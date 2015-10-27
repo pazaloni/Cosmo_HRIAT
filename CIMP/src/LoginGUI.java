@@ -75,7 +75,6 @@ public class LoginGUI extends Application
 				.addAll(viewableLogo, userName, userPassword, loginBtn);
 		box.setSpacing(MAINPANE_SPACING);
 		return box;
-
 	}
 
 	/**
@@ -99,6 +98,5 @@ public class LoginGUI extends Application
 		loginBtn = new Button(BUTTON_LABEL);
 		// making the image for the logo to be displayed
 		logo = new Image(IMAGE_PATH);
-
 	}
 }
