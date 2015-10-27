@@ -7,7 +7,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -28,25 +31,30 @@ public class MedicalStaffMainPageGUI extends Application
         
         VBox root = createMainVBox();
 
-        stage.setScene(new Scene(root, 300, 250));
-        stage.show();
-        
+        stage.setScene(new Scene(root, 875 , 580));
+        stage.resizableProperty().set(false);
+        stage.show();  
     }
     
-    public HBox createHBoxHeader() {
-        HBox hbox = new HBox();
-        hbox.setPadding(new Insets(15, 12, 15, 12));
-        hbox.setSpacing(10);
-        hbox.setStyle("-fx-background-color: #FFFFFF;");
+    
+    public BorderPane createHBoxHeader() {
+        BorderPane logoAndLogin = new BorderPane();
+        logoAndLogin.setPadding(new Insets(15, 12, 15, 12));
+        //logoAndLogin.setSpacing(10);
+        logoAndLogin.setStyle("-fx-background-color: #FFFFFF;");
 
         Button buttonCurrent = new Button("Log Out");
         buttonCurrent.setPrefSize(100, 20);
         
-       // Image logo = new Image(".\\CosmoIconLong[1].png");
+        ImageView logo = new ImageView(new Image(".\\CosmoIconLong[1].png"));
+        logo.setFitWidth(400);
+        logo.setFitHeight(49);
+        
+        logoAndLogin.setLeft(logo);
+        logoAndLogin.setRight(buttonCurrent);
+        //logoAndLogin.getChildren().addAll(logo,buttonCurrent);
 
-        //hbox.getChildren().addAll(logo,buttonCurrent);
-
-        return hbox;
+        return logoAndLogin;
     }
     
     public HBox createHBoxTabs() {
@@ -97,7 +105,7 @@ public class MedicalStaffMainPageGUI extends Application
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(8);
 
-        HBox header = createHBoxHeader();
+        BorderPane header = createHBoxHeader();
         HBox tabs = createHBoxTabs();
         HBox previewNotes = createHBoxPreviewNotes();
         HBox table = createHBoxTable();
