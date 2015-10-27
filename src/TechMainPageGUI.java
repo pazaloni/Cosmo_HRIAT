@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -6,7 +7,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -16,6 +20,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class TechMainPageGUI extends Application {
 
@@ -73,11 +78,22 @@ public class TechMainPageGUI extends Application {
 				
 		TableView<String> table = new TableView<String>();
 		//<StaffAccounts>
-		ObservableList<String> test = FXCollections.observableArrayList();
-		test.add("test1");
-		test.add("test2");
-		table.setItems(test);
-		table.setPadding(new Insets(0,30,0,30));
+		 
+		TableColumn staffIDCol = new TableColumn("StaffID");
+		staffIDCol.setMinWidth(60);
+		TableColumn userNameCol = new TableColumn("User Name");
+		userNameCol.setMinWidth(175);
+		TableColumn emailCol = new TableColumn("Email");
+		emailCol.setMinWidth(169);
+		TableColumn firstNameCol = new TableColumn("First Name");
+		firstNameCol.setMinWidth(150);
+		TableColumn lastNameCol = new TableColumn("Last Name");
+		lastNameCol.setMinWidth(150);
+		TableColumn securityLvlCol = new TableColumn("Security Level");
+		securityLvlCol.setMinWidth(100);
+				
+		table.getColumns().addAll(staffIDCol,userNameCol, emailCol, firstNameCol, lastNameCol,securityLvlCol);
+
 		managePane.setPadding(new Insets(0,30,0,30));
 		managePane.getChildren().addAll(pageName, actionBox, tableName, table);
 		layoutContainer.getChildren().addAll(headerLogin, managePane);
