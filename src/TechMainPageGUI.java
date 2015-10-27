@@ -1,96 +1,130 @@
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class TechMainPageGUI extends Application{
+public class TechMainPageGUI extends Application {
 
-	
 	private Button viewLog = new Button();
 	private Button addUser = new Button();
 	private Button editUser = new Button();
 	private Button logOut = new Button("Log Out");
 	private Button removeUser = new Button();
-	
-	
+
 	private int paneWidth = 875;
 	private int paneHeight = 580;
-	private Image logo = new Image("images/cosmo.png");
-	
+	private Image logo = new Image("images/CosmoIconLong.png");
+
 	private Label techTitle = new Label();
+
 	
-	private BorderPane managePane = new BorderPane();
-	
-	public void start(Stage stage) throws Exception
-	{
-		Scene scene = new Scene(managePane, paneWidth, paneHeight);
+	private VBox layoutContainer = new VBox();
+
+	public void start(Stage stage) throws Exception {
+		Scene scene = new Scene(layoutContainer, paneWidth, paneHeight);
+
+		VBox managePane = new VBox();
+		BorderPane headerLogin = createHeader();
+		
+		//managePane.getChildren().addAll(headerLogin);
+		Label pageName = new Label();
+		pageName.setText("Technical Administration");
+		pageName.setFont(new Font(30));
+		pageName.setPadding(new Insets(10,0,0,0));
+		
+		HBox actionBox = new HBox();
+		
+		viewLog.setText("View Activity Log");
+		viewLog.setFont(new Font(15));
+		viewLog.setMinWidth(150);
+		addUser.setText("Add User");
+		addUser.setMinWidth(150);
+		addUser.setFont(new Font(15));
+		editUser.setText("Edit User");
+		editUser.setMinWidth(150);
+		editUser.setFont(new Font(15));
+		removeUser.setText("Remove User");
+		removeUser.setMinWidth(150);
+		removeUser.setFont(new Font(15));
 				
-		HBox hbox = addHBox();
+		actionBox.getChildren().addAll(viewLog, addUser, editUser, removeUser);
+		actionBox.setPadding(new Insets(25,0,20,0));
+		actionBox.setAlignment(Pos.CENTER);
+		actionBox.setSpacing(75);
+		
+		Label tableName = new Label();
+		tableName.setText("Manage Users");
+		tableName.setFont(new Font(20));
+
 				
-		managePane.setTop(hbox);
-			
+		TableView<String> table = new TableView<String>();
+		//<StaffAccounts>
+		ObservableList<String> test = FXCollections.observableArrayList();
+		test.add("test1");
+		test.add("test2");
+		table.setItems(test);
+		table.setPadding(new Insets(0,30,0,30));
+		managePane.setPadding(new Insets(0,30,0,30));
+		managePane.getChildren().addAll(pageName, actionBox, tableName, table);
+		layoutContainer.getChildren().addAll(headerLogin, managePane);
 		stage.setScene(scene);
 		stage.setTitle("Cosmopolitan Industries");
 		stage.show();
 
 	}
 
-	
+	public BorderPane createHeader() {
+		BorderPane logoAndLogin = new BorderPane();
+		logoAndLogin.setPadding(new Insets(15, 12, 15, 12));
+		// logoAndLogin.setSpacing(10);
+		logoAndLogin.setStyle("-fx-background-color: #FFFFFF;");
 
-	public HBox addHBox() 
-	{
-		HBox hbox = new HBox();
-		
-		hbox.setPadding( new Insets(10,10,10,10));
-			
-		hbox.setAlignment(Pos.CENTER_LEFT);
-		
-		ImageView iLogo = new ImageView();
-		
-		iLogo.setImage(logo);
-		
-		logOut.setTranslateX(641);
-		
-		hbox.getChildren().addAll(iLogo,logOut);
-		
-		
-		return hbox;
-	}
-	public static void main(String[] args) 
-	{
-		launch(args);	
+		Button buttonCurrent = new Button("Log Out");
+		buttonCurrent.setPrefSize(100, 20);
+
+		ImageView logo = new ImageView(new Image("images/CosmoIconLong.png"));	
+		logo.setFitWidth(400);
+		logo.setFitHeight(49);
+
+		logoAndLogin.setLeft(logo);
+		logoAndLogin.setRight(buttonCurrent);
+		// logoAndLogin.getChildren().addAll(logo,buttonCurrent);
+
+		return logoAndLogin;
 	}
 
-	
-	public void openlog()
-	{
-		
+	public static void main(String[] args) {
+		launch(args);
 	}
-	
-	
-	public void addUser()
-	{
-		
+
+	public void openlog() {
+
 	}
-	
-	public void editUser(int staffID)
-	{
-		
+
+	public void addUser() {
+
 	}
-	
-	public void removeUser(int staffID)
-	{
-		
+
+	public void editUser(int staffID) {
+
 	}
-	
-	
+
+	public void removeUser(int staffID) {
+
+	}
+
 }
