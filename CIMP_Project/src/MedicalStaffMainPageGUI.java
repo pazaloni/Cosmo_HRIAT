@@ -21,6 +21,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -51,7 +52,7 @@ public class MedicalStaffMainPageGUI extends Application
     public BorderPane createHBoxHeader() {
         BorderPane logoAndLogin = new BorderPane();
         logoAndLogin.setPadding(new Insets(15, 12, 15, 12));
-        //logoAndLogin.setSpacing(10);
+       // logoAndLogin.setSpacing(10);
         logoAndLogin.setStyle("-fx-background-color: #FFFFFF;");
 
         Button buttonCurrent = new Button("Log Out");
@@ -69,13 +70,9 @@ public class MedicalStaffMainPageGUI extends Application
     }
     
     public TabPane createHBoxTabs() {
-//        HBox hbox = new HBox();
-//        hbox.setPadding(new Insets(15, 12, 15, 12));
-//        hbox.setSpacing(10);
-//        hbox.setStyle("-fx-background-color: #336699;");
 
         TabPane tabPane = new TabPane();
-        
+
         //Create tabs
         Tab participants = new Tab();
         Tab forms = new Tab();
@@ -93,8 +90,14 @@ public class MedicalStaffMainPageGUI extends Application
         
         
         tabPane.setTabMinWidth(175);
+       // tabPane.setTranslateY(-10);
         tabPane.getTabs().addAll(participants, forms, stats);
+        tabPane.setStyle("-fx-background-color: #FF0000;");
         
+        
+        
+        
+       // HBox.setMargin(tabBox, new Insets(20,20,20,20));
         
         return tabPane;
     }
@@ -109,6 +112,7 @@ public class MedicalStaffMainPageGUI extends Application
         HBox noteBox = createNoteBox();
 
         hbox.getChildren().addAll(previewPane, noteBox);
+        //hbox.setTranslateY(20);
 
         return hbox;
     }
@@ -134,11 +138,11 @@ public class MedicalStaffMainPageGUI extends Application
         pictureBox.getChildren().addAll(previewPicture, detailsButton);
         pictureBox.setAlignment(Pos.CENTER);
         pictureBox.setStyle("-fx-background-color: #FFFFFF;");
-        pictureBox.setPadding(new Insets(0,0,80,0));
+        pictureBox.setAlignment(Pos.TOP_CENTER);
         
         GridPane basicInfoPane = new GridPane();
         basicInfoPane.setStyle("-fx-background-color: #FFFFFF;");
-        basicInfoPane.setPadding(new Insets(10,10,10,10));
+        basicInfoPane.setPadding(new Insets(10,10,0,10));
         
         //set basic labels
         Label cosmoIDLabel = new Label("CosmoID:");
@@ -151,7 +155,7 @@ public class MedicalStaffMainPageGUI extends Application
         cosmoIDLabel.setPadding(new Insets(5,5,5,5));
         firstNameLabel.setPadding(new Insets(5,5,5,5));
         lastNameLabel.setPadding(new Insets(5,5,5,5));
-        seizureLabel.setPadding(new Insets(5,5,30,5));
+        seizureLabel.setPadding(new Insets(5,5,25,5));
         allergyLabel.setPadding(new Insets(5,5,50,5));
         
         //set the participant text fields
@@ -186,10 +190,6 @@ public class MedicalStaffMainPageGUI extends Application
         allergyText.setMinHeight(80);
         allergyText.editableProperty().set(false);
         
-       
-     
-
-        
         //add all labels and text boxes to the gridpane
         basicInfoPane.add(cosmoIDLabel, 0, 0);
         basicInfoPane.add(firstNameLabel, 0, 1);
@@ -203,8 +203,7 @@ public class MedicalStaffMainPageGUI extends Application
         basicInfoPane.add(seizureText, 1, 3);
         basicInfoPane.add(allergyText, 1, 4);
         
-        
-        BorderPane.setMargin(searchBar, new Insets(0,0,10,0));
+        BorderPane.setMargin(searchBar, new Insets(10,0,10,0));
         BorderPane.setMargin(pictureBox, new Insets(0,0,0,10));
         previewPane.setTop(searchBar);
         previewPane.setLeft(pictureBox);
@@ -217,7 +216,7 @@ public class MedicalStaffMainPageGUI extends Application
     {
       //create search bar
         HBox searchBar = new HBox();
-        ComboBox<String> searchComboBox = new ComboBox();
+        ComboBox<String> searchComboBox = new ComboBox<String>();
         searchComboBox.getItems().addAll(
             "Highest",
             "High",
@@ -232,10 +231,10 @@ public class MedicalStaffMainPageGUI extends Application
         //create search field
         TextField searchField = new TextField();
         searchField.setPromptText("Search...");
-        searchField.setStyle("-fx-pref-width: 175;");
+        searchField.setStyle("-fx-pref-width: 250;");
         
-        HBox.setMargin(searchComboBox, new Insets(0,10,0,10)); 
-        HBox.setMargin(searchField, new Insets(0,10,0,10));
+       HBox.setMargin(searchComboBox, new Insets(0,10,0,10)); 
+        HBox.setMargin(searchField, new Insets(0,0,4,10));
         searchBar.getChildren().addAll(searchComboBox, searchField);
         
         return searchBar;
@@ -258,14 +257,12 @@ public class MedicalStaffMainPageGUI extends Application
     
     public VBox createMainVBox() {
         VBox vbox = new VBox();
-        vbox.setPadding(new Insets(10));
-        vbox.setSpacing(8);
 
         BorderPane header = createHBoxHeader();
         TabPane tabs = createHBoxTabs();
         HBox previewNotes = createHBoxPreviewNotes();
         HBox table = createHBoxTable();
-        vbox.getChildren().addAll(header, tabs, previewNotes, table);
+        vbox.getChildren().addAll(header, tabs,previewNotes, table);
 
         return vbox;
     }
@@ -277,6 +274,7 @@ public class MedicalStaffMainPageGUI extends Application
         ObservableList<String> notes = FXCollections.observableArrayList("test", "test","test","test","test",
                 "test","test","test","test","test");
         noteTitles.setItems(notes);
+        hbox.setPadding(new Insets(49,0,0,0));
         hbox.getChildren().add(noteTitles);
    
         
