@@ -14,6 +14,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -104,6 +106,8 @@ public class MedicalStaffMainPageGUI extends Application
     
     public HBox createHBoxPreviewNotes() {
         HBox hbox = new HBox();
+        hbox.setMinHeight(295);
+        hbox.setMaxHeight(295);
        // hbox.setPadding(new Insets(15, 12, 15, 12));
         hbox.setSpacing(10);
         hbox.setStyle("-fx-background-color: #336699;");
@@ -112,7 +116,6 @@ public class MedicalStaffMainPageGUI extends Application
         HBox noteBox = createNoteBox();
 
         hbox.getChildren().addAll(previewPane, noteBox);
-        //hbox.setTranslateY(20);
 
         return hbox;
     }
@@ -212,7 +215,7 @@ public class MedicalStaffMainPageGUI extends Application
         return previewPane;
     }
 
-    private HBox createSearchBar()
+    public HBox createSearchBar()
     {
       //create search bar
         HBox searchBar = new HBox();
@@ -246,10 +249,45 @@ public class MedicalStaffMainPageGUI extends Application
         hbox.setSpacing(10);
         hbox.setStyle("-fx-background-color: #336699;");
 
-        Button buttonCurrent = new Button("Table Goes Here");
-        buttonCurrent.setPrefSize(100, 20);
+      //TableView instance to hold User records
+        TableView<String> table = new TableView<String>();
+        
+        //Columns:
+        
+        //cosmoID
+        //name
+        //participantAddress
+        //last updated date
+        //work area
+        //caregiver
+        //emergency contact name
+        //emergency contact phone
+        
+        
+        //Instantiation of all the table column headings (With proper formatting)
+        TableColumn staffIDCol = new TableColumn("StaffID");
+        staffIDCol.setMinWidth(60);
+        
+        TableColumn userNameCol = new TableColumn("User Name");
+        userNameCol.setMinWidth(175);
+        
+        TableColumn emailCol = new TableColumn("Email");
+        emailCol.setMinWidth(169);
+        
+        TableColumn firstNameCol = new TableColumn("First Name");
+        firstNameCol.setMinWidth(150);
+        
+        TableColumn lastNameCol = new TableColumn("Last Name");
+        lastNameCol.setMinWidth(150);
+        
+        TableColumn securityLvlCol = new TableColumn("Security Level");
+        securityLvlCol.setMinWidth(100);
 
-        hbox.getChildren().addAll(buttonCurrent);
+        //Appending column headers to the table for display
+        table.getColumns().addAll(staffIDCol, userNameCol, emailCol,
+                firstNameCol, lastNameCol, securityLvlCol);
+
+     //   hbox.getChildren().addAll(buttonCurrent);
 
         return hbox;
     }
@@ -271,11 +309,58 @@ public class MedicalStaffMainPageGUI extends Application
     {
         HBox hbox = new HBox();
         ListView noteTitles = new ListView();
-        ObservableList<String> notes = FXCollections.observableArrayList("test", "test","test","test","test",
-                "test","test","test","test","test");
+        ObservableList<String> notes = FXCollections.observableArrayList("test", "Mr. Smith needs more dope for his seizures","test","test","test",
+                "test","test","test","test","test","test","test","test","test","test","test");
         noteTitles.setItems(notes);
+        noteTitles.setMinWidth(170);
+        noteTitles.setMaxWidth(170);
+        
+        GridPane noteDisplayPane = new GridPane();
+        
+        noteDisplayPane.setStyle("-fx-background-color: #FFFFFF;");
+        noteDisplayPane.setPadding(new Insets(10,10,0,10));
+        
+        //set basic labels
+        Label dateLabel = new Label("Date:");
+        Label staffLabel = new Label("Staff:");
+        Label participantLabel = new Label("Participant: ");
+        Label subjectLabel = new Label("Subject: ");
+        
+        //set label margins
+        dateLabel.setPadding(new Insets(1,5,3,5));
+        staffLabel.setPadding(new Insets(1,5,3,5));
+        participantLabel.setPadding(new Insets(1,5,3,5));
+        subjectLabel.setPadding(new Insets(1,5,3,5));
+
+        
+        //set the participant text fields
+        Label dateInfoLabel = new Label("dateInfo");
+        Label staffInfoLabel = new Label("staffInfo");
+        Label participantInfoLabel = new Label("participantInfo");
+        Label subjectInfoLabel = new Label("subjectInfo");
+        
+        dateInfoLabel.setPadding(new Insets(1,5,3,5));
+        staffInfoLabel.setPadding(new Insets(1,5,3,5));
+        participantInfoLabel.setPadding(new Insets(1,5,3,5));
+        subjectInfoLabel.setPadding(new Insets(1,5,3,5));
+
+        
+        //add all labels to the gridpane
+        noteDisplayPane.add(dateLabel, 0, 0);
+        noteDisplayPane.add(staffLabel, 0, 1);
+        noteDisplayPane.add(participantLabel, 0, 2);
+        noteDisplayPane.add(subjectLabel, 0, 3);
+        
+        noteDisplayPane.add(dateInfoLabel, 1, 0);
+        noteDisplayPane.add(staffInfoLabel, 1, 1);
+        noteDisplayPane.add(participantInfoLabel, 1, 2);
+        noteDisplayPane.add(subjectInfoLabel, 1, 3);
+        
+        
+        noteDisplayPane.setMinWidth(265);
+        
         hbox.setPadding(new Insets(49,0,0,0));
-        hbox.getChildren().add(noteTitles);
+        hbox.getChildren().addAll(noteTitles, noteDisplayPane);
    
         
         return hbox;
