@@ -1,4 +1,5 @@
 
+
 public abstract class StaffAccount {
 	private int staffID;		//staff members unique login ID
 	private String lastName;	//the staff members last name
@@ -15,5 +16,50 @@ public abstract class StaffAccount {
 	 * @return staffAccount: the account of the user that has successfully
 	 * logged in.
 	 */
-	public abstract StaffAccount login(int staffID, String password);
+	public StaffAccount login(int staffID, String password)
+	{
+		return lookupAccount(staffID, password);
+	}
+	
+	
+	private StaffAccount lookupAccount(int staffID, String password)
+	{
+		//the security level, determines what class type it will be
+		//0 = basic staff
+		//1 = medical admin
+		//2 = tech admin
+		int securityLevel = 0;
+		StaffAccount account;
+		switch(securityLevel)
+		{
+			case 0:
+			{
+				account = new BasicStaff(staffID, password);
+				break;
+			}
+			case 1:
+			{
+				account=  new MedicalAdministrator(staffID, password);
+				break;
+			}
+			case 2:
+			{
+				account = new TechnicalAdministrator(staffID, password);
+				break;
+			}
+		}
+		
+		return account;
+	}
+	
+	/**
+	 * Purpose: Allows the user to logout of the system. moves them to the
+	 * loginGUI, with all of the account info reset in memory.
+	 * @return if the reset of information and sending user back to loginGUI
+	 * is successful, return true, else, false
+	 */
+	public boolean logout()
+	{
+		return false;
+	}
 }
