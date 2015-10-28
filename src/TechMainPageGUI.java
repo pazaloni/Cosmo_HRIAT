@@ -21,8 +21,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-
-public class TechMainPageGUI extends Application {
+/**
+ * Purpose: To display the GUI for the technical administrator
+ * @author cst214,cst209,cst207
+ *
+ */
+public class TechMainPageGUI extends Application 
+{
 
 	//Button when clicked, will bring up the activity log
 	private Button viewLog = new Button();
@@ -58,7 +63,8 @@ public class TechMainPageGUI extends Application {
 	 * Param: The stage to be launched
 	 * 
 	 */
-	public void start(Stage stage){
+	public void start(Stage stage)
+	{
 		//The scene that displays the main layout container with the preferred
 		//dimensions
 		Scene scene = new Scene(layoutContainer, PANE_WIDTH, PANE_HEIGHT);
@@ -158,7 +164,8 @@ public class TechMainPageGUI extends Application {
 	 * and logo
 	 * @return The formatted and created borderpane
 	 */
-	public BorderPane createHeader() {
+	public BorderPane createHeader() 
+	{
 		//the borderpane to return
 		BorderPane logoAndLogout = new BorderPane();
 		
@@ -174,6 +181,8 @@ public class TechMainPageGUI extends Application {
 		ImageView logo = new ImageView(new Image("images/CosmoIconLong.png"));
 		logo.setFitWidth(400);
 		logo.setFitHeight(49);
+		
+		
 
 		//Insert the two children into the borderpane at their preferred sides.
 		logoAndLogout.setLeft(logo);
@@ -183,23 +192,28 @@ public class TechMainPageGUI extends Application {
 		return logoAndLogout;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) 
+	{
 		launch(args);
 	}
 
-	public void openlog() {
+	public void openlog() 
+	{
 
 	}
 
-	public void addUser() {
+	public void addUser() 
+	{
 
 	}
 
-	public void editUser(int staffID) {
+	public void editUser(int staffID) 
+	{
 
 	}
 
-	public void removeUser(int staffID) {
+	public void removeUser(int staffID) 
+	{
 
 	}
 
