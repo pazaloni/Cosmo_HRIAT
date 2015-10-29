@@ -5,10 +5,10 @@ public class BasicStaff extends StaffAccount{
 	
 	//private ArrayList<Note> allNotes;
 	
-	private int staffID;
-	private String password;
-	private String firstName;
-	private String lastName;
+//	private int staffID;
+//	private String password;
+//	private String firstName;
+//	private String lastName;
 	
 	public BasicStaff(int staffID, String password)
 	{

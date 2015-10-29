@@ -1,4 +1,6 @@
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,8 +15,8 @@ public class LoginGUI extends Application
 {
 	/* Login Elements */
 	private VBox mainPane;
-	private TextField userName;
-	private PasswordField userPassword;
+	private TextField txtUserName;
+	private PasswordField pfUserPassword;
 	private Button loginBtn;
 	private Image logo;
 
@@ -30,9 +32,16 @@ public class LoginGUI extends Application
 	public static final String STAGE_TITLE = "Cosmopolitan Industries";
 	public static final String IMAGE_PATH = "CosmoIconLong.png";
 	public static final String BUTTON_LABEL = "Login";
-
+	public static StaffAccount[] users = new StaffAccount[3];
+	
 	public static void main(String[] args)
 	{
+		BasicStaff jeff = new BasicStaff(0, "jill");
+		users[0] = jeff;
+		TechnicalAdministrator kevin = new TechnicalAdministrator(1, "Bryant");
+		users[1] = kevin;
+		BasicStaff haar = new BasicStaff(2, "miranda");
+		users[2] = haar;
 		launch();
 	}
 
@@ -72,8 +81,31 @@ public class LoginGUI extends Application
 		viewableLogo.setFitHeight(IMAGE_HEIGHT);
 		// Adding everyting to the mainbox
 		box.getChildren()
-				.addAll(viewableLogo, userName, userPassword, loginBtn);
+				.addAll(viewableLogo, txtUserName, pfUserPassword, loginBtn);
 		box.setSpacing(MAINPANE_SPACING);
+		loginBtn.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override public void handle(ActionEvent e) {
+		        String username = txtUserName.getText();
+		        String password = pfUserPassword.getText();
+		        int i = 0;
+		        boolean success = false;
+		        while(i<users.length && !success)
+		        {		        	
+		        	if(users[i].staffID == Integer.parseInt(username) && users[i].password.equals(password))
+		        	{
+		        		success = true;
+		        		System.out.println("success");
+		        	}
+		        	i++;
+		        }		    
+		        if(success == false)
+		        {
+		        	txtUserName.setText("");
+		        	pfUserPassword.setText("");
+		        	txtUserName.setPromptText("Incorrect Username or Password");
+		        }
+	        }
+		});
 		return box;
 	}
 
@@ -83,17 +115,17 @@ public class LoginGUI extends Application
 	 */
 	private void initializeVariables()
 	{
-		userName = new TextField();
+		txtUserName = new TextField();
 		// Setting the placeholder text in the textfield
-		userName.setPromptText(USERNAME_PROMPT_TEXT);
+		txtUserName.setPromptText(USERNAME_PROMPT_TEXT);
 		// Setting the maximum width the textfield
-		userName.setMaxWidth(TEXTFIELD_WIDTH);
+		txtUserName.setMaxWidth(TEXTFIELD_WIDTH);
 
-		userPassword = new PasswordField();
+		pfUserPassword = new PasswordField();
 		// Setting the placeholder text in the textfield
-		userPassword.setPromptText(PASSWORD_PROMPT_TEXT);
+		pfUserPassword.setPromptText(PASSWORD_PROMPT_TEXT);
 		// Setting the maximum width the textfield
-		userPassword.setMaxWidth(TEXTFIELD_WIDTH);
+		pfUserPassword.setMaxWidth(TEXTFIELD_WIDTH);
 		// making the new button
 		loginBtn = new Button(BUTTON_LABEL);
 		// making the image for the logo to be displayed

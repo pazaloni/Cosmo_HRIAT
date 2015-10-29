@@ -1,10 +1,10 @@
 
 
 public abstract class StaffAccount {
-	private int staffID;		//staff members unique login ID
+	int staffID;		//staff members unique login ID
 	private String lastName;	//the staff members last name
 	private String firstName;	//the staff members first name
-	private String password;	//the staff members password
+	String password;	//the staff members password
 	
 	/**
 	 * Purpose: If the login information matches that of a staff account
@@ -29,7 +29,7 @@ public abstract class StaffAccount {
 		//1 = medical admin
 		//2 = tech admin
 		int securityLevel = 0;
-		StaffAccount account;
+		StaffAccount account = null;
 		switch(securityLevel)
 		{
 			case 0:
