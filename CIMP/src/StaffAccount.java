@@ -1,10 +1,10 @@
 
 
 public abstract class StaffAccount {
-	int staffID;		//staff members unique login ID
+	protected int staffID;		//staff members unique login ID
 	private String lastName;	//the staff members last name
 	private String firstName;	//the staff members first name
-	String password;	//the staff members password
+	protected String password;	//the staff members password
 	
 	/**
 	 * Purpose: If the login information matches that of a staff account
@@ -16,9 +16,14 @@ public abstract class StaffAccount {
 	 * @return staffAccount: the account of the user that has successfully
 	 * logged in.
 	 */
-	public StaffAccount login(int staffID, String password)
+	public boolean login(int staffID, String password)
 	{
-		return lookupAccount(staffID, password);
+		boolean result = false;
+		if(this.staffID==staffID && this.password.equals(password))
+		{
+			result = true;
+		}
+		return result;
 	}
 	
 	

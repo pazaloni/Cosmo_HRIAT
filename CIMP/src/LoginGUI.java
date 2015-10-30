@@ -20,7 +20,10 @@ public class LoginGUI extends Application
 	private Button loginBtn;
 	private Image logo;
 
+	public Stage loginStage;
+
 	/* Static final variables */
+	
 	public static final int WIDTH = 875;
 	public static final int HEIGHT = 580;
 	public static final int IMAGE_WIDTH = 606;
@@ -48,6 +51,7 @@ public class LoginGUI extends Application
 	@Override
 	public void start(Stage stage) throws Exception
 	{
+		loginStage=stage;
 		initializeVariables();
 		// adding the elements to the mainPane
 		mainPane = createBox();
@@ -56,13 +60,13 @@ public class LoginGUI extends Application
 		// main scene to be displayed
 		Scene scene = new Scene(mainPane);
 		// Styling the scene
-		stage.setScene(scene);
-		stage.setTitle("Cosmopolitan Industries");
-		stage.setWidth(WIDTH);
-		stage.setHeight(HEIGHT);
-		stage.setTitle(STAGE_TITLE);
-		stage.setResizable(false);
-		stage.show();
+		loginStage.setScene(scene);
+		loginStage.setTitle("Cosmopolitan Industries");
+		loginStage.setWidth(WIDTH);
+		loginStage.setHeight(HEIGHT);
+		loginStage.setTitle(STAGE_TITLE);
+		loginStage.setResizable(false);
+		loginStage.show();
 	}
 
 	/**
@@ -90,11 +94,15 @@ public class LoginGUI extends Application
 		        int i = 0;
 		        boolean success = false;
 		        while(i<users.length && !success)
-		        {		        	
-		        	if(users[i].staffID == Integer.parseInt(username) && users[i].password.equals(password))
+		        {	
+		        	
+		        	if(users[i].login(Integer.parseInt(username), password))
 		        	{
 		        		success = true;
 		        		System.out.println("success");
+		        		loginStage.close();
+		        		TechMainPageGUI test5 = new TechMainPageGUI();
+		        		test5.test1(loginStage);
 		        	}
 		        	i++;
 		        }		    
