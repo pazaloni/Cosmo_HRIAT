@@ -32,8 +32,7 @@ public class TechMainPageGUI extends Application
 {
 
 	public static Stage techMainStage;
-	
-	private StaffAccount currentUser;
+
 	//Button when clicked, will bring up the activity log
 	private Button viewLog = new Button();
 	

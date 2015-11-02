@@ -114,7 +114,7 @@ public class MedicalStaffMainPageGUI extends Application
      * 
      * @return a TabPane object
      */
-    public TabPane createTabs()
+    private TabPane createTabs()
     {
 
         TabPane tabPane = new TabPane();
@@ -148,7 +148,7 @@ public class MedicalStaffMainPageGUI extends Application
      * 
      * @return
      */
-    public HBox createHBoxPreviewNotes()
+    private HBox createHBoxPreviewNotes()
     {
         //create hbox and set size and padding
         HBox hbox = new HBox();
@@ -174,7 +174,7 @@ public class MedicalStaffMainPageGUI extends Application
      * 
      * @return
      */
-    public BorderPane createPreviewPane()
+    private BorderPane createPreviewPane()
     {
         //create border pane
         BorderPane previewPane = new BorderPane();
@@ -283,7 +283,7 @@ public class MedicalStaffMainPageGUI extends Application
      * 
      * @return HBox search bar
      */
-    public HBox createSearchBar()
+    private HBox createSearchBar()
     {
         // create search bar
         HBox searchBar = new HBox();
@@ -318,7 +318,7 @@ public class MedicalStaffMainPageGUI extends Application
      * 
      * @return HBox create note box
      */
-    public HBox createNoteBox()
+    private HBox createNoteBox()
     {
         HBox hbox = new HBox();
         ListView<String> noteTitles = new ListView<String>();
@@ -392,7 +392,7 @@ public class MedicalStaffMainPageGUI extends Application
      * @return
      */
     @SuppressWarnings("unchecked")
-    public HBox createHBoxTable()
+    private HBox createHBoxTable()
     {
         HBox hbox = new HBox();
         hbox.setSpacing(10);
