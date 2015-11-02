@@ -94,22 +94,35 @@ public class LoginGUI extends Application
 		        String password = pfUserPassword.getText();
 		        int i = 0;
 		        boolean success = false;
-		        while(i<users.length && !success)
-		        {	
-		        	
-		        	if(users[i].login(Integer.parseInt(username), password))
-		        	{
-		        		if(users[i] instanceof TechnicalAdministrator)
-		        		{
-		        		success = true;
-		        		System.out.println("success");
-		        		loginStage.close();
-		        		TechMainPageGUI test5 = new TechMainPageGUI();
-		        		test5.test1(loginStage);
-		        		}
-		        	}
-		        	i++;
-		        }		    
+		        if(username.length() > 0 && password.length() > 0)
+		        {
+		        	while(i<users.length && !success)
+			        {	
+			        	
+			        	if(users[i].login(Integer.parseInt(username), password))
+			        	{
+			        		if(users[i] instanceof TechnicalAdministrator)
+			        		{
+			        		success = true;
+			        		System.out.println("success");
+			        		loginStage.close();
+			        		TechMainPageGUI test5 = new TechMainPageGUI();
+			        		test5.TechMainPageConstruct(loginStage);
+			        		}
+			        		else if(users[i] instanceof BasicStaff ||
+			        				users[i] instanceof MedicalAdministrator)
+			        		{
+			        			success = true;
+				        		System.out.println("success");
+				        		loginStage.close();
+				        		MedicalStaffMainPageGUI medStaffGUI = new MedicalStaffMainPageGUI();
+				        		medStaffGUI.MedMainPageConstruct(loginStage);
+			        		}
+			        	}
+			        	i++;
+			        }	
+		        }
+		        	    
 		        if(success == false)
 		        {
 		        	txtUserName.setText("");

@@ -44,7 +44,8 @@ import javafx.stage.Stage;
  */
 public class MedicalStaffMainPageGUI extends Application
 {
-    
+	public static Stage MedMainStage;
+	
     public static void main(String[] args)
     {
         launch();
@@ -57,15 +58,20 @@ public class MedicalStaffMainPageGUI extends Application
     @Override
     public void start(Stage stage) throws Exception
     {
-        stage.setTitle("Cosmo Industries");
+    	MedMainPageConstruct(stage);
+    }
+
+    public void MedMainPageConstruct(Stage stage)
+    {
+    	MedMainStage = stage;
+        MedMainStage.setTitle("Cosmo Industries");
 
         VBox root = createMainVBox();
 
-        stage.setScene(new Scene(root, 875, 580));
-        stage.resizableProperty().set(false);
-        stage.show();
+        MedMainStage.setScene(new Scene(root, 875, 580));
+        MedMainStage.resizableProperty().set(false);
+        MedMainStage.show();
     }
-
     /**
      * 
      * Purpose: Create the header area of the program.
@@ -80,9 +86,16 @@ public class MedicalStaffMainPageGUI extends Application
         logoAndLogin.setStyle("-fx-background-color: #FFFFFF;");
 
         //Logout button
-        Button buttonCurrent = new Button("Log Out");
-        buttonCurrent.setPrefSize(100, 20);
-
+        Button logOut = new Button("Log Out");
+        logOut.setPrefSize(100, 20);
+        
+        logOut.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override public void handle(ActionEvent e) {
+        		MedMainStage.close();
+        		LoginGUI test5 = new LoginGUI();
+        		test5.start(MedMainStage);
+	        }
+		});
         //logo image size
         ImageView logo = new ImageView(new Image(".\\CosmoIconLong[1].png"));
         logo.setFitWidth(400);
@@ -90,7 +103,7 @@ public class MedicalStaffMainPageGUI extends Application
 
         //set the image left and right
         logoAndLogin.setLeft(logo);
-        logoAndLogin.setRight(buttonCurrent);
+        logoAndLogin.setRight(logOut);
 
         return logoAndLogin;
     }

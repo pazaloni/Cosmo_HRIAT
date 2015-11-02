@@ -68,7 +68,7 @@ public class TechMainPageGUI extends Application
 		
 	}
 	
-	public void test1(Stage stage)
+	public void TechMainPageConstruct(Stage stage)
 	{
 		techMainStage = stage;
 		//The scene that displays the main layout container with the preferred
@@ -177,7 +177,7 @@ public class TechMainPageGUI extends Application
 	public void start(Stage stage)
 	{
 		
-		test1(stage);
+		TechMainPageConstruct(stage);
 		
 
 	}
