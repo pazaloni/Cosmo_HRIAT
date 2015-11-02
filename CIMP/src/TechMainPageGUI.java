@@ -164,6 +164,9 @@ public class TechMainPageGUI extends Application
 		techMainStage.setTitle("Cosmopolitan Industries");
 		//display window
 		techMainStage.show();
+		
+		
+		
 	}
 	
 	/**
@@ -175,6 +178,7 @@ public class TechMainPageGUI extends Application
 	{
 		
 		test1(stage);
+		
 
 	}
 
@@ -193,12 +197,15 @@ public class TechMainPageGUI extends Application
 		logoAndLogout.setStyle("-fx-background-color: #FFFFFF;");
 
 		//new button for log out, as well as formatting
-		Button buttonCurrent = new Button("Log Out");
-		buttonCurrent.setPrefSize(100, 20);
+		logOut = new Button("Log Out");
+		logOut.setPrefSize(100, 20);
 
-		buttonCurrent.setOnAction(new EventHandler<ActionEvent>() {
+		
+		logOut.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override public void handle(ActionEvent e) {
-
+        		techMainStage.close();
+        		LoginGUI test5 = new LoginGUI();
+        		test5.start(techMainStage);
 	        }
 		});
 		
@@ -211,7 +218,7 @@ public class TechMainPageGUI extends Application
 
 		//Insert the two children into the borderpane at their preferred sides.
 		logoAndLogout.setLeft(logo);
-		logoAndLogout.setRight(buttonCurrent);
+		logoAndLogout.setRight(logOut);
 	
 		//return finished borderPane
 		return logoAndLogout;

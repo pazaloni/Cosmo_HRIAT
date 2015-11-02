@@ -20,7 +20,7 @@ public class LoginGUI extends Application
 	private Button loginBtn;
 	private Image logo;
 
-	public Stage loginStage;
+	public static Stage loginStage;
 
 	/* Static final variables */
 	
@@ -33,7 +33,7 @@ public class LoginGUI extends Application
 	public static final String USERNAME_PROMPT_TEXT = "Username";
 	public static final String PASSWORD_PROMPT_TEXT = "Password";
 	public static final String STAGE_TITLE = "Cosmopolitan Industries";
-	public static final String IMAGE_PATH = "CosmoIconLong.png";
+	public static final String IMAGE_PATH = "images/CosmoIconLong.png";
 	public static final String BUTTON_LABEL = "Login";
 	public static StaffAccount[] users = new StaffAccount[3];
 	
@@ -49,8 +49,9 @@ public class LoginGUI extends Application
 	}
 
 	@Override
-	public void start(Stage stage) throws Exception
+	public void start(Stage stage) 
 	{
+		
 		loginStage=stage;
 		initializeVariables();
 		// adding the elements to the mainPane
@@ -98,11 +99,14 @@ public class LoginGUI extends Application
 		        	
 		        	if(users[i].login(Integer.parseInt(username), password))
 		        	{
+		        		if(users[i] instanceof TechnicalAdministrator)
+		        		{
 		        		success = true;
 		        		System.out.println("success");
 		        		loginStage.close();
 		        		TechMainPageGUI test5 = new TechMainPageGUI();
 		        		test5.test1(loginStage);
+		        		}
 		        	}
 		        	i++;
 		        }		    
