@@ -132,7 +132,7 @@ public class LoginGUI extends Application
                                 System.out.println("success");
                                 loginStage.close();
                                 MedicalStaffMainPageGUI medStaffGUI = new MedicalStaffMainPageGUI();
-                                medStaffGUI.MedMainPageConstruct(loginStage);
+                                medStaffGUI.medMainPageConstruct(loginStage);
                             }
                         }
                         i++;

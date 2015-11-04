@@ -20,7 +20,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.image.ImageView; 
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -36,21 +36,32 @@ import javafx.stage.Stage;
  */
 public class MedicalStaffMainPageGUI extends Application
 {
-    public static Stage MedMainStage;
-
-    public static void main( String[] args )
-    {
-        launch();
-    }
+    public static Stage medMainStage;
+    
+    private Button logout;
+    
+    private ComboBox<String> searchBy;
+    
+    private TextField searchField;
+    
+    private ImageView previewPicture;
+    
+    private ListView<String> noteTitleView;
+    
+    private ObservableList<String> noteTitleList;
+    
+    private TableView<Participant> participantTable;
+    
+    
 
     /**
-     * Purpose: entry point for program
+     * Purpose: displays the GUI
      * 
      */
     @Override
     public void start( Stage stage ) throws Exception
     {
-        MedMainPageConstruct(stage);
+        medMainPageConstruct(stage);
     }
 
     /**
@@ -60,16 +71,16 @@ public class MedicalStaffMainPageGUI extends Application
      * 
      * @param stage: the stage the medical staff will see
      */
-    public void MedMainPageConstruct( Stage stage )
+    public void medMainPageConstruct( Stage stage )
     {
-        MedMainStage = stage;
-        MedMainStage.setTitle("Cosmo Industries");
+        medMainStage = stage;
+        medMainStage.setTitle("Cosmo Industries");
 
         VBox root = createMainVBox();
 
-        MedMainStage.setScene(new Scene(root, 875, 580));
-        MedMainStage.resizableProperty().set(false);
-        MedMainStage.show();
+        medMainStage.setScene(new Scene(root, 875, 580));
+        medMainStage.resizableProperty().set(false);
+        medMainStage.show();
     }
 
     /**
@@ -86,17 +97,17 @@ public class MedicalStaffMainPageGUI extends Application
         logoAndLogin.setStyle("-fx-background-color: #FFFFFF;");
 
         // Logout button
-        Button logOut = new Button("Log Out");
-        logOut.setPrefSize(100, 20);
+        logout = new Button("Log Out");
+        logout.setPrefSize(100, 20);
 
-        logOut.setOnAction(new EventHandler<ActionEvent>()
+        logout.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
             public void handle( ActionEvent e )
             {
-                MedMainStage.close();
+                medMainStage.close();
                 LoginGUI test5 = new LoginGUI();
-                test5.start(MedMainStage);
+                test5.start(medMainStage);
             }
         });
         // logo image size
@@ -106,7 +117,7 @@ public class MedicalStaffMainPageGUI extends Application
 
         // set the image left and right
         logoAndLogin.setLeft(logo);
-        logoAndLogin.setRight(logOut);
+        logoAndLogin.setRight(logout);
 
         return logoAndLogin;
     }
@@ -189,7 +200,7 @@ public class MedicalStaffMainPageGUI extends Application
         // create picture box for left side of preview pane
         VBox pictureBox = new VBox();
         // default preview picture
-        ImageView previewPicture = new ImageView(new Image(
+        previewPicture = new ImageView(new Image(
                 "images/defaultPicture.png"));
 
         // details button
@@ -286,16 +297,16 @@ public class MedicalStaffMainPageGUI extends Application
     {
         // create search bar
         HBox searchBar = new HBox();
-        ComboBox<String> searchComboBox = new ComboBox<String>();
-        searchComboBox.getItems().addAll("Name", "Address", "Allergy",
+        searchBy = new ComboBox<String>();
+        searchBy.getItems().addAll("Name", "Address", "Allergy",
                 "CosmoID");
 
         // set width
-        searchComboBox.setStyle("-fx-pref-width: 150;");
-        searchComboBox.setPromptText(("Search By"));
+        searchBy.setStyle("-fx-pref-width: 150;");
+        searchBy.setPromptText(("Search By"));
 
         // create search field
-        TextField searchField = new TextField();
+        searchField = new TextField();
         searchField.setPromptText("Search...");
         searchField.setStyle("-fx-pref-width: 245; -fx-pref-height: 26;");
 
@@ -304,10 +315,10 @@ public class MedicalStaffMainPageGUI extends Application
         searchButton.setPrefSize(110, 20);
 
         // set margins
-        HBox.setMargin(searchComboBox, new Insets(0, 5, 0, 10));
+        HBox.setMargin(searchBy, new Insets(0, 5, 0, 10));
         HBox.setMargin(searchField, new Insets(0, 5, 0, 5));
         HBox.setMargin(searchButton, new Insets(0, 0, 0, 5));
-        searchBar.getChildren().addAll(searchComboBox, searchField,
+        searchBar.getChildren().addAll(searchBy, searchField,
                 searchButton);
 
         return searchBar;
@@ -322,17 +333,17 @@ public class MedicalStaffMainPageGUI extends Application
     private HBox createNoteBox()
     {
         HBox hbox = new HBox();
-        ListView<String> noteTitles = new ListView<String>();
+        noteTitleView = new ListView<String>();
         // create list of notes
         // TODO make this automatically pull from the database of notes
-        ObservableList<String> notes = FXCollections.observableArrayList(
+        noteTitleList = FXCollections.observableArrayList(
                 "Note 1", "Note 2", "Note 3", "Note 4", "Note 5", "Note 6",
                 "Note 7", "Note 8", "Note 9", "Note 10", "Note 11");
 
         // set notes list to listview
-        noteTitles.setItems(notes);
-        noteTitles.setMinWidth(170);
-        noteTitles.setMaxWidth(170);
+        noteTitleView.setItems(noteTitleList);
+        noteTitleView.setMinWidth(170);
+        noteTitleView.setMaxWidth(170);
 
         // note display pane
         GridPane noteDisplayPane = new GridPane();
@@ -381,7 +392,7 @@ public class MedicalStaffMainPageGUI extends Application
         noteDisplayPane.setMinWidth(265);
 
         hbox.setPadding(new Insets(49, 0, 0, 0));
-        hbox.getChildren().addAll(noteTitles, noteDisplayPane);
+        hbox.getChildren().addAll(noteTitleView, noteDisplayPane);
 
         return hbox;
     }
@@ -400,8 +411,8 @@ public class MedicalStaffMainPageGUI extends Application
         hbox.setStyle("-fx-background-color: #336699;");
 
         // TableView instance to hold User records
-        TableView<Participant> table = new TableView<Participant>();
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        participantTable = new TableView<Participant>();
+        participantTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         // Instantiation of all the table column headings (With proper
         // formatting)
@@ -443,12 +454,12 @@ public class MedicalStaffMainPageGUI extends Application
         lastUpdatedCol.setResizable(false);
 
         // Appending column headers to the table for display
-        table.getColumns().addAll(cosmoIDCol, participantNameCol, addressCol,
+        participantTable.getColumns().addAll(cosmoIDCol, participantNameCol, addressCol,
                 emergencyContactNameCol, emergencyContactPhoneCol,
                 lastUpdatedCol);
 
         // table columns not draggable to reorder it
-        table.getColumns().addListener(new ListChangeListener()
+        participantTable.getColumns().addListener(new ListChangeListener()
         {
             @Override
             public void onChanged( Change change )
@@ -456,15 +467,15 @@ public class MedicalStaffMainPageGUI extends Application
                 change.next();
                 if ( change.wasReplaced() )
                 {
-                    table.getColumns().clear();
-                    table.getColumns().addAll(cosmoIDCol, participantNameCol,
+                    participantTable.getColumns().clear();
+                    participantTable.getColumns().addAll(cosmoIDCol, participantNameCol,
                             addressCol, emergencyContactNameCol,
                             emergencyContactPhoneCol, lastUpdatedCol);
                 }
             }
         });
 
-        // TODO example, pls remove
+        // TODO example, please remove
 
         Date updated = new Date();
 
@@ -476,6 +487,8 @@ public class MedicalStaffMainPageGUI extends Application
         // add list to columns
         ObservableList<Participant> participantList = FXCollections
                 .observableArrayList(test, test2);
+        
+        
         // add data to columns
         cosmoIDCol.setCellValueFactory(new PropertyValueFactory<>("cosmoID"));
         participantNameCol.setCellValueFactory(new PropertyValueFactory<>(
@@ -491,9 +504,9 @@ public class MedicalStaffMainPageGUI extends Application
                 "informationLastUpdated"));
 
         // set things to participants
-        table.setItems(participantList);
+        participantTable.setItems(participantList);
 
-        hbox.getChildren().addAll(table);
+        hbox.getChildren().addAll(participantTable);
 
         return hbox;
     }
