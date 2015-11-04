@@ -94,13 +94,15 @@ public class LoginGUI extends Application
 		        String password = pfUserPassword.getText();
 		        int i = 0;
 		        boolean success = false;
+		        //Checks the lenght of the textfileds 
 		        if(username.length() > 0 && password.length() > 0)
 		        {
 		        	while(i<users.length && !success)
 			        {	
-			        	
+			        	//If the password and username are correct
 			        	if(users[i].login(Integer.parseInt(username), password))
 			        	{
+			        		//If the logged in user is a technical administrator, show the tech admin main page
 			        		if(users[i] instanceof TechnicalAdministrator)
 			        		{
 			        		success = true;
@@ -109,6 +111,7 @@ public class LoginGUI extends Application
 			        		TechMainPageGUI test5 = new TechMainPageGUI();
 			        		test5.TechMainPageConstruct(loginStage);
 			        		}
+			        		//Otherwise they are medical staff 
 			        		else if(users[i] instanceof BasicStaff ||
 			        				users[i] instanceof MedicalAdministrator)
 			        		{
