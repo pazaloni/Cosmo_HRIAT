@@ -1,23 +1,30 @@
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
+/**
+ * 
+ * Purpose: Represent a participant within the system, store all the information
+ * pertaining the participanti in the system
+ * 
+ * @author TEAM CIMP
+ * @version 1.0
+ */
 public class Participant
 {
-    //TODO add all attributes pls
-    
+    // TODO add all attributes pls
+
     private int cosmoID;
     private String participantName;
     private Date informationLastUpdated;
-    private String participantAddress; //TODO change to address object
-    private String emergencyContactName; 
+    private String participantAddress; // TODO change to address object
+    private String emergencyContactName;
     private String emergencyContactPhone;
-    
-    
-    //TODO very bad constructor
+
+    // TODO very bad constructor
     /**
      * 
      * Constructor for the Participant class.
+     * 
      * @param cosmoID
      * @param participantName
      * @param informationLastUpdated
@@ -25,20 +32,20 @@ public class Participant
      * @param emergencyContactName
      * @param emergencyContactPhone
      */
-    public Participant(int cosmoID, String participantName, String participantAddress, 
-            String emergencyContactName, String emergencyContactPhone, Date informationLastUpdated)
-            {
-                this.cosmoID = cosmoID;
-                this.participantName = participantName;
-                this.informationLastUpdated = informationLastUpdated;
-                this.participantAddress = participantAddress;
-                this.emergencyContactName = emergencyContactName;
-                this.emergencyContactPhone = emergencyContactPhone;
-        
-        
-            }
+    public Participant(int cosmoID, String participantName,
+            String participantAddress, String emergencyContactName,
+            String emergencyContactPhone, Date informationLastUpdated)
+    {
+        this.cosmoID = cosmoID;
+        this.participantName = participantName;
+        this.informationLastUpdated = informationLastUpdated;
+        this.participantAddress = participantAddress;
+        this.emergencyContactName = emergencyContactName;
+        this.emergencyContactPhone = emergencyContactPhone;
 
-    //shane's nightmare
+    }
+
+    // shane's nightmare
     public int getCosmoID()
     {
         return cosmoID;
@@ -51,9 +58,9 @@ public class Participant
 
     public String getInformationLastUpdated()
     {
-       SimpleDateFormat format = new SimpleDateFormat("dd/MM/YYYY hh:mm a");
-              
-       return format.format(informationLastUpdated);
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/YYYY hh:mm a");
+
+        return format.format(informationLastUpdated);
     }
 
     public String getParticipantAddress()
@@ -70,7 +77,5 @@ public class Participant
     {
         return emergencyContactPhone;
     }
-    
-    
-    
+
 }
