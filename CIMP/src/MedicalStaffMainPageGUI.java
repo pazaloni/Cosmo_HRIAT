@@ -97,7 +97,7 @@ public class MedicalStaffMainPageGUI extends Application
 	        }
 		});
         //logo image size
-        ImageView logo = new ImageView(new Image(".\\CosmoIconLong[1].png"));
+        ImageView logo = new ImageView(new Image("images/CosmoIconLong.png"));
         logo.setFitWidth(400);
         logo.setFitHeight(49);
 
@@ -186,7 +186,7 @@ public class MedicalStaffMainPageGUI extends Application
         VBox pictureBox = new VBox();
         //default preview picture
         ImageView previewPicture = new ImageView(new Image(
-                ".\\defaultPicture.png"));
+                "images/defaultPicture.png"));
 
         //details button
         Button detailsButton = new Button("View Details");
