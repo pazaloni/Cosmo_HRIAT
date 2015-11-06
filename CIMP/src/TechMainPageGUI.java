@@ -1,7 +1,4 @@
 import javafx.application.Application;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -10,19 +7,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 /**
  * Purpose: To display the GUI for the technical administrator
@@ -33,49 +25,44 @@ import javafx.util.Callback;
 public class TechMainPageGUI extends Application
 {
 
-    public static Stage techMainStage;
+    public static Stage stageTech;
 
     // Button when clicked, will bring up the activity log
-    private Button viewLog = new Button();
+    private Button btnViewLog = new Button();
 
     // Button, when clicked will bring up the add user menu
-    private Button addUser = new Button();
+    private Button btnAddUser = new Button();
 
     // Button, when clicked will bring up window of user properties to be edited
-    private Button editUser = new Button();
+    private Button btnEditUser = new Button();
 
     // will log out the current technical admin
-    private Button logOut = new Button("Log Out");
+    private Button btnLogOut = new Button("Log Out");
 
     // Once a user is highlighted, clicking this button will prompt for
     // assurance
     // and then the removal of th user
-    private Button removeUser = new Button();
+    private Button btnRemoveUser = new Button();
 
     // The main windows dimensions, in pixels
     private static final int PANE_WIDTH = 875;
     private static final int PANE_HEIGHT = 580;
 
     // The clients logo displayed at the top.
-    private Image logo = new Image("images/CosmoIconLong.png");
+    private Image imgLogo = new Image("images/CosmoIconLong.png");
 
     // heading of the page "Technical Administration"
-    private Label techTitle = new Label();
+    private Label lblTechTitle = new Label();
 
     // the main container for the page.
-    private VBox layoutContainer = new VBox();
+    private VBox vbLayoutContainer = new VBox();
 
-    public TechMainPageGUI()
+    public void techMainPageConstruct( Stage stage )
     {
-
-    }
-
-    public void TechMainPageConstruct( Stage stage )
-    {
-        techMainStage = stage;
+        stageTech = stage;
         // The scene that displays the main layout container with the preferred
         // dimensions
-        Scene scene = new Scene(layoutContainer, PANE_WIDTH, PANE_HEIGHT);
+        Scene scene = new Scene(vbLayoutContainer, PANE_WIDTH, PANE_HEIGHT);
 
         // Vbox used to hold the main content of the page (Buttons, Table, etc)
         VBox managePane = new VBox();
@@ -94,28 +81,28 @@ public class TechMainPageGUI extends Application
         HBox actionBox = new HBox();
 
         // Formating for the viewLog Button
-        viewLog.setText("View Activity Log");
-        viewLog.setFont(new Font(15));
-        viewLog.setMinWidth(150);
+        btnViewLog.setText("View Activity Log");
+        btnViewLog.setFont(new Font(15));
+        btnViewLog.setMinWidth(150);
 
         // Formating for the addUser Button
-        addUser.setText("Add User");
-        addUser.setMinWidth(150);
-        addUser.setFont(new Font(15));
+        btnAddUser.setText("Add User");
+        btnAddUser.setMinWidth(150);
+        btnAddUser.setFont(new Font(15));
 
         // Formating for the editUser Button
-        editUser.setText("Edit User");
-        editUser.setMinWidth(150);
-        editUser.setFont(new Font(15));
+        btnEditUser.setText("Edit User");
+        btnEditUser.setMinWidth(150);
+        btnEditUser.setFont(new Font(15));
 
         // Formating for the removeUser Button
-        removeUser.setText("Remove User");
-        removeUser.setMinWidth(150);
-        removeUser.setFont(new Font(15));
+        btnRemoveUser.setText("Remove User");
+        btnRemoveUser.setMinWidth(150);
+        btnRemoveUser.setFont(new Font(15));
 
         // appends buttons to the action box to be displayed, and formatts the
         // actionBox
-        actionBox.getChildren().addAll(viewLog, addUser, editUser, removeUser);
+        actionBox.getChildren().addAll(btnViewLog, btnAddUser, btnEditUser, btnRemoveUser);
         actionBox.setPadding(new Insets(25, 0, 20, 0));
         actionBox.setAlignment(Pos.CENTER);
         actionBox.setSpacing(75);
@@ -158,13 +145,13 @@ public class TechMainPageGUI extends Application
         managePane.getChildren().addAll(pageName, actionBox, tableName, table);
 
         // appending the two main containers to the layOut container
-        layoutContainer.getChildren().addAll(headerLogin, managePane);
+        vbLayoutContainer.getChildren().addAll(headerLogin, managePane);
 
         // final stage preparation and titling
-        techMainStage.setScene(scene);
-        techMainStage.setTitle("Cosmopolitan Industries");
+        stageTech.setScene(scene);
+        stageTech.setTitle("Cosmopolitan Industries");
         // display window
-        techMainStage.show();
+        stageTech.show();
 
     }
 
@@ -176,7 +163,7 @@ public class TechMainPageGUI extends Application
     public void start( Stage stage )
     {
 
-        TechMainPageConstruct(stage);
+        techMainPageConstruct(stage);
 
     }
 
@@ -196,28 +183,28 @@ public class TechMainPageGUI extends Application
         logoAndLogout.setStyle("-fx-background-color: #FFFFFF;");
 
         // new button for log out, as well as formatting
-        logOut = new Button("Log Out");
-        logOut.setPrefSize(100, 20);
+        btnLogOut = new Button("Log Out");
+        btnLogOut.setPrefSize(100, 20);
 
-        logOut.setOnAction(new EventHandler<ActionEvent>()
+        btnLogOut.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
             public void handle( ActionEvent e )
             {
-                techMainStage.close();
+                stageTech.close();
                 LoginGUI test5 = new LoginGUI();
-                test5.start(techMainStage);
+                test5.start(stageTech);
             }
         });
 
         // ImageView that will hold and display the clients logo, and formatting
-        ImageView logo = new ImageView(new Image("images/CosmoIconLong.png"));
+        ImageView logo = new ImageView(imgLogo);
         logo.setFitWidth(400);
         logo.setFitHeight(49);
 
         // Insert the two children into the borderpane at their preferred sides.
         logoAndLogout.setLeft(logo);
-        logoAndLogout.setRight(logOut);
+        logoAndLogout.setRight(btnLogOut);
 
         // return finished borderPane
         return logoAndLogout;

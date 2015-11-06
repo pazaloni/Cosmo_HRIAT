@@ -2,8 +2,8 @@
 public abstract class StaffAccount
 {
     protected int staffID; // staff members unique login ID
-    private String lastName; // the staff members last name
-    private String firstName; // the staff members first name
+    protected String lastName; // the staff members last name
+    protected String firstName; // the staff members first name
     protected String password; // the staff members password
 
     /**
@@ -24,7 +24,7 @@ public abstract class StaffAccount
         }
         return result;
     }
-
+    /* Flaging for possible removal
     private StaffAccount lookupAccount( int staffID, String password )
     {
         // the security level, determines what class type it will be
@@ -53,8 +53,9 @@ public abstract class StaffAccount
         }
 
         return account;
-    }
-
+    }	
+	*/
+    
     /**
      * Purpose: Allows the user to logout of the system. moves them to the
      * loginGUI, with all of the account info reset in memory.

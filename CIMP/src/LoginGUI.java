@@ -20,13 +20,13 @@ import javafx.stage.Stage;
 public class LoginGUI extends Application
 {
     /* Login Elements */
-    private VBox mainPane;
+    private VBox vbMainPane;
     private TextField txtUserName;
     private PasswordField pfUserPassword;
-    private Button loginBtn;
-    private Image logo;
+    private Button btnLogin;
+    private Image imgLogo;
 
-    public static Stage loginStage;
+    public static Stage stageLogin;
 
     /* Static final variables */
 
@@ -41,6 +41,7 @@ public class LoginGUI extends Application
     public static final String STAGE_TITLE = "Cosmopolitan Industries";
     public static final String IMAGE_PATH = "images/CosmoIconLong.png";
     public static final String BUTTON_LABEL = "Login";
+    //Hard coded array for testing purposes, do not add to diagrams.
     public static StaffAccount[] users = new StaffAccount[3];
 
     public static void main( String[] args )
@@ -60,22 +61,22 @@ public class LoginGUI extends Application
     public void start( Stage stage )
     {
 
-        loginStage = stage;
+        stageLogin = stage;
         initializeVariables();
         // adding the elements to the mainPane
-        mainPane = createBox();
-        mainPane.setAlignment(Pos.CENTER);
+        vbMainPane = createBox();
+        vbMainPane.setAlignment(Pos.CENTER);
 
         // main scene to be displayed
-        Scene scene = new Scene(mainPane);
+        Scene scene = new Scene(vbMainPane);
         // Styling the scene
-        loginStage.setScene(scene);
-        loginStage.setTitle("Cosmopolitan Industries");
-        loginStage.setWidth(WIDTH);
-        loginStage.setHeight(HEIGHT);
-        loginStage.setTitle(STAGE_TITLE);
-        loginStage.setResizable(false);
-        loginStage.show();
+        stageLogin.setScene(scene);
+        stageLogin.setTitle("Cosmopolitan Industries");
+        stageLogin.setWidth(WIDTH);
+        stageLogin.setHeight(HEIGHT);
+        stageLogin.setTitle(STAGE_TITLE);
+        stageLogin.setResizable(false);
+        stageLogin.show();
     }
 
     /**
@@ -88,15 +89,15 @@ public class LoginGUI extends Application
     {
         VBox box = new VBox();
         // Viewable image of the logo
-        ImageView viewableLogo = new ImageView(logo);
+        ImageView viewableLogo = new ImageView(imgLogo);
         // Setting image dimensions
         viewableLogo.setFitWidth(IMAGE_WIDTH);
         viewableLogo.setFitHeight(IMAGE_HEIGHT);
         // Adding everyting to the mainbox
         box.getChildren().addAll(viewableLogo, txtUserName, pfUserPassword,
-                loginBtn);
+                btnLogin);
         box.setSpacing(MAINPANE_SPACING);
-        loginBtn.setOnAction(new EventHandler<ActionEvent>()
+        btnLogin.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
             public void handle( ActionEvent e )
@@ -120,9 +121,9 @@ public class LoginGUI extends Application
                             {
                                 success = true;
                                 System.out.println("success");
-                                loginStage.close();
-                                TechMainPageGUI test5 = new TechMainPageGUI();
-                                test5.TechMainPageConstruct(loginStage);
+                                stageLogin.close();
+                                TechMainPageGUI techMainGui = new TechMainPageGUI();
+                                techMainGui.techMainPageConstruct(stageLogin);
                             }
                             // Otherwise they are medical staff
                             else if ( users[i] instanceof BasicStaff
@@ -130,9 +131,9 @@ public class LoginGUI extends Application
                             {
                                 success = true;
                                 System.out.println("success");
-                                loginStage.close();
+                                stageLogin.close();
                                 MedicalStaffMainPageGUI medStaffGUI = new MedicalStaffMainPageGUI();
-                                medStaffGUI.medMainPageConstruct(loginStage);
+                                medStaffGUI.medMainPageConstruct(stageLogin);
                             }
                         }
                         i++;
@@ -170,15 +171,8 @@ public class LoginGUI extends Application
         // Setting the maximum width the textfield
         pfUserPassword.setMaxWidth(TEXTFIELD_WIDTH);
         // making the new button
-        loginBtn = new Button(BUTTON_LABEL);
+        btnLogin = new Button(BUTTON_LABEL);
         // making the image for the logo to be displayed
-        logo = new Image(IMAGE_PATH);
-    }
-
-    public boolean login( String username, String password )
-    {
-        boolean successful = false;
-
-        return successful;
+        imgLogo = new Image(IMAGE_PATH);
     }
 }
