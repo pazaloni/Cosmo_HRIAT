@@ -1,25 +1,32 @@
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
  * Purpose: To display the GUI for the technical administrator
  * 
- * @author cst214,cst209,cst207
+ * @author cst214,cst209,cst207,cst205
  *
  */
 public class TechMainPageGUI extends Application
@@ -102,7 +109,13 @@ public class TechMainPageGUI extends Application
 
         // appends buttons to the action box to be displayed, and formatts the
         // actionBox
-        actionBox.getChildren().addAll(btnViewLog, btnAddUser, btnEditUser, btnRemoveUser);
+        // set event handler to create a new user
+        btnAddUser.setOnAction(( ActionEvent ) -> {
+            createUser();
+        });
+
+        actionBox.getChildren().addAll(btnViewLog, btnAddUser, btnEditUser,
+                btnRemoveUser);
         actionBox.setPadding(new Insets(25, 0, 20, 0));
         actionBox.setAlignment(Pos.CENTER);
         actionBox.setSpacing(75);
@@ -156,15 +169,136 @@ public class TechMainPageGUI extends Application
     }
 
     /**
+     * 
+     * Purpose: Display a pop-up box with information to fill out for a user
+     */
+    private void createUser()
+    {
+        Stage stageNewUser = new Stage();
+
+        GridPane newUserForm = new GridPane();
+        newUserForm.setHgap(10);
+        newUserForm.setVgap(10);
+        newUserForm.setPadding(new Insets(15));
+
+        Label lblFirstName = new Label("First Name");
+        lblFirstName.setFont(new Font(15));
+        TextField firstName = new TextField();
+
+        Label lblLastName = new Label("Last Name");
+        lblLastName.setFont(new Font(15));
+        TextField lastName = new TextField();
+
+        Label lblUsername = new Label("Username");
+        lblUsername.setFont(new Font(15));
+        TextField username = new TextField();
+
+        Label lblPassword = new Label("Password");
+        lblPassword.setFont(new Font(15));
+        PasswordField password = new PasswordField();
+
+        Label lblRepeatPassword = new Label("Repeat Password");
+        lblRepeatPassword.setFont(new Font(15));
+        PasswordField repeatPassword = new PasswordField();
+
+        Label lblSecurityLevel = new Label("Security Level");
+        lblSecurityLevel.setFont(new Font(15));
+        ObservableList<String> securityLevels = FXCollections
+                .observableArrayList("Basic Staff", "Medical Administrator",
+                        "Technical Administrator");
+        ComboBox<String> cboSecurityLevels = new ComboBox<String>(
+                securityLevels);
+        cboSecurityLevels.setValue(securityLevels.get(0));
+
+        HBox completionButtons = new HBox();
+
+        Button btnReset = new Button("Reset");
+        btnReset.minWidth(150);
+        btnReset.setFont(new Font(15));
+
+        btnReset.setOnAction(event -> {
+            firstName.setText("");
+            lastName.setText("");
+            username.setText("");
+            password.setText("");
+            repeatPassword.setText("");
+            cboSecurityLevels.setValue(securityLevels.get(0));
+
+        });
+
+        Button btnFinish = new Button("Finish");
+        btnFinish.minWidth(150);
+        btnFinish.setFont(new Font(15));
+
+        completionButtons.getChildren().addAll(btnReset, btnFinish);
+        completionButtons.setSpacing(15);
+        newUserForm.add(lblFirstName, 0, 0);
+        newUserForm.add(firstName, 1, 0);
+        newUserForm.add(lblLastName, 0, 1);
+        newUserForm.add(lastName, 1, 1);
+        newUserForm.add(lblUsername, 0, 2);
+        newUserForm.add(username, 1, 2);
+        newUserForm.add(lblPassword, 0, 3);
+        newUserForm.add(password, 1, 3);
+        newUserForm.add(lblRepeatPassword, 0, 4);
+        newUserForm.add(repeatPassword, 1, 4);
+        newUserForm.add(lblSecurityLevel, 0, 5);
+        newUserForm.add(cboSecurityLevels, 1, 5);
+        newUserForm.add(completionButtons, 1, 6);
+
+        Scene scene = new Scene(newUserForm);
+
+        stageNewUser.setScene(scene);
+
+        stageNewUser.setTitle("New User");
+        // set the modality
+        stageNewUser.initModality(Modality.WINDOW_MODAL);
+        // set the parent of the this stage to the 'techstage' so the modality
+        // will
+        // work because it needs a parent to know which stage to disable access
+        stageNewUser.initOwner(stageTech);
+        // make the window not be resizable
+        stageNewUser.setResizable(false);
+        // display window
+        stageNewUser.show();
+
+    }
+
+    /**
+     * 
+     * Purpose: Return a specific number based on the level string
+     * 
+     * @param level
+     *            the level that the admin selected in the combobox
+     * @return Return a security level based on the item selected in the text
+     *         box
+     */
+    private int returnSecurityLevel( String level )
+    {
+        int securityLevel = 4;
+        if ( level.contains("Basic Staff") )
+        {
+            securityLevel = 0;
+        }
+        else if ( level.contains("Medical Administrator") )
+        {
+            securityLevel = 1;
+        }
+        else if ( level.contains("Technical Administrator") )
+        {
+            securityLevel = 2;
+        }
+        return securityLevel;
+    }
+
+    /**
      * Description: Prepares the window for display Param: The stage to be
      * launched
      * 
      */
     public void start( Stage stage )
     {
-
         techMainPageConstruct(stage);
-
     }
 
     /**
@@ -197,7 +331,7 @@ public class TechMainPageGUI extends Application
                 {
                     test5.start(stageTech);
                 }
-                catch (Exception e1)
+                catch ( Exception e1 )
                 {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
