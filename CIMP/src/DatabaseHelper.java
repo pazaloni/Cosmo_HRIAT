@@ -18,16 +18,17 @@ public class DatabaseHelper
     {
         Statement s = null;
         ResultSet rs = null;
+        String result = null;
 
         s = conn.createStatement();
 
-        rs = s.executeQuery("SELECT [LastName] FROM [Clients]");
+        rs = s.executeQuery("SELECT [UserName] FROM [Staff]");
 
         while (rs.next())
         {
-            System.out.println(rs.getString(1));
+            result += (rs.getString(1));
         }
 
-        return null;
+        return result;
     }
 }
