@@ -1,3 +1,4 @@
+
 /**
  * 
  *  Purpose: Represent the technical administrator in the system
@@ -7,7 +8,7 @@
 public class TechnicalAdministrator extends StaffAccount
 {
 
-    public TechnicalAdministrator(int staffID, String password)
+    public TechnicalAdministrator(String staffID, String password)
     {
         this.staffID = staffID;
         this.password = password;
@@ -23,9 +24,11 @@ public class TechnicalAdministrator extends StaffAccount
         return false;
     }
 
-    public boolean removeAccount( int staffID )
+    public boolean removeAccount( String staffID )
     {
-        return false;
+        DatabaseHelper db = new DatabaseHelper();
+        String whereClause = "username = '" + staffID +"'";
+        return db.delete("Staff", whereClause);
     }
 
     public boolean resetPassword( int staffID, String newPassword )
