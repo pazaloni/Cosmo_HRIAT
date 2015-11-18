@@ -63,6 +63,9 @@ public class TechMainPageGUI extends Application
 
     // the main container for the page.
     private VBox vbLayoutContainer = new VBox();
+    
+    // the new user main page
+    private Stage stageNewUser;
 
     public void techMainPageConstruct( Stage stage )
     {
@@ -174,7 +177,7 @@ public class TechMainPageGUI extends Application
      */
     private void createUser()
     {
-        Stage stageNewUser = new Stage();
+        stageNewUser = new Stage();
 
         GridPane newUserForm = new GridPane();
         newUserForm.setHgap(10);
@@ -229,6 +232,15 @@ public class TechMainPageGUI extends Application
         Button btnFinish = new Button("Finish");
         btnFinish.minWidth(150);
         btnFinish.setFont(new Font(15));
+        
+        btnFinish.setOnAction( event  -> {
+//            addUser(firstName.getText(), lastName.getText(), username.getText(), 
+//                    password.getText(), repeatPassword.getText(), 
+//                    cboSecurityLevels.getValue());
+            
+            createPopUpMessage("somethin");
+        });
+
 
         completionButtons.getChildren().addAll(btnReset, btnFinish);
         completionButtons.setSpacing(15);
@@ -261,6 +273,7 @@ public class TechMainPageGUI extends Application
         stageNewUser.setResizable(false);
         // display window
         stageNewUser.show();
+        
 
     }
 
@@ -362,9 +375,10 @@ public class TechMainPageGUI extends Application
 
     }
 
-    public void addUser()
+    public void addUser(String firstName, String lastname, String username, 
+            String password, String repeatPW, String securityLv )
     {
-
+        createPopUpMessage("yeahhhhhhh baby!!!!!");
     }
 
     public void editUser( int staffID )
@@ -376,5 +390,30 @@ public class TechMainPageGUI extends Application
     {
 
     }
+    
+    private void createPopUpMessage(String msg)
+    {
+        Stage stage = new Stage();
+        stage.initModality( Modality.APPLICATION_MODAL);
+        stage.initOwner( stageNewUser );
+        VBox vb = new VBox();
+        
+        Label l = new Label(msg);
+       
+        Button ok = new Button("OK");
+        ok.setOnAction((ActionEvent)->{
+            stage.close();
+        });
+        vb.getChildren().addAll(l, ok);
+        vb.setPadding(new Insets(20, 20, 20, 20));
+        vb.setSpacing(10);
+        vb.setAlignment(Pos.CENTER);
+        stage.setResizable(false);
+        Scene sc = new Scene(vb);
+        stage.setScene(sc);
+        stage.show();
+        
+    }
+
 
 }
