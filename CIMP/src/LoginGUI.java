@@ -48,12 +48,12 @@ public class LoginGUI extends Application
     public static void main( String[] args )
     {
         // Following are test staff that we used to test our login system
-        BasicStaff jeff = new BasicStaff(55501, "jill");
+        BasicStaff jeff = new BasicStaff("55501", "jill");
         users[0] = jeff;
-        TechnicalAdministrator kevin = new TechnicalAdministrator(24561,
+        TechnicalAdministrator kevin = new TechnicalAdministrator("24561",
                 "Bryant");
         users[1] = kevin;
-        BasicStaff haar = new MedicalAdministrator(91023, "miranda");
+        BasicStaff haar = new MedicalAdministrator("91023", "miranda");
         users[2] = haar;
         launch();
     }
@@ -113,7 +113,7 @@ public class LoginGUI extends Application
                     while ( i < users.length && !success )
                     {
                         // If the password and username are correct
-                        if ( users[i].login(Integer.parseInt(username),
+                        if ( users[i].login(username,
                                 password) )
                         {
                             // If the logged in user is a technical

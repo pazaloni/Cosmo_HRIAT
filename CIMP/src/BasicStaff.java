@@ -15,7 +15,7 @@ public class BasicStaff extends StaffAccount
     // private String firstName;
     // private String lastName;
 
-    public BasicStaff(int staffID, String password)
+    public BasicStaff(String staffID, String password)
     {
         this.staffID = staffID;
         this.password = password;

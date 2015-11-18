@@ -10,7 +10,7 @@ public class MedicalAdministrator extends BasicStaff
 
     // private ArrayList<Note> allNotes;
 
-    public MedicalAdministrator(int staffID, String password)
+    public MedicalAdministrator(String staffID, String password)
     {
         super(staffID, password);
         // connect to database, get the staff account record
