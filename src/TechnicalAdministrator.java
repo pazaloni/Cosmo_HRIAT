@@ -31,7 +31,7 @@ public class TechnicalAdministrator extends StaffAccount
         return db.delete("Staff", whereClause);
     }
 
-    public boolean resetPassword( int staffID, String newPassword )
+    public boolean resetPassword( String staffID, String newPassword )
     {
         return false;
     }
