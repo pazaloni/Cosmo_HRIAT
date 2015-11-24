@@ -1,3 +1,4 @@
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 
@@ -120,8 +121,46 @@ public abstract class StaffAccount
     
     public StringProperty accessLevelProperty()
     {
-    	return accessLevel;
+    	String accessStr = " ";
+    	System.out.println(accessLevel);
+    	if(accessLevel.getValue().equals("0"))
+    	{
+    		accessStr = "Medical Staff";
+    	}
+    	else if(accessLevel.getValue().equals("1"))
+    	{
+    		accessStr = "Medical Administrator";
+    	}
+    	else
+    	{
+    		accessStr = "Technical Administrator";
+    	}
+    	StringProperty access = new SimpleStringProperty(accessStr);
+    	return access;
     }
     
+    public void setUsername(String username)
+    {
+    	this.username.set(username);
+    }
     
+    public void setLastName(String lastName)
+    {
+    	this.lastName.set(lastName);
+    }
+    
+    public void setFirstName(String firstName)
+    {
+    	this.firstName.set(firstName);
+    }
+    
+    public void setEmail(String email)
+    {
+    	this.email.set(email);
+    }
+    
+    public void setAccessLevel(String accessLevel)
+    {
+    	this.accessLevel.set(accessLevel);
+    }
 }

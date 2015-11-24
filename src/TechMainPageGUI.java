@@ -136,39 +136,42 @@ public class TechMainPageGUI extends Application
         tableName.setText("Manage Users");
         tableName.setFont(new Font(20));
 
-        // TableView instance to hold User records
-        TableView<String> table = new TableView<String>();
+//        // TableView instance to hold User records
+//        TableView<String> table = new TableView<String>();
+//
+//        // Instantiation of all the table column headings (With proper
+//        // formatting)
+//        TableColumn userNameCol = new TableColumn("User Name");
+//        userNameCol.setMinWidth(175);
+//        
+//        TableColumn lastNameCol = new TableColumn("Last Name");
+//        lastNameCol.setMinWidth(150);
+//
+//        TableColumn firstNameCol = new TableColumn("First Name");
+//        firstNameCol.setMinWidth(150);
+//        
+//        TableColumn emailCol = new TableColumn("Email");
+//        emailCol.setMinWidth(169);
+//
+//        TableColumn securityLvlCol = new TableColumn("Security Level");
+//        securityLvlCol.setMinWidth(100);
+//
+//        // Appending column headers to the table for display
+//        table.getColumns().addAll(userNameCol, lastNameCol, firstNameCol, emailCol,
+//                  securityLvlCol);
+//        System.out.println("About to set items into table");
+//        ResultSet staffResults = dbObject.select("username, lastName, firstName, email, accessLevel", 
+//        		"Staff", "", "lastName");
+//        ObservableList<String> observableStaffList = (ObservableList<String>) dbObject.displayRows(staffResults);
+//        table.setItems(observableStaffList);
 
-        // Instantiation of all the table column headings (With proper
-        // formatting)
-        TableColumn userNameCol = new TableColumn("User Name");
-        userNameCol.setMinWidth(175);
+        StaffTableViewController sTVCont = new StaffTableViewController();
+        sTVCont.initialize();
         
-        TableColumn lastNameCol = new TableColumn("Last Name");
-        lastNameCol.setMinWidth(150);
-
-        TableColumn firstNameCol = new TableColumn("First Name");
-        firstNameCol.setMinWidth(150);
-        
-        TableColumn emailCol = new TableColumn("Email");
-        emailCol.setMinWidth(169);
-
-        TableColumn securityLvlCol = new TableColumn("Security Level");
-        securityLvlCol.setMinWidth(100);
-
-        // Appending column headers to the table for display
-        table.getColumns().addAll(userNameCol, lastNameCol, firstNameCol, emailCol,
-                  securityLvlCol);
-        System.out.println("About to set items into table");
-        ResultSet staffResults = dbObject.select("username, lastName, firstName, email, accessLevel", 
-        		"Staff", "", "lastName");
-        ObservableList<String> observableStaffList = (ObservableList<String>) dbObject.displayRows(staffResults);
-        table.setItems(observableStaffList);
-
         // Formatting for the managePane, as well as the appending of the pages
         // main content
         managePane.setPadding(new Insets(0, 30, 0, 30));
-        managePane.getChildren().addAll(pageName, actionBox, tableName, table);
+        managePane.getChildren().addAll(pageName, actionBox, tableName, sTVCont.staffTable);
 
         // appending the two main containers to the layOut container
         vbLayoutContainer.getChildren().addAll(headerLogin, managePane);

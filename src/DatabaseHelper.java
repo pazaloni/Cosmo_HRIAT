@@ -9,6 +9,11 @@ public class DatabaseHelper
     private final String DB_PATH = "G:/CIMPDatabase.accdb";
     private Connection conn;
 
+    public DatabaseHelper()
+    {
+    	connect();
+    }
+    
     /**
      * Purpose: To establish a connection to the database
      * 
@@ -80,11 +85,11 @@ public class DatabaseHelper
         Statement s = null;
         ResultSet rs = null;
         String query = "SELECT " + columnList + " FROM " + tableList;
-
+        System.out.println("Query without sort or conditions: " + query);
         try
         {
             s = conn.createStatement();
-
+            System.out.println("Created statement to execute");
             // If a condition is specified, add it to the query
             if (!condition.equals(""))
             {
