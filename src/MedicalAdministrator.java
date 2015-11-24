@@ -10,13 +10,11 @@ public class MedicalAdministrator extends BasicStaff
 
     // private ArrayList<Note> allNotes;
 
-    public MedicalAdministrator(String staffID, String password)
+
+
+    public MedicalAdministrator(String username, String lastName, String firstName, String email, 
+    		String password, String accessLevel)
     {
-        super(staffID, password);
-        // connect to database, get the staff account record
-
-        // fetch the first and last name, and assign them to
-        // the firstName and lastname variables
+        super(username, lastName, firstName, email, password, accessLevel);
     }
-
 }

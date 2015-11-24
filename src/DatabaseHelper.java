@@ -1,4 +1,8 @@
 import java.sql.*;
+import java.util.ArrayList;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class DatabaseHelper
 {
@@ -19,7 +23,7 @@ public class DatabaseHelper
         catch (SQLException e)
         {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.out.println("Failed Connection to Database");
         }
     }
 
@@ -72,6 +76,7 @@ public class DatabaseHelper
     public ResultSet select(String columnList, String tableList,
             String condition, String sort)
     {
+    	System.out.println("Doing select");
         Statement s = null;
         ResultSet rs = null;
         String query = "SELECT " + columnList + " FROM " + tableList;
@@ -91,14 +96,14 @@ public class DatabaseHelper
             {
                 query += " ORDER BY " + sort;
             }
-
+            System.out.println("Going to execute: " + query);
             // execute the query
             rs = s.executeQuery(query);
         }
         catch (SQLException e)
         {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.out.println("Failed select");
         }
 
         // return the resultset
@@ -245,4 +250,45 @@ public class DatabaseHelper
         return rows != 0;
     }
 
+    public ObservableList<String> displayRows(ResultSet rs)
+    {
+		ObservableList<String> rows = FXCollections.observableArrayList();
+		
+		try 
+		{
+			ObservableList<String> row = FXCollections.observableArrayList();
+			ArrayList<String> staffInfo = new ArrayList<String>();
+			
+//			while(rs.next())
+//			{
+//				
+//				for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++)
+//				{
+//					System.out.print(rs.getString(i) + ", ");
+//					
+//					row.add(rs.getString(i));
+//				}
+//				System.out.println();
+//				rows.addAll(row);
+//			}
+			
+			while(rs.next())
+			{
+				for(int i = 1; i <= rs.getMetaData().getColumnCount(); i++)
+				{
+					System.out.println(rs.getString(i) + ", ");
+					staffInfo.add(rs.getString(i));
+				}
+				rows.addAll(staffInfo);
+			}
+		} 
+		catch (SQLException e) 
+		{
+			// TODO Auto-generated catch block
+			System.out.println("Error in trying to display rows");
+		}
+
+    	return rows;
+    }
+    
 }

@@ -1,4 +1,7 @@
+import java.sql.*;
+
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -25,6 +28,8 @@ import javafx.stage.Stage;
 public class TechMainPageGUI extends Application
 {
 
+	private DatabaseHelper dbObject = new DatabaseHelper();
+	
     public static Stage stageTech;
 
     // Button when clicked, will bring up the activity log
@@ -59,6 +64,8 @@ public class TechMainPageGUI extends Application
 
     public void techMainPageConstruct( Stage stage )
     {
+    	dbObject.connect();
+    	
         stageTech = stage;
         // The scene that displays the main layout container with the preferred
         // dimensions
@@ -99,6 +106,23 @@ public class TechMainPageGUI extends Application
         btnRemoveUser.setText("Remove User");
         btnRemoveUser.setMinWidth(150);
         btnRemoveUser.setFont(new Font(15));
+        
+        btnRemoveUser.setOnAction(new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle( ActionEvent e )
+            {
+                try
+                {
+                   
+                }
+                catch (Exception e1)
+                {
+                   
+                    e1.printStackTrace();
+                }
+            }
+        });
 
         // appends buttons to the action box to be displayed, and formatts the
         // actionBox
@@ -117,27 +141,29 @@ public class TechMainPageGUI extends Application
 
         // Instantiation of all the table column headings (With proper
         // formatting)
-        TableColumn staffIDCol = new TableColumn("StaffID");
-        staffIDCol.setMinWidth(60);
-
         TableColumn userNameCol = new TableColumn("User Name");
         userNameCol.setMinWidth(175);
-
-        TableColumn emailCol = new TableColumn("Email");
-        emailCol.setMinWidth(169);
+        
+        TableColumn lastNameCol = new TableColumn("Last Name");
+        lastNameCol.setMinWidth(150);
 
         TableColumn firstNameCol = new TableColumn("First Name");
         firstNameCol.setMinWidth(150);
-
-        TableColumn lastNameCol = new TableColumn("Last Name");
-        lastNameCol.setMinWidth(150);
+        
+        TableColumn emailCol = new TableColumn("Email");
+        emailCol.setMinWidth(169);
 
         TableColumn securityLvlCol = new TableColumn("Security Level");
         securityLvlCol.setMinWidth(100);
 
         // Appending column headers to the table for display
-        table.getColumns().addAll(staffIDCol, userNameCol, emailCol,
-                firstNameCol, lastNameCol, securityLvlCol);
+        table.getColumns().addAll(userNameCol, lastNameCol, firstNameCol, emailCol,
+                  securityLvlCol);
+        System.out.println("About to set items into table");
+        ResultSet staffResults = dbObject.select("username, lastName, firstName, email, accessLevel", 
+        		"Staff", "", "lastName");
+        ObservableList<String> observableStaffList = (ObservableList<String>) dbObject.displayRows(staffResults);
+        table.setItems(observableStaffList);
 
         // Formatting for the managePane, as well as the appending of the pages
         // main content
@@ -233,14 +259,14 @@ public class TechMainPageGUI extends Application
 
     }
 
-    public void editUser( int staffID )
+    public void editUser( String staffID )
     {
 
     }
 
-    public void removeUser( int staffID )
+    public void removeUser( String staffID )
     {
-
+    	
     }
 
 }

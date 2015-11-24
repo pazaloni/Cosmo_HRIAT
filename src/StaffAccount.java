@@ -1,11 +1,16 @@
+import javafx.beans.property.StringProperty;
+
 
 public abstract class StaffAccount
 {
-    protected String staffID; // staff members unique login ID
-    protected String lastName; // the staff members last name
-    protected String firstName; // the staff members first name
-    protected String password; // the staff members password
+	protected StringProperty username;
+	protected StringProperty lastName;
+	protected StringProperty firstName;
+	protected StringProperty email;
+	protected StringProperty password;
+	protected StringProperty accessLevel;
 
+    
     /**
      * Purpose: If the login information matches that of a staff account in the
      * database, it will return an instance of that staff member's account, so
@@ -18,7 +23,7 @@ public abstract class StaffAccount
     public boolean login( String staffID, String password )
     {
         boolean result = false;
-        if ( this.staffID == staffID && this.password.equals(password) )
+        if ( this.username.equals( staffID) && this.password.equals(password) )
         {
             result = true;
         }
@@ -67,4 +72,56 @@ public abstract class StaffAccount
     {
         return false;
     }
+    
+    public String GetUsername()
+    {
+    	return username.get();
+    }
+    
+    public StringProperty usernameProperty()
+    {
+    	return username;
+    }
+    
+    public String GetLastName()
+    {
+    	return lastName.get();
+    }
+    
+    public StringProperty lastNameProperty()
+    {
+    	return lastName;
+    }
+    
+    public String GetFirstName()
+    {
+    	return firstName.get();
+    }
+    
+    public StringProperty firstNameProperty()
+    {
+    	return firstName;
+    }
+    
+    public String GetEmail()
+    {
+    	return email.get();
+    }
+    
+    public StringProperty emailProperty()
+    {
+    	return email;
+    }
+    
+    public String GetAccessLevel()
+    {
+    	return accessLevel.get();
+    }
+    
+    public StringProperty accessLevelProperty()
+    {
+    	return accessLevel;
+    }
+    
+    
 }
