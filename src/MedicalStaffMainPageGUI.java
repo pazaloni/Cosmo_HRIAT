@@ -375,23 +375,23 @@ public class MedicalStaffMainPageGUI extends Application
         TextField physicianPhoneTxt = new TextField();
         TextField cosmoIdTxt = new TextField();
         
-
+        grid.add(cosmoIdLbl, 0 , 1);
         grid.add(firstNameLbl, 0 , 2);
         grid.add(lastNameLbl, 0 , 3);
         grid.add(birthdateLbl, 0 , 4);
         grid.add(familyPhysicianLbl, 0 , 5);
         grid.add(healthNumLbl, 0 , 6);
         grid.add(physicianPhoneLbl, 0 , 7);      
-        grid.add(cosmoIdLbl, 0 , 1);
-        
 
+        
+        grid.add(cosmoIdTxt, 1 , 1);
         grid.add(firstNameTxt, 1 , 2);
         grid.add(lastNameTxt, 1 , 3);
         grid.add(birthdateTxt, 1 , 4);
         grid.add(familyPhysicianTxt, 1 , 5);
         grid.add(healthNumTxt, 1 , 6);
         grid.add(physicianPhoneTxt, 1 , 7);
-        grid.add(cosmoIdTxt, 1 , 1);
+
            
         grid.setPadding(new Insets(10, 10, 0, 10));
         

@@ -27,23 +27,23 @@ public class MedicalAdministrator extends BasicStaff
     	DatabaseHelper db = new DatabaseHelper();
     	db.connect();
     	
-    	String values[][] = new String[7][2];
+    	String values[][] = new String[6][2];
     	values[0][0] = "cosmoID";
     	values[1][0] = "firstName";
     	values[2][0] = "lastName";
     	values[3][0] = "dateOfBirth";
-    	values[4][0] = "gender";
-    	values[5][0] = "personalHealthNumber";
-    	values[6][0] = "phoneNum";
+    	//values[4][0] = "gender";
+    	values[4][0] = "personalHealthNumber";
+    	values[5][0] = "phoneNum";
 
     	
     	values[0][1] = cosmoID;
     	values[1][1] = firstName;
     	values[2][1] = lastName;
     	values[3][1] = birthDate;
-    	values[4][1] = familyPhysician;
-    	values[5][1] = healthNumber;
-    	values[6][1] = physicalPhone;
+    	//values[4][1] = familyPhysician;
+    	values[4][1] = healthNumber;
+    	values[5][1] = physicalPhone;
 
 
     	boolean successful = db.insert(values, "Participant");
