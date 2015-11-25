@@ -59,7 +59,7 @@ public class StaffAccount
         }
 
         // flag used to check if the returned username isn't empty
-        if ( !returnedUsername.equals("") )
+        if ( !returnedUsername.equals("") || returnedUsername ==null)
         {
             if ( returnedUsername.equals(username)
                     && returnedPassword.equals(password) )
