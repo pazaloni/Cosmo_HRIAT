@@ -61,8 +61,6 @@ public class TechMainPageGUI extends Application
     private static final int PANE_WIDTH = 875;
     private static final int PANE_HEIGHT = 580;
 
-    private static final String WARNING_MESSAGE = "Please check your fields!";
-
     // The clients logo displayed at the top.
     private Image imgLogo = new Image("images/CosmoIconLong.png");
 
@@ -70,7 +68,7 @@ public class TechMainPageGUI extends Application
     private Label lblTechTitle = new Label();
 
     // label that will be displayed when there will be an error
-    public static Label lblwarning = new Label();
+    public static Label lblWarning = new Label();
 
     // the main container for the page.
     private VBox vbLayoutContainer = new VBox();
@@ -191,7 +189,7 @@ public class TechMainPageGUI extends Application
      */
     public static void changeWarning( String warning )
     {
-        lblwarning.setText(warning);
+        lblWarning.setText(warning);
     }
 
     /**
@@ -240,8 +238,8 @@ public class TechMainPageGUI extends Application
                 securityLevels);
         cboSecurityLevels.setValue(securityLevels.get(0));
 
-        lblwarning.setFont(new Font(15));
-        lblwarning.setStyle("-fx-text-fill: red");
+        lblWarning.setFont(new Font(15));
+        lblWarning.setStyle("-fx-text-fill: red");
 
         HBox completionButtons = new HBox();
 
@@ -257,6 +255,7 @@ public class TechMainPageGUI extends Application
             email.setText("");
             password.setText("");
             repeatPassword.setText("");
+            lblWarning.setText("");
             cboSecurityLevels.setValue(securityLevels.get(0));
         });
 
@@ -268,15 +267,19 @@ public class TechMainPageGUI extends Application
             @Override
             public void handle( ActionEvent event )
             {
-                boolean result = manageStaff.addUser(username.getText(),
+                String result = manageStaff.addUser(username.getText(),
                         lastName.getText(), firstName.getText(),
                         email.getText(), password.getText(),
                         repeatPassword.getText(),
                         returnSecurityLevel(cboSecurityLevels.getValue()));
                 
-                if ( result )
+                if ( result.equals("") )
                 {
                     stageNewUser.close();
+                }
+                else
+                {
+                    lblWarning.setText(result);
                 }
 
             }
@@ -299,7 +302,7 @@ public class TechMainPageGUI extends Application
         newUserForm.add(lblSecurityLevel, 0, 6);
         newUserForm.add(cboSecurityLevels, 1, 6);
         newUserForm.add(completionButtons, 1, 7);
-        newUserForm.add(lblwarning, 1, 8);
+        newUserForm.add(lblWarning, 1, 8);
 
         Scene scene = new Scene(newUserForm);
 

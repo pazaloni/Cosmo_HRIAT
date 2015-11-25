@@ -59,59 +59,67 @@ public class testManageStaffAccountHelper
     @Test
     public void testPasswordSame()
     {
-        boolean result = test.addUser(usernameOne, lastNameOne, firstNameOne, emailOne,
+        String result = test.addUser(usernameOne, lastNameOne, firstNameOne, emailOne,
                 firstPasswordOne, failPassword, securityOne);
-        assertFalse(result);
+        assertTrue(result.equals("Passwords do not match"));
     }
     
     @Test
     public void testEmailFormat()
     {
-        boolean result = test.addUser(usernameOne, lastNameOne, firstNameOne, failEmail,
+        String result = test.addUser(usernameOne, lastNameOne, firstNameOne, failEmail,
                 firstPasswordOne, secondPasswordOne, securityOne);
-        assertFalse(result);
+        assertTrue(result.equals("Email is not valid"));
     }
     
     @Test
     public void testEmptyField()
     {
-        boolean result = test.addUser(failEmptyField, lastNameOne, firstNameOne, emailOne,
+        String result = test.addUser(failEmptyField, lastNameOne, firstNameOne, emailOne,
                 firstPasswordOne, secondPasswordOne, securityOne);
-        assertFalse(result);
+        assertTrue(result.equals("One of your fields is empty"));
         
         result = test.addUser(usernameOne, failEmptyField, firstNameOne, emailOne,
                 firstPasswordOne, secondPasswordOne, securityOne);
-        assertFalse(result);
+        assertTrue(result.equals("One of your fields is empty"));
         
         result = test.addUser(usernameOne, lastNameOne, failEmptyField, emailOne,
                 firstPasswordOne, secondPasswordOne, securityOne);
-        assertFalse(result);
-        
-        result = test.addUser(usernameOne, lastNameOne, firstNameOne, failEmptyField,
-                firstPasswordOne, secondPasswordOne, securityOne);
-        assertFalse(result);
+        assertTrue(result.equals("One of your fields is empty"));
         
         result = test.addUser(usernameOne, lastNameOne, firstNameOne, emailOne, failEmptyField,
                 secondPasswordOne, securityOne);
-        assertFalse(result);
+        assertTrue(result.equals("One of your fields is empty"));
         
         result = test.addUser(usernameOne, lastNameOne, firstNameOne, 
                 emailOne, firstPasswordOne, failEmptyField, securityOne);
-        assertFalse(result);
+        assertTrue(result.equals("One of your fields is empty"));
         
         result = test.addUser(usernameOne, lastNameOne, firstNameOne, 
                 emailOne, firstPasswordOne, secondPasswordOne, failEmptyField);
-        assertFalse(result);
+        assertTrue(result.equals("One of your fields is empty"));
+        
+        
     }
     
-    
+    @Test
+    public void testUserNameTaken()
+    {
+        String result = test.addUser(usernameOne, lastNameOne, firstNameOne, emailOne,
+                firstPasswordOne, secondPasswordOne, securityOne);
+        assertTrue(result.equals(""));
+        
+        result = test.addUser(usernameOne, lastNameOne, firstNameOne, emailOne,
+                firstPasswordOne, secondPasswordOne, securityOne);
+        assertTrue(result.equals("Username is already taken"));
+    }
 
-//    @Test
-//    public void TestAddUserPass()
-//    {
-//        boolean result = test.addUser(username, lastName, firstName, email,
-//                firstPassword, secondPassword, security);
-//        assertTrue(result);
-//    }
+    @Test
+    public void TestAddUserPass()
+    {
+        String result = test.addUser(usernameTwo, lastNameTwo, firstNameTwo, emailTwo,
+                firstPasswordTwo, secondPasswordTwo, securityTwo);
+        assertTrue(result.equals(""));
+    }
 
 }

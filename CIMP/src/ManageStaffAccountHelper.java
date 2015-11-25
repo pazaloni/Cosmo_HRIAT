@@ -7,7 +7,7 @@ public class ManageStaffAccountHelper
     private static final String EMPTY_FIELD = "One of your fields is empty";
     private static final String PASSWORD_NOT_SAME = "Passwords do not match";
     private static final String EMAIL_NOT_VALID = "Email is not valid";
-    private static final String USERNAME_NOT_UNIQUE = "Username is already taken";
+    private static final String USERNAME_NOT_UNIQUE="Username is already taken";
     private static final String RESET_TEXT = "";
 
     private DatabaseHelper db;
@@ -17,43 +17,52 @@ public class ManageStaffAccountHelper
         db = new DatabaseHelper();
     }
 
-
     /**
      * 
-     * Purpose: Return true or false if the user was added to the database successfully
-     * @param username: the username the user passed in 
-     * @param lastName: the lastname the user passed in 
-     * @param firstName: the firstName the user passed in 
-     * @param email: the email the user passed in 
-     * @param password: the password the user passed in 
-     * @param repeatPW: the second password the user passed in 
-     * @param securityLv: the the user passed in
+     * Purpose: Return true or false if the user was added to the database
+     * successfully
      * 
-     * @return boolean: true if the user addition was successful, false otherwise
+     * @param username
+     *            : the username the user passed in
+     * @param lastName
+     *            : the lastname the user passed in
+     * @param firstName
+     *            : the firstName the user passed in
+     * @param email
+     *            : the email the user passed in
+     * @param password
+     *            : the password the user passed in
+     * @param repeatPW
+     *            : the second password the user passed in
+     * @param securityLv
+     *            : the the user passed in
+     * 
+     * @return boolean: true if the user addition was successful, false
+     *         otherwise
      */
-    public boolean addUser( String username, String lastName, String firstName,
+    public String addUser( String username, String lastName, String firstName,
             String email, String password, String repeatPW, String securityLv )
     {
-        boolean result = false;
+        String result = "";
 
         if ( firstName.isEmpty() || lastName.isEmpty() || username.isEmpty()
                 || password.isEmpty() || repeatPW.isEmpty()
                 || securityLv.isEmpty() )
 
         {
-            TechMainPageGUI.changeWarning(EMPTY_FIELD);
+            result = EMPTY_FIELD;
         }
         else
         {
-            //if the paswords are the same, proceed
+            // if the paswords are the same, proceed
             if ( password.equals(repeatPW) )
             {
-                //if the email cotains an @ and . 
+                // if the email cotains an @ and .
                 if ( email.contains("@") && email.contains(".") )
                 {
 
                     db.connect();
-                    //if the username does not exist in the database
+                    // if the username does not exist in the database
                     if ( !usernameExists(username) )
                     {
                         String[] newUserInfo = new String[6];
@@ -64,25 +73,28 @@ public class ManageStaffAccountHelper
                         newUserInfo[4] = password;
                         newUserInfo[5] = securityLv;
                         db.insert(newUserInfo, "Staff");
-                        result = true;
-                        TechMainPageGUI.changeWarning(RESET_TEXT);
+                        result = "";
+
                     }
-                    //if the username does exist, change the warning label with the appropriate message 
+                    // if the username does exist, change the warning label with
+                    // the appropriate message
                     else
                     {
-                        TechMainPageGUI.changeWarning(USERNAME_NOT_UNIQUE);
+                        result = USERNAME_NOT_UNIQUE;
                     }
                 }
-                //if the email is not valid, change the warning label with the appropriate message 
+                // if the email is not valid, change the warning label with the
+                // appropriate message
                 else
                 {
-                    TechMainPageGUI.changeWarning(EMAIL_NOT_VALID);
+                    result = EMAIL_NOT_VALID;
                 }
             }
-            //if the passwords do not match, change the warning label with the appropriate message 
+            // if the passwords do not match, change the warning label with the
+            // appropriate message
             else
             {
-                TechMainPageGUI.changeWarning(PASSWORD_NOT_SAME);
+                result = PASSWORD_NOT_SAME;
             }
         }
         return result;
@@ -122,17 +134,12 @@ public class ManageStaffAccountHelper
         return result;
     }
 
-    public void openlog()
+    public void editUser( String username )
     {
 
     }
 
-    public void editUser( int staffID )
-    {
-
-    }
-
-    public void removeUser( int staffID )
+    public void removeUser( String username )
     {
 
     }
