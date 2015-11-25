@@ -66,6 +66,11 @@ public class TechMainPageGUI extends Application
     {
     	dbObject.connect();
     	
+    	StaffTableViewController sTVCont;
+    	
+    	sTVCont = new StaffTableViewController();
+        sTVCont.initialize();
+    	
         stageTech = stage;
         // The scene that displays the main layout container with the preferred
         // dimensions
@@ -114,7 +119,7 @@ public class TechMainPageGUI extends Application
             {
                 try
                 {
-                   
+                   removeUser(sTVCont.getSelectedPK());
                 }
                 catch (Exception e1)
                 {
@@ -136,37 +141,8 @@ public class TechMainPageGUI extends Application
         tableName.setText("Manage Users");
         tableName.setFont(new Font(20));
 
-//        // TableView instance to hold User records
-//        TableView<String> table = new TableView<String>();
-//
-//        // Instantiation of all the table column headings (With proper
-//        // formatting)
-//        TableColumn userNameCol = new TableColumn("User Name");
-//        userNameCol.setMinWidth(175);
-//        
-//        TableColumn lastNameCol = new TableColumn("Last Name");
-//        lastNameCol.setMinWidth(150);
-//
-//        TableColumn firstNameCol = new TableColumn("First Name");
-//        firstNameCol.setMinWidth(150);
-//        
-//        TableColumn emailCol = new TableColumn("Email");
-//        emailCol.setMinWidth(169);
-//
-//        TableColumn securityLvlCol = new TableColumn("Security Level");
-//        securityLvlCol.setMinWidth(100);
-//
-//        // Appending column headers to the table for display
-//        table.getColumns().addAll(userNameCol, lastNameCol, firstNameCol, emailCol,
-//                  securityLvlCol);
-//        System.out.println("About to set items into table");
-//        ResultSet staffResults = dbObject.select("username, lastName, firstName, email, accessLevel", 
-//        		"Staff", "", "lastName");
-//        ObservableList<String> observableStaffList = (ObservableList<String>) dbObject.displayRows(staffResults);
-//        table.setItems(observableStaffList);
 
-        StaffTableViewController sTVCont = new StaffTableViewController();
-        sTVCont.initialize();
+        
         
         // Formatting for the managePane, as well as the appending of the pages
         // main content
@@ -269,7 +245,10 @@ public class TechMainPageGUI extends Application
 
     public void removeUser( String staffID )
     {
-    	
+    	PopUpCheck checkBox = new PopUpCheck("Are you sure you want to delete ___?");
+    	Stage stage = new Stage();
+    	stage.setScene(checkBox.scene);
+    	stage.show();
     }
 
 }
