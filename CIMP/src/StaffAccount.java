@@ -1,61 +1,97 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public abstract class StaffAccount
+public class StaffAccount
 {
-    protected int staffID; // staff members unique login ID
+    private DatabaseHelper db;
+
+    protected String username; // staff members unique login ID
     protected String lastName; // the staff members last name
     protected String firstName; // the staff members first name
     protected String password; // the staff members password
 
-    /**
-     * Purpose: If the login information matches that of a staff account in the
-     * database, it will return an instance of that staff member's account, so
-     * their information and security level can be used to determine what they
-     * see. This method assumes that the information has already been validated.
-     * 
-     * @return staffAccount: the account of the user that has successfully
-     *         logged in.
-     */
-    public boolean login( int staffID, String password )
+    public StaffAccount()
     {
-        boolean result = false;
-        if ( this.staffID == staffID && this.password.equals(password) )
-        {
-            result = true;
-        }
-        return result;
+
     }
-    /* Flaging for possible removal
-    private StaffAccount lookupAccount( int staffID, String password )
+
+    /**
+     * 
+     * Purpose: perform a login attempt based on the credentials provided by the
+     * user
+     * 
+     * @param username : the username the user provided
+     * @param password : the password the user provided
+     * @return either an instantiated account(basic staff, medical admin, or
+     *         techincal admin) or a null account indicating an unsucessful
+     *         login
+     */
+    public StaffAccount login( String username, String password )
     {
-        // the security level, determines what class type it will be
-        // 0 = basic staff
-        // 1 = medical admin
-        // 2 = tech admin
-        int securityLevel = 0;
-        StaffAccount account = null;
-        switch ( securityLevel )
+        // the account that will be returned upon successful login
+        StaffAccount staff = null;
+        // the username and password returned from the database
+        String returnedUsername = null;
+        String returnedPassword = null;
+        // variable to keep track of the access level
+        int accessLevel = -1;
+
+        db = new DatabaseHelper();
+        db.connect();
+        // query used to find the provided username that returns the username,
+        // password and accesslevel
+        ResultSet user = db.select("UserName, password, accessLevel", "Staff",
+                "username='" + username + "'", "");
+        try
         {
-            case 0:
+            // if the user result set has values in it
+            while ( user.next() )
             {
-                account = new BasicStaff(staffID, password);
-                break;
+                returnedUsername = user.getString(1);
+                returnedPassword = user.getString(2);
+                accessLevel = Integer.parseInt(user.getString(3));
             }
-            case 1:
-            {
-                account = new MedicalAdministrator(staffID, password);
-                break;
-            }
-            case 2:
-            {
-                account = new TechnicalAdministrator(staffID, password);
-                break;
-            }
+        }
+        catch ( SQLException e1 )
+        {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
         }
 
-        return account;
-    }	
-	*/
-    
+        // flag used to check if the returned username isn't empty
+        if ( !returnedUsername.equals("") )
+        {
+            if ( returnedUsername.equals(username)
+                    && returnedPassword.equals(password) )
+            {
+                // if the accessLevel is 0 then instantiate a Basic staff
+                if ( accessLevel == 0 )
+                {
+                    staff = new BasicStaff(returnedUsername, returnedPassword);
+                }
+                // if the accessLevel is 1 then instantiate a Medical Admin
+                else if ( accessLevel == 1 )
+                {
+                    staff = new MedicalAdministrator(returnedUsername,
+                            returnedPassword);
+                }
+                // if the accessLevel is 2 then instantiate a Technical Admin
+                else if ( accessLevel == 2 )
+                {
+                    staff = new TechnicalAdministrator(returnedUsername,
+                            returnedPassword);
+                }
+            }
+            else
+            {
+                // if the returned username is null, make the staff to return
+                // null aswell
+                staff = null;
+            }
+        }
+        return staff;
+    }
+
     /**
      * Purpose: Allows the user to logout of the system. moves them to the
      * loginGUI, with all of the account info reset in memory.

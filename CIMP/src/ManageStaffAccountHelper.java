@@ -120,7 +120,7 @@ public class ManageStaffAccountHelper
             {
                 // if the username for the new user is already in the database
                 // then the result is false
-                if ( username.equals(set.getString(1)) )
+                if ( username.equals(set.getString(1)))
                 {
                     result = true;
                 }
