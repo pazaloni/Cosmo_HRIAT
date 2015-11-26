@@ -202,7 +202,7 @@ public class TechMainPageGUI extends Application
 
         GridPane newUserForm = new GridPane();
         newUserForm.setHgap(10);
-        newUserForm.setVgap(10);
+        newUserForm.setVgap(15);
         newUserForm.setPadding(new Insets(15));
 
         Label lblFirstName = new Label("First Name");
@@ -286,29 +286,29 @@ public class TechMainPageGUI extends Application
         });
 
         completionButtons.getChildren().addAll(btnReset, btnSubmit);
-        completionButtons.setSpacing(15);
-        newUserForm.add(lblUsername, 0, 0);
-        newUserForm.add(username, 1, 0);
-        newUserForm.add(lblLastName, 0, 1);
-        newUserForm.add(lastName, 1, 1);
-        newUserForm.add(lblFirstName, 0, 2);
-        newUserForm.add(firstName, 1, 2);
-        newUserForm.add(lblEmail, 0, 3);
-        newUserForm.add(email, 1, 3);
-        newUserForm.add(lblPassword, 0, 4);
-        newUserForm.add(password, 1, 4);
-        newUserForm.add(lblRepeatPassword, 0, 5);
-        newUserForm.add(repeatPassword, 1, 5);
-        newUserForm.add(lblSecurityLevel, 0, 6);
-        newUserForm.add(cboSecurityLevels, 1, 6);
-        newUserForm.add(completionButtons, 1, 7);
-        newUserForm.add(lblWarning, 1, 8);
+        completionButtons.setSpacing(10);
+        newUserForm.add(lblUsername,        0, 1);
+        newUserForm.add(username,           1, 1);
+        newUserForm.add(lblLastName,        0, 2);
+        newUserForm.add(lastName,           1, 2); 
+        newUserForm.add(lblFirstName,       0, 3);
+        newUserForm.add(firstName,          1, 3);
+        newUserForm.add(lblEmail,           0, 4);
+        newUserForm.add(email,              1, 4);
+        newUserForm.add(lblPassword,        0, 5);
+        newUserForm.add(password,           1, 5);
+        newUserForm.add(lblRepeatPassword,  0, 6);
+        newUserForm.add(repeatPassword,     1, 6);
+        newUserForm.add(lblSecurityLevel,   0, 7);
+        newUserForm.add(cboSecurityLevels,  1, 7);
+        newUserForm.add(completionButtons,  1, 8);
+        newUserForm.add(lblWarning, 0, 0,   2,1);
 
         Scene scene = new Scene(newUserForm);
 
         stageNewUser.setScene(scene);
 
-        stageNewUser.setTitle("New User");
+        stageNewUser.setTitle("Account Registration");
         // set the modality
         stageNewUser.initModality(Modality.WINDOW_MODAL);
         // set the parent of the this stage to the 'techstage' so the modality

@@ -30,9 +30,12 @@ public class StaffAccount
     {
         // the account that will be returned upon successful login
         StaffAccount staff = null;
-        // the username and password returned from the database
-        String returnedUsername = null;
-        String returnedPassword = null;
+        
+        // These are set as not found because when there is nothing returned
+        // form the database they are assigned nothing so they remain
+        // uninstantiated
+        String returnedUsername = "not found";
+        String returnedPassword = "not found";
         // variable to keep track of the access level
         int accessLevel = -1;
 
@@ -47,6 +50,7 @@ public class StaffAccount
             // if the user result set has values in it
             while ( user.next() )
             {
+                // the username, password and accessLevel returned from the database
                 returnedUsername = user.getString(1);
                 returnedPassword = user.getString(2);
                 accessLevel = Integer.parseInt(user.getString(3));
@@ -59,7 +63,7 @@ public class StaffAccount
         }
 
         // flag used to check if the returned username isn't empty
-        if ( !returnedUsername.equals("") || returnedUsername ==null)
+        if ( !returnedUsername.equals("not found") )
         {
             if ( returnedUsername.equals(username)
                     && returnedPassword.equals(password) )

@@ -4,10 +4,10 @@ import java.sql.SQLException;
 public class ManageStaffAccountHelper
 {
 
-    private static final String EMPTY_FIELD = "One of your fields is empty";
+    private static final String EMPTY_FIELD = "One or more of your fields is empty";
     private static final String PASSWORD_NOT_SAME = "Passwords do not match";
     private static final String EMAIL_NOT_VALID = "Email is not valid";
-    private static final String USERNAME_NOT_UNIQUE="Username is already taken";
+    private static final String USERNAME_NOT_UNIQUE = "Username is already taken";
     private static final String RESET_TEXT = "";
 
     private DatabaseHelper db;
@@ -22,20 +22,13 @@ public class ManageStaffAccountHelper
      * Purpose: Return true or false if the user was added to the database
      * successfully
      * 
-     * @param username
-     *            : the username the user passed in
-     * @param lastName
-     *            : the lastname the user passed in
-     * @param firstName
-     *            : the firstName the user passed in
-     * @param email
-     *            : the email the user passed in
-     * @param password
-     *            : the password the user passed in
-     * @param repeatPW
-     *            : the second password the user passed in
-     * @param securityLv
-     *            : the the user passed in
+     * @param username : the username the user passed in
+     * @param lastName : the lastname the user passed in
+     * @param firstName : the firstName the user passed in
+     * @param email : the email the user passed in
+     * @param password : the password the user passed in
+     * @param repeatPW : the second password the user passed in
+     * @param securityLv : the the user passed in
      * 
      * @return boolean: true if the user addition was successful, false
      *         otherwise
@@ -104,8 +97,7 @@ public class ManageStaffAccountHelper
      * 
      * Purpose: Query the database and check if the username has been taken
      *
-     * @param username
-     *            : the username for the new account
+     * @param username : the username for the new account
      * @return boolean: true if the username exists, false otherwise
      */
     private boolean usernameExists( String username )
@@ -120,7 +112,7 @@ public class ManageStaffAccountHelper
             {
                 // if the username for the new user is already in the database
                 // then the result is false
-                if ( username.equals(set.getString(1)))
+                if ( username.equals(set.getString(1)) )
                 {
                     result = true;
                 }
