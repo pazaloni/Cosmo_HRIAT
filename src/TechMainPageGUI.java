@@ -27,6 +27,7 @@ import javafx.stage.Stage;
  */
 public class TechMainPageGUI extends Application
 {
+	private StaffTableViewController sTVCont;
 
 	private DatabaseHelper dbObject = new DatabaseHelper();
 	
@@ -66,7 +67,7 @@ public class TechMainPageGUI extends Application
     {
     	dbObject.connect();
     	
-    	StaffTableViewController sTVCont;
+    	
     	
     	sTVCont = new StaffTableViewController();
         sTVCont.initialize();
@@ -245,10 +246,24 @@ public class TechMainPageGUI extends Application
 
     public void removeUser( String staffID )
     {
-    	PopUpCheck checkBox = new PopUpCheck("Are you sure you want to delete ___?");
+    	System.out.println("Attempting Removal of: " + staffID);
     	Stage stage = new Stage();
-    	stage.setScene(checkBox.scene);
-    	stage.show();
-    }
+    	PopUpCheck checkBox = new PopUpCheck("Are you sure you want to delete "
+    			+ staffID + "?", stage);
+    	
+		Scene scene = new Scene(checkBox.root, 300, 75);
+    	stage.setScene(scene);
+    	stage.showAndWait();
+    
+    	if(checkBox.result)
+    	{
+    		System.out.println("Removing user: " + staffID);
+    		this.dbObject.delete("Staff", "UserName = \"" + staffID + "\"");
+    		this.sTVCont.removeViewableUser(staffID);
+    	}
+    	
+    	
+    	
+	}
 
 }
