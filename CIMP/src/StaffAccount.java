@@ -1,6 +1,15 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * 
+ *  Purpose: manage when users want to log in and checks to be sure that all
+ *  users that login have an existing login and password and that they match the
+ *  input given by the user
+ *
+ * @author team CIMP
+ * @version 1.0
+ */
 public class StaffAccount
 {
     private DatabaseHelper db;
@@ -10,10 +19,7 @@ public class StaffAccount
     protected String firstName; // the staff members first name
     protected String password; // the staff members password
 
-    public StaffAccount()
-    {
-
-    }
+ 
 
     /**
      * 

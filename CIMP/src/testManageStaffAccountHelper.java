@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,7 +24,9 @@ public class testManageStaffAccountHelper
     private String secondPasswordTwo;
     private String securityTwo;
 
-    private String failEmail;
+    private String failEmailWithoutBoth;
+    private String failEmailWithoutAt;
+    private String failEmailWithoutPeriod;
     private String failPassword;
     private String failEmptyField;
 
@@ -50,7 +53,9 @@ public class testManageStaffAccountHelper
         
         
 
-        failEmail = "1234";
+        failEmailWithoutBoth = "1234";
+        failEmailWithoutAt = "hello.hello";
+        failEmailWithoutPeriod = "1234@1234";
         failPassword = "random";
         failEmptyField = "";
 
@@ -59,24 +64,35 @@ public class testManageStaffAccountHelper
     @Test
     public void testPasswordSame()
     {
-        String result = test.addUser(usernameOne, lastNameOne, firstNameOne, emailOne,
-                firstPasswordOne, failPassword, securityOne);
+        String result = test.addUser(usernameOne, lastNameOne, firstNameOne, 
+                emailOne, firstPasswordOne, failPassword, securityOne);
         assertTrue(result.equals("Passwords do not match"));
     }
     
     @Test
     public void testEmailFormat()
     {
-        String result = test.addUser(usernameOne, lastNameOne, firstNameOne, failEmail,
-                firstPasswordOne, secondPasswordOne, securityOne);
+        String result = test.addUser(usernameOne, lastNameOne, firstNameOne,
+                failEmailWithoutBoth, firstPasswordOne, secondPasswordOne,
+                securityOne);
+        assertTrue(result.equals("Email is not valid"));
+        
+        result = test.addUser(usernameOne, lastNameOne, firstNameOne,
+                failEmailWithoutAt, firstPasswordOne, secondPasswordOne,
+                securityOne);
+        assertTrue(result.equals("Email is not valid"));
+        
+        result = test.addUser(usernameOne, lastNameOne, firstNameOne,
+                failEmailWithoutPeriod, firstPasswordOne, secondPasswordOne,
+                securityOne);
         assertTrue(result.equals("Email is not valid"));
     }
     
     @Test
     public void testEmptyField()
     {
-        String result = test.addUser(failEmptyField, lastNameOne, firstNameOne, emailOne,
-                firstPasswordOne, secondPasswordOne, securityOne);
+        String result = test.addUser(failEmptyField, lastNameOne, firstNameOne, 
+                emailOne, firstPasswordOne, secondPasswordOne, securityOne);
         assertTrue(result.equals("One or more of your fields is empty"));
         
         result = test.addUser(usernameOne, failEmptyField, firstNameOne, emailOne,
@@ -87,8 +103,8 @@ public class testManageStaffAccountHelper
                 firstPasswordOne, secondPasswordOne, securityOne);
         assertTrue(result.equals("One or more of your fields is empty"));
         
-        result = test.addUser(usernameOne, lastNameOne, firstNameOne, emailOne, failEmptyField,
-                secondPasswordOne, securityOne);
+        result = test.addUser(usernameOne, lastNameOne, firstNameOne, emailOne, 
+                failEmptyField, secondPasswordOne, securityOne);
         assertTrue(result.equals("One or more of your fields is empty"));
         
         result = test.addUser(usernameOne, lastNameOne, firstNameOne, 
@@ -105,8 +121,8 @@ public class testManageStaffAccountHelper
     @Test
     public void testUserNameTaken()
     {
-        String result = test.addUser(usernameOne, lastNameOne, firstNameOne, emailOne,
-                firstPasswordOne, secondPasswordOne, securityOne);
+        String result = test.addUser(usernameOne, lastNameOne, firstNameOne, 
+                emailOne, firstPasswordOne, secondPasswordOne, securityOne);
         assertTrue(result.equals(""));
         
         result = test.addUser(usernameOne, lastNameOne, firstNameOne, emailOne,
@@ -117,9 +133,16 @@ public class testManageStaffAccountHelper
     @Test
     public void TestAddUserPass()
     {
-        String result = test.addUser(usernameTwo, lastNameTwo, firstNameTwo, emailTwo,
-                firstPasswordTwo, secondPasswordTwo, securityTwo);
+        String result = test.addUser(usernameTwo, lastNameTwo, firstNameTwo, 
+                emailTwo, firstPasswordTwo, secondPasswordTwo, securityTwo);
         assertTrue(result.equals(""));
+    }
+    
+    @After
+    public void tearDown()
+    {
+        test.removeUser(usernameOne);
+        test.removeUser(usernameTwo);
     }
 
 }

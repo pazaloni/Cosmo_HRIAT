@@ -1,6 +1,15 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * 
+ *  Purpose: Class to manage the adding, editing and removal of a staff accounts
+ *  and to do all of these to the database
+ *  
+ *
+ * @author team CIMP
+ * @version 1.0
+ */
 public class ManageStaffAccountHelper
 {
 
@@ -11,6 +20,11 @@ public class ManageStaffAccountHelper
     
     private DatabaseHelper db;
 
+    /**
+     * purpose: Constructor for ManageStaffAccountHelper which creates 
+     * and instance of the DataBaseHelper
+     * Constructor for the ManageStaffAccountHelper class.
+     */
     public ManageStaffAccountHelper()
     {
         db = new DatabaseHelper();
@@ -119,19 +133,29 @@ public class ManageStaffAccountHelper
         }
         catch ( SQLException e )
         {
-            // TODO Auto-generated catch block
+            
             e.printStackTrace();
         }
         return result;
     }
 
+    /**
+     * 
+     * Purpose: edit an existing user
+     * @param username
+     */
     public void editUser( String username )
     {
-
+     // TODO
     }
 
+    /**
+     * 
+     * Purpose: remove an existing user
+     * @param username
+     */
     public void removeUser( String username )
     {
-
+     // TODO
     }
 }
