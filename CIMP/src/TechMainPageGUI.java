@@ -1,29 +1,39 @@
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
  * Purpose: To display the GUI for the technical administrator
  * 
- * @author cst214,cst209,cst207
+ * @author cst214,cst209,cst207,cst205
  *
  */
 public class TechMainPageGUI extends Application
 {
+
+    // helper class used to manage accounts
+    private ManageStaffAccountHelper manageStaff = new ManageStaffAccountHelper();
 
     public static Stage stageTech;
 
@@ -35,6 +45,9 @@ public class TechMainPageGUI extends Application
 
     // Button, when clicked will bring up window of user properties to be edited
     private Button btnEditUser = new Button();
+
+    // Button, used to finish adding a staff account to database
+    private Button btnSubmit = new Button("Submit");
 
     // will log out the current technical admin
     private Button btnLogOut = new Button("Log Out");
@@ -54,8 +67,14 @@ public class TechMainPageGUI extends Application
     // heading of the page "Technical Administration"
     private Label lblTechTitle = new Label();
 
+    // label that will be displayed when there will be an error
+    public static Label lblWarning = new Label();
+
     // the main container for the page.
     private VBox vbLayoutContainer = new VBox();
+
+    // the new user main page
+    private Stage stageNewUser;
 
     public void techMainPageConstruct( Stage stage )
     {
@@ -102,7 +121,13 @@ public class TechMainPageGUI extends Application
 
         // appends buttons to the action box to be displayed, and formatts the
         // actionBox
-        actionBox.getChildren().addAll(btnViewLog, btnAddUser, btnEditUser, btnRemoveUser);
+        // set event handler to create a new user
+        btnAddUser.setOnAction(( ActionEvent ) -> {
+            createUser();
+        });
+
+        actionBox.getChildren().addAll(btnViewLog, btnAddUser, btnEditUser,
+                btnRemoveUser);
         actionBox.setPadding(new Insets(25, 0, 20, 0));
         actionBox.setAlignment(Pos.CENTER);
         actionBox.setSpacing(75);
@@ -156,15 +181,182 @@ public class TechMainPageGUI extends Application
     }
 
     /**
+     * 
+     * Purpose:Change the warning based on what the user's input failed to
+     * validated
+     * 
+     * @param warning
+     */
+    public static void changeWarning( String warning )
+    {
+        lblWarning.setText(warning);
+    }
+
+    /**
+     * 
+     * Purpose: Display a pop-up box with information to fill out for a user
+     */
+    private void createUser()
+    {
+        stageNewUser = new Stage();
+
+        GridPane newUserForm = new GridPane();
+        newUserForm.setHgap(10);
+        newUserForm.setVgap(15);
+        newUserForm.setPadding(new Insets(15));
+
+        Label lblFirstName = new Label("First Name");
+        lblFirstName.setFont(new Font(15));
+        TextField firstName = new TextField();
+
+        Label lblLastName = new Label("Last Name");
+        lblLastName.setFont(new Font(15));
+        TextField lastName = new TextField();
+
+        Label lblUsername = new Label("Username");
+        lblUsername.setFont(new Font(15));
+        TextField username = new TextField();
+
+        Label lblPassword = new Label("Password");
+        lblPassword.setFont(new Font(15));
+        PasswordField password = new PasswordField();
+
+        Label lblEmail = new Label("Email");
+        lblEmail.setFont(new Font(15));
+        TextField email = new TextField();
+
+        Label lblRepeatPassword = new Label("Repeat Password");
+        lblRepeatPassword.setFont(new Font(15));
+        PasswordField repeatPassword = new PasswordField();
+
+        Label lblSecurityLevel = new Label("Security Level");
+        lblSecurityLevel.setFont(new Font(15));
+        ObservableList<String> securityLevels = FXCollections
+                .observableArrayList("Basic Staff", "Medical Administrator",
+                        "Technical Administrator");
+        ComboBox<String> cboSecurityLevels = new ComboBox<String>(
+                securityLevels);
+        cboSecurityLevels.setValue(securityLevels.get(0));
+
+        lblWarning.setFont(new Font(15));
+        lblWarning.setStyle("-fx-text-fill: red");
+
+        HBox completionButtons = new HBox();
+
+        Button btnReset = new Button("Reset");
+
+        btnReset.minWidth(150);
+        btnReset.setFont(new Font(15));
+
+        btnReset.setOnAction(event -> {
+            firstName.setText("");
+            lastName.setText("");
+            username.setText("");
+            email.setText("");
+            password.setText("");
+            repeatPassword.setText("");
+            lblWarning.setText("");
+            cboSecurityLevels.setValue(securityLevels.get(0));
+        });
+
+        btnSubmit.minWidth(150);
+        btnSubmit.setFont(new Font(15));
+        
+        btnSubmit.setOnAction(new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle( ActionEvent event )
+            {
+                String result = manageStaff.addUser(username.getText(),
+                        lastName.getText(), firstName.getText(),
+                        email.getText(), password.getText(),
+                        repeatPassword.getText(),
+                        returnSecurityLevel(cboSecurityLevels.getValue()));
+                
+                if ( result.equals("") )
+                {
+                    stageNewUser.close();
+                }
+                else
+                {
+                    lblWarning.setText(result);
+                }
+
+            }
+        });
+
+        completionButtons.getChildren().addAll(btnReset, btnSubmit);
+        completionButtons.setSpacing(10);
+        newUserForm.add(lblUsername,        0, 1);
+        newUserForm.add(username,           1, 1);
+        newUserForm.add(lblLastName,        0, 2);
+        newUserForm.add(lastName,           1, 2); 
+        newUserForm.add(lblFirstName,       0, 3);
+        newUserForm.add(firstName,          1, 3);
+        newUserForm.add(lblEmail,           0, 4);
+        newUserForm.add(email,              1, 4);
+        newUserForm.add(lblPassword,        0, 5);
+        newUserForm.add(password,           1, 5);
+        newUserForm.add(lblRepeatPassword,  0, 6);
+        newUserForm.add(repeatPassword,     1, 6);
+        newUserForm.add(lblSecurityLevel,   0, 7);
+        newUserForm.add(cboSecurityLevels,  1, 7);
+        newUserForm.add(completionButtons,  1, 8);
+        newUserForm.add(lblWarning, 0, 0,   2,1);
+
+        Scene scene = new Scene(newUserForm);
+
+        stageNewUser.setScene(scene);
+
+        stageNewUser.setTitle("Account Registration");
+        // set the modality
+        stageNewUser.initModality(Modality.WINDOW_MODAL);
+        // set the parent of the this stage to the 'techstage' so the modality
+        // will
+        // work because it needs a parent to know which stage to disable access
+        stageNewUser.initOwner(stageTech);
+        // make the window not be resizable
+        stageNewUser.setResizable(false);
+        // display window
+        stageNewUser.show();
+
+    }
+
+    /**
+     * 
+     * Purpose: Return a specific number based on the level string
+     * 
+     * @param level
+     *            the level that the admin selected in the combobox
+     * @return Return a security level based on the item selected in the text
+     *         box
+     */
+    private String returnSecurityLevel( String level )
+    {
+        String securityLevel = "4";
+        if ( level.contains("Basic Staff") )
+        {
+            securityLevel = "0";
+        }
+        else if ( level.contains("Medical Administrator") )
+        {
+            securityLevel = "1";
+        }
+        else if ( level.contains("Technical Administrator") )
+        {
+            securityLevel = "2";
+        }
+        return securityLevel;
+    }
+
+    /**
      * Description: Prepares the window for display Param: The stage to be
      * launched
      * 
      */
     public void start( Stage stage )
     {
-
         techMainPageConstruct(stage);
-
     }
 
     /**
@@ -197,7 +389,7 @@ public class TechMainPageGUI extends Application
                 {
                     test5.start(stageTech);
                 }
-                catch (Exception e1)
+                catch ( Exception e1 )
                 {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
@@ -221,26 +413,6 @@ public class TechMainPageGUI extends Application
     public static void main( String[] args )
     {
         launch(args);
-    }
-
-    public void openlog()
-    {
-
-    }
-
-    public void addUser()
-    {
-
-    }
-
-    public void editUser( int staffID )
-    {
-
-    }
-
-    public void removeUser( int staffID )
-    {
-
     }
 
 }

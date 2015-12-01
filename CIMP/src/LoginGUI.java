@@ -1,4 +1,3 @@
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,6 +19,8 @@ import javafx.stage.Stage;
  */
 public class LoginGUI extends Application
 {
+    StaffAccount staffloginHelper = new StaffAccount();
+
     /* Login Elements */
     private VBox vbMainPane;
     private TextField txtUserName;
@@ -30,7 +31,6 @@ public class LoginGUI extends Application
     public static Stage stageLogin;
 
     /* Static final variables */
-
     public static final int WIDTH = 875;
     public static final int HEIGHT = 580;
     public static final int IMAGE_WIDTH = 606;
@@ -42,42 +42,33 @@ public class LoginGUI extends Application
     public static final String STAGE_TITLE = "Cosmopolitan Industries";
     public static final String IMAGE_PATH = "images/CosmoIconLong.png";
     public static final String BUTTON_LABEL = "Login";
-    //Hard coded array for testing purposes, do not add to diagrams.
-    public static StaffAccount[] users = new StaffAccount[3];
 
     public static void main( String[] args )
     {
-        // Following are test staff that we used to test our login system
-        BasicStaff jeff = new BasicStaff(55501, "jill");
-        users[0] = jeff;
-        TechnicalAdministrator kevin = new TechnicalAdministrator(24561,
-                "Bryant");
-        users[1] = kevin;
-        BasicStaff haar = new MedicalAdministrator(91023, "miranda");
-        users[2] = haar;
         launch();
     }
 
-    @Override
-    public void start( Stage stage )
+    /**
+     * Initialize all of the global variables so they don't have a null pointer
+     * exception
+     */
+    private void initializeVariables()
     {
+        txtUserName = new TextField();
+        // Setting the placeholder text in the textfield
+        txtUserName.setPromptText(USERNAME_PROMPT_TEXT);
+        // Setting the maximum width the textfield
+        txtUserName.setMaxWidth(TEXTFIELD_WIDTH);
 
-        stageLogin = stage;
-        initializeVariables();
-        // adding the elements to the mainPane
-        vbMainPane = createBox();
-        vbMainPane.setAlignment(Pos.CENTER);
-
-        // main scene to be displayed
-        Scene scene = new Scene(vbMainPane);
-        // Styling the scene
-        stageLogin.setScene(scene);
-        stageLogin.setTitle("Cosmopolitan Industries");
-        stageLogin.setWidth(WIDTH);
-        stageLogin.setHeight(HEIGHT);
-        stageLogin.setTitle(STAGE_TITLE);
-        stageLogin.setResizable(false);
-        stageLogin.show();
+        pfUserPassword = new PasswordField();
+        // Setting the placeholder text in the textfield
+        pfUserPassword.setPromptText(PASSWORD_PROMPT_TEXT);
+        // Setting the maximum width the textfield
+        pfUserPassword.setMaxWidth(TEXTFIELD_WIDTH);
+        // making the new button
+        btnLogin = new Button(BUTTON_LABEL);
+        // making the image for the logo to be displayed
+        imgLogo = new Image(IMAGE_PATH);
     }
 
     /**
@@ -103,78 +94,97 @@ public class LoginGUI extends Application
             @Override
             public void handle( ActionEvent e )
             {
-                String username = txtUserName.getText();
-                String password = pfUserPassword.getText();
-                int i = 0;
-                boolean success = false;
-                // Checks the lenght of the textfileds
-                if ( username.length() > 0 && password.length() > 0 )
-                {
-                    while ( i < users.length && !success )
-                    {
-                        // If the password and username are correct
-                        if ( users[i].login(Integer.parseInt(username),
-                                password) )
-                        {
-                            // If the logged in user is a technical
-                            // administrator, show the tech admin main page
-                            if ( users[i] instanceof TechnicalAdministrator )
-                            {
-                                success = true;
-                                System.out.println("success");
-                                stageLogin.close();
-                                TechMainPageGUI techMainGui = new TechMainPageGUI();
-                                techMainGui.techMainPageConstruct(stageLogin);
-                            }
-                            // Otherwise they are medical staff
-                            else if ( users[i] instanceof BasicStaff
-                                    || users[i] instanceof MedicalAdministrator )
-                            {
-                                success = true;
-                                System.out.println("success");
-                                stageLogin.close();
-                                MedicalStaffMainPageGUI medStaffGUI = new MedicalStaffMainPageGUI();
-                                medStaffGUI.medMainPageConstruct(stageLogin);
-                            }
-                        }
-                        i++;
-                    }
-                }
-
-                // If they didn't successfully login a incorrect username or
-                // password will be displayed
-                if ( success == false )
-                {
-                    txtUserName.setText("");
-                    pfUserPassword.setText("");
-                    txtUserName.setPromptText("Incorrect Username or Password");
-                }
+                login();
             }
         });
         return box;
     }
 
-    /**
-     * Initialize all of the global variables so they don't have a null pointer
-     * exception
-     */
-    private void initializeVariables()
+    
+    @Override
+    public void start( Stage stage )
     {
-        txtUserName = new TextField();
-        // Setting the placeholder text in the textfield
-        txtUserName.setPromptText(USERNAME_PROMPT_TEXT);
-        // Setting the maximum width the textfield
-        txtUserName.setMaxWidth(TEXTFIELD_WIDTH);
 
-        pfUserPassword = new PasswordField();
-        // Setting the placeholder text in the textfield
-        pfUserPassword.setPromptText(PASSWORD_PROMPT_TEXT);
-        // Setting the maximum width the textfield
-        pfUserPassword.setMaxWidth(TEXTFIELD_WIDTH);
-        // making the new button
-        btnLogin = new Button(BUTTON_LABEL);
-        // making the image for the logo to be displayed
-        imgLogo = new Image(IMAGE_PATH);
+        stageLogin = stage;
+        initializeVariables();
+
+        // adding the elements to the mainPane
+        vbMainPane = createBox();
+        vbMainPane.setAlignment(Pos.CENTER);
+
+        // main scene to be displayed
+        Scene scene = new Scene(vbMainPane);
+
+        // Styling the scene
+        stageLogin.setScene(scene);
+        stageLogin.setTitle("Cosmopolitan Industries");
+        stageLogin.setWidth(WIDTH);
+        stageLogin.setHeight(HEIGHT);
+        stageLogin.setTitle(STAGE_TITLE);
+        stageLogin.setResizable(false);
+        stageLogin.show();
     }
+
+    /**
+     * 
+     * Purpose: perform a login with the provided credentials. Display an
+     * "incorrect login credentials" if the provided credentials are incorrect
+     */
+    private void login()
+    {
+        // the staff that will be logged in
+        StaffAccount loggedInStaff;
+
+        // the username and password form the textfields
+        String username = txtUserName.getText();
+        String password = pfUserPassword.getText();
+
+        // flag used to keep track if they logged in or not
+        boolean success = false;
+        // Checks the lenght of the textfileds
+        if ( username.length() > 0 && password.length() > 0 )
+        {
+
+            // attemp login
+            loggedInStaff = staffloginHelper.login(username, password);
+            // of the returned staff isn't null
+            if ( loggedInStaff != null )
+            {
+                // if they are a basic staff
+                if ( loggedInStaff instanceof BasicStaff )
+                {
+                    success = true;
+                    stageLogin.close();
+                    MedicalStaffMainPageGUI medStaffGUI = new MedicalStaffMainPageGUI();
+                    medStaffGUI.medMainPageConstruct(stageLogin);
+                }
+                // if they are a medical administrator
+                else if ( loggedInStaff instanceof MedicalAdministrator )
+                {
+                    success = true;
+                    stageLogin.close();
+                    MedicalStaffMainPageGUI medStaffGUI = new MedicalStaffMainPageGUI();
+                    medStaffGUI.medMainPageConstruct(stageLogin);
+                }
+                // otherwise they are a technical admin
+                else
+                {
+                    success = true;
+                    stageLogin.close();
+                    TechMainPageGUI techMainGui = new TechMainPageGUI();
+                    techMainGui.techMainPageConstruct(stageLogin);
+                }
+            }
+        }
+        // If they didn't successfully login a incorrect username or
+        // password will be displayed
+        if ( success == false )
+        {
+            txtUserName.setText("");
+            pfUserPassword.setText("");
+            txtUserName.setPromptText("Incorrect Username or Password");
+        }
+    }
+
 
 }
