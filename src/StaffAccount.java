@@ -1,11 +1,17 @@
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 
 public abstract class StaffAccount
 {
-    protected int staffID; // staff members unique login ID
-    protected String lastName; // the staff members last name
-    protected String firstName; // the staff members first name
-    protected String password; // the staff members password
+	protected StringProperty username;
+	protected StringProperty lastName;
+	protected StringProperty firstName;
+	protected StringProperty email;
+	protected StringProperty password;
+	protected StringProperty accessLevel;
 
+    
     /**
      * Purpose: If the login information matches that of a staff account in the
      * database, it will return an instance of that staff member's account, so
@@ -15,10 +21,10 @@ public abstract class StaffAccount
      * @return staffAccount: the account of the user that has successfully
      *         logged in.
      */
-    public boolean login( int staffID, String password )
+    public boolean login( String staffID, String password )
     {
         boolean result = false;
-        if ( this.staffID == staffID && this.password.equals(password) )
+        if ( this.username.equals( staffID) && this.password.equals(password) )
         {
             result = true;
         }
@@ -66,5 +72,95 @@ public abstract class StaffAccount
     public boolean logout()
     {
         return false;
+    }
+    
+    public String GetUsername()
+    {
+    	return username.get();
+    }
+    
+    public StringProperty usernameProperty()
+    {
+    	return username;
+    }
+    
+    public String GetLastName()
+    {
+    	return lastName.get();
+    }
+    
+    public StringProperty lastNameProperty()
+    {
+    	return lastName;
+    }
+    
+    public String GetFirstName()
+    {
+    	return firstName.get();
+    }
+    
+    public StringProperty firstNameProperty()
+    {
+    	return firstName;
+    }
+    
+    public String GetEmail()
+    {
+    	return email.get();
+    }
+    
+    public StringProperty emailProperty()
+    {
+    	return email;
+    }
+    
+    public String GetAccessLevel()
+    {
+    	return accessLevel.get();
+    }
+    
+    public StringProperty accessLevelProperty()
+    {
+    	String accessStr = " ";
+    	System.out.println(accessLevel);
+    	if(accessLevel.getValue().equals("0"))
+    	{
+    		accessStr = "Medical Staff";
+    	}
+    	else if(accessLevel.getValue().equals("1"))
+    	{
+    		accessStr = "Medical Administrator";
+    	}
+    	else
+    	{
+    		accessStr = "Technical Administrator";
+    	}
+    	StringProperty access = new SimpleStringProperty(accessStr);
+    	return access;
+    }
+    
+    public void setUsername(String username)
+    {
+    	this.username.set(username);
+    }
+    
+    public void setLastName(String lastName)
+    {
+    	this.lastName.set(lastName);
+    }
+    
+    public void setFirstName(String firstName)
+    {
+    	this.firstName.set(firstName);
+    }
+    
+    public void setEmail(String email)
+    {
+    	this.email.set(email);
+    }
+    
+    public void setAccessLevel(String accessLevel)
+    {
+    	this.accessLevel.set(accessLevel);
     }
 }

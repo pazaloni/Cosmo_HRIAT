@@ -1,4 +1,7 @@
+import java.sql.*;
+
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -24,7 +27,10 @@ import javafx.stage.Stage;
  */
 public class TechMainPageGUI extends Application
 {
+	private StaffTableViewController sTVCont;
 
+	private DatabaseHelper dbObject = new DatabaseHelper();
+	
     public static Stage stageTech;
 
     // Button when clicked, will bring up the activity log
@@ -59,6 +65,13 @@ public class TechMainPageGUI extends Application
 
     public void techMainPageConstruct( Stage stage )
     {
+    	dbObject.connect();
+    	
+    	
+    	
+    	sTVCont = new StaffTableViewController();
+        sTVCont.initialize();
+    	
         stageTech = stage;
         // The scene that displays the main layout container with the preferred
         // dimensions
@@ -99,6 +112,23 @@ public class TechMainPageGUI extends Application
         btnRemoveUser.setText("Remove User");
         btnRemoveUser.setMinWidth(150);
         btnRemoveUser.setFont(new Font(15));
+        
+        btnRemoveUser.setOnAction(new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle( ActionEvent e )
+            {
+                try
+                {
+                   removeUser(sTVCont.getSelectedPK());
+                }
+                catch (Exception e1)
+                {
+                   
+                    e1.printStackTrace();
+                }
+            }
+        });
 
         // appends buttons to the action box to be displayed, and formatts the
         // actionBox
@@ -112,37 +142,13 @@ public class TechMainPageGUI extends Application
         tableName.setText("Manage Users");
         tableName.setFont(new Font(20));
 
-        // TableView instance to hold User records
-        TableView<String> table = new TableView<String>();
 
-        // Instantiation of all the table column headings (With proper
-        // formatting)
-        TableColumn staffIDCol = new TableColumn("StaffID");
-        staffIDCol.setMinWidth(60);
-
-        TableColumn userNameCol = new TableColumn("User Name");
-        userNameCol.setMinWidth(175);
-
-        TableColumn emailCol = new TableColumn("Email");
-        emailCol.setMinWidth(169);
-
-        TableColumn firstNameCol = new TableColumn("First Name");
-        firstNameCol.setMinWidth(150);
-
-        TableColumn lastNameCol = new TableColumn("Last Name");
-        lastNameCol.setMinWidth(150);
-
-        TableColumn securityLvlCol = new TableColumn("Security Level");
-        securityLvlCol.setMinWidth(100);
-
-        // Appending column headers to the table for display
-        table.getColumns().addAll(staffIDCol, userNameCol, emailCol,
-                firstNameCol, lastNameCol, securityLvlCol);
-
+        
+        
         // Formatting for the managePane, as well as the appending of the pages
         // main content
         managePane.setPadding(new Insets(0, 30, 0, 30));
-        managePane.getChildren().addAll(pageName, actionBox, tableName, table);
+        managePane.getChildren().addAll(pageName, actionBox, tableName, sTVCont.staffTable);
 
         // appending the two main containers to the layOut container
         vbLayoutContainer.getChildren().addAll(headerLogin, managePane);
@@ -233,14 +239,31 @@ public class TechMainPageGUI extends Application
 
     }
 
-    public void editUser( int staffID )
+    public void editUser( String staffID )
     {
 
     }
 
-    public void removeUser( int staffID )
+    public void removeUser( String staffID )
     {
-
-    }
+    	System.out.println("Attempting Removal of: " + staffID);
+    	Stage stage = new Stage();
+    	PopUpCheck checkBox = new PopUpCheck("Are you sure you want to delete "
+    			+ staffID + "?", stage);
+    	
+		Scene scene = new Scene(checkBox.root, 300, 75);
+    	stage.setScene(scene);
+    	stage.showAndWait();
+    
+    	if(checkBox.result)
+    	{
+    		System.out.println("Removing user: " + staffID);
+    		this.dbObject.delete("Staff", "UserName = \"" + staffID + "\"");
+    		this.sTVCont.removeViewableUser(staffID);
+    	}
+    	
+    	
+    	
+	}
 
 }

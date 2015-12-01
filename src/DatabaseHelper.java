@@ -1,10 +1,19 @@
 import java.sql.*;
+import java.util.ArrayList;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class DatabaseHelper
 {
     private final String DB_PATH = "G:/CIMPDatabase.accdb";
     private Connection conn;
 
+    public DatabaseHelper()
+    {
+    	connect();
+    }
+    
     /**
      * Purpose: To establish a connection to the database
      * 
@@ -19,7 +28,7 @@ public class DatabaseHelper
         catch (SQLException e)
         {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.out.println("Failed Connection to Database");
         }
     }
 
@@ -73,14 +82,15 @@ public class DatabaseHelper
     public ResultSet select(String columnList, String tableList,
             String condition, String sort)
     {
+    	System.out.println("Doing select");
         Statement s = null;
         ResultSet rs = null;
         String query = "SELECT " + columnList + " FROM " + tableList;
-
+        System.out.println("Query without sort or conditions: " + query);
         try
         {
             s = conn.createStatement();
-
+            System.out.println("Created statement to execute");
             // If a condition is specified, add it to the query
             if (!condition.equals(""))
             {
@@ -92,7 +102,7 @@ public class DatabaseHelper
             {
                 query += " ORDER BY " + sort;
             }
-
+            System.out.println("Going to execute: " + query);
             // execute the query
             rs = s.executeQuery(query);
             s.close();
@@ -109,10 +119,10 @@ public class DatabaseHelper
 
     /**
      * 
-     * Purpose: This method will add a new record to the specified table, when all fields are being filled
+     * Purpose: This method will add a new record to the specified table
      * 
      * @param newRecord
-     *            A 1d array of the values to be inserted
+     *            A 2d array of the field names and the values to be inserted
      * @param tableName
      *            The name of the table to add the record to
      * @return boolean True if rows were affected, false if 0 rows were affected
@@ -349,18 +359,46 @@ public class DatabaseHelper
 
         return rows != 0;
     }
-    
-    
-    public void close()
-    {
-    	try 
-    	{
-			conn.close();
-		} catch (SQLException e) 
-    	{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
 
+    public ObservableList<String> displayRows(ResultSet rs)
+    {
+		ObservableList<String> rows = FXCollections.observableArrayList();
+		
+		try 
+		{
+			ObservableList<String> row = FXCollections.observableArrayList();
+			ArrayList<String> staffInfo = new ArrayList<String>();
+			
+//			while(rs.next())
+//			{
+//				
+//				for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++)
+//				{
+//					System.out.print(rs.getString(i) + ", ");
+//					
+//					row.add(rs.getString(i));
+//				}
+//				System.out.println();
+//				rows.addAll(row);
+//			}
+			
+			while(rs.next())
+			{
+				for(int i = 1; i <= rs.getMetaData().getColumnCount(); i++)
+				{
+					System.out.println(rs.getString(i) + ", ");
+					staffInfo.add(rs.getString(i));
+				}
+				rows.addAll(staffInfo);
+			}
+		} 
+		catch (SQLException e) 
+		{
+			// TODO Auto-generated catch block
+			System.out.println("Error in trying to display rows");
+		}
+
+    	return rows;
+    }
+    
 }
