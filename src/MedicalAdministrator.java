@@ -35,18 +35,24 @@ public class MedicalAdministrator extends BasicStaff
     	//values[4][0] = "gender";
     	values[4][0] = "personalHealthNumber";
     	values[5][0] = "phoneNum";
+//    	values[6][0] = "physicianID";
+//    	values[7][0] = "agencyID";
+//    	values[8][0] = "kinID";
+//    	values[9][0] = "caregiverID";
+//    	values[10][0] = "landlordID";
+//    	values[11][0] = "chwNurseID";
+//    	values[12][0] = "workID";
 
     	
     	values[0][1] = cosmoID;
     	values[1][1] = firstName;
     	values[2][1] = lastName;
     	values[3][1] = birthDate;
-    	//values[4][1] = familyPhysician;
     	values[4][1] = healthNumber;
     	values[5][1] = physicalPhone;
 
 
-    	boolean successful = db.insert(values, "Participant");
+    	boolean successful = db.insert(values, "TemporaryParticipant");
     	
     	db.close();
     	

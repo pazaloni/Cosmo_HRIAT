@@ -179,7 +179,14 @@ public class DatabaseHelper
         for (int r = 0; r < newRecord.length; r++)
         {
             fieldList += newRecord[r][0] + ", ";
-            valueList += "'" + newRecord[r][1] + "', ";
+            if(newRecord[r][1] != null)
+            {
+            	valueList += "'" + newRecord[r][1] + "', ";
+            }
+            else
+            {
+            	valueList += "" + newRecord[r][1] + ", ";
+            }
         }
 
         // Trim off the final comma and add the parentheses
@@ -191,11 +198,11 @@ public class DatabaseHelper
         String insertStatement = "INSERT INTO " + tableName + " " + fieldList
                 + " VALUES " + valueList;
         System.out.println(insertStatement);
-
+        
         int rows = 0;
         try
         {
-            s = conn.createStatement();
+        	s = conn.createStatement();
             rows = s.executeUpdate(insertStatement);
             s.close();
         }
@@ -208,6 +215,49 @@ public class DatabaseHelper
         {
         }
         return rows != 0;
+    }
+    
+    public boolean insertPS(String[][] newRecord, String tableName)
+    {
+        Statement s = null;
+        boolean success = false;
+        String fieldList = "( ";
+        String valueList = "( ";
+        String questionMarkList = "( ";
+
+        // add each field and value to their strings
+        for (int r = 0; r < newRecord.length; r++)
+        {
+            fieldList += newRecord[r][0] + ", ";
+            questionMarkList += "?, ";
+        }
+    	
+        fieldList = fieldList.substring(0, fieldList.length() - 2) + " )";
+        questionMarkList = questionMarkList.substring(0, questionMarkList.length() - 2) + " )";
+    	String queryString = "INSERT INTO " + tableName + fieldList + 
+				" VALUES " + questionMarkList;
+    	try {
+			PreparedStatement ps = conn.prepareStatement( queryString, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+			
+	    	
+	    	for(int i = 0; i < newRecord.length; i++)
+	    	{
+	    		ps.setString(i+1, newRecord[i][1]);
+	    	}
+	    	
+	    	success = ps.execute();
+	    	ps.getConnection().commit();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+    	
+    	
+		return success;
+    	
     }
 
     /**
