@@ -27,10 +27,13 @@ import javafx.stage.Stage;
  */
 public class TechMainPageGUI extends Application
 {
+	//Controller used to fill the tableview
 	private StaffTableViewController sTVCont;
 
+	//Instance of the database helper 
 	private DatabaseHelper dbObject = new DatabaseHelper();
 	
+	//The stage
     public static Stage stageTech;
 
     // Button when clicked, will bring up the activity log
@@ -65,10 +68,10 @@ public class TechMainPageGUI extends Application
 
     public void techMainPageConstruct( Stage stage )
     {
+    	//open the database connection
     	dbObject.connect();
     	
-    	
-    	
+    	//create a staff table view controller and initialize it
     	sTVCont = new StaffTableViewController();
         sTVCont.initialize();
     	
@@ -244,9 +247,14 @@ public class TechMainPageGUI extends Application
 
     }
 
+    /**
+     * Purpose:	This will take the selected user from the table, confirm that 
+     * 			you wish to delete them, if so, will delete the selected user, 
+     * 			then refresh the table of accounts
+     * @param staffID	The user that you will remove
+     */
     public void removeUser( String staffID )
     {
-    	System.out.println("Attempting Removal of: " + staffID);
     	Stage stage = new Stage();
     	PopUpCheck checkBox = new PopUpCheck("Are you sure you want to delete "
     			+ staffID + "?", stage);
@@ -257,13 +265,9 @@ public class TechMainPageGUI extends Application
     
     	if(checkBox.result)
     	{
-    		System.out.println("Removing user: " + staffID);
     		this.dbObject.delete("Staff", "UserName = \"" + staffID + "\"");
     		this.sTVCont.removeViewableUser(staffID);
     	}
-    	
-    	
-    	
 	}
 
 }

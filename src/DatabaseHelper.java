@@ -248,13 +248,20 @@ public class DatabaseHelper
         }
         catch (SQLException e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
         return rows != 0;
     }
 
+    /**
+     * Purpose:		This will take in the result set and use it to populate the 
+     * 				Observable list, which will be used to  display the rows in 
+     * 				the tableview. 
+     * @param rs	The result set that will be used to populate the observable 
+     * 				list
+     * @return		The Observable list that will be used to generate the table
+     */
     public ObservableList<String> displayRows(ResultSet rs)
     {
 		ObservableList<String> rows = FXCollections.observableArrayList();
@@ -263,25 +270,11 @@ public class DatabaseHelper
 		{
 			ObservableList<String> row = FXCollections.observableArrayList();
 			ArrayList<String> staffInfo = new ArrayList<String>();
-			
-//			while(rs.next())
-//			{
-//				
-//				for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++)
-//				{
-//					System.out.print(rs.getString(i) + ", ");
-//					
-//					row.add(rs.getString(i));
-//				}
-//				System.out.println();
-//				rows.addAll(row);
-//			}
-			
+
 			while(rs.next())
 			{
 				for(int i = 1; i <= rs.getMetaData().getColumnCount(); i++)
 				{
-					System.out.println(rs.getString(i) + ", ");
 					staffInfo.add(rs.getString(i));
 				}
 				rows.addAll(staffInfo);
