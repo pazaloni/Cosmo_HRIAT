@@ -8,8 +8,7 @@ public class ManageStaffAccountHelper
     private static final String PASSWORD_NOT_SAME = "Passwords do not match";
     private static final String EMAIL_NOT_VALID = "Email is not valid";
     private static final String USERNAME_NOT_UNIQUE = "Username is already taken";
-    private static final String RESET_TEXT = "";
-
+    
     private DatabaseHelper db;
 
     public ManageStaffAccountHelper()

@@ -48,28 +48,27 @@ public class LoginGUI extends Application
         launch();
     }
 
-    @Override
-    public void start( Stage stage )
+    /**
+     * Initialize all of the global variables so they don't have a null pointer
+     * exception
+     */
+    private void initializeVariables()
     {
+        txtUserName = new TextField();
+        // Setting the placeholder text in the textfield
+        txtUserName.setPromptText(USERNAME_PROMPT_TEXT);
+        // Setting the maximum width the textfield
+        txtUserName.setMaxWidth(TEXTFIELD_WIDTH);
 
-        stageLogin = stage;
-        initializeVariables();
-
-        // adding the elements to the mainPane
-        vbMainPane = createBox();
-        vbMainPane.setAlignment(Pos.CENTER);
-
-        // main scene to be displayed
-        Scene scene = new Scene(vbMainPane);
-
-        // Styling the scene
-        stageLogin.setScene(scene);
-        stageLogin.setTitle("Cosmopolitan Industries");
-        stageLogin.setWidth(WIDTH);
-        stageLogin.setHeight(HEIGHT);
-        stageLogin.setTitle(STAGE_TITLE);
-        stageLogin.setResizable(false);
-        stageLogin.show();
+        pfUserPassword = new PasswordField();
+        // Setting the placeholder text in the textfield
+        pfUserPassword.setPromptText(PASSWORD_PROMPT_TEXT);
+        // Setting the maximum width the textfield
+        pfUserPassword.setMaxWidth(TEXTFIELD_WIDTH);
+        // making the new button
+        btnLogin = new Button(BUTTON_LABEL);
+        // making the image for the logo to be displayed
+        imgLogo = new Image(IMAGE_PATH);
     }
 
     /**
@@ -99,6 +98,31 @@ public class LoginGUI extends Application
             }
         });
         return box;
+    }
+
+    
+    @Override
+    public void start( Stage stage )
+    {
+
+        stageLogin = stage;
+        initializeVariables();
+
+        // adding the elements to the mainPane
+        vbMainPane = createBox();
+        vbMainPane.setAlignment(Pos.CENTER);
+
+        // main scene to be displayed
+        Scene scene = new Scene(vbMainPane);
+
+        // Styling the scene
+        stageLogin.setScene(scene);
+        stageLogin.setTitle("Cosmopolitan Industries");
+        stageLogin.setWidth(WIDTH);
+        stageLogin.setHeight(HEIGHT);
+        stageLogin.setTitle(STAGE_TITLE);
+        stageLogin.setResizable(false);
+        stageLogin.show();
     }
 
     /**
@@ -162,27 +186,5 @@ public class LoginGUI extends Application
         }
     }
 
-    /**
-     * Initialize all of the global variables so they don't have a null pointer
-     * exception
-     */
-    private void initializeVariables()
-    {
-        txtUserName = new TextField();
-        // Setting the placeholder text in the textfield
-        txtUserName.setPromptText(USERNAME_PROMPT_TEXT);
-        // Setting the maximum width the textfield
-        txtUserName.setMaxWidth(TEXTFIELD_WIDTH);
-
-        pfUserPassword = new PasswordField();
-        // Setting the placeholder text in the textfield
-        pfUserPassword.setPromptText(PASSWORD_PROMPT_TEXT);
-        // Setting the maximum width the textfield
-        pfUserPassword.setMaxWidth(TEXTFIELD_WIDTH);
-        // making the new button
-        btnLogin = new Button(BUTTON_LABEL);
-        // making the image for the logo to be displayed
-        imgLogo = new Image(IMAGE_PATH);
-    }
 
 }

@@ -77,27 +77,27 @@ public class testManageStaffAccountHelper
     {
         String result = test.addUser(failEmptyField, lastNameOne, firstNameOne, emailOne,
                 firstPasswordOne, secondPasswordOne, securityOne);
-        assertTrue(result.equals("One of your fields is empty"));
+        assertTrue(result.equals("One or more of your fields is empty"));
         
         result = test.addUser(usernameOne, failEmptyField, firstNameOne, emailOne,
                 firstPasswordOne, secondPasswordOne, securityOne);
-        assertTrue(result.equals("One of your fields is empty"));
+        assertTrue(result.equals("One or more of your fields is empty"));
         
         result = test.addUser(usernameOne, lastNameOne, failEmptyField, emailOne,
                 firstPasswordOne, secondPasswordOne, securityOne);
-        assertTrue(result.equals("One of your fields is empty"));
+        assertTrue(result.equals("One or more of your fields is empty"));
         
         result = test.addUser(usernameOne, lastNameOne, firstNameOne, emailOne, failEmptyField,
                 secondPasswordOne, securityOne);
-        assertTrue(result.equals("One of your fields is empty"));
+        assertTrue(result.equals("One or more of your fields is empty"));
         
         result = test.addUser(usernameOne, lastNameOne, firstNameOne, 
                 emailOne, firstPasswordOne, failEmptyField, securityOne);
-        assertTrue(result.equals("One of your fields is empty"));
+        assertTrue(result.equals("One or more of your fields is empty"));
         
         result = test.addUser(usernameOne, lastNameOne, firstNameOne, 
                 emailOne, firstPasswordOne, secondPasswordOne, failEmptyField);
-        assertTrue(result.equals("One of your fields is empty"));
+        assertTrue(result.equals("One or more of your fields is empty"));
         
         
     }
