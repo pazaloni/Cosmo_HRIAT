@@ -47,14 +47,7 @@ public class LoginGUI extends Application
 
     public static void main( String[] args )
     {
-        // Following are test staff that we used to test our login system
-        BasicStaff jeff = new BasicStaff("55501", "jill");
-        users[0] = jeff;
-        TechnicalAdministrator kevin = new TechnicalAdministrator("24561",
-                "Bryant");
-        users[1] = kevin;
-        BasicStaff haar = new MedicalAdministrator("91023", "miranda");
-        users[2] = haar;
+     
         launch();
     }
 
