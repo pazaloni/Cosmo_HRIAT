@@ -177,9 +177,11 @@ public class DatabaseHelper
      * @return boolean True if rows were affected, false if 0 rows were affected
      *         (failed update)
      */
-    public boolean update( String[][] values, String tableName,
+    public boolean update( String[] values, String tableName,
             String primaryKey )
     {
+        String[][] updateRecord = this.createArray(tableName, values);
+
         Statement s = null;
 
         String updateStatement = "Update " + tableName + " SET ";
@@ -187,8 +189,8 @@ public class DatabaseHelper
         // add each field and value to their strings
         for ( int r = 0; r < values.length; r++ )
         {
-            String fieldName = "" + values[r][0];
-            String value = "" + values[r][1];
+            String fieldName = "" + updateRecord[r][0];
+            String value = "" + updateRecord[r][1];
             // If this isn't the primary key
             if ( fieldName != primaryKey )
             {
@@ -203,7 +205,7 @@ public class DatabaseHelper
 
         // specify which record to update
         // TODO fix primary key
-        updateStatement += " WHERE " + values[0][0] + "='" + primaryKey + "'";
+        updateStatement += " WHERE " + updateRecord[0][0] + "='" + primaryKey + "'";
 
         int rows = 0;
 

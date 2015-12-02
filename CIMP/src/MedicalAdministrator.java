@@ -7,8 +7,8 @@
  */
 public class MedicalAdministrator extends BasicStaff
 {
-    public MedicalAdministrator(String username, String lastName, String firstName, String email,
-    		String password, String accessLevel)
+    public MedicalAdministrator(String username, String lastName,
+            String firstName, String email, String password, String accessLevel)
     {
         super(username, lastName, firstName, email, password, accessLevel);
     }

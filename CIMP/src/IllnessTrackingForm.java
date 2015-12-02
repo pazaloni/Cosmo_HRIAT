@@ -1,9 +1,8 @@
-
-public class IllnessTrackingForm 
+public class IllnessTrackingForm
 {
 
-	public void illnessTrackingForm(Participant participant)
-	{
-		
-	}
+    public void illnessTrackingForm( Participant participant )
+    {
+
+    }
 }

@@ -1,8 +1,7 @@
-
-public class HealthStatusInformation 
+public class HealthStatusInformation
 {
-	public void healthStatusInformation(Participant participant)
-	{
-		
-	}
+    public void healthStatusInformation( Participant participant )
+    {
+
+    }
 }

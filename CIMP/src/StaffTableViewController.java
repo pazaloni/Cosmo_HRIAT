@@ -45,7 +45,7 @@ public class StaffTableViewController
         // Create an observable list that will store the individual row data
         ObservableList<String> row = FXCollections.observableArrayList();
         // The result set that will query the database to get all the users
-        ResultSet rs = db.select("username, lastName, firstName, email, "
+        ResultSet rs = db.select("UserName, lastName, firstName, email, "
                 + "accessLevel", "Staff", "", "");
         String username;
         String lastName;
@@ -75,14 +75,14 @@ public class StaffTableViewController
 
                 StaffAccount account;
                 // if accessLevel is 0, then the user is a basicStaff
-                if ( accessLevel == "0" )
+                if ( accessLevel.equals("0") )
                 {
                     account = new BasicStaff(username, lastName, firstName,
                             email, password, accessLevel);
                 }
                 // If the accessLevel is 1, then the user is a
                 // medicalAdministrator
-                else if ( accessLevel == "1" )
+                else if ( accessLevel.equals("1") )
                 {
                     account = new MedicalAdministrator(username, lastName,
                             firstName, email, password, accessLevel);
@@ -143,8 +143,19 @@ public class StaffTableViewController
      */
     public String getSelectedPK()
     {
+        String result;
+
         StaffAccount account = staffTable.getSelectionModel().getSelectedItem();
-        return account.GetUsername();
+
+        if ( account == null )
+        {
+            result = "null";
+        }
+        else
+        {
+            result = account.GetUsername();
+        }
+        return result;
     }
 
     /**

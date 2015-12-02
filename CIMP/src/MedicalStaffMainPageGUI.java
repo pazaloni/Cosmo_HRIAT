@@ -20,7 +20,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView; 
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -37,22 +37,20 @@ import javafx.stage.Stage;
 public class MedicalStaffMainPageGUI extends Application
 {
     public static Stage medMainStage;
-    
+
     private Button logout;
-    
+
     private ComboBox<String> searchBy;
-    
+
     private TextField searchField;
-    
+
     private ImageView previewPicture;
-    
+
     private ListView<String> noteTitleView;
-    
+
     private ObservableList<String> noteTitleList;
-    
+
     private TableView<Participant> participantTable;
-    
-    
 
     /**
      * Purpose: displays the GUI
@@ -69,7 +67,8 @@ public class MedicalStaffMainPageGUI extends Application
      * Purpose: Construct the main stage for the medical staff when they have
      * successfully logged in
      * 
-     * @param stage: the stage the medical staff will see
+     * @param stage
+     *            : the stage the medical staff will see
      */
     public void medMainPageConstruct( Stage stage )
     {
@@ -111,7 +110,7 @@ public class MedicalStaffMainPageGUI extends Application
                 {
                     test5.start(medMainStage);
                 }
-                catch (Exception e1)
+                catch ( Exception e1 )
                 {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
@@ -208,8 +207,7 @@ public class MedicalStaffMainPageGUI extends Application
         // create picture box for left side of preview pane
         VBox pictureBox = new VBox();
         // default preview picture
-        previewPicture = new ImageView(new Image(
-                "images/defaultPicture.png"));
+        previewPicture = new ImageView(new Image("images/defaultPicture.png"));
 
         // details button
         Button detailsButton = new Button("View Details");
@@ -306,8 +304,7 @@ public class MedicalStaffMainPageGUI extends Application
         // create search bar
         HBox searchBar = new HBox();
         searchBy = new ComboBox<String>();
-        searchBy.getItems().addAll("Name", "Address", "Allergy",
-                "CosmoID");
+        searchBy.getItems().addAll("Name", "Address", "Allergy", "CosmoID");
 
         // set width
         searchBy.setStyle("-fx-pref-width: 150;");
@@ -326,8 +323,7 @@ public class MedicalStaffMainPageGUI extends Application
         HBox.setMargin(searchBy, new Insets(0, 5, 0, 10));
         HBox.setMargin(searchField, new Insets(0, 5, 0, 5));
         HBox.setMargin(searchButton, new Insets(0, 0, 0, 5));
-        searchBar.getChildren().addAll(searchBy, searchField,
-                searchButton);
+        searchBar.getChildren().addAll(searchBy, searchField, searchButton);
 
         return searchBar;
     }
@@ -344,9 +340,9 @@ public class MedicalStaffMainPageGUI extends Application
         noteTitleView = new ListView<String>();
         // create list of notes
         // TODO make this automatically pull from the database of notes
-        noteTitleList = FXCollections.observableArrayList(
-                "Note 1", "Note 2", "Note 3", "Note 4", "Note 5", "Note 6",
-                "Note 7", "Note 8", "Note 9", "Note 10", "Note 11");
+        noteTitleList = FXCollections.observableArrayList("Note 1", "Note 2",
+                "Note 3", "Note 4", "Note 5", "Note 6", "Note 7", "Note 8",
+                "Note 9", "Note 10", "Note 11");
 
         // set notes list to listview
         noteTitleView.setItems(noteTitleList);
@@ -420,7 +416,8 @@ public class MedicalStaffMainPageGUI extends Application
 
         // TableView instance to hold User records
         participantTable = new TableView<Participant>();
-        participantTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        participantTable
+                .setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         // Instantiation of all the table column headings (With proper
         // formatting)
@@ -462,8 +459,8 @@ public class MedicalStaffMainPageGUI extends Application
         lastUpdatedCol.setResizable(false);
 
         // Appending column headers to the table for display
-        participantTable.getColumns().addAll(cosmoIDCol, participantNameCol, addressCol,
-                emergencyContactNameCol, emergencyContactPhoneCol,
+        participantTable.getColumns().addAll(cosmoIDCol, participantNameCol,
+                addressCol, emergencyContactNameCol, emergencyContactPhoneCol,
                 lastUpdatedCol);
 
         // table columns not draggable to reorder it
@@ -476,9 +473,10 @@ public class MedicalStaffMainPageGUI extends Application
                 if ( change.wasReplaced() )
                 {
                     participantTable.getColumns().clear();
-                    participantTable.getColumns().addAll(cosmoIDCol, participantNameCol,
-                            addressCol, emergencyContactNameCol,
-                            emergencyContactPhoneCol, lastUpdatedCol);
+                    participantTable.getColumns().addAll(cosmoIDCol,
+                            participantNameCol, addressCol,
+                            emergencyContactNameCol, emergencyContactPhoneCol,
+                            lastUpdatedCol);
                 }
             }
         });
@@ -495,8 +493,7 @@ public class MedicalStaffMainPageGUI extends Application
         // add list to columns
         ObservableList<Participant> participantList = FXCollections
                 .observableArrayList(test, test2);
-        
-        
+
         // add data to columns
         cosmoIDCol.setCellValueFactory(new PropertyValueFactory<>("cosmoID"));
         participantNameCol.setCellValueFactory(new PropertyValueFactory<>(

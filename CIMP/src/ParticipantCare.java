@@ -1,9 +1,8 @@
-
-public class ParticipantCare 
+public class ParticipantCare
 {
 
-	public void ParticipantCare(Participant participant)
-	{
-		
-	}
+    public void ParticipantCare( Participant participant )
+    {
+
+    }
 }

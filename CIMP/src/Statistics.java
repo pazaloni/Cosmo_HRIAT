@@ -1,15 +1,14 @@
-
-public class Statistics 
+public class Statistics
 {
 
-	public  void getMedicalAttribute()
-	{
-		
-	}
-	
-	public void generateStats()
-	{
-		
-	}
+    public void getMedicalAttribute()
+    {
+
+    }
+
+    public void generateStats()
+    {
+
+    }
 
 }

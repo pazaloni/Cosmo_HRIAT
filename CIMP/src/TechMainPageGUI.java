@@ -1,4 +1,5 @@
 import java.sql.*;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,13 +37,13 @@ public class TechMainPageGUI extends Application
     // helper class used to manage accounts
     private ManageStaffAccountHelper manageStaff = new ManageStaffAccountHelper();
 
-    //Controller used to fill the tableview
-  	private StaffTableViewController sTVCont;
+    // Controller used to fill the tableview
+    private StaffTableViewController sTVCont;
 
-  	//Instance of the database helper 
-  	private DatabaseHelper dbObject = new DatabaseHelper();
-  	
-  	//The stage
+    // Instance of the database helper
+    private DatabaseHelper dbObject = new DatabaseHelper();
+
+    // The stage
     public static Stage stageTech;
 
     // Button when clicked, will bring up the activity log
@@ -69,6 +70,9 @@ public class TechMainPageGUI extends Application
     private static final int PANE_WIDTH = 875;
     private static final int PANE_HEIGHT = 580;
 
+    private static final boolean NEW_STAFF = true;
+
+    private static final boolean EDIT_STAFF = false;
     // The clients logo displayed at the top.
     private Image imgLogo = new Image("images/CosmoIconLong.png");
 
@@ -87,13 +91,13 @@ public class TechMainPageGUI extends Application
     public void techMainPageConstruct( Stage stage )
     {
 
-    	//open the database connection
-    	dbObject.connect();
-    	
-    	//create a staff table view controller and initialize it
-    	sTVCont = new StaffTableViewController();
+        // open the database connection
+        dbObject.connect();
+
+        // create a staff table view controller and initialize it
+        sTVCont = new StaffTableViewController();
         sTVCont.initialize();
-        
+
         stageTech = stage;
         // The scene that displays the main layout container with the preferred
         // dimensions
@@ -134,9 +138,9 @@ public class TechMainPageGUI extends Application
         btnRemoveUser.setText("Remove User");
         btnRemoveUser.setMinWidth(150);
         btnRemoveUser.setFont(new Font(15));
-        
-      //when the remove user is clicked, the selected account from the table 
-        //list will run the removeUser method using its primary key
+
+        // when the remove user is clicked, the selected account from the table
+        // list will run the removeUser method using its primary key
         btnRemoveUser.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
@@ -146,20 +150,27 @@ public class TechMainPageGUI extends Application
                 {
                     removeUser(sTVCont.getSelectedPK());
                 }
-                catch (Exception e1)
+                catch ( Exception e1 )
                 {
-                   
+
                     e1.printStackTrace();
                 }
             }
         });
-        
 
         // appends buttons to the action box to be displayed, and formatts the
         // actionBox
         // set event handler to create a new user
         btnAddUser.setOnAction(( ActionEvent ) -> {
-            createUser();
+            manageUser(NEW_STAFF);
+        });
+
+        btnEditUser.setOnAction(( ActionEvent ) -> {
+            if (!(sTVCont.getSelectedPK().equals("null")))
+            {
+                manageUser(EDIT_STAFF);
+            }
+ 
         });
 
         actionBox.getChildren().addAll(btnViewLog, btnAddUser, btnEditUser,
@@ -173,10 +184,11 @@ public class TechMainPageGUI extends Application
         tableName.setText("Manage Users");
         tableName.setFont(new Font(20));
         // Formatting for the managePane, as well as the appending of the pages
-        
+
         // main content
         managePane.setPadding(new Insets(0, 30, 0, 30));
-        managePane.getChildren().addAll(pageName, actionBox, tableName, sTVCont.staffTable);
+        managePane.getChildren().addAll(pageName, actionBox, tableName,
+                sTVCont.staffTable);
 
         // appending the two main containers to the layOut container
         vbLayoutContainer.getChildren().addAll(headerLogin, managePane);
@@ -205,7 +217,7 @@ public class TechMainPageGUI extends Application
      * 
      * Purpose: Display a pop-up box with information to fill out for a user
      */
-    private void createUser()
+    private void manageUser( boolean newUser )
     {
         stageNewUser = new Stage();
 
@@ -270,49 +282,85 @@ public class TechMainPageGUI extends Application
 
         btnSubmit.minWidth(150);
         btnSubmit.setFont(new Font(15));
-        
+        if ( !newUser )
+        {
+            String[] selectedStaff = manageStaff.queryStaff(sTVCont
+                    .getSelectedPK());
+            firstName.setText(selectedStaff[2]);
+            username.setDisable(true);
+            lastName.setText(selectedStaff[1]);
+            username.setText(selectedStaff[0]);
+            email.setText(selectedStaff[3]);
+            password.setText(selectedStaff[4]);
+            repeatPassword.setText(selectedStaff[4]);
+            cboSecurityLevels.setValue(securityLevels.get(Integer
+                    .parseInt(selectedStaff[5])));
+        }
         btnSubmit.setOnAction(new EventHandler<ActionEvent>()
         {
+
             @Override
             public void handle( ActionEvent event )
             {
-                String result = manageStaff.addUser(username.getText(),
-                        lastName.getText(), firstName.getText(),
-                        email.getText(), password.getText(),
-                        repeatPassword.getText(),
-                        returnSecurityLevel(cboSecurityLevels.getValue()));
-                
-                if ( result.equals("") )
+                if ( newUser )
                 {
-                    stageNewUser.close();
-                    sTVCont.refreshTable();
-                }
-                else
-                {
-                    lblWarning.setText(result);
+                    String result = manageStaff.addUser(username.getText(),
+                            lastName.getText(), firstName.getText(),
+                            email.getText(), password.getText(),
+                            repeatPassword.getText(),
+                            returnSecurityLevel(cboSecurityLevels.getValue()));
+
+                    if ( result.equals("") )
+                    {
+                        stageNewUser.close();
+                        sTVCont.refreshTable();
+                    }
+                    else
+                    {
+                        lblWarning.setText(result);
+                    }
                 }
 
+                else
+                {
+                    String updateResult = manageStaff.editUser(
+                            username.getText(), lastName.getText(),
+                            firstName.getText(), email.getText(),
+                            password.getText(), repeatPassword.getText(),
+                            returnSecurityLevel(cboSecurityLevels.getValue()));
+                    if ( updateResult.equals("") )
+                    {
+                        stageNewUser.close();
+                        sTVCont.refreshTable();
+                    }
+                    else
+                    {
+                        lblWarning.setText(updateResult);
+                    }
+                }
+                sTVCont.refreshTable();
             }
+
         });
 
         completionButtons.getChildren().addAll(btnReset, btnSubmit);
         completionButtons.setSpacing(10);
-        newUserForm.add(lblUsername,        0, 1);
-        newUserForm.add(username,           1, 1);
-        newUserForm.add(lblLastName,        0, 2);
-        newUserForm.add(lastName,           1, 2); 
-        newUserForm.add(lblFirstName,       0, 3);
-        newUserForm.add(firstName,          1, 3);
-        newUserForm.add(lblEmail,           0, 4);
-        newUserForm.add(email,              1, 4);
-        newUserForm.add(lblPassword,        0, 5);
-        newUserForm.add(password,           1, 5);
-        newUserForm.add(lblRepeatPassword,  0, 6);
-        newUserForm.add(repeatPassword,     1, 6);
-        newUserForm.add(lblSecurityLevel,   0, 7);
-        newUserForm.add(cboSecurityLevels,  1, 7);
-        newUserForm.add(completionButtons,  1, 8);
-        newUserForm.add(lblWarning, 0, 0,   2,1);
+        newUserForm.add(lblUsername, 0, 1);
+        newUserForm.add(username, 1, 1);
+        newUserForm.add(lblLastName, 0, 2);
+        newUserForm.add(lastName, 1, 2);
+        newUserForm.add(lblFirstName, 0, 3);
+        newUserForm.add(firstName, 1, 3);
+        newUserForm.add(lblEmail, 0, 4);
+        newUserForm.add(email, 1, 4);
+        newUserForm.add(lblPassword, 0, 5);
+        newUserForm.add(password, 1, 5);
+        newUserForm.add(lblRepeatPassword, 0, 6);
+        newUserForm.add(repeatPassword, 1, 6);
+        newUserForm.add(lblSecurityLevel, 0, 7);
+        newUserForm.add(cboSecurityLevels, 1, 7);
+        newUserForm.add(completionButtons, 1, 8);
+        newUserForm.add(lblWarning, 0, 0, 2, 1);
 
         Scene scene = new Scene(newUserForm);
 
@@ -424,29 +472,31 @@ public class TechMainPageGUI extends Application
     {
         launch(args);
     }
-    
+
     /**
-     * Purpose:	This will take the selected user from the table, confirm that 
-     * 			you wish to delete them, if so, will delete the selected user, 
-     * 			then refresh the table of accounts
-     * @param username	The user that you will remove
+     * Purpose: This will take the selected user from the table, confirm that
+     * you wish to delete them, if so, will delete the selected user, then
+     * refresh the table of accounts
+     * 
+     * @param username
+     *            The user that you will remove
      */
     public void removeUser( String username )
     {
-    	Stage stage = new Stage();
-    	PopUpCheck checkBox = new PopUpCheck("Are you sure you want to delete "
-    			+ username + "?", stage);
-    	
-		Scene scene = new Scene(checkBox.root, 300, 75);
-    	stage.setScene(scene);
-    	stage.showAndWait();
-    
-    	//when the user is removed from the database
-    	if(manageStaff.removeUser(username))
-    	{    		
-//    		this.sTVCont.removeViewableUser(username);
-    		this.sTVCont.refreshTable();
-    	
-    	}
-	}
+        Stage stage = new Stage();
+        PopUpCheck checkBox = new PopUpCheck("Are you sure you want to delete "
+                + username + "?", stage);
+
+        Scene scene = new Scene(checkBox.root, 300, 75);
+        stage.setScene(scene);
+        stage.showAndWait();
+
+        // when the user is removed from the database
+        if ( manageStaff.removeUser(username) )
+        {
+            // this.sTVCont.removeViewableUser(username);
+            this.sTVCont.refreshTable();
+
+        }
+    }
 }
