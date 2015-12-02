@@ -116,6 +116,8 @@ public class TechMainPageGUI extends Application
         btnRemoveUser.setMinWidth(150);
         btnRemoveUser.setFont(new Font(15));
         
+        //when the remove user is clicked, the selected account from the table 
+        //list will run the removeUser method using its primary key
         btnRemoveUser.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
