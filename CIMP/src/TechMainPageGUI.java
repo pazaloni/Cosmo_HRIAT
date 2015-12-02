@@ -161,13 +161,16 @@ public class TechMainPageGUI extends Application
         // appends buttons to the action box to be displayed, and formatts the
         // actionBox
         // set event handler to create a new user
-        btnAddUser.setOnAction(( ActionEvent ) -> {
+        btnAddUser.setOnAction(( ActionEvent ) -> 
+        {
+            lblWarning.setText("");
             manageUser(NEW_STAFF);
         });
 
         btnEditUser.setOnAction(( ActionEvent ) -> {
             if (!(sTVCont.getSelectedPK().equals("null")))
             {
+                lblWarning.setText("");
                 manageUser(EDIT_STAFF);
             }
  
@@ -302,6 +305,7 @@ public class TechMainPageGUI extends Application
             @Override
             public void handle( ActionEvent event )
             {
+                
                 if ( newUser )
                 {
                     String result = manageStaff.addUser(username.getText(),
@@ -339,6 +343,7 @@ public class TechMainPageGUI extends Application
                     }
                 }
                 sTVCont.refreshTable();
+                
             }
 
         });
