@@ -43,6 +43,8 @@ public class PopUpCheck
 		scene = new Scene(root);
 		this.stage.setScene(scene);
 		
+		root = new BorderPane();
+		
 		//create and set the label to display the message passed into it.
 		checkMsgLbl = new Label();
 		checkMsgLbl.setText(message);
