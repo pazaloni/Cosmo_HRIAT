@@ -1,7 +1,9 @@
 import javafx.application.*;
+import javafx.beans.property.StringProperty;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,54 +35,43 @@ public class ParticipantTableViewController
 	{
 		DatabaseHelper db = new DatabaseHelper();
 		ObservableList<String> row = FXCollections.observableArrayList();
-		ArrayList<String> staffInfo = new ArrayList<String>();
-		ResultSet rs = db.select("cosmoID, lastName, firstName, dateOfBirth, "
-				+ "accessLevel", "Staff", "", "");
-		String username;
-		String lastName;
-		String firstName;
-		String email;
-		String password = "";
-		String accessLevel;
+		ArrayList<String> participantInfo = new ArrayList<String>();
+		//TODO fix to query appropriate address, emergency info
+		//correct table Participant instead of TemporaryParticipant
+		ResultSet rs = db.select("cosmoID, firstName, lastName, city, province,  "
+				+ "informationLastUpdated", "TemporaryParticipant", "", "");
+		
+	    String cosmoID;
+	    String firstName;
+	    String lastName;
+	    String participantName;
+	    String participantAddress; 
+	    String emergencyContactName = "";
+	    String emergencyContactPhone = ""; //TODO FIX IT
+	    String informationLastUpdated;
+	    
 		try {
 			while(rs.next())
 			{
-				username = rs.getString(1);
-				System.out.println(username);
-				lastName = rs.getString(2);
-				firstName = rs.getString(3);
-				if(rs.getString(4) == null)
-				{
-					email = "none";
-				}
-				else
-				{
-					email = rs.getString(4);
-				}
+				cosmoID = rs.getString(1);
+				System.out.println(cosmoID);
+				firstName = rs.getString(2);
+				lastName = rs.getString(3);
+				participantName = firstName + " " + lastName;
+				participantAddress = rs.getString(4) + " " + rs.getString(5);
 				
-				accessLevel = rs.getString(5);
+				informationLastUpdated = rs.getString(6);
 				
-				StaffAccount account;
-				if(accessLevel == "0")
-				{
-					account = new BasicStaff(username, lastName, firstName, 
-							email, password, accessLevel);
-				}
-				else if(accessLevel == "1")
-				{
-					account = new MedicalAdministrator(username, lastName, 
-							firstName, email, password, accessLevel);
-				}
-				else
-				{
-					account = new TechnicalAdministrator(username, lastName,
-							firstName, email, password, accessLevel);
-				}
+
+				Participant participant = new Participant(cosmoID, participantName,
+			            participantAddress, emergencyContactName,
+			            emergencyContactPhone, informationLastUpdated);
 				
-				participantData.add(account);
+				
+				participantData.add(participant);
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to populate Staff Table");
+			System.out.println("Failed to populate Participant Table");
 			e.printStackTrace();
 		}
 	
@@ -107,8 +98,8 @@ public class ParticipantTableViewController
 
 	public String getSelectedPK() 
 	{
-		StaffAccount account = participantTable.getSelectionModel().getSelectedItem();
-		return account.GetUsername();
+		Participant participant = participantTable.getSelectionModel().getSelectedItem();
+		return participant.getCosmoID();
 	}
 	
 	

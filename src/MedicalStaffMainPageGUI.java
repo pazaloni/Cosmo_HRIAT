@@ -1,3 +1,4 @@
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javafx.application.Application;
@@ -407,8 +408,7 @@ public class MedicalStaffMainPageGUI extends Application
             	String cosmoID = cosmoIdTxt.getText();
             	String firstName = firstNameTxt.getText();
             	String lastName = lastNameTxt.getText();
-//            	String birthDate = birthdateTxt.getText();
-            	String birthDate = "12-Jan-2009";
+            	String birthDate = birthdateTxt.getText();
             	String familyPhysician= familyPhysicianTxt.getText();
             	String healthNumber= healthNumTxt.getText();
             	String physicalPhone = physicianPhoneTxt.getText();
@@ -599,11 +599,13 @@ public class MedicalStaffMainPageGUI extends Application
 
         // TODO example, please remove
 
-        Date updated = new Date();
+        Date updatedDate = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy");
+        String updated = sdf.format(updatedDate);
 
-        Participant test = new Participant(0, "John Doe", "301 Highwater Pl",
+        Participant test = new Participant("0", "John Doe", "301 Highwater Pl",
                 "Jane Doe", "123-456-7890", updated);
-        Participant test2 = new Participant(1, "Jane Doe", "302 Highwater Pl",
+        Participant test2 = new Participant("1", "Jane Doe", "302 Highwater Pl",
                 "John Doe", "123-456-7890", updated);
 
         // add list to columns

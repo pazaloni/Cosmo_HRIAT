@@ -34,9 +34,9 @@ public class Participant
      * @param emergencyContactName
      * @param emergencyContactPhone
      */
-    public Participant(int cosmoID, String participantName,
+    public Participant(String cosmoID, String participantName,
             String participantAddress, String emergencyContactName,
-            String emergencyContactPhone, Date informationLastUpdated)
+            String emergencyContactPhone, String informationLastUpdated)
     {
         this.cosmoID.set(""+cosmoID);
         this.participantName.set(participantName);

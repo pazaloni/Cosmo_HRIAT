@@ -24,7 +24,7 @@ public class MedicalAdministrator extends BasicStaff
     }
    
     public static boolean createParticipant(String cosmoID, String firstName, String lastName, String birthDate, 
-    		String familyPhysician, String healthNumber, String physicalPhone)
+    		String familyPhysician, String healthNumber, String phone)
     {
     	DatabaseHelper db = new DatabaseHelper();
     	db.connect();
@@ -34,7 +34,6 @@ public class MedicalAdministrator extends BasicStaff
     	values[1][0] = "firstName";
     	values[2][0] = "lastName";
     	values[3][0] = "dateOfBirth";
-    	//values[4][0] = "gender";
     	values[4][0] = "personalHealthNumber";
     	values[5][0] = "phoneNum";
 //    	values[6][0] = "physicianID";
@@ -51,7 +50,7 @@ public class MedicalAdministrator extends BasicStaff
     	values[2][1] = lastName;
     	values[3][1] = birthDate;
     	values[4][1] = healthNumber;
-    	values[5][1] = physicalPhone;
+    	values[5][1] = phone;
 
 
     	boolean successful = db.insert(values, "TemporaryParticipant");
