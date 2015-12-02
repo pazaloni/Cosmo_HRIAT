@@ -100,7 +100,6 @@ public class LoginGUI extends Application
         return box;
     }
 
-    
     @Override
     public void start( Stage stage )
     {
@@ -151,7 +150,7 @@ public class LoginGUI extends Application
             if ( loggedInStaff != null )
             {
                 // if they are a basic staff
-                if ( loggedInStaff instanceof BasicStaff )
+                if ( loggedInStaff.accessLevel.toString().contains("1") )
                 {
                     success = true;
                     stageLogin.close();
@@ -159,7 +158,7 @@ public class LoginGUI extends Application
                     medStaffGUI.medMainPageConstruct(stageLogin);
                 }
                 // if they are a medical administrator
-                else if ( loggedInStaff instanceof MedicalAdministrator )
+                else if ( loggedInStaff.accessLevel.toString().contains("0") )
                 {
                     success = true;
                     stageLogin.close();
@@ -185,6 +184,5 @@ public class LoginGUI extends Application
             txtUserName.setPromptText("Incorrect Username or Password");
         }
     }
-
 
 }

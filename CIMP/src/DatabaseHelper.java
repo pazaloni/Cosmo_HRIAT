@@ -150,7 +150,6 @@ public class DatabaseHelper
         String insertStatement = "INSERT INTO " + tableName + " " + fieldList
                 + " VALUES " + valueList;
 
-
         int rows = 0;
         try
         {
@@ -269,7 +268,6 @@ public class DatabaseHelper
 
         try
         {
-            ObservableList<String> row = FXCollections.observableArrayList();
             ArrayList<String> staffInfo = new ArrayList<String>();
 
             while ( rs.next() )

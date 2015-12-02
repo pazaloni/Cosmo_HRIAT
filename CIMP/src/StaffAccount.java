@@ -57,7 +57,7 @@ public class StaffAccount
         db.connect();
         // query used to find the provided username that returns the username,
         // password and accesslevel
-        ResultSet user = db.select("UserName,  lastName, firstName, email, password, accessLevel, ", "Staff",
+        ResultSet user = db.select("UserName, lastName, firstName, email, password, accessLevel", "Staff",
                 "username='" + username + "'", "");
         try
         {
