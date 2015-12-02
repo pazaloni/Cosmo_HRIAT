@@ -1,4 +1,6 @@
 import java.sql.ResultSet;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import java.sql.SQLException;
 
 /**
@@ -14,10 +16,12 @@ public class StaffAccount
 {
     private DatabaseHelper db;
 
-    protected String username; // staff members unique login ID
-    protected String lastName; // the staff members last name
-    protected String firstName; // the staff members first name
-    protected String password; // the staff members password
+    protected StringProperty username;
+	protected StringProperty lastName;
+	protected StringProperty firstName;
+	protected StringProperty email;
+	protected StringProperty password;
+	protected StringProperty accessLevel;
 
  
 
@@ -42,14 +46,18 @@ public class StaffAccount
         // uninstantiated
         String returnedUsername = "not found";
         String returnedPassword = "not found";
+        String returnedLastName = "not found";
+        String returnedFirstName = "not found";
+        String returnedEmail = "not found";
+        String accessLevel = "-1";
         // variable to keep track of the access level
-        int accessLevel = -1;
+
 
         db = new DatabaseHelper();
         db.connect();
         // query used to find the provided username that returns the username,
         // password and accesslevel
-        ResultSet user = db.select("UserName, password, accessLevel", "Staff",
+        ResultSet user = db.select("UserName,  lastName, firstName, email, password, accessLevel, ", "Staff",
                 "username='" + username + "'", "");
         try
         {
@@ -58,8 +66,11 @@ public class StaffAccount
             {
                 // the username, password and accessLevel returned from the database
                 returnedUsername = user.getString(1);
-                returnedPassword = user.getString(2);
-                accessLevel = Integer.parseInt(user.getString(3));
+                returnedLastName = user.getString(2);
+                returnedFirstName = user.getString(3);
+                returnedEmail = user.getString(4);
+                returnedPassword = user.getString(5);
+                accessLevel = user.getString(6);
             }
         }
         catch ( SQLException e1 )
@@ -75,21 +86,26 @@ public class StaffAccount
                     && returnedPassword.equals(password) )
             {
                 // if the accessLevel is 0 then instantiate a Basic staff
-                if ( accessLevel == 0 )
+                if ( Integer.parseInt(accessLevel) == 0 )
                 {
-                    staff = new BasicStaff(returnedUsername, returnedPassword);
+                    staff = new BasicStaff(returnedUsername, returnedLastName, 
+                    		returnedFirstName, returnedEmail, returnedPassword, 
+                    		accessLevel);
                 }
                 // if the accessLevel is 1 then instantiate a Medical Admin
-                else if ( accessLevel == 1 )
+                else if ( Integer.parseInt(accessLevel) == 1 )
                 {
-                    staff = new MedicalAdministrator(returnedUsername,
-                            returnedPassword);
+                    staff = new MedicalAdministrator(returnedUsername, returnedLastName, 
+                    		returnedFirstName, returnedEmail, returnedPassword, 
+                    		accessLevel);
                 }
                 // if the accessLevel is 2 then instantiate a Technical Admin
-                else if ( accessLevel == 2 )
+                else if ( Integer.parseInt(accessLevel) == 2 )
                 {
-                    staff = new TechnicalAdministrator(returnedUsername,
-                            returnedPassword);
+                    staff = new TechnicalAdministrator(returnedUsername, 
+                    		returnedLastName, 
+                    		returnedFirstName, returnedEmail, returnedPassword, 
+                    		accessLevel);
                 }
             }
             else
@@ -112,5 +128,94 @@ public class StaffAccount
     public boolean logout()
     {
         return false;
+    }
+    
+    public String GetUsername()
+    {
+    	return username.get();
+    }
+    
+    public StringProperty usernameProperty()
+    {
+    	return username;
+    }
+    
+    public String GetLastName()
+    {
+    	return lastName.get();
+    }
+    
+    public StringProperty lastNameProperty()
+    {
+    	return lastName;
+    }
+    
+    public String GetFirstName()
+    {
+    	return firstName.get();
+    }
+    
+    public StringProperty firstNameProperty()
+    {
+    	return firstName;
+    }
+    
+    public String GetEmail()
+    {
+    	return email.get();
+    }
+    
+    public StringProperty emailProperty()
+    {
+    	return email;
+    }
+    
+    public String GetAccessLevel()
+    {
+    	return accessLevel.get();
+    }
+    
+    public StringProperty accessLevelProperty()
+    {
+    	String accessStr = " ";
+    	if(accessLevel.getValue().equals("0"))
+    	{
+    		accessStr = "Medical Staff";
+    	}
+    	else if(accessLevel.getValue().equals("1"))
+    	{
+    		accessStr = "Medical Administrator";
+    	}
+    	else
+    	{
+    		accessStr = "Technical Administrator";
+    	}
+    	StringProperty access = new SimpleStringProperty(accessStr);
+    	return access;
+    }
+    
+    public void setUsername(String username)
+    {
+    	this.username.set(username);
+    }
+    
+    public void setLastName(String lastName)
+    {
+    	this.lastName.set(lastName);
+    }
+    
+    public void setFirstName(String firstName)
+    {
+    	this.firstName.set(firstName);
+    }
+    
+    public void setEmail(String email)
+    {
+    	this.email.set(email);
+    }
+    
+    public void setAccessLevel(String accessLevel)
+    {
+    	this.accessLevel.set(accessLevel);
     }
 }

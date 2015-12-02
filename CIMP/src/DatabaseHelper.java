@@ -1,9 +1,18 @@
 import java.sql.*;
+import java.util.ArrayList;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class DatabaseHelper
 {
     private final String DB_PATH = "G:/CIMPDatabase.accdb";
     private Connection conn;
+
+    public DatabaseHelper()
+    {
+        connect();
+    }
 
     /**
      * Purpose: To establish a connection to the database
@@ -72,6 +81,7 @@ public class DatabaseHelper
     public ResultSet select( String columnList, String tableList,
             String condition, String sort )
     {
+
         Statement s = null;
         ResultSet rs = null;
         String query = "SELECT " + columnList + " FROM " + tableList;
@@ -91,6 +101,7 @@ public class DatabaseHelper
             {
                 query += " ORDER BY " + sort;
             }
+
             // execute the query
             rs = s.executeQuery(query);
         }
@@ -138,7 +149,7 @@ public class DatabaseHelper
 
         String insertStatement = "INSERT INTO " + tableName + " " + fieldList
                 + " VALUES " + valueList;
-        // System.out.println(insertStatement);
+
 
         int rows = 0;
         try
@@ -167,7 +178,8 @@ public class DatabaseHelper
      * @return boolean True if rows were affected, false if 0 rows were affected
      *         (failed update)
      */
-    public boolean update( Array[][] values, String tableName, String primaryKey )
+    public boolean update( String[][] values, String tableName,
+            String primaryKey )
     {
         Statement s = null;
 
@@ -191,13 +203,14 @@ public class DatabaseHelper
                 updateStatement.length() - 2);
 
         // specify which record to update
-        // TODO make sure values[0][0] is correct
-        updateStatement += " WHERE " + primaryKey + "='" + values[0][0] + "'";
+        // TODO fix primary key
+        updateStatement += " WHERE " + values[0][0] + "='" + primaryKey + "'";
 
         int rows = 0;
 
         try
         {
+            s = conn.createStatement();
             rows = s.executeUpdate(updateStatement);
         }
         catch ( SQLException e )
@@ -230,7 +243,43 @@ public class DatabaseHelper
 
         try
         {
+            s = conn.createStatement();
             rows = s.executeUpdate(deleteStatement);
+        }
+        catch ( SQLException e )
+        {
+            e.printStackTrace();
+        }
+
+        return rows != 0;
+    }
+
+    /**
+     * Purpose: This will take in the result set and use it to populate the
+     * Observable list, which will be used to display the rows in the tableview.
+     * 
+     * @param rs
+     *            The result set that will be used to populate the observable
+     *            list
+     * @return The Observable list that will be used to generate the table
+     */
+    public ObservableList<String> displayRows( ResultSet rs )
+    {
+        ObservableList<String> rows = FXCollections.observableArrayList();
+
+        try
+        {
+            ObservableList<String> row = FXCollections.observableArrayList();
+            ArrayList<String> staffInfo = new ArrayList<String>();
+
+            while ( rs.next() )
+            {
+                for ( int i = 1; i <= rs.getMetaData().getColumnCount(); i++ )
+                {
+                    staffInfo.add(rs.getString(i));
+                }
+                rows.addAll(staffInfo);
+            }
         }
         catch ( SQLException e )
         {
@@ -238,7 +287,7 @@ public class DatabaseHelper
             e.printStackTrace();
         }
 
-        return rows != 0;
+        return rows;
     }
 
 }

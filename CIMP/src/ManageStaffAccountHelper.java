@@ -3,9 +3,9 @@ import java.sql.SQLException;
 
 /**
  * 
- *  Purpose: Class to manage the adding, editing and removal of a staff accounts
- *  and to do all of these to the database
- *  
+ * Purpose: Class to manage the adding, editing and removal of a staff accounts
+ * and to do all of these to the database
+ * 
  *
  * @author team CIMP
  * @version 1.0
@@ -17,13 +17,13 @@ public class ManageStaffAccountHelper
     private static final String PASSWORD_NOT_SAME = "Passwords do not match";
     private static final String EMAIL_NOT_VALID = "Email is not valid";
     private static final String USERNAME_NOT_UNIQUE = "Username is already taken";
-    
+
     private DatabaseHelper db;
 
     /**
-     * purpose: Constructor for ManageStaffAccountHelper which creates 
-     * and instance of the DataBaseHelper
-     * Constructor for the ManageStaffAccountHelper class.
+     * purpose: Constructor for ManageStaffAccountHelper which creates and
+     * instance of the DataBaseHelper Constructor for the
+     * ManageStaffAccountHelper class.
      */
     public ManageStaffAccountHelper()
     {
@@ -35,13 +35,20 @@ public class ManageStaffAccountHelper
      * Purpose: Return true or false if the user was added to the database
      * successfully
      * 
-     * @param username : the username the user passed in
-     * @param lastName : the lastname the user passed in
-     * @param firstName : the firstName the user passed in
-     * @param email : the email the user passed in
-     * @param password : the password the user passed in
-     * @param repeatPW : the second password the user passed in
-     * @param securityLv : the the user passed in
+     * @param username
+     *            : the username the user passed in
+     * @param lastName
+     *            : the lastname the user passed in
+     * @param firstName
+     *            : the firstName the user passed in
+     * @param email
+     *            : the email the user passed in
+     * @param password
+     *            : the password the user passed in
+     * @param repeatPW
+     *            : the second password the user passed in
+     * @param securityLv
+     *            : the the user passed in
      * 
      * @return boolean: true if the user addition was successful, false
      *         otherwise
@@ -110,7 +117,8 @@ public class ManageStaffAccountHelper
      * 
      * Purpose: Query the database and check if the username has been taken
      *
-     * @param username : the username for the new account
+     * @param username
+     *            : the username for the new account
      * @return boolean: true if the username exists, false otherwise
      */
     private boolean usernameExists( String username )
@@ -133,7 +141,7 @@ public class ManageStaffAccountHelper
         }
         catch ( SQLException e )
         {
-            
+
             e.printStackTrace();
         }
         return result;
@@ -142,20 +150,23 @@ public class ManageStaffAccountHelper
     /**
      * 
      * Purpose: edit an existing user
+     * 
      * @param username
      */
     public void editUser( String username )
     {
-     // TODO
+        // TODO
     }
 
     /**
+     * Purpose: This will take the selected user from the table, confirm that
+     * you wish to delete them, if so, will delete the selected user, then
+     * refresh the table of accounts
      * 
-     * Purpose: remove an existing user
-     * @param username
+     * @param username: The user that you will remove
      */
-    public void removeUser( String username )
-    {
-     // TODO
+    public boolean removeUser( String username )
+    {        
+        return this.db.delete("Staff", "UserName = \"" + username + "\"");
     }
 }

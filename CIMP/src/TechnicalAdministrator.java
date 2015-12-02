@@ -5,17 +5,13 @@
  * @author YOUR NAME AND CST NUMBER GO HERE
  * @version 1.0
  */
-public class TechnicalAdministrator extends StaffAccount
+public class TechnicalAdministrator extends BasicStaff
 {
 
-    public TechnicalAdministrator(String username, String password)
+    public TechnicalAdministrator(String username, String lastName, String firstName, String email,
+    		String password, String accessLevel)
     {
-        this.username = username;
-        this.password = password;
-        // connect to database, get the staff account record
-
-        // fetch the first and last name, and assign them to
-        // the firstName and lastname variables
+        super(username, lastName, firstName, email, password, accessLevel);
     }
 
     public boolean addAccount( String lastName, String firstName,
