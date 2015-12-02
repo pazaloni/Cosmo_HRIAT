@@ -24,7 +24,7 @@ public abstract class StaffAccount
     public boolean login( String staffID, String password )
     {
         boolean result = false;
-        if ( this.username.equals( staffID) && this.password.equals(password) )
+        if ( this.username.getValue().equals( staffID) && this.password.getValue().equals(password) )
         {
             result = true;
         }

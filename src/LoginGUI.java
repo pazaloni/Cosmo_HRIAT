@@ -48,12 +48,12 @@ public class LoginGUI extends Application
     public static void main( String[] args )
     {
         // Following are test staff that we used to test our login system
-        BasicStaff jeff = new BasicStaff("55501", "jill");
+        BasicStaff jeff = new BasicStaff("55501", "jill", "grace", "fake", "test", "0");
         users[0] = jeff;
         TechnicalAdministrator kevin = new TechnicalAdministrator("24561",
-                "Bryant");
+                "Bryant", "grace", "fake", "test", "1");
         users[1] = kevin;
-        BasicStaff haar = new MedicalAdministrator("91023", "miranda");
+        BasicStaff haar = new MedicalAdministrator("91023", "miranda", "grace", "fake", "test", "2");
         users[2] = haar;
         launch();
     }
@@ -130,11 +130,17 @@ public class LoginGUI extends Application
                             else if ( users[i] instanceof BasicStaff
                                     || users[i] instanceof MedicalAdministrator )
                             {
+                            	boolean admin = false;
+                            	if ( users[i] instanceof MedicalAdministrator)
+                            	{
+                            		admin = true;
+                            	}
+                            
                                 success = true;
                                 System.out.println("success");
                                 stageLogin.close();
                                 MedicalStaffMainPageGUI medStaffGUI = new MedicalStaffMainPageGUI();
-                                medStaffGUI.medMainPageConstruct(stageLogin);
+                                medStaffGUI.medMainPageConstruct(stageLogin, admin);
                             }
                         }
                         i++;
