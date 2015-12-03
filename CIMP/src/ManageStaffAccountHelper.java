@@ -185,7 +185,7 @@ public class ManageStaffAccountHelper
                     newUserInfo[3] = email;
                     newUserInfo[4] = password;
                     newUserInfo[5] = securityLv;
-                    db.update(newUserInfo, "Staff",username);
+                    db.update(newUserInfo, "Staff", username);
                     result = "";
 
                 }
@@ -223,7 +223,9 @@ public class ManageStaffAccountHelper
      * 
      * Purpose: To take in a username, query the database for that username and
      * if the user exists, return a string full of the attributes of the user
-     * @param username String of user name to be queried on
+     * 
+     * @param username
+     *            String of user name to be queried on
      * @return String[] an array for strings holding the attributes
      */
     public String[] queryStaff( String username )

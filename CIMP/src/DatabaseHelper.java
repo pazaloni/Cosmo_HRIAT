@@ -21,6 +21,7 @@ public class DatabaseHelper
      */
     public void connect()
     {
+
         try
         {
             conn = DriverManager.getConnection("jdbc:ucanaccess://" + DB_PATH);
@@ -31,7 +32,22 @@ public class DatabaseHelper
             e.printStackTrace();
         }
     }
-
+    /**
+     * 
+     * Purpose: close the database connection;
+     */
+    public void disconnect()
+    {
+        try
+        {
+            conn.close();
+        }
+        catch ( SQLException e )
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
     public String[][] createArray( String tableName, String[] values )
     {
         Statement s = null;

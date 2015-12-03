@@ -483,8 +483,7 @@ public class TechMainPageGUI extends Application
      * you wish to delete them, if so, will delete the selected user, then
      * refresh the table of accounts
      * 
-     * @param username
-     *            The user that you will remove
+     * @param username The user that you will remove
      */
     public void removeUser( String username )
     {
