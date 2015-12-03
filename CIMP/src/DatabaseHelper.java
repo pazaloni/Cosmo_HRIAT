@@ -279,6 +279,9 @@ public class DatabaseHelper
      *            The result set that will be used to populate the observable
      *            list
      * @return The Observable list that will be used to generate the table
+     * 
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
      */
     public ObservableList<String> displayRows( ResultSet rs )
     {

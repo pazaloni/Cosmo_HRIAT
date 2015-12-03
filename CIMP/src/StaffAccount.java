@@ -14,13 +14,20 @@ import java.sql.SQLException;
  */
 public class StaffAccount
 {
+    //The database object
     private DatabaseHelper db;
 
+    //stringProperty that will hold the username
     protected StringProperty username;
+    //stringProperty that will hold the last name
     protected StringProperty lastName;
+    //stringProperty that will hold the first name
     protected StringProperty firstName;
+    //stringProperty that will hold the email
     protected StringProperty email;
+    //stringProperty that will hold the password
     protected StringProperty password;
+    //stringProperty that will hold the access level
     protected StringProperty accessLevel;
 
     /**
@@ -35,6 +42,8 @@ public class StaffAccount
      * @return either an instantiated account(basic staff, medical admin, or
      *         techincal admin) or a null account indicating an unsucessful
      *         login
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
      */
     public StaffAccount login( String username, String password )
     {
@@ -124,57 +133,128 @@ public class StaffAccount
      * 
      * @return if the reset of information and sending user back to loginGUI is
      *         successful, return true, else, false
+     * 
      */
     public boolean logout()
     {
         return false;
     }
 
+    /**
+     * 
+     * Purpose: Gets the username from the stringProperty 
+     * @return: username string
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public String GetUsername()
     {
         return username.get();
     }
 
+    /**
+     * 
+     * Purpose: 
+     * @return
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public StringProperty usernameProperty()
     {
         return username;
     }
 
+    /**
+     * 
+     * Purpose:
+     * @return
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public String GetLastName()
     {
         return lastName.get();
     }
 
+    /**
+     * 
+     * Purpose:
+     * @return
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public StringProperty lastNameProperty()
     {
         return lastName;
     }
 
+    /**
+     * 
+     * Purpose:
+     * @return
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public String GetFirstName()
     {
         return firstName.get();
     }
 
+    /**
+     * 
+     * Purpose:
+     * @return
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public StringProperty firstNameProperty()
     {
         return firstName;
     }
 
+    /**
+     * 
+     * Purpose:
+     * @return
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public String GetEmail()
     {
         return email.get();
     }
 
+    /**
+     * 
+     * Purpose:
+     * @return
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public StringProperty emailProperty()
     {
         return email;
     }
 
+    /**
+     * 
+     * Purpose:
+     * @return
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public String GetAccessLevel()
     {
         return accessLevel.get();
     }
 
+    /**
+     * 
+     * Purpose:
+     * @return
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public StringProperty accessLevelProperty()
     {
         String accessStr = " ";
@@ -194,26 +274,61 @@ public class StaffAccount
         return access;
     }
 
+    /**
+     * 
+     * Purpose:
+     * @return
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public void setUsername( String username )
     {
         this.username.set(username);
     }
 
+    /**
+     * 
+     * Purpose:
+     * @return
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public void setLastName( String lastName )
     {
         this.lastName.set(lastName);
     }
 
+    /**
+     * 
+     * Purpose:
+     * @return
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public void setFirstName( String firstName )
     {
         this.firstName.set(firstName);
     }
 
+    /**
+     * 
+     * Purpose:
+     * @return
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public void setEmail( String email )
     {
         this.email.set(email);
     }
 
+    /**
+     * 
+     * Purpose:
+     * @return
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public void setAccessLevel( String accessLevel )
     {
         this.accessLevel.set(accessLevel);

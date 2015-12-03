@@ -9,6 +9,15 @@ import javafx.beans.property.SimpleStringProperty;
 public class BasicStaff extends StaffAccount
 {
     // private ArrayList<Note> allNotes;
+    /**
+     * Constructor for the BasicStaff class.
+     * @param username
+     * @param lastName
+     * @param firstName
+     * @param email
+     * @param password
+     * @param accessLevel
+     */
     public BasicStaff(String username, String lastName, String firstName,
             String email, String password, String accessLevel)
     {

@@ -30,10 +30,10 @@ public class PopUpCheck
     /**
      * Purpose: The main constructor for the pop up check
      * 
-     * @param message
-     *            The passed in message that will be displayed on the GUI
-     * @param stage
-     *            The passed in stage
+     * @param message   The passed in message that will be displayed on the GUI
+     * @param stage     The passed in stage
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
      */
     public PopUpCheck(String message, Stage stage)
     {
@@ -106,6 +106,9 @@ public class PopUpCheck
      * Purpose: this will return the result the set on the button click
      * 
      * @return a boolean value saying whether the deletion was confirmed
+     * 
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
      */
     public boolean runCheck()
     {

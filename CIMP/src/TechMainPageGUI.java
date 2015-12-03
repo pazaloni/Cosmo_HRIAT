@@ -484,6 +484,8 @@ public class TechMainPageGUI extends Application
      * refresh the table of accounts
      * 
      * @param username The user that you will remove
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
      */
     public void removeUser( String username )
     {
@@ -496,11 +498,13 @@ public class TechMainPageGUI extends Application
         stage.showAndWait();
 
         // when the user is removed from the database
-        if ( manageStaff.removeUser(username) )
+        if(checkBox.result) 
         {
-            // this.sTVCont.removeViewableUser(username);
-            this.sTVCont.refreshTable();
-
+            if( manageStaff.removeUser(username) )
+            {
+                // this.sTVCont.removeViewableUser(username);
+                this.sTVCont.refreshTable();
+            }
         }
     }
 }
