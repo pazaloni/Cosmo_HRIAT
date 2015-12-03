@@ -219,6 +219,13 @@ public class ManageStaffAccountHelper
         return this.db.delete("Staff", "UserName = \"" + username + "\"");
     }
 
+    /**
+     * 
+     * Purpose: To take in a username, query the database for that username and
+     * if the user exists, return a string full of the attributes of the user
+     * @param username String of user name to be queried on
+     * @return String[] an array for strings holding the attributes
+     */
     public String[] queryStaff( String username )
     {
         String[] stafftoReturn = new String[STAFF_COLUMN_SIZE];
