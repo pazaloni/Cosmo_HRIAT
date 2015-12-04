@@ -418,5 +418,4 @@ public class DatabaseHelper
         return rows;
     }
 
-
 }
