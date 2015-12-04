@@ -37,6 +37,8 @@ public class TestManageStaffAccountHelper
     private String failEmailWithoutPeriod;
     private String failPassword;
     private String failEmptyField;
+    
+
 
     @Before
     public void setUp() throws Exception
@@ -72,6 +74,7 @@ public class TestManageStaffAccountHelper
         failEmailWithoutPeriod = "1234@1234";
         failPassword = "random";
         failEmptyField = "";
+
 
     }
 

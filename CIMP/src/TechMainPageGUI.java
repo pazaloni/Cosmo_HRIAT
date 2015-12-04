@@ -489,22 +489,31 @@ public class TechMainPageGUI extends Application
      */
     public void removeUser( String username )
     {
-        Stage stage = new Stage();
-        PopUpCheck checkBox = new PopUpCheck("Are you sure you want to delete "
-                + username + "?", stage);
-
-        Scene scene = new Scene(checkBox.root, 300, 75);
-        stage.setScene(scene);
-        stage.showAndWait();
-
-        // when the user is removed from the database
-        if(checkBox.result) 
+        
+        
+        if(username != null && username != "null")
         {
-            if( manageStaff.removeUser(username) )
+            Stage stage = new Stage();
+            
+            PopUpCheck checkBox = new PopUpCheck("Are you sure you want to "
+                    + "delete " + username + "?", stage);
+            
+            Scene scene = new Scene(checkBox.root, 300, 75);
+            stage.setScene(scene);
+            stage.showAndWait();
+
+            // when the user is removed from the database
+            if(checkBox.result) 
             {
-                // this.sTVCont.removeViewableUser(username);
-                this.sTVCont.refreshTable();
+                if( manageStaff.removeUser(username) )
+                {
+                    // this.sTVCont.removeViewableUser(username);
+                    this.sTVCont.refreshTable();
+                }
             }
         }
+        
+
+        
     }
 }

@@ -135,10 +135,8 @@ public class DatabaseHelper
      * 
      * Purpose: This method will add a new record to the specified table
      * 
-     * @param newRecord
-     *            A 2d array of the field names and the values to be inserted
-     * @param tableName
-     *            The name of the table to add the record to
+     * @param newRecord A 2d array of the field names and the values to be inserted
+     * @param tableName The name of the table to add the record to
      * @return boolean True if rows were affected, false if 0 rows were affected
      *         (failed insert)
      */
@@ -184,12 +182,9 @@ public class DatabaseHelper
      * 
      * Purpose: To update a row in a table
      * 
-     * @param values
-     *            a 2d array of field names and values to change in a row
-     * @param tableName
-     *            the table that the row is located in
-     * @param primaryKey
-     *            the primary key of the table
+     * @param values    a 2d array of field names and values to change in a row
+     * @param tableName the table that the row is located in
+     * @param primaryKey   the primary key of the table
      * @return boolean True if rows were affected, false if 0 rows were affected
      *         (failed update)
      */
@@ -244,10 +239,8 @@ public class DatabaseHelper
      * 
      * Purpose: To delete from a table on a condition
      * 
-     * @param tableName
-     *            the name of the table
-     * @param condition
-     *            the condition to delete on
+     * @param tableName the name of the table
+     * @param condition the condition to delete on
      * @return boolean whether the delete was successful
      */
     public boolean delete( String tableName, String condition )
@@ -273,12 +266,12 @@ public class DatabaseHelper
 
     /**
      * Purpose: This will take in the result set and use it to populate the
-     * Observable list, which will be used to display the rows in the tableview.
+     *          Observable list, which will be used to display the rows in the 
+     *          tableview.
      * 
-     * @param rs
-     *            The result set that will be used to populate the observable
-     *            list
-     * @return The Observable list that will be used to generate the table
+     * @param rs    The result set that will be used to populate the observable
+     *              list
+     * @return      The Observable list that will be used to generate the table
      * 
      * @author  Breanna Wilson cst215
      *          Steven Palchinski cst209

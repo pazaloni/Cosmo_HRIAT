@@ -120,7 +120,7 @@ public class StaffAccount
             else
             {
                 // if the returned username is null, make the staff to return
-                // null aswell
+                // null as well
                 staff = null;
             }
         }
@@ -142,8 +142,8 @@ public class StaffAccount
 
     /**
      * 
-     * Purpose: Gets the username from the stringProperty 
-     * @return: username string
+     * Purpose: Gets the username from the StringProperty 
+     * @return  username String
      * @author  Breanna Wilson cst215
      *          Steven Palchinski cst209
      */
@@ -154,8 +154,8 @@ public class StaffAccount
 
     /**
      * 
-     * Purpose: 
-     * @return
+     * Purpose: Gets the username property
+     * @return: Username property StringProperty
      * @author  Breanna Wilson cst215
      *          Steven Palchinski cst209
      */
@@ -166,8 +166,8 @@ public class StaffAccount
 
     /**
      * 
-     * Purpose:
-     * @return
+     * Purpose: Gets the lastName from the StringProperty
+     * @return  lastName String
      * @author  Breanna Wilson cst215
      *          Steven Palchinski cst209
      */
@@ -178,8 +178,8 @@ public class StaffAccount
 
     /**
      * 
-     * Purpose:
-     * @return
+     * Purpose: Gets the lastName property
+     * @return  lastName property StringProperty
      * @author  Breanna Wilson cst215
      *          Steven Palchinski cst209
      */
@@ -190,8 +190,8 @@ public class StaffAccount
 
     /**
      * 
-     * Purpose:
-     * @return
+     * Purpose: Gets the firstName from the StringProperty
+     * @return  firstName String
      * @author  Breanna Wilson cst215
      *          Steven Palchinski cst209
      */
@@ -202,8 +202,8 @@ public class StaffAccount
 
     /**
      * 
-     * Purpose:
-     * @return
+     * Purpose: Gets the firstName property
+     * @return  firstName property StringProperty
      * @author  Breanna Wilson cst215
      *          Steven Palchinski cst209
      */
@@ -214,8 +214,8 @@ public class StaffAccount
 
     /**
      * 
-     * Purpose:
-     * @return
+     * Purpose: Gets the email from the StingProperty
+     * @return  email String
      * @author  Breanna Wilson cst215
      *          Steven Palchinski cst209
      */
@@ -226,8 +226,8 @@ public class StaffAccount
 
     /**
      * 
-     * Purpose:
-     * @return
+     * Purpose: Gets the email Property
+     * @return  email property StringProperty
      * @author  Breanna Wilson cst215
      *          Steven Palchinski cst209
      */
@@ -238,8 +238,8 @@ public class StaffAccount
 
     /**
      * 
-     * Purpose:
-     * @return
+     * Purpose: Gets the accesslevel from the StringProperty
+     * @return  accessLevel String
      * @author  Breanna Wilson cst215
      *          Steven Palchinski cst209
      */
@@ -250,8 +250,9 @@ public class StaffAccount
 
     /**
      * 
-     * Purpose:
-     * @return
+     * Purpose: Checks the value of the accessLevel and assigns the proper 
+     *          access level String that will be displayed in the table
+     * @return  accessLevel StringProperty
      * @author  Breanna Wilson cst215
      *          Steven Palchinski cst209
      */
@@ -276,8 +277,7 @@ public class StaffAccount
 
     /**
      * 
-     * Purpose:
-     * @return
+     * Purpose: Sets the username StringProperty
      * @author  Breanna Wilson cst215
      *          Steven Palchinski cst209
      */
@@ -288,8 +288,7 @@ public class StaffAccount
 
     /**
      * 
-     * Purpose:
-     * @return
+     * Purpose: Sets the lastName StringProperty
      * @author  Breanna Wilson cst215
      *          Steven Palchinski cst209
      */
@@ -300,8 +299,7 @@ public class StaffAccount
 
     /**
      * 
-     * Purpose:
-     * @return
+     * Purpose: Sets the firstName StringProperty
      * @author  Breanna Wilson cst215
      *          Steven Palchinski cst209
      */
@@ -312,8 +310,7 @@ public class StaffAccount
 
     /**
      * 
-     * Purpose:
-     * @return
+     * Purpose: Sets the email StringProperty
      * @author  Breanna Wilson cst215
      *          Steven Palchinski cst209
      */
@@ -324,8 +321,7 @@ public class StaffAccount
 
     /**
      * 
-     * Purpose:
-     * @return
+     * Purpose: Sets the accessLevel StringProperty
      * @author  Breanna Wilson cst215
      *          Steven Palchinski cst209
      */
