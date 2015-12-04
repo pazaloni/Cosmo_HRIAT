@@ -1,6 +1,7 @@
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
@@ -38,12 +39,12 @@ public class Participant
             String participantAddress, String emergencyContactName,
             String emergencyContactPhone, String informationLastUpdated)
     {
-        this.cosmoID.set(""+cosmoID);
-        this.participantName.set(participantName);
-        this.informationLastUpdated.set(""+informationLastUpdated);
-        this.participantAddress.set(""+participantAddress);
-        this.emergencyContactName.set(""+emergencyContactName);
-        this.emergencyContactPhone.set(""+emergencyContactPhone);
+        this.cosmoID = new SimpleStringProperty(cosmoID);
+        this.participantName = new SimpleStringProperty(participantName);
+        this.informationLastUpdated = new SimpleStringProperty(""+informationLastUpdated);
+        this.participantAddress = new SimpleStringProperty(""+participantAddress);
+        this.emergencyContactName = new SimpleStringProperty(""+emergencyContactName);
+        this.emergencyContactPhone = new SimpleStringProperty(""+emergencyContactPhone);
 
     }
 
@@ -70,13 +71,14 @@ public class Participant
     
     public String getInformationLastUpdated()
     {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/YYYY hh:mm a");
+        SimpleDateFormat format = new SimpleDateFormat("dd-MMM-YYYY");
 
         return format.format(informationLastUpdated);
     }
 
     public StringProperty getUpdatedProperty()
     {
+        informationLastUpdated.set(informationLastUpdated.get().substring(0, 11));
         return informationLastUpdated;
     }
     

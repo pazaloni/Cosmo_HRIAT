@@ -1,4 +1,5 @@
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 import javafx.application.Application;
@@ -12,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
@@ -26,6 +28,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -37,6 +40,11 @@ import javafx.stage.Stage;
  */
 public class MedicalStaffMainPageGUI extends Application
 {
+    
+    private ParticipantTableViewController pTVCont;
+    
+    private DatabaseHelper dbObject = new DatabaseHelper();
+    
     public static Stage medMainStage;
     
     private Button logout;
@@ -51,7 +59,7 @@ public class MedicalStaffMainPageGUI extends Application
     
     private ObservableList<String> noteTitleList;
     
-    private TableView<Participant> participantTable;
+    private Stage createParticipantStage;
     
     
 
@@ -74,6 +82,11 @@ public class MedicalStaffMainPageGUI extends Application
      */
     public void medMainPageConstruct( Stage stage, boolean admin )
     {
+        dbObject.connect();
+        
+        pTVCont = new ParticipantTableViewController();
+        pTVCont.initialize();
+        
         medMainStage = stage;
         medMainStage.setTitle("Cosmo Industries");
 
@@ -334,10 +347,10 @@ public class MedicalStaffMainPageGUI extends Application
             @Override
             public void handle( ActionEvent e ){
             	//Open addNewParticipant Window
-            	Stage createParticipantStage = new Stage();
+            	createParticipantStage = new Stage();
             	createParticipantStage.setTitle("Create Participant");
             	
-            	createParticipantStage.setScene(new Scene(createParticipantPopUp(), 300, 300));
+            	createParticipantStage.setScene(new Scene(createParticipantPopUp(), 300, 315));
             	createParticipantStage.show();
             }
             
@@ -358,6 +371,9 @@ public class MedicalStaffMainPageGUI extends Application
     protected GridPane createParticipantPopUp() {
     	
     	GridPane grid = new GridPane();
+    	
+    	Label lblWarning = new Label();
+    	lblWarning.setTextFill(Color.FIREBRICK);
         
         Label firstNameLbl = new Label("First Name");
         Label lastNameLbl = new Label("Last Name");
@@ -370,7 +386,20 @@ public class MedicalStaffMainPageGUI extends Application
         
         TextField firstNameTxt = new TextField();
         TextField lastNameTxt = new TextField();
-        TextField birthdateTxt= new TextField();
+       // TextField birthdateTxt= new TextField();
+        DatePicker birthDatePicker = new DatePicker();
+//        birthDatePicker.setOnAction(new EventHandler<ActionEvent>(){
+//
+//            @Override
+//            public void handle(ActionEvent arg0)
+//            {
+//                LocalDate date = birthDatePicker.getValue();
+//                
+//                
+//            }
+//            
+//        });
+        
         TextField familyPhysicianTxt = new TextField();
         TextField healthNumTxt = new TextField();
         TextField physicianPhoneTxt = new TextField();
@@ -384,11 +413,11 @@ public class MedicalStaffMainPageGUI extends Application
         grid.add(healthNumLbl, 0 , 6);
         grid.add(physicianPhoneLbl, 0 , 7);      
 
-        
+        grid.add(lblWarning, 1, 0);
         grid.add(cosmoIdTxt, 1 , 1);
         grid.add(firstNameTxt, 1 , 2);
         grid.add(lastNameTxt, 1 , 3);
-        grid.add(birthdateTxt, 1 , 4);
+        grid.add(birthDatePicker, 1 , 4);
         grid.add(familyPhysicianTxt, 1 , 5);
         grid.add(healthNumTxt, 1 , 6);
         grid.add(physicianPhoneTxt, 1 , 7);
@@ -405,14 +434,20 @@ public class MedicalStaffMainPageGUI extends Application
         {
             @Override
             public void handle( ActionEvent e ){
-            	String cosmoID = cosmoIdTxt.getText();
-            	String firstName = firstNameTxt.getText();
-            	String lastName = lastNameTxt.getText();
-            	String birthDate = birthdateTxt.getText();
-            	String familyPhysician= familyPhysicianTxt.getText();
-            	String healthNumber= healthNumTxt.getText();
-            	String physicalPhone = physicianPhoneTxt.getText();
-            	MedicalAdministrator.createParticipant(cosmoID, firstName, lastName, birthDate, familyPhysician, healthNumber, physicalPhone);
+            	String result = MedicalAdministrator.createParticipant(cosmoIdTxt.getText(), firstNameTxt.getText(), 
+            	        lastNameTxt.getText(), birthDatePicker.getValue(), familyPhysicianTxt.getText(), 
+            	        healthNumTxt.getText(), physicianPhoneTxt.getText() );
+            	
+                	if(result.equals(""))
+                	{
+                	    createParticipantStage.close();
+                	    pTVCont.refreshTable();
+                	}
+                	else
+                	{
+                        lblWarning.setTextFill(Color.FIREBRICK);
+                	    lblWarning.setText(result);
+                	}
             	}
             }
         );
@@ -525,115 +560,115 @@ public class MedicalStaffMainPageGUI extends Application
      * 
      * @return
      */
-    @SuppressWarnings("unchecked")
-    private HBox createHBoxTable()
-    {
-        HBox hbox = new HBox();
-        hbox.setSpacing(10);
-        hbox.setStyle("-fx-background-color: #336699;");
-
-        // TableView instance to hold User records
-        participantTable = new TableView<Participant>();
-        participantTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        // Instantiation of all the table column headings (With proper
-        // formatting)
-
-        // cosmoID Col
-        TableColumn<Participant, String> cosmoIDCol = new TableColumn<Participant, String>(
-                "Cosmo ID");
-        cosmoIDCol.setMinWidth(50);
-        cosmoIDCol.setResizable(false);
-
-        // Participant Col
-        TableColumn<Participant, String> participantNameCol = new TableColumn<Participant, String>(
-                "Participant");
-        participantNameCol.setMinWidth(175);
-        participantNameCol.setResizable(false);
-
-        // Home Address Col
-        TableColumn<Participant, String> addressCol = new TableColumn<Participant, String>(
-                "Home Address");
-        addressCol.setMinWidth(200);
-        addressCol.setResizable(false);
-
-        // Emergency Contact name
-        TableColumn<Participant, String> emergencyContactNameCol = new TableColumn<Participant, String>(
-                "Emergency Contact Name");
-        emergencyContactNameCol.setMinWidth(180);
-        emergencyContactNameCol.setResizable(false);
-
-        // Emergency Phone Col
-        TableColumn<Participant, String> emergencyContactPhoneCol = new TableColumn<Participant, String>(
-                "Emergency Phone");
-        emergencyContactPhoneCol.setMinWidth(115);
-        emergencyContactPhoneCol.setResizable(false);
-
-        // Last Updated col
-        TableColumn<Participant, String> lastUpdatedCol = new TableColumn<Participant, String>(
-                "Last Updated");
-        lastUpdatedCol.setMinWidth(135);
-        lastUpdatedCol.setResizable(false);
-
-        // Appending column headers to the table for display
-        participantTable.getColumns().addAll(cosmoIDCol, participantNameCol, addressCol,
-                emergencyContactNameCol, emergencyContactPhoneCol,
-                lastUpdatedCol);
-
-        // table columns not draggable to reorder it
-        participantTable.getColumns().addListener(new ListChangeListener()
-        {
-            @Override
-            public void onChanged( Change change )
-            {
-                change.next();
-                if ( change.wasReplaced() )
-                {
-                    participantTable.getColumns().clear();
-                    participantTable.getColumns().addAll(cosmoIDCol, participantNameCol,
-                            addressCol, emergencyContactNameCol,
-                            emergencyContactPhoneCol, lastUpdatedCol);
-                }
-            }
-        });
-
-        // TODO example, please remove
-
-        Date updatedDate = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy");
-        String updated = sdf.format(updatedDate);
-
-        Participant test = new Participant("0", "John Doe", "301 Highwater Pl",
-                "Jane Doe", "123-456-7890", updated);
-        Participant test2 = new Participant("1", "Jane Doe", "302 Highwater Pl",
-                "John Doe", "123-456-7890", updated);
-
-        // add list to columns
-        ObservableList<Participant> participantList = FXCollections
-                .observableArrayList(test, test2);
-        
-        
-        // add data to columns
-        cosmoIDCol.setCellValueFactory(new PropertyValueFactory<>("cosmoID"));
-        participantNameCol.setCellValueFactory(new PropertyValueFactory<>(
-                "participantName"));
-        addressCol.setCellValueFactory(new PropertyValueFactory<>(
-                "participantAddress"));
-        emergencyContactNameCol.setCellValueFactory(new PropertyValueFactory<>(
-                "emergencyContactName"));
-        emergencyContactPhoneCol
-                .setCellValueFactory(new PropertyValueFactory<>(
-                        "emergencyContactPhone"));
-        lastUpdatedCol.setCellValueFactory(new PropertyValueFactory<>(
-                "informationLastUpdated"));
-
-        // set things to participants
-        participantTable.setItems(participantList);
-
-        hbox.getChildren().addAll(participantTable);
-
-        return hbox;
-    }
+//    @SuppressWarnings("unchecked")
+//    private HBox createHBoxTable()
+//    {
+//        HBox hbox = new HBox();
+//        hbox.setSpacing(10);
+//        hbox.setStyle("-fx-background-color: #336699;");
+//
+//        // TableView instance to hold User records
+//        participantTable = new TableView<Participant>();
+//        participantTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+//
+//        // Instantiation of all the table column headings (With proper
+//        // formatting)
+//
+//        // cosmoID Col
+//        TableColumn<Participant, String> cosmoIDCol = new TableColumn<Participant, String>(
+//                "Cosmo ID");
+//        cosmoIDCol.setMinWidth(50);
+//        cosmoIDCol.setResizable(false);
+//
+//        // Participant Col
+//        TableColumn<Participant, String> participantNameCol = new TableColumn<Participant, String>(
+//                "Participant");
+//        participantNameCol.setMinWidth(175);
+//        participantNameCol.setResizable(false);
+//
+//        // Home Address Col
+//        TableColumn<Participant, String> addressCol = new TableColumn<Participant, String>(
+//                "Home Address");
+//        addressCol.setMinWidth(200);
+//        addressCol.setResizable(false);
+//
+//        // Emergency Contact name
+//        TableColumn<Participant, String> emergencyContactNameCol = new TableColumn<Participant, String>(
+//                "Emergency Contact Name");
+//        emergencyContactNameCol.setMinWidth(180);
+//        emergencyContactNameCol.setResizable(false);
+//
+//        // Emergency Phone Col
+//        TableColumn<Participant, String> emergencyContactPhoneCol = new TableColumn<Participant, String>(
+//                "Emergency Phone");
+//        emergencyContactPhoneCol.setMinWidth(115);
+//        emergencyContactPhoneCol.setResizable(false);
+//
+//        // Last Updated col
+//        TableColumn<Participant, String> lastUpdatedCol = new TableColumn<Participant, String>(
+//                "Last Updated");
+//        lastUpdatedCol.setMinWidth(135);
+//        lastUpdatedCol.setResizable(false);
+//
+//        // Appending column headers to the table for display
+//        participantTable.getColumns().addAll(cosmoIDCol, participantNameCol, addressCol,
+//                emergencyContactNameCol, emergencyContactPhoneCol,
+//                lastUpdatedCol);
+//
+//        // table columns not draggable to reorder it
+//        participantTable.getColumns().addListener(new ListChangeListener()
+//        {
+//            @Override
+//            public void onChanged( Change change )
+//            {
+//                change.next();
+//                if ( change.wasReplaced() )
+//                {
+//                    participantTable.getColumns().clear();
+//                    participantTable.getColumns().addAll(cosmoIDCol, participantNameCol,
+//                            addressCol, emergencyContactNameCol,
+//                            emergencyContactPhoneCol, lastUpdatedCol);
+//                }
+//            }
+//        });
+//
+//        // TODO example, please remove
+//
+//  Date updatedDate = new Date();
+//  SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy");
+//  String updated = sdf.format(updatedDate);
+//
+//        Participant test = new Participant("0", "John Doe", "301 Highwater Pl",
+//                "Jane Doe", "123-456-7890", updated);
+//        Participant test2 = new Participant("1", "Jane Doe", "302 Highwater Pl",
+//                "John Doe", "123-456-7890", updated);
+//
+//        // add list to columns
+//        ObservableList<Participant> participantList = FXCollections
+//                .observableArrayList(test, test2);
+//        
+//        
+//        // add data to columns
+//        cosmoIDCol.setCellValueFactory(new PropertyValueFactory<>("cosmoID"));
+//        participantNameCol.setCellValueFactory(new PropertyValueFactory<>(
+//                "participantName"));
+//        addressCol.setCellValueFactory(new PropertyValueFactory<>(
+//                "participantAddress"));
+//        emergencyContactNameCol.setCellValueFactory(new PropertyValueFactory<>(
+//                "emergencyContactName"));
+//        emergencyContactPhoneCol
+//                .setCellValueFactory(new PropertyValueFactory<>(
+//                        "emergencyContactPhone"));
+//        lastUpdatedCol.setCellValueFactory(new PropertyValueFactory<>(
+//                "informationLastUpdated"));
+//
+//        // set things to participants
+//        participantTable.setItems(participantList);
+//
+//        hbox.getChildren().addAll(participantTable);
+//
+//        return hbox;
+//    }
 
     /**
      * 
@@ -657,9 +692,9 @@ public class MedicalStaffMainPageGUI extends Application
         HBox previewNotes = createHBoxPreviewNotes();
         //VBox.setMargin(previewNotes, new Insets(10,0,10,0));
         // table hbox
-        HBox table = createHBoxTable();
+       // HBox table = createHBoxTable();
         // add everthing to vbox
-        vbox.getChildren().addAll(header, tabs, searchBar, previewNotes, table);
+        vbox.getChildren().addAll(header, tabs, searchBar, previewNotes, pTVCont.participantTable);
 
         return vbox;
     }
