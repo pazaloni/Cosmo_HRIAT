@@ -70,9 +70,9 @@ public class Participant
     
     public String getInformationLastUpdated()
     {
-        SimpleDateFormat format = new SimpleDateFormat("dd-MMM-YYYY");
+    	informationLastUpdated.set(informationLastUpdated.get().substring(0, 11));
 
-        return format.format(informationLastUpdated);
+        return informationLastUpdated.get();
     }
 
     public StringProperty getUpdatedProperty()
