@@ -20,30 +20,47 @@ public class MedicalAdministrator extends BasicStaff
 
     // private ArrayList<Note> allNotes;
 
+
     public MedicalAdministrator(String username, String lastName, String firstName, String email,
     		String password, String accessLevel)
     {
         super(username, lastName, firstName, email, password, accessLevel);
-        // connect to database, get the staff account record
-
-        // fetch the first and last name, and assign them to
-        // the firstName and lastname variables
     }
    
+    /**
+     * 
+     * Purpose: To take in the information input in the {@link MedicalStaffMainPageGUI} Add participant
+     * form and put it into the database after doing proper validation.
+     * 
+     * 
+     * @param cosmoID
+     * @param firstName
+     * @param lastName
+     * @param birthDate
+     * @param familyPhysician
+     * @param healthNumber
+     * @param phone
+     * 
+     * @return String - An error message if validation fails
+     */
     public static String createParticipant(String cosmoID, String firstName, String lastName, LocalDate birthDate, 
     		String familyPhysician, String healthNumber, String phone)
     {
-         //initialize birth date string to blank
+         //initialize birth date string to an empty string
          String birthDateString = "";
         
-         //check if birthdate is set before trying to format it
+         //check if birthdate is set before trying to format it so we don't
+         //get a null pointer exception
          if(birthDate != null)
          {
          birthDateString = birthDate.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
          }
         
         
+        //set the result error message to en empty string
     	String result = "";
+    	
+    	//check to see if any of the fields are empty
 		if (cosmoID.isEmpty() || firstName.isEmpty() || lastName.isEmpty()
 				|| birthDateString.equals("") || familyPhysician.isEmpty()
 				|| healthNumber.isEmpty() || phone.isEmpty()) 
@@ -55,25 +72,31 @@ public class MedicalAdministrator extends BasicStaff
             DatabaseHelper db = new DatabaseHelper();
             db.connect();
 	
+            //check to see if the CosmoID is a number
 			if(!cosmoID.matches("\\d+"))
 			{
 			    result = "CosmoID must be a number";
 			}
+			//check to see if the cosmoID already exists in the database
 			else if(idExists(cosmoID))
 			{
                 result = "That CosmoID already exists";
 			}
+			//check to see if the Health Number is a 9 digit number
 			else if(!healthNumber.matches("^[0-9]{9}$"))
 			{
 			    result = "Health Number must be 9 digits";
 			}
+			//check to see if the Phone number is 10 digits.
 	        else if(!phone.matches("^[0-9]{10}$"))
             {
                 result = "Phone Number must be 10 digits";
             }
+			//everything is valid
 			else
 			{
 
+			    //array of field names
 	            String values[][] = new String[7][2];
 	            values[0][0] = "cosmoID";
 	            values[1][0] = "firstName";
@@ -84,11 +107,12 @@ public class MedicalAdministrator extends BasicStaff
 	            values[6][0] = "dateUpdated";
 			    
 			    
-                Calendar c = Calendar.getInstance();
-            
-                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-                
+	            //get the current date to insert into "lastUpdated"
+                Calendar c = Calendar.getInstance();           
+                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");              
                 String formattedDate = df.format(c.getTime());
+                
+                //array of values to insert
                 values[0][1] = cosmoID;
                 values[1][1] = firstName;
                 values[2][1] = lastName;
@@ -97,22 +121,29 @@ public class MedicalAdministrator extends BasicStaff
                 values[5][1] = phone;
                 values[6][1] = formattedDate;
         
+                //inserting into the database
                 boolean successful = db.insert(values, "TemporaryParticipant");
                 if(!successful)
                 {
                     result = "The insertion was not successful";
                 }
 			}
-
 			db.disconnect();
 		}
 		return result;
 	}
 
+    /**
+     * 
+     * Purpose: To check if the passed in ID exists in the database
+     * @param cosmoID - the ID that was input into the field
+     * 
+     * @return boolean - true if id exists already, false if it doesn't exist
+     */
 	private static boolean idExists(String cosmoID) {
         boolean result = false;
 
-        // result set that we obtain form the database
+        //result set of all cosmoID's in the database
         DatabaseHelper db = new DatabaseHelper();
 		ResultSet set = db.select("cosmoID", "TemporaryParticipant", "", "");
         try
@@ -128,8 +159,7 @@ public class MedicalAdministrator extends BasicStaff
             }
         }
         catch ( SQLException e )
-        {
-            
+        {   
             e.printStackTrace();
         }
         return result;
