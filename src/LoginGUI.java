@@ -89,6 +89,22 @@ public class LoginGUI extends Application
         box.getChildren().addAll(viewableLogo, txtUserName, pfUserPassword,
                 btnLogin);
         box.setSpacing(MAINPANE_SPACING);
+        txtUserName.setOnAction(new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle( ActionEvent e )
+            {
+                login();
+            }
+        });
+        pfUserPassword.setOnAction(new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle( ActionEvent e )
+            {
+                login();
+            }
+        });
         btnLogin.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override

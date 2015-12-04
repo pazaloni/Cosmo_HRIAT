@@ -61,9 +61,6 @@ public class MedicalStaffMainPageGUI extends Application
     
     private Stage createParticipantStage;
     
-    
-
-    private TableView<Participant> participantTable;
 
     /**
      * Purpose: displays the GUI
@@ -154,7 +151,6 @@ public class MedicalStaffMainPageGUI extends Application
      */
     private TabPane createTabs()
     {
-
         TabPane tabPane = new TabPane();
 
         // Create tabs names
@@ -215,9 +211,6 @@ public class MedicalStaffMainPageGUI extends Application
     {
         // create border pane
         BorderPane previewPane = new BorderPane();
-
-        // create the search bar in the preview pane
-        
 
         // create picture box for left side of preview pane
         VBox pictureBox = new VBox();
@@ -370,13 +363,20 @@ public class MedicalStaffMainPageGUI extends Application
         return searchBar;
     }
 
+    /**
+     * 
+     * Purpose: To create a pop up window to add the participant into the database
+     * @return a GridPane containing the form
+     */
     protected GridPane createParticipantPopUp() {
     	
     	GridPane grid = new GridPane();
     	
+    	//warning label
     	Label lblWarning = new Label();
     	lblWarning.setTextFill(Color.FIREBRICK);
         
+    	//text field labels
         Label firstNameLbl = new Label("First Name");
         Label lastNameLbl = new Label("Last Name");
         Label birthdateLbl= new Label("Birthdate");
@@ -385,29 +385,18 @@ public class MedicalStaffMainPageGUI extends Application
         Label phoneLbl = new Label("Phone Number");      
         Label cosmoIdLbl = new Label("Cosmo ID");
         
-        
+        //the text fields
         TextField firstNameTxt = new TextField();
         TextField lastNameTxt = new TextField();
-       // TextField birthdateTxt= new TextField();
         DatePicker birthDatePicker = new DatePicker();
-//        birthDatePicker.setOnAction(new EventHandler<ActionEvent>(){
-//
-//            @Override
-//            public void handle(ActionEvent arg0)
-//            {
-//                LocalDate date = birthDatePicker.getValue();
-//                
-//                
-//            }
-//            
-//        });
-        
         TextField familyPhysicianTxt = new TextField();
         TextField healthNumTxt = new TextField();
         TextField phoneTxt = new TextField();
         phoneTxt.setPromptText("Ex: 3062879111");
+        
         TextField cosmoIdTxt = new TextField();
         
+        //add the form to the grid
         grid.add(cosmoIdLbl, 0 , 1);
         grid.add(firstNameLbl, 0 , 2);
         grid.add(lastNameLbl, 0 , 3);
@@ -425,27 +414,31 @@ public class MedicalStaffMainPageGUI extends Application
         grid.add(healthNumTxt, 1 , 6);
         grid.add(phoneTxt, 1 , 7);
 
-           
+        //setPadding of the grid
         grid.setPadding(new Insets(10, 10, 0, 10));
         
         grid.setHgap(10);
         
         grid.setVgap(10);
         
+        //Adding participant event handler
         Button createParticipantBtn = new Button("Add");
         createParticipantBtn.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
             public void handle( ActionEvent e ){
+                //call create participant on medical administrator with the text passed in
             	String result = MedicalAdministrator.createParticipant(cosmoIdTxt.getText(), firstNameTxt.getText(), 
             	        lastNameTxt.getText(), birthDatePicker.getValue(), familyPhysicianTxt.getText(), 
             	        healthNumTxt.getText(), phoneTxt.getText() );
             	
+            	//if no error message is recieved then close this window and refresh the table
                 	if(result.equals(""))
                 	{
                 	    createParticipantStage.close();
                 	    pTVCont.refreshTable();
                 	}
+                	//if there is an error message, display it
                 	else
                 	{
                         lblWarning.setTextFill(Color.FIREBRICK);
@@ -459,6 +452,8 @@ public class MedicalStaffMainPageGUI extends Application
             	}
             }
         );
+        
+        //reset the form event handler
         Button resetBtn	= new Button("Reset");
         resetBtn.setOnAction( new EventHandler<ActionEvent>()
         {
@@ -466,6 +461,7 @@ public class MedicalStaffMainPageGUI extends Application
             @Override
             public void handle(ActionEvent arg0)
             {
+                //sets all values to default
                 cosmoIdTxt.setText("");
                 firstNameTxt.setText("");
                 lastNameTxt.setText("");
@@ -478,32 +474,17 @@ public class MedicalStaffMainPageGUI extends Application
     
         });
         
-        grid.add(resetBtn, 0, 8);
-        
-        //grid.add(createParticipantBtn, 1, 8);
-        
-        HBox buttonsHbox = new HBox();
-        
-        HBox resetHbox = new HBox();
-        
-        buttonsHbox.getChildren().addAll(createParticipantBtn);
-        
-        buttonsHbox.setAlignment(Pos.CENTER);
-        
-        resetHbox.getChildren().addAll(resetBtn);
-        
+        //Add the buttons to the grid
+        HBox buttonsHbox = new HBox();        
+        HBox resetHbox = new HBox();      
+        buttonsHbox.getChildren().addAll(createParticipantBtn);       
+        buttonsHbox.setAlignment(Pos.CENTER);    
+        resetHbox.getChildren().addAll(resetBtn);       
         resetHbox.setAlignment(Pos.CENTER_RIGHT);
-        
-        grid.add(buttonsHbox,1,8);
-        
+        grid.add(buttonsHbox,1,8);      
         grid.add(resetHbox,0 ,8);
-        
-        //HBox.setMargin(resetBtn, new Insets(0,10,0,10));
-        
-        
+                    
 		return grid;
-        
-
 	}
 
 	/**
@@ -581,122 +562,6 @@ public class MedicalStaffMainPageGUI extends Application
 
     /**
      * 
-     * Purpose:Create HBox with table
-     * 
-     * @return
-     */
-//    @SuppressWarnings("unchecked")
-//    private HBox createHBoxTable()
-//    {
-//        HBox hbox = new HBox();
-//        hbox.setSpacing(10);
-//        hbox.setStyle("-fx-background-color: #336699;");
-//
-//        // TableView instance to hold User records
-//        participantTable = new TableView<Participant>();
-//        participantTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-//
-//        // Instantiation of all the table column headings (With proper
-//        // formatting)
-//
-//        // cosmoID Col
-//        TableColumn<Participant, String> cosmoIDCol = new TableColumn<Participant, String>(
-//                "Cosmo ID");
-//        cosmoIDCol.setMinWidth(50);
-//        cosmoIDCol.setResizable(false);
-//
-//        // Participant Col
-//        TableColumn<Participant, String> participantNameCol = new TableColumn<Participant, String>(
-//                "Participant");
-//        participantNameCol.setMinWidth(175);
-//        participantNameCol.setResizable(false);
-//
-//        // Home Address Col
-//        TableColumn<Participant, String> addressCol = new TableColumn<Participant, String>(
-//                "Home Address");
-//        addressCol.setMinWidth(200);
-//        addressCol.setResizable(false);
-//
-//        // Emergency Contact name
-//        TableColumn<Participant, String> emergencyContactNameCol = new TableColumn<Participant, String>(
-//                "Emergency Contact Name");
-//        emergencyContactNameCol.setMinWidth(180);
-//        emergencyContactNameCol.setResizable(false);
-//
-//        // Emergency Phone Col
-//        TableColumn<Participant, String> emergencyContactPhoneCol = new TableColumn<Participant, String>(
-//                "Emergency Phone");
-//        emergencyContactPhoneCol.setMinWidth(115);
-//        emergencyContactPhoneCol.setResizable(false);
-//
-//        // Last Updated col
-//        TableColumn<Participant, String> lastUpdatedCol = new TableColumn<Participant, String>(
-//                "Last Updated");
-//        lastUpdatedCol.setMinWidth(135);
-//        lastUpdatedCol.setResizable(false);
-//
-//        // Appending column headers to the table for display
-//        participantTable.getColumns().addAll(cosmoIDCol, participantNameCol, addressCol,
-//                emergencyContactNameCol, emergencyContactPhoneCol,
-//                lastUpdatedCol);
-//
-//        // table columns not draggable to reorder it
-//        participantTable.getColumns().addListener(new ListChangeListener()
-//        {
-//            @Override
-//            public void onChanged( Change change )
-//            {
-//                change.next();
-//                if ( change.wasReplaced() )
-//                {
-//                    participantTable.getColumns().clear();
-//                    participantTable.getColumns().addAll(cosmoIDCol, participantNameCol,
-//                            addressCol, emergencyContactNameCol,
-//                            emergencyContactPhoneCol, lastUpdatedCol);
-//                }
-//            }
-//        });
-//
-//        // TODO example, please remove
-//
-//  Date updatedDate = new Date();
-//  SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy");
-//  String updated = sdf.format(updatedDate);
-//
-//        Participant test = new Participant("0", "John Doe", "301 Highwater Pl",
-//                "Jane Doe", "123-456-7890", updated);
-//        Participant test2 = new Participant("1", "Jane Doe", "302 Highwater Pl",
-//                "John Doe", "123-456-7890", updated);
-//
-//        // add list to columns
-//        ObservableList<Participant> participantList = FXCollections
-//                .observableArrayList(test, test2);
-//        
-//        
-//        // add data to columns
-//        cosmoIDCol.setCellValueFactory(new PropertyValueFactory<>("cosmoID"));
-//        participantNameCol.setCellValueFactory(new PropertyValueFactory<>(
-//                "participantName"));
-//        addressCol.setCellValueFactory(new PropertyValueFactory<>(
-//                "participantAddress"));
-//        emergencyContactNameCol.setCellValueFactory(new PropertyValueFactory<>(
-//                "emergencyContactName"));
-//        emergencyContactPhoneCol
-//                .setCellValueFactory(new PropertyValueFactory<>(
-//                        "emergencyContactPhone"));
-//        lastUpdatedCol.setCellValueFactory(new PropertyValueFactory<>(
-//                "informationLastUpdated"));
-//
-//        // set things to participants
-//        participantTable.setItems(participantList);
-//
-//        hbox.getChildren().addAll(participantTable);
-//
-//        return hbox;
-//    }
-
-    /**
-     * 
      * Purpose: Create Main VBox
      * @param admin 
      * 
@@ -715,10 +580,9 @@ public class MedicalStaffMainPageGUI extends Application
         VBox.setMargin(searchBar, new Insets(5,0,5,0));
         // preview notes
         HBox previewNotes = createHBoxPreviewNotes();
-        //VBox.setMargin(previewNotes, new Insets(10,0,10,0));
-        // table hbox
-       // HBox table = createHBoxTable();
-        // add everthing to vbox
+
+
+        // add everything to vbox
         vbox.getChildren().addAll(header, tabs, searchBar, previewNotes, pTVCont.participantTable);
 
         return vbox;

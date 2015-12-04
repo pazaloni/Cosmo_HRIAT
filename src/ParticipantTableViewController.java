@@ -15,7 +15,7 @@ public class ParticipantTableViewController
 {
 	//the tableview containing the information for all the staff accounts
 	protected TableView<Participant> participantTable = new TableView<Participant>();
-	//
+	//the columns of the participant table
 	private TableColumn<Participant, String> cosmoIDColumn = new TableColumn<Participant, String>("Cosmo ID");
 	private TableColumn<Participant, String> participantNameColumn = new TableColumn<Participant, String>("Participant");
 	private TableColumn<Participant, String> addressColumn = new TableColumn<Participant, String>("Home Address");
@@ -25,14 +25,21 @@ public class ParticipantTableViewController
 	
 	public ObservableList<Participant> participantData = FXCollections.observableArrayList();
 	
+	/**
+	 * Constructor for the ParticipantTableViewController class.
+	 * 
+	 * Initializes the data from the database
+	 * 
+	 * Sets the items from the database into the tableview
+	 */
 	public ParticipantTableViewController()
 	{
-		intitializeParticipantData();
+		initializeParticipantData();
 		participantTable.setItems(participantData);
 	}
 
 
-	private void intitializeParticipantData() 
+	private void initializeParticipantData() 
 	{
 		DatabaseHelper db = new DatabaseHelper();
 		ObservableList<String> row = FXCollections.observableArrayList();
@@ -42,26 +49,33 @@ public class ParticipantTableViewController
 		ResultSet rs = db.select("cosmoID, firstName, lastName, city, province,  "
 				+ "dateUpdated", "TemporaryParticipant", "", "");
 		
+		//Strings to represent the TODO fix it
 	    String cosmoID;
 	    String firstName;
 	    String lastName;
 	    String participantName;
+	    
+	    //concatenate address
 	    String city;
 	    String province;
 	    String participantAddress; 
+	    
 	    String emergencyContactName = "";
-	    String emergencyContactPhone = ""; //TODO FIX IT
+	    String emergencyContactPhone = ""; //TODO Get from database
 	    String informationLastUpdated;
 	    
 		try {
 			while(rs.next())
 			{
+			    //get the information from the database
 				cosmoID = rs.getString(1);
 				System.out.println(cosmoID);
 				firstName = rs.getString(2);
 				lastName = rs.getString(3);
 				city = rs.getString(4);
 				province = rs.getString(5);
+				
+				//check if the city is null
 				if(city == null)
 				{
 				    city = "";
@@ -70,23 +84,28 @@ public class ParticipantTableViewController
 				{
 				    city += ", ";
 				}
+				
+				//check if the province is null
 				if(province == null)
 				{
 				    province = "";
 				}
 				
+				//concatenate name
 				participantName = firstName + " " + lastName;
 				
+				//concatenate address
 				participantAddress = city + "" + province;
 				
+				//get the last time the information was updated
 				informationLastUpdated = rs.getString(6);
 				
-
+				//create the participant object
 				Participant participant = new Participant(cosmoID, participantName,
 			            participantAddress, emergencyContactName,
 			            emergencyContactPhone, informationLastUpdated);
 				
-				
+				//add the participant into the tableview
 				participantData.add(participant);
 			}
 		} catch (SQLException e) {
@@ -96,78 +115,91 @@ public class ParticipantTableViewController
 	
 	}
 	
+	/**
+	 * 
+	 * Purpose: To create the table and columns
+	 */
 	public void initialize()
 	{
-		cosmoIDColumn.setCellValueFactory(cellData -> cellData.getValue().getCosmoIDProperty());
+		cosmoIDColumn.setCellValueFactory
+		(cellData -> cellData.getValue().getCosmoIDProperty());
 	    cosmoIDColumn.setMinWidth(50);
 	    cosmoIDColumn.setResizable(false);
 
-		
-		participantNameColumn.setCellValueFactory(cellData -> cellData.getValue().getParticipantNameProperty());
+		participantNameColumn.setCellValueFactory
+		(cellData -> cellData.getValue().getParticipantNameProperty());
 		participantNameColumn.setMinWidth(175);
 		participantNameColumn.setResizable(false);
 
-		
-		addressColumn.setCellValueFactory(cellData -> cellData.getValue().getAddressProperty());
+		addressColumn.setCellValueFactory
+		(cellData -> cellData.getValue().getAddressProperty());
 		addressColumn.setMinWidth(200);
 		addressColumn.setResizable(false);
-
 		
-		emergencyNameColumn.setCellValueFactory(cellData -> cellData.getValue().getEmergencyContactProperty());
+		emergencyNameColumn.setCellValueFactory
+		(cellData -> cellData.getValue().getEmergencyContactProperty());
 		emergencyNameColumn.setMinWidth(180);
 		emergencyNameColumn.setResizable(false);
-
 		
-		emergencyPhoneColumn.setCellValueFactory(cellData -> cellData.getValue().getEmergencyContactPhoneProperty());
+		emergencyPhoneColumn.setCellValueFactory
+		(cellData -> cellData.getValue().getEmergencyContactPhoneProperty());
 		emergencyPhoneColumn.setMinWidth(115);
 		emergencyPhoneColumn.setResizable(false);
 
-		
 		lastUpdatedColumn.setCellValueFactory(cellData -> cellData.getValue().getUpdatedProperty());
 		lastUpdatedColumn.setMinWidth(135);
 		lastUpdatedColumn.setResizable(false);
 		
-		//  table columns not draggable to reorder it
+      // make table columns not draggable to reorder it
       participantTable.getColumns().addListener(new ListChangeListener<Object>()
       {
           @Override
           public void onChanged( Change change )
           {
               change.next();
+              //if the column was changed
               if ( change.wasReplaced() )
               {
+                  //clear all columns
                   participantTable.getColumns().clear();
+                  //re-add the columns in order
                   participantTable.getColumns().addAll(cosmoIDColumn, participantNameColumn, 
-                          addressColumn, emergencyNameColumn, emergencyPhoneColumn, lastUpdatedColumn);
+                          addressColumn, emergencyNameColumn,
+                          emergencyPhoneColumn, lastUpdatedColumn);
               }
           }
       });
 
+		//add the columns to the tableview
+		participantTable.getColumns().addAll(cosmoIDColumn, 
+		        participantNameColumn, addressColumn, emergencyNameColumn,
+		        emergencyPhoneColumn, lastUpdatedColumn);
 		
-		participantTable.getColumns().addAll(cosmoIDColumn, participantNameColumn, addressColumn, emergencyNameColumn, emergencyPhoneColumn, lastUpdatedColumn);
-		
+		//set the data into the table
 		participantTable.setItems(participantData);
 	}
 
+	/**
+	 * Purpose: Get the item that is selected in the table
+	 * 
+	 * @return the ID of the row that is selected
+	 */
 	public String getSelectedPK() 
 	{
 		Participant participant = participantTable.getSelectionModel().getSelectedItem();
 		return participant.getCosmoID();
 	}
 	
+
 	
-	public void removeViewableUser(String username)
-	{
-		this.participantData.clear();
-		this.intitializeParticipantData();
-		this.participantTable.getColumns().clear();
-		this.initialize();
-	}
-	
+	/**
+     * Purpose: To refresh the table so other classes can 
+     * call this when they update the information
+	 */
     public void refreshTable()
     {
         this.participantData.clear();
-        this.intitializeParticipantData();
+        this.initializeParticipantData();
         this.participantTable.getColumns().clear();
         this.initialize();
     }

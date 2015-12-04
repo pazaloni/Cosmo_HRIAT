@@ -14,8 +14,7 @@ import javafx.beans.property.StringProperty;
  */
 public class Participant
 {
-    // TODO add all attributes pls
-
+    // TODO add all attributes
     private StringProperty cosmoID;
     private StringProperty participantName;
     private StringProperty informationLastUpdated;
@@ -23,7 +22,7 @@ public class Participant
     private StringProperty emergencyContactName;
     private StringProperty emergencyContactPhone;
 
-    // TODO very bad constructor
+    
     /**
      * 
      * Constructor for the Participant class.
