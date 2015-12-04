@@ -405,6 +405,7 @@ public class MedicalStaffMainPageGUI extends Application
         TextField familyPhysicianTxt = new TextField();
         TextField healthNumTxt = new TextField();
         TextField phoneTxt = new TextField();
+        phoneTxt.setPromptText("Ex: 3062879111");
         TextField cosmoIdTxt = new TextField();
         
         grid.add(cosmoIdLbl, 0 , 1);
@@ -449,6 +450,11 @@ public class MedicalStaffMainPageGUI extends Application
                 	{
                         lblWarning.setTextFill(Color.FIREBRICK);
                 	    lblWarning.setText(result);
+                	    if(result.equals("Phone Number must be 10 digits"))
+                	    {
+                            phoneTxt.setText("");
+                	        phoneTxt.setPromptText("Ex: 3062879111");
+                	    }
                 	}
             	}
             }
@@ -467,6 +473,7 @@ public class MedicalStaffMainPageGUI extends Application
                 familyPhysicianTxt.setText("");
                 healthNumTxt.setText("");
                 phoneTxt.setText("");
+                lblWarning.setText("");
             }
     
         });

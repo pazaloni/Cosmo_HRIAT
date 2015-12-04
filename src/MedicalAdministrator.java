@@ -63,6 +63,14 @@ public class MedicalAdministrator extends BasicStaff
 			{
                 result = "That CosmoID already exists";
 			}
+			else if(!healthNumber.matches("^[0-9]{9}$"))
+			{
+			    result = "Health Number must be 9 digits";
+			}
+	        else if(!phone.matches("^[0-9]{10}$"))
+            {
+                result = "Phone Number must be 10 digits";
+            }
 			else
 			{
 
