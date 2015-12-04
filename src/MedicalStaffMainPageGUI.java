@@ -679,7 +679,7 @@ public class MedicalStaffMainPageGUI extends Application
      * 
      * @return VBox main VBox
      */
-    public VBox createMainVBox(boolean admin)
+    private VBox createMainVBox(boolean admin)
     {
         VBox vbox = new VBox();
 

@@ -151,7 +151,7 @@ public class LoginGUI extends Application
             {
             	boolean admin = false;
                 // if they are a basic staff
-                if ( loggedInStaff.accessLevel.toString().contains("1") )
+                if ( loggedInStaff.accessLevel.toString().contains("0") )
                 {
                     success = true;
                     stageLogin.close();
@@ -159,8 +159,9 @@ public class LoginGUI extends Application
                     medStaffGUI.medMainPageConstruct(stageLogin, admin);
                 }
                 // if they are a medical administrator
-                else if ( loggedInStaff.accessLevel.toString().contains("2") )
+                else if ( loggedInStaff.accessLevel.toString().contains("1") )
                 {
+                	admin = true;
                     success = true;
                     stageLogin.close();
                     MedicalStaffMainPageGUI medStaffGUI = new MedicalStaffMainPageGUI();
