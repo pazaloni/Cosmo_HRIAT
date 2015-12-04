@@ -42,19 +42,23 @@ public class testRemoveUser
     }
 
     @Test
-//    public void testRemove()
-//    {
-//        acctHelper.addUser(usernameToRemove, lastNameToRemove,
-//                firstNameToRemove, emailToRemove, passwordToRemove, 
-//                passwordToRemove, securityToRemove);
-//        
-//        acctHelper.removeUser(usernameToRemove);
-//        
-//        String[] userToMatch = acctHelper.queryStaff(usernameToRemove);
-//        
-//        //only need to check username, since it should always be unique
-//        assertFalse(userToMatch[0].equals(usernameToRemove));
-//    }
+    public void testRemove()
+    {
+        acctHelper.addUser(usernameToRemove, lastNameToRemove,
+                firstNameToRemove, emailToRemove, passwordToRemove, 
+                passwordToRemove, securityToRemove);
+        
+        String[] userToMatch = acctHelper.queryStaff(usernameToRemove);
+        
+        assertTrue(userToMatch[0].equals(usernameToRemove));
+        
+        acctHelper.removeUser(usernameToRemove);
+        
+        String[] RemovedUser = acctHelper.queryStaff(usernameToRemove);
+        
+        //only need to check username, since it should always be unique
+        assertTrue(RemovedUser[0] == null);
+    }
     
     public void testGetUsername()
     {
