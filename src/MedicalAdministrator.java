@@ -33,58 +33,67 @@ public class MedicalAdministrator extends BasicStaff
     public static String createParticipant(String cosmoID, String firstName, String lastName, LocalDate birthDate, 
     		String familyPhysician, String healthNumber, String phone)
     {
-        //Date test = new Date(Integer.parseInt(birthDate.toString()));
-        String birthDateString = birthDate.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
-        //String birthDateString = new SimpleDateFormat("yyy-mmm-dd").format(test);
+         //initialize birth date string to blank
+         String birthDateString = "";
+        
+         //check if birthdate is set before trying to format it
+         if(birthDate != null)
+         {
+         birthDateString = birthDate.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
+         }
         
         
     	String result = "";
 		if (cosmoID.isEmpty() || firstName.isEmpty() || lastName.isEmpty()
-				|| birthDateString.isEmpty() || familyPhysician.isEmpty()
+				|| birthDateString.equals("") || familyPhysician.isEmpty()
 				|| healthNumber.isEmpty() || phone.isEmpty()) 
 		{
-			result = " one of your fields is empty";
+			result = "One of your fields is empty";
 		}
 		else
 		{
-			
-			DatabaseHelper db = new DatabaseHelper();
-			db.connect();
+            DatabaseHelper db = new DatabaseHelper();
+            db.connect();
 	
-			String values[][] = new String[7][2];
-			values[0][0] = "cosmoID";
-			values[1][0] = "firstName";
-			values[2][0] = "lastName";
-			values[3][0] = "dateOfBirth";
-			values[4][0] = "personalHealthNumber";
-			values[5][0] = "phoneNum";
-			values[6][0] = "dateUpdated";
-	
-			if(!idExists(cosmoID))
+			if(!cosmoID.matches("\\d+"))
 			{
-		        
-		        Calendar c = Calendar.getInstance();
-		    
-		        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-		        
-		        String formattedDate = df.format(c.getTime());
-				values[0][1] = cosmoID;
-				values[1][1] = firstName;
-				values[2][1] = lastName;
-				values[3][1] = birthDateString;
-				values[4][1] = healthNumber;
-				values[5][1] = phone;
-				values[6][1] = formattedDate;
-		
-				boolean successful = db.insert(values, "TemporaryParticipant");
-				if(!successful)
-				{
-					result = "The insertion was not successful";
-				}
+			    result = "CosmoID must be a number";
+			}
+			else if(idExists(cosmoID))
+			{
+                result = "That CosmoID already exists";
 			}
 			else
 			{
-				result = "That ID already exists";
+
+	            String values[][] = new String[7][2];
+	            values[0][0] = "cosmoID";
+	            values[1][0] = "firstName";
+	            values[2][0] = "lastName";
+	            values[3][0] = "dateOfBirth";
+	            values[4][0] = "personalHealthNumber";
+	            values[5][0] = "phoneNum";
+	            values[6][0] = "dateUpdated";
+			    
+			    
+                Calendar c = Calendar.getInstance();
+            
+                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                
+                String formattedDate = df.format(c.getTime());
+                values[0][1] = cosmoID;
+                values[1][1] = firstName;
+                values[2][1] = lastName;
+                values[3][1] = birthDateString;
+                values[4][1] = healthNumber;
+                values[5][1] = phone;
+                values[6][1] = formattedDate;
+        
+                boolean successful = db.insert(values, "TemporaryParticipant");
+                if(!successful)
+                {
+                    result = "The insertion was not successful";
+                }
 			}
 
 			db.disconnect();

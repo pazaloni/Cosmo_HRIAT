@@ -382,7 +382,7 @@ public class MedicalStaffMainPageGUI extends Application
         Label birthdateLbl= new Label("Birthdate");
         Label familyPhysicianLbl = new Label("Family Physician");
         Label healthNumLbl = new Label("Health Number");
-        Label physicianPhoneLbl = new Label("Physician Phone");      
+        Label phoneLbl = new Label("Phone Number");      
         Label cosmoIdLbl = new Label("Cosmo ID");
         
         
@@ -404,7 +404,7 @@ public class MedicalStaffMainPageGUI extends Application
         
         TextField familyPhysicianTxt = new TextField();
         TextField healthNumTxt = new TextField();
-        TextField physicianPhoneTxt = new TextField();
+        TextField phoneTxt = new TextField();
         TextField cosmoIdTxt = new TextField();
         
         grid.add(cosmoIdLbl, 0 , 1);
@@ -413,7 +413,7 @@ public class MedicalStaffMainPageGUI extends Application
         grid.add(birthdateLbl, 0 , 4);
         grid.add(familyPhysicianLbl, 0 , 5);
         grid.add(healthNumLbl, 0 , 6);
-        grid.add(physicianPhoneLbl, 0 , 7);      
+        grid.add(phoneLbl, 0 , 7);      
 
         grid.add(lblWarning, 1, 0);
         grid.add(cosmoIdTxt, 1 , 1);
@@ -422,7 +422,7 @@ public class MedicalStaffMainPageGUI extends Application
         grid.add(birthDatePicker, 1 , 4);
         grid.add(familyPhysicianTxt, 1 , 5);
         grid.add(healthNumTxt, 1 , 6);
-        grid.add(physicianPhoneTxt, 1 , 7);
+        grid.add(phoneTxt, 1 , 7);
 
            
         grid.setPadding(new Insets(10, 10, 0, 10));
@@ -438,7 +438,7 @@ public class MedicalStaffMainPageGUI extends Application
             public void handle( ActionEvent e ){
             	String result = MedicalAdministrator.createParticipant(cosmoIdTxt.getText(), firstNameTxt.getText(), 
             	        lastNameTxt.getText(), birthDatePicker.getValue(), familyPhysicianTxt.getText(), 
-            	        healthNumTxt.getText(), physicianPhoneTxt.getText() );
+            	        healthNumTxt.getText(), phoneTxt.getText() );
             	
                 	if(result.equals(""))
                 	{
@@ -454,6 +454,22 @@ public class MedicalStaffMainPageGUI extends Application
             }
         );
         Button resetBtn	= new Button("Reset");
+        resetBtn.setOnAction( new EventHandler<ActionEvent>()
+        {
+
+            @Override
+            public void handle(ActionEvent arg0)
+            {
+                cosmoIdTxt.setText("");
+                firstNameTxt.setText("");
+                lastNameTxt.setText("");
+                birthDatePicker.setValue(null);
+                familyPhysicianTxt.setText("");
+                healthNumTxt.setText("");
+                phoneTxt.setText("");
+            }
+    
+        });
         
         grid.add(resetBtn, 0, 8);
         
