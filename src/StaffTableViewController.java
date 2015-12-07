@@ -37,6 +37,8 @@ public class StaffTableViewController
     /**
      * Purpose: Fetches the account information from the database and then adds
      * the fetched information to observable list.
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
      */
     private void intitializeStaffData()
     {
@@ -110,6 +112,8 @@ public class StaffTableViewController
     /**
      * Purpose: Sets up the table by setting all the column titles based on the
      * information from the observable list.
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
      */
     public void initialize()
     {
@@ -140,6 +144,8 @@ public class StaffTableViewController
      * 
      * @return A string representing the username of the selected user from the
      *         table
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
      */
     public String getSelectedPK()
     {
@@ -165,6 +171,8 @@ public class StaffTableViewController
      * @param username
      *            The username that identifies which entry to remove from the
      *            table.
+     *  @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
      */
     public void removeViewableUser( String username )
     {
@@ -174,6 +182,12 @@ public class StaffTableViewController
         this.initialize();
     }
 
+    /**
+     * Purpose: This will refresh the table when a change is made.
+     * 
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public void refreshTable()
     {
         this.staffData.clear();

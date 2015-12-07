@@ -489,16 +489,17 @@ public class TechMainPageGUI extends Application
      */
     public void removeUser( String username )
     {
-        
+    	Stage stage = new Stage();
+    	Scene scene;
         
         if(username != null && username != "null")
         {
-            Stage stage = new Stage();
+            
             
             PopUpCheck checkBox = new PopUpCheck("Are you sure you want to "
                     + "delete " + username + "?", stage);
             
-            Scene scene = new Scene(checkBox.root, 300, 75);
+            scene = new Scene(checkBox.root, 300, 75);
             stage.setScene(scene);
             stage.showAndWait();
 
@@ -511,6 +512,16 @@ public class TechMainPageGUI extends Application
                     this.sTVCont.refreshTable();
                 }
             }
+        }
+        else
+        {
+        	//tell the user to select a user to delete
+        	PopUpMessage messageBox = new PopUpMessage("Please select a user"
+        			+ " to remove.", stage);
+        	
+        	scene = new Scene(messageBox.root, 300, 75);
+        	stage.setScene(scene);
+        	stage.showAndWait();
         }
         
 

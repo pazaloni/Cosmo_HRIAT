@@ -35,6 +35,8 @@ public class StaffAccount
      * @return either an instantiated account(basic staff, medical admin, or
      *         techincal admin) or a null account indicating an unsucessful
      *         login
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
      */
     public StaffAccount login( String username, String password )
     {
@@ -130,51 +132,122 @@ public class StaffAccount
         return false;
     }
 
+    /**
+     * 
+     * Purpose: Gets the username from the StringProperty 
+     * @return  username String
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public String GetUsername()
     {
         return username.get();
     }
 
+    /**
+     * 
+     * Purpose: Gets the username property
+     * @return: Username property StringProperty
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public StringProperty usernameProperty()
     {
         return username;
     }
 
+    /**
+     * 
+     * Purpose: Gets the lastName from the StringProperty
+     * @return  lastName String
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public String GetLastName()
     {
         return lastName.get();
     }
 
+    /**
+     * 
+     * Purpose: Gets the lastName property
+     * @return  lastName property StringProperty
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public StringProperty lastNameProperty()
     {
         return lastName;
     }
 
+    /**
+     * 
+     * Purpose: Gets the firstName from the StringProperty
+     * @return  firstName String
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public String GetFirstName()
     {
         return firstName.get();
     }
 
+    /**
+     * 
+     * Purpose: Gets the firstName property
+     * @return  firstName property StringProperty
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public StringProperty firstNameProperty()
     {
         return firstName;
     }
 
+    /**
+     * 
+     * Purpose: Gets the email from the StingProperty
+     * @return  email String
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public String GetEmail()
     {
         return email.get();
     }
 
+    /**
+     * 
+     * Purpose: Gets the email Property
+     * @return  email property StringProperty
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public StringProperty emailProperty()
     {
         return email;
     }
 
+    /**
+     * 
+     * Purpose: Gets the accesslevel from the StringProperty
+     * @return  accessLevel String
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public String GetAccessLevel()
     {
         return accessLevel.get();
     }
 
+    /**
+     * 
+     * Purpose: Checks the value of the accessLevel and assigns the proper 
+     *          access level String that will be displayed in the table
+     * @return  accessLevel StringProperty
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public StringProperty accessLevelProperty()
     {
         String accessStr = " ";
@@ -194,26 +267,56 @@ public class StaffAccount
         return access;
     }
 
+    /**
+     * 
+     * Purpose: Sets the username StringProperty
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public void setUsername( String username )
     {
         this.username.set(username);
     }
 
+    /**
+     * 
+     * Purpose: Sets the lastName StringProperty
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public void setLastName( String lastName )
     {
         this.lastName.set(lastName);
     }
 
+    /**
+     * 
+     * Purpose: Sets the firstName StringProperty
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public void setFirstName( String firstName )
     {
         this.firstName.set(firstName);
     }
 
+    /**
+     * 
+     * Purpose: Sets the email StringProperty
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public void setEmail( String email )
     {
         this.email.set(email);
     }
 
+    /**
+     * 
+     * Purpose: Sets the accessLevel StringProperty
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
+     */
     public void setAccessLevel( String accessLevel )
     {
         this.accessLevel.set(accessLevel);

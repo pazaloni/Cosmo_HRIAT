@@ -213,6 +213,8 @@ public class ManageStaffAccountHelper
      * 
      * @param username
      *            : The user that you will remove
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
      */
     public boolean removeUser( String username )
     {

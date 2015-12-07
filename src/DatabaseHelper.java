@@ -385,12 +385,15 @@ public class DatabaseHelper
 
     /**
      * Purpose: This will take in the result set and use it to populate the
-     * Observable list, which will be used to display the rows in the tableview.
+     *          Observable list, which will be used to display the rows in the 
+     *          tableview.
      * 
-     * @param rs
-     *            The result set that will be used to populate the observable
-     *            list
-     * @return The Observable list that will be used to generate the table
+     * @param rs    The result set that will be used to populate the observable
+     *              list
+     * @return      The Observable list that will be used to generate the table
+     * 
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
      */
     public ObservableList<String> displayRows( ResultSet rs )
     {
