@@ -484,23 +484,36 @@ public class TechMainPageGUI extends Application
      * refresh the table of accounts
      * 
      * @param username The user that you will remove
+     * @author  Breanna Wilson cst215
+     *          Steven Palchinski cst209
      */
     public void removeUser( String username )
     {
-        Stage stage = new Stage();
-        PopUpCheck checkBox = new PopUpCheck("Are you sure you want to delete "
-                + username + "?", stage);
-
-        Scene scene = new Scene(checkBox.root, 300, 75);
-        stage.setScene(scene);
-        stage.showAndWait();
-
-        // when the user is removed from the database
-        if ( manageStaff.removeUser(username) )
+        
+        
+        if(username != null && username != "null")
         {
-            // this.sTVCont.removeViewableUser(username);
-            this.sTVCont.refreshTable();
+            Stage stage = new Stage();
+            
+            PopUpCheck checkBox = new PopUpCheck("Are you sure you want to "
+                    + "delete " + username + "?", stage);
+            
+            Scene scene = new Scene(checkBox.root, 300, 75);
+            stage.setScene(scene);
+            stage.showAndWait();
 
+            // when the user is removed from the database
+            if(checkBox.result) 
+            {
+                if( manageStaff.removeUser(username) )
+                {
+                    // this.sTVCont.removeViewableUser(username);
+                    this.sTVCont.refreshTable();
+                }
+            }
         }
+        
+
+        
     }
 }
