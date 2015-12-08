@@ -136,7 +136,7 @@ public class LoginGUI extends Application
         stageLogin.setWidth(WIDTH);
         stageLogin.setHeight(HEIGHT);
         stageLogin.setTitle(STAGE_TITLE);
-        stageLogin.setResizable(false);
+        stageLogin.setResizable(true);
         stageLogin.show();
     }
 
