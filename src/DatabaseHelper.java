@@ -24,9 +24,15 @@ public class DatabaseHelper
 
         try
         {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
             conn = DriverManager.getConnection("jdbc:ucanaccess://" + DB_PATH);
         }
         catch (SQLException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (ClassNotFoundException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
