@@ -45,9 +45,9 @@ public class ParticipantTableViewController
 		ObservableList<String> row = FXCollections.observableArrayList();
 		ArrayList<String> participantInfo = new ArrayList<String>();
 		//TODO fix to query appropriate address, emergency info
-		//correct table Participant instead of TemporaryParticipant
+		//correct table Participant instead of Participant
 		ResultSet rs = db.select("cosmoID, firstName, lastName, city, province,  "
-				+ "dateUpdated", "TemporaryParticipant", "", "");
+				+ "dateUpdated", "Participant", "", "");
 		
 		//Strings to represent the TODO fix it
 	    String cosmoID;

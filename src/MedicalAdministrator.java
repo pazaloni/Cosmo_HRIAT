@@ -158,7 +158,7 @@ public class MedicalAdministrator extends BasicStaff
 
         //result set of all cosmoID's in the database
         DatabaseHelper db = new DatabaseHelper();
-		ResultSet set = db.select("cosmoID", "TemporaryParticipant", "", "");
+		ResultSet set = db.select("cosmoID", "Participant", "", "");
         try
         {
             while ( set.next() && !result )
