@@ -94,7 +94,7 @@ public class MedicalStaffMainPageGUI extends Application
         VBox root = createMainVBox(admin);
 
         medMainStage.setScene(new Scene(root, 875, 580));
-        medMainStage.resizableProperty().set(false);
+        medMainStage.resizableProperty().set(true);
         medMainStage.show();
     }
 
@@ -190,7 +190,7 @@ public class MedicalStaffMainPageGUI extends Application
         HBox hbox = new HBox();
         hbox.setMinHeight(305);
         hbox.setMaxHeight(305);
-        hbox.setPadding(new Insets(0, 10, 10, 0));
+        hbox.setPadding(new Insets(0, 0, 10, 0));
         hbox.setSpacing(10);
         hbox.setStyle("-fx-background-color: #336699;");
 
@@ -563,7 +563,7 @@ public class MedicalStaffMainPageGUI extends Application
 
         // set minimum width
         noteDisplayPane.setMinWidth(265);
-
+        noteDisplayPane.prefWidthProperty().bind(medMainStage.widthProperty().divide(1.60));
         hbox.setPadding(new Insets(10, 0, 0, 0));
         hbox.getChildren().addAll(noteTitleView, noteDisplayPane);
 
