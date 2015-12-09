@@ -34,6 +34,11 @@ public class DatabaseHelper
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        catch (ClassNotFoundException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         catch ( ClassNotFoundException e )
         {
             // TODO Auto-generated catch block
@@ -244,6 +249,8 @@ public class DatabaseHelper
         return rows != 0;
     }
 
+    
+    
     /**
      * 
      * Purpose: To update a row in a table

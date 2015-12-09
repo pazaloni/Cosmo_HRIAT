@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
@@ -216,8 +218,16 @@ public class MedicalStaffMainPageGUI extends Application
         // create picture box for left side of preview pane
         VBox pictureBox = new VBox();
         // default preview picture
-        previewPicture = new ImageView(new Image(
-                "images/defaultPicture.png"));
+        URL url = getClass().getResource("images/defaultPicture.png");
+        try
+        {
+            previewPicture = new ImageView(new Image(url.openStream()));
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         // details button
         Button detailsButton = new Button("View Details");
