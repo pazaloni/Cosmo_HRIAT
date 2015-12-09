@@ -47,27 +47,51 @@ public class Participant
 
     }
 
-    // shane's nightmare
+    /**
+     * 
+     * Purpose: To return the cosmoID string
+     * @return cosmoID String
+     */
     public String getCosmoID()
     {
         return cosmoID.get();
     }
 
+    /**
+     * 
+     * Purpose: To return the cosmoID StringProperty
+     * @return cosmoID StringProperty
+     */
     public StringProperty getCosmoIDProperty()
     {
         return cosmoID;
     }
     
+    /**
+     * 
+     * Purpose: To return the participant name String
+     * @return participantName String
+     */
     public String getParticipantName()
     {
         return participantName.get();
     }
 
+    /**
+     * 
+     * Purpose: To return the participantName StringProperty
+     * @return participantName StringProperty
+     */
     public StringProperty getParticipantNameProperty()
     {
         return participantName;
     }
     
+    /**
+     * 
+     * Purpose: To return the informationLastUpdated String
+     * @return informationLastUpdated String
+     */
     public String getInformationLastUpdated()
     {
     	informationLastUpdated.set(informationLastUpdated.get().substring(0, 11));
@@ -75,37 +99,72 @@ public class Participant
         return informationLastUpdated.get();
     }
 
+    /**
+     * 
+     * Purpose: To return the informationLastUpdated StringProperty
+     * @return informationLastUpdated StringProperty
+     */
     public StringProperty getUpdatedProperty()
     {
         informationLastUpdated.set(informationLastUpdated.get().substring(0, 11));
         return informationLastUpdated;
     }
     
+    /**
+     * 
+     * Purpose: To return the participantAddress String
+     * @return participantAddress String
+     */
     public String getParticipantAddress()
     {
         return participantAddress.get();
     }
 
+    /**
+     * 
+     * Purpose: To return the participantAddress StringProperty
+     * @return participantAddress StringProperty
+     */
     public StringProperty getAddressProperty()
     {
         return participantAddress;
     }
     
+    /**
+     * 
+     * Purpose: To return the emergencyContactName String
+     * @return emergencyContactname String
+     */
     public String getEmergencyContactName()
     {
         return emergencyContactName.get();
     }
-
+    
+    /**
+     * 
+     * Purpose: To return the emergencyContactName String Property
+     * @return emergencyContactName StringProperty
+     */
     public StringProperty getEmergencyContactProperty()
     {
         return emergencyContactName;
     }
     
+    /**
+     * 
+     * Purpose: To return the emergencyContactPhone String
+     * @return emergencyContactPhone String
+     */
     public String getEmergencyContactPhone()
     {
         return emergencyContactPhone.get();
     }
     
+    /**
+     * 
+     * Purpose: getEmergencyContactPhone String Property
+     * @return emergencyContactPhone StringProperty
+     */
     public StringProperty getEmergencyContactPhoneProperty()
     {
         return emergencyContactPhone;

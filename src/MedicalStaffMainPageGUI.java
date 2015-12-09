@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
@@ -215,8 +217,16 @@ public class MedicalStaffMainPageGUI extends Application
         // create picture box for left side of preview pane
         VBox pictureBox = new VBox();
         // default preview picture
-        previewPicture = new ImageView(new Image(
-                "images/defaultPicture.png"));
+        URL url = getClass().getResource("images/defaultPicture.png");
+        try
+        {
+            previewPicture = new ImageView(new Image(url.openStream()));
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         // details button
         Button detailsButton = new Button("View Details");
@@ -234,6 +244,7 @@ public class MedicalStaffMainPageGUI extends Application
         GridPane basicInfoPane = new GridPane();
         basicInfoPane.setStyle("-fx-background-color: #FFFFFF;");
         basicInfoPane.setPadding(new Insets(10, 10, 0, 10));
+        
 
         // set basic labels
         Label cosmoIDLabel = new Label("CosmoID:");
@@ -248,6 +259,13 @@ public class MedicalStaffMainPageGUI extends Application
         lastNameLabel.setPadding(new Insets(5, 5, 5, 5));
         seizureLabel.setPadding(new Insets(0, 5, 25, 5));
         allergyLabel.setPadding(new Insets(5, 5, 50, 5));
+        
+        seizureLabel.setMaxWidth(175);
+        seizureLabel.setMinWidth(80);
+        seizureLabel.setMaxHeight(40);
+        seizureLabel.setMinHeight(65);
+        seizureLabel.setWrapText(true);
+        seizureLabel.setAlignment(Pos.TOP_LEFT);
 
         // set the participant Labels
         Label cosmoIDText = new Label("0");
@@ -553,6 +571,7 @@ public class MedicalStaffMainPageGUI extends Application
 
         // set minimum width
         noteDisplayPane.setMinWidth(265);
+        //Sets the notebox's width to fit that of the parents window when it is resized
         noteDisplayPane.prefWidthProperty().bind(medMainStage.widthProperty().divide(1.60));
         hbox.setPadding(new Insets(10, 0, 0, 0));
         hbox.getChildren().addAll(noteTitleView, noteDisplayPane);
