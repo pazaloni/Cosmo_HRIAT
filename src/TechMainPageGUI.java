@@ -173,6 +173,21 @@ public class TechMainPageGUI extends Application
                 lblWarning.setText("");
                 manageUser(EDIT_STAFF);
             }
+            else
+            {
+            	//if no user is selected, display pop up message
+            		//asking them to select a user to edit
+            	Stage pStage = new Stage();
+            	Scene pScene;
+
+            	PopUpMessage messageBox = new PopUpMessage("Please select a user"
+            			+ " to edit.", pStage);
+
+            	pScene = new Scene(messageBox.root, 300, 75);
+            	pStage.setScene(pScene);
+            	pStage.showAndWait();
+
+            }
  
         });
 
@@ -287,17 +302,22 @@ public class TechMainPageGUI extends Application
         btnSubmit.setFont(new Font(15));
         if ( !newUser )
         {
-            String[] selectedStaff = manageStaff.queryStaff(sTVCont
-                    .getSelectedPK());
-            firstName.setText(selectedStaff[2]);
-            username.setDisable(true);
-            lastName.setText(selectedStaff[1]);
-            username.setText(selectedStaff[0]);
-            email.setText(selectedStaff[3]);
-            password.setText(selectedStaff[4]);
-            repeatPassword.setText(selectedStaff[4]);
-            cboSecurityLevels.setValue(securityLevels.get(Integer
-                    .parseInt(selectedStaff[5])));
+
+        	String[] selectedStaff = manageStaff.queryStaff(sTVCont
+        			.getSelectedPK());
+
+        	firstName.setText(selectedStaff[2]);
+        	username.setDisable(true);
+        	lastName.setText(selectedStaff[1]);
+        	username.setText(selectedStaff[0]);
+        	email.setText(selectedStaff[3]);
+        	password.setText(selectedStaff[4]);
+        	repeatPassword.setText(selectedStaff[4]);
+        	cboSecurityLevels.setValue(securityLevels.get(Integer
+        			.parseInt(selectedStaff[5])));
+
+
+
         }
         btnSubmit.setOnAction(new EventHandler<ActionEvent>()
         {
