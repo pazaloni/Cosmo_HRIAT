@@ -29,6 +29,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -354,6 +355,9 @@ public class MedicalStaffMainPageGUI extends Application
             	createParticipantStage.setTitle("Create Participant");
             	
             	createParticipantStage.setScene(new Scene(createParticipantPopUp(), 300, 315));
+                createParticipantStage.initModality(Modality.APPLICATION_MODAL);
+                createParticipantStage.initOwner(medMainStage);            
+                createParticipantStage.setResizable(false);
             	createParticipantStage.show();
             }
             
