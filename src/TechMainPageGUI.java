@@ -501,7 +501,11 @@ public class TechMainPageGUI extends Application
             
             scene = new Scene(checkBox.root, 300, 75);
             stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(stageTech);
             stage.showAndWait();
+        
 
             // when the user is removed from the database
             if(checkBox.result) 

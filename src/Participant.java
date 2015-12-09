@@ -95,7 +95,6 @@ public class Participant
     public String getInformationLastUpdated()
     {
     	informationLastUpdated.set(informationLastUpdated.get().substring(0, 11));
-
         return informationLastUpdated.get();
     }
 
@@ -169,5 +168,4 @@ public class Participant
     {
         return emergencyContactPhone;
     }
-
 }

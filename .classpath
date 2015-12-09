@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="src/" kind="src" path=""/>
+	<classpathentry excluding="src/|lib/" kind="src" path=""/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<accessrules>
@@ -10,10 +10,11 @@
 	<classpathentry kind="lib" path="C:/Program Files/Java/jre1.8.0_45/lib/ext/jfxrt.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="G:/git/prj5_cosmo_industries/UCanAccess-3.0.2-bin/ucanaccess-3.0.2.jar"/>
-	<classpathentry kind="lib" path="G:/git/prj5_cosmo_industries/UCanAccess-3.0.2-bin/lib/commons-lang-2.6.jar"/>
-	<classpathentry kind="lib" path="G:/git/prj5_cosmo_industries/UCanAccess-3.0.2-bin/lib/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="lib" path="G:/git/prj5_cosmo_industries/UCanAccess-3.0.2-bin/lib/hsqldb.jar"/>
-	<classpathentry kind="lib" path="G:/git/prj5_cosmo_industries/UCanAccess-3.0.2-bin/lib/jackcess-2.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/hsqldb.jar"/>
+	<classpathentry kind="lib" path="lib/jackcess-2.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/ucanaccess-3.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.10.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
