@@ -236,6 +236,8 @@ public class DatabaseHelper
         return rows != 0;
     }
 
+    
+    
     /**
      * 
      * Purpose: To update a row in a table
