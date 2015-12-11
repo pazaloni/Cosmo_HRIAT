@@ -8,7 +8,7 @@ import javafx.collections.ObservableList;
 
 public class DatabaseHelper
 {
-    private final String DB_PATH = "G:/CIMPDatabase.mdb";
+    private final String DB_PATH = "G:/CIMPDatabase.accdb";
     private Connection conn;
 
     public DatabaseHelper()
