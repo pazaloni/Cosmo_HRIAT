@@ -5,7 +5,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 
-
+/**
+ * 
+ *  Purpose: Provide all database needs to the system
+ *  
+ *  
+ * @author TEAMP CIMP
+ * @version 1.0
+ */
 public class DatabaseHelper
 {
     private final String DB_PATH = "G:/CIMPDatabase.accdb";
