@@ -156,11 +156,11 @@ public class LoginGUI extends Application
 
         // flag used to keep track if they logged in or not
         boolean success = false;
-        // Checks the lenght of the textfileds
+        // Checks the length of the textfields
         if ( username.length() > 0 && password.length() > 0 )
         {
 
-            // attemp login
+            // attempt login
             loggedInStaff = staffloginHelper.login(username, password);
             // of the returned staff isn't null
             if ( loggedInStaff != null )
@@ -189,6 +189,7 @@ public class LoginGUI extends Application
                     success = true;
                     stageLogin.close();
                     TechMainPageGUI techMainGui = new TechMainPageGUI();
+                    techMainGui.passLoggedInUser(username);
                     techMainGui.techMainPageConstruct(stageLogin);
                 }
             }

@@ -87,6 +87,8 @@ public class TechMainPageGUI extends Application
 
     // the new user main page
     private Stage stageNewUser;
+    
+    private String loggedUser;
 
     public void techMainPageConstruct( Stage stage )
     {
@@ -494,28 +496,38 @@ public class TechMainPageGUI extends Application
         
         if(username != null && username != "null")
         {
-            
-            
-            PopUpCheck checkBox = new PopUpCheck("Are you sure you want to "
-                    + "delete " + username + "?", stage);
-            
-            scene = new Scene(checkBox.root, 300, 75);
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initOwner(stageTech);
-            stage.showAndWait();
-        
-
-            // when the user is removed from the database
-            if(checkBox.result) 
+            if(username.equals(loggedUser))
             {
-                if( manageStaff.removeUser(username) )
-                {
-                    // this.sTVCont.removeViewableUser(username);
-                    this.sTVCont.refreshTable();
-                }
+            	PopUpMessage messageBox = new PopUpMessage("You cannot delete "
+            			+ "logged user.", stage);
+            	
+            	scene = new Scene(messageBox.root, 300, 75);
+            	stage.setScene(scene);
+            	stage.showAndWait();
             }
+            else
+            {
+            	PopUpCheck checkBox = new PopUpCheck("Are you sure you want to "
+                        + "delete " + username + "?", stage);
+                
+                scene = new Scene(checkBox.root, 300, 75);
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.initOwner(stageTech);
+                stage.showAndWait();
+            
+
+                // when the user is removed from the database
+                if(checkBox.result) 
+                {
+                    if( manageStaff.removeUser(username) )
+                    {
+                        // this.sTVCont.removeViewableUser(username);
+                        this.sTVCont.refreshTable();
+                    }
+                }
+            }   
         }
         else
         {
@@ -530,5 +542,16 @@ public class TechMainPageGUI extends Application
         
 
         
+    }
+    
+    /**
+     * Purpose:	To set the username of the currently logged in tech admin
+     * @param username the passed in logged in tech admin
+     * @author 	Steven Palchinski cst209
+     * 			Andrew Hundeby	cst205
+     */
+    public void passLoggedInUser(String username)
+    {
+    	loggedUser = username;
     }
 }

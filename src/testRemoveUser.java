@@ -16,9 +16,20 @@ public class testRemoveUser
     private String passwordToRemove;
     private String securityToRemove;
     
+    private String loggedInTech;
+    
+    private String techUsername;
+    private String techFirstName;
+    private String techLastName;
+    private String techEmail;
+    private String techPassword;
+    private String techSecurity;
+    
     private DatabaseHelper db;
     
     StaffAccount userToRemove;
+    
+    StaffAccount techAdmin;
     
     ManageStaffAccountHelper acctHelper;
     
@@ -37,6 +48,18 @@ public class testRemoveUser
         userToRemove = new BasicStaff(usernameToRemove, lastNameToRemove, 
                 firstNameToRemove, emailToRemove, passwordToRemove, 
                 securityToRemove);
+        
+        techUsername = "ahundeby";
+        techLastName = "Hundeby";
+        techFirstName = "Andrew";
+        techEmail = "andy@hundeby.com";
+        techPassword = "password";
+        techSecurity = "3";
+        
+        loggedInTech = techUsername;
+        
+        techAdmin = new BasicStaff(techUsername, techLastName, techFirstName, 
+        		techEmail, techPassword, techSecurity);
         
         acctHelper = new ManageStaffAccountHelper();
     }
@@ -58,6 +81,23 @@ public class testRemoveUser
         
         //only need to check username, since it should always be unique
         assertTrue(RemovedUser[0] == null);
+    }
+    
+    @Test
+    public void testRemoveLoggedInTech()
+    {
+    	acctHelper.addUser(techUsername, techLastName, techFirstName,
+    			techEmail, techPassword, techPassword, techSecurity);
+    	
+    	techAdmin.login(techUsername, techPassword);
+    	
+    	String[] activeTech = acctHelper.queryStaff(techUsername);
+    	
+    	assertTrue(activeTech[0].equals(techUsername));
+    	
+    	acctHelper.removeUser(techUsername);
+    	
+    	assertTrue(activeTech[0].equals(techUsername));
     }
     
     public void testGetUsername()
