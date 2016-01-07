@@ -88,6 +88,7 @@ public class TechMainPageGUI extends Application
     // the new user main page
     private Stage stageNewUser;
     
+    //String that will hold the username of the logged in tech admin 
     private String loggedUser;
 
     public void techMainPageConstruct( Stage stage )
@@ -494,17 +495,21 @@ public class TechMainPageGUI extends Application
     	Stage stage = new Stage();
     	Scene scene;
         
+    	//if the selected username is not null 
         if(username != null && username != "null")
         {
-            if(username.equals(loggedUser))
+            //if the selected username is the same as the current username 
+        	if(username.equals(loggedUser))
             {
-            	PopUpMessage messageBox = new PopUpMessage("You cannot delete "
-            			+ "logged user.", stage);
+            	//pop up a message saying that you cannot delete the current user
+        		PopUpMessage messageBox = new PopUpMessage("You cannot delete "
+            			+ "current user.", stage);
             	
             	scene = new Scene(messageBox.root, 300, 75);
             	stage.setScene(scene);
             	stage.showAndWait();
             }
+        	//else pop up a message asking to confirm deleting the selected user
             else
             {
             	PopUpCheck checkBox = new PopUpCheck("Are you sure you want to "
@@ -529,6 +534,7 @@ public class TechMainPageGUI extends Application
                 }
             }   
         }
+        //pop up a message saying that no user has been selected to delete
         else
         {
         	//tell the user to select a user to delete
