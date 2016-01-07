@@ -18,6 +18,7 @@ public class TestMedicalAdministrator
     private String familyPhysicianOne;
     private String healthNumberOne;
     private String phoneOne;
+    private String addressOne;
     
     private String cosmoIDTwo;
     private String participantFirstNameTwo;
@@ -26,6 +27,7 @@ public class TestMedicalAdministrator
     private String familyPhysicianTwo;
     private String healthNumberTwo;
     private String phoneTwo;
+    private String addressTwo;
     
 
     private String failEmailWithoutBoth;
@@ -48,6 +50,7 @@ public class TestMedicalAdministrator
     	familyPhysicianOne= "Dr Phill";
     	healthNumberOne="111111111";
     	phoneOne = "1111111111";
+    	addressOne = "123 Fake Street";
     	
     	cosmoIDTwo ="666";
 		participantFirstNameTwo = "Chad";
@@ -56,12 +59,7 @@ public class TestMedicalAdministrator
 		familyPhysicianTwo = "Louis Cipher";
 		healthNumberTwo="999999999";
 		phoneTwo =	"666911666";
-		
-		
-	
-	
-	
-	
+		addressTwo = "123 Cookie Blvd";
 
         
         failEmailWithoutBoth = "1234";
@@ -78,45 +76,45 @@ public class TestMedicalAdministrator
     @Test
     public void testFieldIsEmpty()
     {
-        String result = MedicalAdministrator.createParticipant(cosmoIDOne, failEmptyField, participantLastNameOne, participantBirthdateOne, familyPhysicianOne, healthNumberOne, phoneOne);
+        String result = MedicalAdministrator.createParticipant(cosmoIDOne, failEmptyField, participantLastNameOne, participantBirthdateOne, familyPhysicianOne, healthNumberOne, phoneOne, addressOne);
         assertTrue(result.equals("One of your fields is empty"));
         
-        result = MedicalAdministrator.createParticipant(failEmptyField, participantFirstNameOne, participantLastNameOne, participantBirthdateOne, familyPhysicianOne, healthNumberOne, phoneOne);
+        result = MedicalAdministrator.createParticipant(failEmptyField, participantFirstNameOne, participantLastNameOne, participantBirthdateOne, familyPhysicianOne, healthNumberOne, phoneOne, addressOne);
         assertTrue(result.equals("One of your fields is empty"));
-        result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, failEmptyField, participantBirthdateOne, familyPhysicianOne, healthNumberOne, phoneOne);
+        result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, failEmptyField, participantBirthdateOne, familyPhysicianOne, healthNumberOne, phoneOne, addressOne);
         assertTrue(result.equals("One of your fields is empty"));
-        result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, participantLastNameOne, failDate, familyPhysicianOne, healthNumberOne, phoneOne);
+        result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, participantLastNameOne, failDate, familyPhysicianOne, healthNumberOne, phoneOne, addressOne);
         assertTrue(result.equals("One of your fields is empty"));
-        result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, participantLastNameOne, participantBirthdateOne, failEmptyField, healthNumberOne, phoneOne);
+        result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, participantLastNameOne, participantBirthdateOne, failEmptyField, healthNumberOne, phoneOne, addressOne);
         assertTrue(result.equals("One of your fields is empty"));        
-        result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, participantLastNameOne, participantBirthdateOne, healthNumberOne, failEmptyField, phoneOne);
+        result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, participantLastNameOne, participantBirthdateOne, healthNumberOne, failEmptyField, phoneOne, addressOne);
         assertTrue(result.equals("One of your fields is empty"));        
-        result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, participantLastNameOne, participantBirthdateOne, healthNumberOne, healthNumberOne, failEmptyField);
+        result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, participantLastNameOne, participantBirthdateOne, healthNumberOne, healthNumberOne, failEmptyField, addressOne);
         assertTrue(result.equals("One of your fields is empty"));
+        result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, participantLastNameOne, participantBirthdateOne, healthNumberOne, failEmptyField, phoneOne, failEmptyField);
+        assertTrue(result.equals("One of your fields is empty"));  
     }
    
-    
-
 
 
     @Test
     public void TestCosmoIDNumber()
     {
-    	String result = MedicalAdministrator.createParticipant(failNumeric, participantFirstNameOne, participantFirstNameOne, participantBirthdateOne, familyPhysicianOne, healthNumberOne, phoneOne);
+    	String result = MedicalAdministrator.createParticipant(failNumeric, participantFirstNameOne, participantFirstNameOne, participantBirthdateOne, familyPhysicianOne, healthNumberOne, phoneOne, addressOne);
         assertTrue(result.equals("CosmoID must be a number"));
     }
     
     @Test
     public void testfailHealth()
     {
-    	String result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, participantFirstNameOne, participantBirthdateOne, familyPhysicianOne, failNumeric, phoneOne);
+    	String result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, participantFirstNameOne, participantBirthdateOne, familyPhysicianOne, failNumeric, phoneOne, addressOne);
         assertTrue(result.equals("Health Number must be 9 digits"));
     }
 
     @Test
     public void testfailPhone()
     {
-    	String result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, participantFirstNameOne, participantBirthdateOne, familyPhysicianOne, healthNumberOne, failNumeric);
+    	String result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, participantFirstNameOne, participantBirthdateOne, familyPhysicianOne, healthNumberOne, failNumeric, addressOne);
         assertTrue(result.equals("Phone Number must be 10 digits"));
     }
     
@@ -124,11 +122,11 @@ public class TestMedicalAdministrator
     @Test
     public void testCosmoIDExists()
     {
-        String result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, participantFirstNameOne, participantBirthdateOne, familyPhysicianOne, healthNumberOne, phoneOne);
+        String result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, participantFirstNameOne, participantBirthdateOne, familyPhysicianOne, healthNumberOne, phoneOne, addressOne);
         
         //assertTrue(result.equals(""));
 
-        result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, participantFirstNameOne, participantBirthdateOne, familyPhysicianOne, healthNumberOne, phoneOne);
+        result = MedicalAdministrator.createParticipant(cosmoIDOne, participantFirstNameOne, participantFirstNameOne, participantBirthdateOne, familyPhysicianOne, healthNumberOne, phoneOne, addressOne);
         System.out.println(result);
         assertTrue(result.equals("That CosmoID already exists"));
     }
