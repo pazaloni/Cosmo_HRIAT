@@ -87,6 +87,9 @@ public class TechMainPageGUI extends Application
 
     // the new user main page
     private Stage stageNewUser;
+    
+    //String that will hold the username of the logged in tech admin 
+    private String loggedUser;
 
     public void techMainPageConstruct( Stage stage )
     {
@@ -492,31 +495,46 @@ public class TechMainPageGUI extends Application
     	Stage stage = new Stage();
     	Scene scene;
         
+    	//if the selected username is not null 
         if(username != null && username != "null")
         {
-            
-            
-            PopUpCheck checkBox = new PopUpCheck("Are you sure you want to "
-                    + "delete " + username + "?", stage);
-            
-            scene = new Scene(checkBox.root, 300, 75);
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initOwner(stageTech);
-            stage.showAndWait();
-        
-
-            // when the user is removed from the database
-            if(checkBox.result) 
+            //if the selected username is the same as the current username 
+        	if(username.equals(loggedUser))
             {
-                if( manageStaff.removeUser(username) )
-                {
-                    // this.sTVCont.removeViewableUser(username);
-                    this.sTVCont.refreshTable();
-                }
+            	//pop up a message saying that you cannot delete the current user
+        		PopUpMessage messageBox = new PopUpMessage("You cannot delete "
+            			+ "current user.", stage);
+            	
+            	scene = new Scene(messageBox.root, 300, 75);
+            	stage.setScene(scene);
+            	stage.showAndWait();
             }
+        	//else pop up a message asking to confirm deleting the selected user
+            else
+            {
+            	PopUpCheck checkBox = new PopUpCheck("Are you sure you want to "
+                        + "delete " + username + "?", stage);
+                
+                scene = new Scene(checkBox.root, 300, 75);
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.initOwner(stageTech);
+                stage.showAndWait();
+            
+
+                // when the user is removed from the database
+                if(checkBox.result) 
+                {
+                    if( manageStaff.removeUser(username) )
+                    {
+                        // this.sTVCont.removeViewableUser(username);
+                        this.sTVCont.refreshTable();
+                    }
+                }
+            }   
         }
+        //pop up a message saying that no user has been selected to delete
         else
         {
         	//tell the user to select a user to delete
@@ -530,5 +548,16 @@ public class TechMainPageGUI extends Application
         
 
         
+    }
+    
+    /**
+     * Purpose:	To set the username of the currently logged in tech admin
+     * @param username the passed in logged in tech admin
+     * @author 	Steven Palchinski cst209
+     * 			Andrew Hundeby	cst205
+     */
+    public void passLoggedInUser(String username)
+    {
+    	loggedUser = username;
     }
 }
