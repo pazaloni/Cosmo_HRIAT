@@ -19,7 +19,7 @@ import javafx.stage.Stage;
  */
 public class LoginGUI extends Application
 {
-	StaffAccount staffloginHelper = new StaffAccount();
+    StaffAccount staffloginHelper = new StaffAccount();
 
     /* Login Elements */
     private VBox vbMainPane;
@@ -43,7 +43,7 @@ public class LoginGUI extends Application
     public static final String IMAGE_PATH = "images/CosmoIconLong.png";
     public static final String BUTTON_LABEL = "Login";
 
-    public static void main( String[] args )
+    public static void main(String[] args)
     {
         launch();
     }
@@ -92,7 +92,7 @@ public class LoginGUI extends Application
         txtUserName.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
-            public void handle( ActionEvent e )
+            public void handle(ActionEvent e)
             {
                 login();
             }
@@ -100,7 +100,7 @@ public class LoginGUI extends Application
         pfUserPassword.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
-            public void handle( ActionEvent e )
+            public void handle(ActionEvent e)
             {
                 login();
             }
@@ -108,7 +108,7 @@ public class LoginGUI extends Application
         btnLogin.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
-            public void handle( ActionEvent e )
+            public void handle(ActionEvent e)
             {
                 login();
             }
@@ -117,7 +117,7 @@ public class LoginGUI extends Application
     }
 
     @Override
-    public void start( Stage stage )
+    public void start(Stage stage)
     {
 
         stageLogin = stage;
@@ -157,17 +157,17 @@ public class LoginGUI extends Application
         // flag used to keep track if they logged in or not
         boolean success = false;
         // Checks the lenght of the textfileds
-        if ( username.length() > 0 && password.length() > 0 )
+        if (username.length() > 0 && password.length() > 0)
         {
 
             // attemp login
             loggedInStaff = staffloginHelper.login(username, password);
             // of the returned staff isn't null
-            if ( loggedInStaff != null )
+            if (loggedInStaff != null)
             {
-            	boolean admin = false;
+                boolean admin = false;
                 // if they are a basic staff
-                if ( loggedInStaff.accessLevel.toString().contains("0") )
+                if (loggedInStaff.accessLevel.toString().contains("0"))
                 {
                     success = true;
                     stageLogin.close();
@@ -175,9 +175,9 @@ public class LoginGUI extends Application
                     medStaffGUI.medMainPageConstruct(stageLogin, admin);
                 }
                 // if they are a medical administrator
-                else if ( loggedInStaff.accessLevel.toString().contains("1") )
+                else if (loggedInStaff.accessLevel.toString().contains("1"))
                 {
-                	admin = true;
+                    admin = true;
                     success = true;
                     stageLogin.close();
                     MedicalStaffMainPageGUI medStaffGUI = new MedicalStaffMainPageGUI();
@@ -195,7 +195,7 @@ public class LoginGUI extends Application
         }
         // If they didn't successfully login a incorrect username or
         // password will be displayed
-        if ( success == false )
+        if (success == false)
         {
             txtUserName.setText("");
             pfUserPassword.setText("");

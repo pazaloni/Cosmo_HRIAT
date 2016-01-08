@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-
 /**
  * 
- *  Purpose: Provide all database needs to the system
- *  
- *  
+ * Purpose: Provide all database needs to the system
+ * 
+ * 
  * @author TEAMP CIMP
  * @version 1.0
  */
@@ -47,6 +46,7 @@ public class DatabaseHelper
             e.printStackTrace();
         }
     }
+
     /**
      * 
      * Purpose: close the database connection;
@@ -57,13 +57,14 @@ public class DatabaseHelper
         {
             conn.close();
         }
-        catch ( SQLException e )
+        catch (SQLException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
-    public String[][] createArray( String tableName, String[] values )
+
+    public String[][] createArray(String tableName, String[] values)
     {
         Statement s = null;
         ResultSet rs = null;
@@ -75,7 +76,7 @@ public class DatabaseHelper
             s = conn.createStatement();
             rs = s.executeQuery(query);
             ResultSetMetaData rsmd = rs.getMetaData();
-            for ( int i = 0; i < values.length; i++ )
+            for (int i = 0; i < values.length; i++)
             {
                 // set the field name of the array
                 result[i][0] = rsmd.getColumnLabel(i + 1);
@@ -85,7 +86,7 @@ public class DatabaseHelper
 
             }
         }
-        catch ( SQLException e )
+        catch (SQLException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -109,8 +110,8 @@ public class DatabaseHelper
      *            optional sql sort statement to supply
      * @return ResultSet rs The result of the SELECT query
      */
-    public ResultSet select( String columnList, String tableList,
-            String condition, String sort )
+    public ResultSet select(String columnList, String tableList,
+            String condition, String sort)
     {
 
         Statement s = null;
@@ -122,13 +123,13 @@ public class DatabaseHelper
             s = conn.createStatement();
 
             // If a condition is specified, add it to the query
-            if ( !condition.equals("") )
+            if (!condition.equals(""))
             {
                 query += " WHERE " + condition;
             }
 
             // If a sort order is specified, add it to the query
-            if ( !sort.equals("") )
+            if (!sort.equals(""))
             {
                 query += " ORDER BY " + sort;
             }
@@ -136,7 +137,7 @@ public class DatabaseHelper
             // execute the query
             rs = s.executeQuery(query);
         }
-        catch ( SQLException e )
+        catch (SQLException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -157,7 +158,7 @@ public class DatabaseHelper
      * @return boolean True if rows were affected, false if 0 rows were affected
      *         (failed insert)
      */
-    public boolean insert( String[] values, String tableName )
+    public boolean insert(String[] values, String tableName)
     {
         String[][] newRecord = this.createArray(tableName, values);
 
@@ -166,7 +167,7 @@ public class DatabaseHelper
         String valueList = "( ";
 
         // add each field and value to their strings
-        for ( int r = 0; r < newRecord.length; r++ )
+        for (int r = 0; r < newRecord.length; r++)
         {
             fieldList += newRecord[r][0] + ", ";
             valueList += "'" + newRecord[r][1] + "', ";
@@ -194,10 +195,11 @@ public class DatabaseHelper
         }
         return rows != 0;
     }
-    
+
     /**
      * 
-     * Purpose: This method will add a new record to the specified table, specifying the field names
+     * Purpose: This method will add a new record to the specified table,
+     * specifying the field names
      * 
      * @param newRecord
      *            A 2d array of the field names and the values to be inserted
@@ -216,13 +218,13 @@ public class DatabaseHelper
         for (int r = 0; r < newRecord.length; r++)
         {
             fieldList += newRecord[r][0] + ", ";
-            if(newRecord[r][1] != null)
+            if (newRecord[r][1] != null)
             {
-            	valueList += "'" + newRecord[r][1] + "', ";
+                valueList += "'" + newRecord[r][1] + "', ";
             }
             else
             {
-            	valueList += "" + newRecord[r][1] + ", ";
+                valueList += "" + newRecord[r][1] + ", ";
             }
         }
 
@@ -235,15 +237,15 @@ public class DatabaseHelper
         String insertStatement = "INSERT INTO " + tableName + " " + fieldList
                 + " VALUES " + valueList;
         System.out.println(insertStatement);
-        
+
         int rows = 0;
         try
         {
-        	s = conn.createStatement();
+            s = conn.createStatement();
             rows = s.executeUpdate(insertStatement);
             s.close();
         }
-        catch ( SQLException e )
+        catch (SQLException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -251,8 +253,6 @@ public class DatabaseHelper
         return rows != 0;
     }
 
-    
-    
     /**
      * 
      * Purpose: To update a row in a table
@@ -266,8 +266,7 @@ public class DatabaseHelper
      * @return boolean True if rows were affected, false if 0 rows were affected
      *         (failed update)
      */
-    public boolean update( String[] values, String tableName,
-            String primaryKey )
+    public boolean update(String[] values, String tableName, String primaryKey)
     {
         String[][] updateRecord = this.createArray(tableName, values);
 
@@ -276,12 +275,12 @@ public class DatabaseHelper
         String updateStatement = "Update " + tableName + " SET ";
 
         // add each field and value to their strings
-        for ( int r = 0; r < values.length; r++ )
+        for (int r = 0; r < values.length; r++)
         {
             String fieldName = "" + updateRecord[r][0];
             String value = "" + updateRecord[r][1];
             // If this isn't the primary key
-            if ( fieldName != primaryKey )
+            if (fieldName != primaryKey)
             {
                 // Add the column and value to be changed to the query statement
                 updateStatement += fieldName + "='" + value + "', ";
@@ -294,7 +293,8 @@ public class DatabaseHelper
 
         // specify which record to update
         // TODO fix primary key
-        updateStatement += " WHERE " + updateRecord[0][0] + "='" + primaryKey + "'";
+        updateStatement += " WHERE " + updateRecord[0][0] + "='" + primaryKey
+                + "'";
 
         int rows = 0;
 
@@ -303,7 +303,7 @@ public class DatabaseHelper
             s = conn.createStatement();
             rows = s.executeUpdate(updateStatement);
         }
-        catch ( SQLException e )
+        catch (SQLException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -312,6 +312,7 @@ public class DatabaseHelper
         // return whether update failed or not
         return rows != 0;
     }
+
     /**
      * 
      * Purpose: To update a row in a table
@@ -350,7 +351,7 @@ public class DatabaseHelper
 
         // specify which record to update
         // TODO fix primary key
-        updateStatement += " WHERE " +  values[0][0] + "='" + primaryKey + "'";
+        updateStatement += " WHERE " + values[0][0] + "='" + primaryKey + "'";
         System.out.println(updateStatement);
 
         int rows = 0;
@@ -369,6 +370,7 @@ public class DatabaseHelper
         // return whether update failed or not
         return rows != 0;
     }
+
     /**
      * 
      * Purpose: To delete from a table on a condition
@@ -402,17 +404,16 @@ public class DatabaseHelper
 
     /**
      * Purpose: This will take in the result set and use it to populate the
-     *          Observable list, which will be used to display the rows in the 
-     *          tableview.
+     * Observable list, which will be used to display the rows in the tableview.
      * 
-     * @param rs    The result set that will be used to populate the observable
-     *              list
-     * @return      The Observable list that will be used to generate the table
+     * @param rs
+     *            The result set that will be used to populate the observable
+     *            list
+     * @return The Observable list that will be used to generate the table
      * 
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public ObservableList<String> displayRows( ResultSet rs )
+    public ObservableList<String> displayRows(ResultSet rs)
     {
         ObservableList<String> rows = FXCollections.observableArrayList();
 
@@ -420,16 +421,16 @@ public class DatabaseHelper
         {
             ArrayList<String> staffInfo = new ArrayList<String>();
 
-            while ( rs.next() )
+            while (rs.next())
             {
-                for ( int i = 1; i <= rs.getMetaData().getColumnCount(); i++ )
+                for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++)
                 {
                     staffInfo.add(rs.getString(i));
                 }
                 rows.addAll(staffInfo);
             }
         }
-        catch ( SQLException e )
+        catch (SQLException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -437,6 +438,5 @@ public class DatabaseHelper
 
         return rows;
     }
-
 
 }

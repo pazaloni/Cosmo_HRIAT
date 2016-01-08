@@ -23,7 +23,7 @@ public class TestManageStaffAccountHelper
     private String firstPasswordTwo;
     private String secondPasswordTwo;
     private String securityTwo;
-    
+
     private String usernameThree;
     private String firstNameThree;
     private String lastNameThree;
@@ -58,7 +58,7 @@ public class TestManageStaffAccountHelper
         firstPasswordTwo = "thrones";
         secondPasswordTwo = "thrones";
         securityTwo = "2";
-        
+
         usernameThree = "sallyJ";
         firstNameThree = "Sally";
         lastNameThree = "Jones";
@@ -150,7 +150,7 @@ public class TestManageStaffAccountHelper
                 emailTwo, firstPasswordTwo, secondPasswordTwo, securityTwo);
         assertTrue(result.equals(""));
     }
-    
+
     @Test
     public void testEditUserPasswordSame()
     {
@@ -181,8 +181,9 @@ public class TestManageStaffAccountHelper
     @Test
     public void testEditUserEmptyField()
     {
-        String result = test.editUser(failEmptyField, lastNameOne, firstNameOne,
-                emailOne, firstPasswordOne, secondPasswordOne, securityOne);
+        String result = test.editUser(failEmptyField, lastNameOne,
+                firstNameOne, emailOne, firstPasswordOne, secondPasswordOne,
+                securityOne);
         assertTrue(result.equals("One or more of your fields is empty"));
 
         result = test.editUser(usernameOne, failEmptyField, firstNameOne,
@@ -193,31 +194,30 @@ public class TestManageStaffAccountHelper
                 emailOne, firstPasswordOne, secondPasswordOne, securityOne);
         assertTrue(result.equals("One or more of your fields is empty"));
 
-        result = test.editUser(usernameOne, lastNameOne, firstNameOne, emailOne,
-                failEmptyField, secondPasswordOne, securityOne);
+        result = test.editUser(usernameOne, lastNameOne, firstNameOne,
+                emailOne, failEmptyField, secondPasswordOne, securityOne);
         assertTrue(result.equals("One or more of your fields is empty"));
 
-        result = test.editUser(usernameOne, lastNameOne, firstNameOne, emailOne,
-                firstPasswordOne, failEmptyField, securityOne);
+        result = test.editUser(usernameOne, lastNameOne, firstNameOne,
+                emailOne, firstPasswordOne, failEmptyField, securityOne);
         assertTrue(result.equals("One or more of your fields is empty"));
 
-        result = test.editUser(usernameOne, lastNameOne, firstNameOne, emailOne,
-                firstPasswordOne, secondPasswordOne, failEmptyField);
+        result = test.editUser(usernameOne, lastNameOne, firstNameOne,
+                emailOne, firstPasswordOne, secondPasswordOne, failEmptyField);
         assertTrue(result.equals("One or more of your fields is empty"));
 
     }
 
-
     @Test
     public void TestEditUserPass()
     {
-        String result = test.addUser(usernameThree, lastNameThree, 
-                firstNameThree, emailThree, firstPasswordThree, 
+        String result = test.addUser(usernameThree, lastNameThree,
+                firstNameThree, emailThree, firstPasswordThree,
                 secondPasswordThree, securityThree);
         assertTrue(result.equals(""));
-        
+
         result = test.editUser(usernameThree, lastNameTwo, firstNameThree,
-                emailThree, firstPasswordThree, secondPasswordThree, 
+                emailThree, firstPasswordThree, secondPasswordThree,
                 securityThree);
         assertTrue(result.equals(""));
     }

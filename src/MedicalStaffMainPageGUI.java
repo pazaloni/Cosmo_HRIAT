@@ -43,11 +43,11 @@ import javafx.stage.Stage;
  */
 public class MedicalStaffMainPageGUI extends Application
 {
-    
+
     private ParticipantTableViewController pTVCont;
-    
+
     private DatabaseHelper dbObject = new DatabaseHelper();
-    
+
     public static Stage medMainStage;
 
     private Button logout;
@@ -61,16 +61,15 @@ public class MedicalStaffMainPageGUI extends Application
     private ListView<String> noteTitleView;
 
     private ObservableList<String> noteTitleList;
-    
+
     private Stage createParticipantStage;
-    
 
     /**
      * Purpose: displays the GUI
      * 
      */
     @Override
-    public void start( Stage stage ) throws Exception
+    public void start(Stage stage) throws Exception
     {
         medMainPageConstruct(stage, true);
     }
@@ -80,15 +79,16 @@ public class MedicalStaffMainPageGUI extends Application
      * Purpose: Construct the main stage for the medical staff when they have
      * successfully logged in
      * 
-     * @param stage: the stage the medical staff will see
+     * @param stage
+     *            : the stage the medical staff will see
      */
-    public void medMainPageConstruct( Stage stage, boolean admin )
+    public void medMainPageConstruct(Stage stage, boolean admin)
     {
         dbObject.connect();
-        
+
         pTVCont = new ParticipantTableViewController();
         pTVCont.initialize();
-        
+
         medMainStage = stage;
         medMainStage.setTitle("Cosmo Industries");
 
@@ -119,7 +119,7 @@ public class MedicalStaffMainPageGUI extends Application
         logout.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
-            public void handle( ActionEvent e )
+            public void handle(ActionEvent e)
             {
                 medMainStage.close();
                 LoginGUI test5 = new LoginGUI();
@@ -127,7 +127,7 @@ public class MedicalStaffMainPageGUI extends Application
                 {
                     test5.start(medMainStage);
                 }
-                catch ( Exception e1 )
+                catch (Exception e1)
                 {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
@@ -183,6 +183,7 @@ public class MedicalStaffMainPageGUI extends Application
      * 
      * Purpose: Create the HBox that will contain the Preview pane and the Note
      * pane
+     * 
      * @return
      */
     private HBox createHBoxPreviewNotes()
@@ -208,6 +209,7 @@ public class MedicalStaffMainPageGUI extends Application
 
     /**
      * Purpose: Create the Preview Pane
+     * 
      * @return
      */
     private BorderPane createPreviewPane()
@@ -245,7 +247,6 @@ public class MedicalStaffMainPageGUI extends Application
         GridPane basicInfoPane = new GridPane();
         basicInfoPane.setStyle("-fx-background-color: #FFFFFF;");
         basicInfoPane.setPadding(new Insets(10, 10, 0, 10));
-        
 
         // set basic labels
         Label cosmoIDLabel = new Label("CosmoID:");
@@ -260,7 +261,7 @@ public class MedicalStaffMainPageGUI extends Application
         lastNameLabel.setPadding(new Insets(5, 5, 5, 5));
         seizureLabel.setPadding(new Insets(0, 5, 25, 5));
         allergyLabel.setPadding(new Insets(5, 5, 50, 5));
-        
+
         seizureLabel.setMaxWidth(175);
         seizureLabel.setMinWidth(80);
         seizureLabel.setMaxHeight(40);
@@ -314,7 +315,7 @@ public class MedicalStaffMainPageGUI extends Application
         // set margins
         BorderPane.setMargin(pictureBox, new Insets(10, 0, 0, 10));
         BorderPane.setMargin(basicInfoPane, new Insets(10, 0, 0, 0));
-        //previewPane.setTop(searchBar);
+        // previewPane.setTop(searchBar);
         previewPane.setLeft(pictureBox);
         previewPane.setCenter(basicInfoPane);
 
@@ -324,7 +325,8 @@ public class MedicalStaffMainPageGUI extends Application
     /**
      * 
      * Purpose:Create the search bar
-     * @param admin 
+     * 
+     * @param admin
      * 
      * @return HBox search bar
      */
@@ -333,8 +335,7 @@ public class MedicalStaffMainPageGUI extends Application
         // create search bar
         HBox searchBar = new HBox();
         searchBy = new ComboBox<String>();
-        searchBy.getItems().addAll("Name", "Address", "Allergy",
-                "CosmoID");
+        searchBy.getItems().addAll("Name", "Address", "Allergy", "CosmoID");
 
         // set width
         searchBy.setStyle("-fx-pref-width: 150;");
@@ -353,62 +354,67 @@ public class MedicalStaffMainPageGUI extends Application
         HBox.setMargin(searchBy, new Insets(0, 5, 0, 10));
         HBox.setMargin(searchField, new Insets(0, 5, 0, 5));
         HBox.setMargin(searchButton, new Insets(0, 5, 0, 5));
-        if(admin)
+        if (admin)
         {
-        	Button addParticipantButton = new Button("Add Participant");
-        	addParticipantButton.setOnAction(new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle( ActionEvent e ){
-            	//Open addNewParticipant Window
-            	createParticipantStage = new Stage();
-            	createParticipantStage.setTitle("Create Participant");
-            	
-            	createParticipantStage.setScene(new Scene(createParticipantPopUp(), 300, 350));
-                createParticipantStage.initModality(Modality.APPLICATION_MODAL);
-                createParticipantStage.initOwner(medMainStage);            
-                createParticipantStage.setResizable(false);
-            	createParticipantStage.show();
-            }
-            
-        });
-        	addParticipantButton.setPrefSize(200, 20);
-        	HBox.setMargin(addParticipantButton, new Insets(0,5,0,5));
-        	searchBar.getChildren().addAll(searchBy, searchField,
-                    searchButton, addParticipantButton);
+            Button addParticipantButton = new Button("Add Participant");
+            addParticipantButton.setOnAction(new EventHandler<ActionEvent>()
+            {
+                @Override
+                public void handle(ActionEvent e)
+                {
+                    // Open addNewParticipant Window
+                    createParticipantStage = new Stage();
+                    createParticipantStage.setTitle("Create Participant");
+
+                    createParticipantStage.setScene(new Scene(
+                            createParticipantPopUp(), 300, 350));
+                    createParticipantStage
+                            .initModality(Modality.APPLICATION_MODAL);
+                    createParticipantStage.initOwner(medMainStage);
+                    createParticipantStage.setResizable(false);
+                    createParticipantStage.show();
+                }
+
+            });
+            addParticipantButton.setPrefSize(200, 20);
+            HBox.setMargin(addParticipantButton, new Insets(0, 5, 0, 5));
+            searchBar.getChildren().addAll(searchBy, searchField, searchButton,
+                    addParticipantButton);
         }
         else
         {
-        	searchBar.getChildren().addAll(searchBy, searchField,
-                searchButton);
+            searchBar.getChildren().addAll(searchBy, searchField, searchButton);
         }
         return searchBar;
     }
 
     /**
      * 
-     * Purpose: To create a pop up window to add the participant into the database
+     * Purpose: To create a pop up window to add the participant into the
+     * database
+     * 
      * @return a GridPane containing the form
      */
-    protected GridPane createParticipantPopUp() {
-    	
-    	GridPane grid = new GridPane();
-    	
-    	//warning label
-    	Label lblWarning = new Label();
-    	lblWarning.setTextFill(Color.FIREBRICK);
-        
-    	//text field labels
+    protected GridPane createParticipantPopUp()
+    {
+
+        GridPane grid = new GridPane();
+
+        // warning label
+        Label lblWarning = new Label();
+        lblWarning.setTextFill(Color.FIREBRICK);
+
+        // text field labels
         Label firstNameLbl = new Label("First Name");
         Label lastNameLbl = new Label("Last Name");
-        Label birthdateLbl= new Label("Birthdate");
+        Label birthdateLbl = new Label("Birthdate");
         Label familyPhysicianLbl = new Label("Family Physician");
         Label healthNumLbl = new Label("Health Number");
-        Label phoneLbl = new Label("Phone Number");      
+        Label phoneLbl = new Label("Phone Number");
         Label cosmoIdLbl = new Label("Cosmo ID");
         Label addressLbl = new Label("Address");
-        
-        //the text fields
+
+        // the text fields
         TextField firstNameTxt = new TextField();
         TextField lastNameTxt = new TextField();
         DatePicker birthDatePicker = new DatePicker();
@@ -418,75 +424,79 @@ public class MedicalStaffMainPageGUI extends Application
         phoneTxt.setPromptText("Ex: 3062879111");
         TextField cosmoIdTxt = new TextField();
         TextField addressTxt = new TextField();
-        
-        //add the form to the grid
-        grid.add(cosmoIdLbl, 0 , 1);
-        grid.add(firstNameLbl, 0 , 2);
-        grid.add(lastNameLbl, 0 , 3);
-        grid.add(birthdateLbl, 0 , 4);
-        grid.add(familyPhysicianLbl, 0 , 5);
-        grid.add(healthNumLbl, 0 , 6);
-        grid.add(phoneLbl, 0 , 7);  
+
+        // add the form to the grid
+        grid.add(cosmoIdLbl, 0, 1);
+        grid.add(firstNameLbl, 0, 2);
+        grid.add(lastNameLbl, 0, 3);
+        grid.add(birthdateLbl, 0, 4);
+        grid.add(familyPhysicianLbl, 0, 5);
+        grid.add(healthNumLbl, 0, 6);
+        grid.add(phoneLbl, 0, 7);
         grid.add(addressLbl, 0, 8);
 
         grid.add(lblWarning, 1, 0);
-        grid.add(cosmoIdTxt, 1 , 1);
-        grid.add(firstNameTxt, 1 , 2);
-        grid.add(lastNameTxt, 1 , 3);
-        grid.add(birthDatePicker, 1 , 4);
-        grid.add(familyPhysicianTxt, 1 , 5);
-        grid.add(healthNumTxt, 1 , 6);
-        grid.add(phoneTxt, 1 , 7);
+        grid.add(cosmoIdTxt, 1, 1);
+        grid.add(firstNameTxt, 1, 2);
+        grid.add(lastNameTxt, 1, 3);
+        grid.add(birthDatePicker, 1, 4);
+        grid.add(familyPhysicianTxt, 1, 5);
+        grid.add(healthNumTxt, 1, 6);
+        grid.add(phoneTxt, 1, 7);
         grid.add(addressTxt, 1, 8);
 
-        //setPadding of the grid
+        // setPadding of the grid
         grid.setPadding(new Insets(10, 10, 0, 10));
-        
+
         grid.setHgap(10);
-        
+
         grid.setVgap(10);
-        
-        //Adding participant event handler
+
+        // Adding participant event handler
         Button createParticipantBtn = new Button("Add");
         createParticipantBtn.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
-            public void handle( ActionEvent e ){
-                //call create participant on medical administrator with the text passed in
-            	String result = MedicalAdministrator.createParticipant(cosmoIdTxt.getText(), firstNameTxt.getText(), 
-            	        lastNameTxt.getText(), birthDatePicker.getValue(), familyPhysicianTxt.getText(), 
-            	        healthNumTxt.getText(), phoneTxt.getText(), addressTxt.getText() );
-            	
-            	//if no error message is recieved then close this window and refresh the table
-                	if(result.equals(""))
-                	{
-                	    createParticipantStage.close();
-                	    pTVCont.refreshTable();
-                	}
-                	//if there is an error message, display it
-                	else
-                	{
-                        lblWarning.setTextFill(Color.FIREBRICK);
-                	    lblWarning.setText(result);
-                	    if(result.equals("Phone Number must be 10 digits"))
-                	    {
-                            phoneTxt.setText("");
-                	        phoneTxt.setPromptText("Ex: 3062879111");
-                	    }
-                	}
-            	}
+            public void handle(ActionEvent e)
+            {
+                // call create participant on medical administrator with the
+                // text passed in
+                String result = MedicalAdministrator.createParticipant(
+                        cosmoIdTxt.getText(), firstNameTxt.getText(),
+                        lastNameTxt.getText(), birthDatePicker.getValue(),
+                        familyPhysicianTxt.getText(), healthNumTxt.getText(),
+                        phoneTxt.getText(), addressTxt.getText());
+
+                // if no error message is recieved then close this window and
+                // refresh the table
+                if (result.equals(""))
+                {
+                    createParticipantStage.close();
+                    pTVCont.refreshTable();
+                }
+                // if there is an error message, display it
+                else
+                {
+                    lblWarning.setTextFill(Color.FIREBRICK);
+                    lblWarning.setText(result);
+                    if (result.equals("Phone Number must be 10 digits"))
+                    {
+                        phoneTxt.setText("");
+                        phoneTxt.setPromptText("Ex: 3062879111");
+                    }
+                }
             }
-        );
-        
-        //reset the form event handler
-        Button resetBtn	= new Button("Reset");
-        resetBtn.setOnAction( new EventHandler<ActionEvent>()
+        });
+
+        // reset the form event handler
+        Button resetBtn = new Button("Reset");
+        resetBtn.setOnAction(new EventHandler<ActionEvent>()
         {
 
             @Override
             public void handle(ActionEvent arg0)
             {
-                //sets all values to default
+                // sets all values to default
                 cosmoIdTxt.setText("");
                 firstNameTxt.setText("");
                 lastNameTxt.setText("");
@@ -497,23 +507,23 @@ public class MedicalStaffMainPageGUI extends Application
                 addressTxt.setText("");
                 lblWarning.setText("");
             }
-    
-        });
-        
-        //Add the buttons to the grid
-        HBox buttonsHbox = new HBox();        
-        HBox resetHbox = new HBox();      
-        buttonsHbox.getChildren().addAll(createParticipantBtn);       
-        buttonsHbox.setAlignment(Pos.CENTER);    
-        resetHbox.getChildren().addAll(resetBtn);       
-        resetHbox.setAlignment(Pos.CENTER_RIGHT);
-        grid.add(buttonsHbox,1,9);      
-        grid.add(resetHbox,0 ,9);
-                    
-		return grid;
-	}
 
-	/**
+        });
+
+        // Add the buttons to the grid
+        HBox buttonsHbox = new HBox();
+        HBox resetHbox = new HBox();
+        buttonsHbox.getChildren().addAll(createParticipantBtn);
+        buttonsHbox.setAlignment(Pos.CENTER);
+        resetHbox.getChildren().addAll(resetBtn);
+        resetHbox.setAlignment(Pos.CENTER_RIGHT);
+        grid.add(buttonsHbox, 1, 9);
+        grid.add(resetHbox, 0, 9);
+
+        return grid;
+    }
+
+    /**
      * 
      * Purpose: Create Note Box
      * 
@@ -525,9 +535,9 @@ public class MedicalStaffMainPageGUI extends Application
         noteTitleView = new ListView<String>();
         // create list of notes
         // TODO make this automatically pull from the database of notes
-        noteTitleList = FXCollections.observableArrayList(
-                "Note 1", "Note 2", "Note 3", "Note 4", "Note 5", "Note 6",
-                "Note 7", "Note 8", "Note 9", "Note 10", "Note 11");
+        noteTitleList = FXCollections.observableArrayList("Note 1", "Note 2",
+                "Note 3", "Note 4", "Note 5", "Note 6", "Note 7", "Note 8",
+                "Note 9", "Note 10", "Note 11");
 
         // set notes list to listview
         noteTitleView.setItems(noteTitleList);
@@ -579,8 +589,10 @@ public class MedicalStaffMainPageGUI extends Application
 
         // set minimum width
         noteDisplayPane.setMinWidth(265);
-        //Sets the notebox's width to fit that of the parents window when it is resized
-        noteDisplayPane.prefWidthProperty().bind(medMainStage.widthProperty().divide(1.60));
+        // Sets the notebox's width to fit that of the parents window when it is
+        // resized
+        noteDisplayPane.prefWidthProperty().bind(
+                medMainStage.widthProperty().divide(1.60));
         hbox.setPadding(new Insets(10, 0, 0, 0));
         hbox.getChildren().addAll(noteTitleView, noteDisplayPane);
 
@@ -590,7 +602,8 @@ public class MedicalStaffMainPageGUI extends Application
     /**
      * 
      * Purpose: Create Main VBox
-     * @param admin 
+     * 
+     * @param admin
      * 
      * @return VBox main VBox
      */
@@ -602,15 +615,15 @@ public class MedicalStaffMainPageGUI extends Application
         BorderPane header = createHBoxHeader();
         // tab pane
         TabPane tabs = createTabs();
-        //Search bar
+        // Search bar
         HBox searchBar = createSearchBar(admin);
-        VBox.setMargin(searchBar, new Insets(5,0,5,0));
+        VBox.setMargin(searchBar, new Insets(5, 0, 5, 0));
         // preview notes
         HBox previewNotes = createHBoxPreviewNotes();
 
-
         // add everything to vbox
-        vbox.getChildren().addAll(header, tabs, searchBar, previewNotes, pTVCont.participantTable);
+        vbox.getChildren().addAll(header, tabs, searchBar, previewNotes,
+                pTVCont.participantTable);
 
         return vbox;
     }

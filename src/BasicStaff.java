@@ -9,8 +9,9 @@ import javafx.beans.property.SimpleStringProperty;
 public class BasicStaff extends StaffAccount
 {
 
-	/**
+    /**
      * Constructor for the BasicStaff class.
+     * 
      * @param username
      * @param lastName
      * @param firstName

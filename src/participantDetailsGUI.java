@@ -1,4 +1,4 @@
-
-public class participantDetailsGUI {
+public class participantDetailsGUI
+{
 
 }
