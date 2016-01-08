@@ -137,7 +137,7 @@ public class testRemoveUser
         userToRemove.setEmail("hyrule@warriors.com");
         assertTrue(userToRemove.GetFirstName().equals("hyrule@warriors.com"));
     }
-
+    
     public void testSetAccessLevel()
     {
         userToRemove.setAccessLevel("1");
