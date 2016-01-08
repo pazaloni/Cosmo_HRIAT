@@ -64,7 +64,8 @@ public class MedicalStaffMainPageGUI extends Application
     
     private Stage createParticipantStage;
     
-
+    private Stage viewParticipantDetailsStage = new Stage();
+    
     /**
      * Purpose: displays the GUI
      * 
@@ -231,6 +232,18 @@ public class MedicalStaffMainPageGUI extends Application
 
         // details button
         Button detailsButton = new Button("View Details");
+        
+        detailsButton.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				participantDetailsGUI detailsGUI = new participantDetailsGUI();
+				
+				detailsGUI.participantDetailsConstruct(viewParticipantDetailsStage);
+				
+			}
+        	
+        });
 
         // set margins
         VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
