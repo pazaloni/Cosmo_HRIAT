@@ -44,7 +44,7 @@ public class MedicalAdministrator extends BasicStaff
      * @return String - An error message if validation fails
      */
     public static String createParticipant(String cosmoID, String firstName, String lastName, LocalDate birthDate, 
-    		String familyPhysician, String healthNumber, String phone)
+    		String familyPhysician, String healthNumber, String phone, String address)
     {
          //initialize birth date string to an empty string
          String birthDateString = "";
@@ -63,7 +63,7 @@ public class MedicalAdministrator extends BasicStaff
     	//check to see if any of the fields are empty
 		if (cosmoID.isEmpty() || firstName.isEmpty() || lastName.isEmpty()
 				|| birthDateString.equals("") || familyPhysician.isEmpty()
-				|| healthNumber.isEmpty() || phone.isEmpty()) 
+				|| healthNumber.isEmpty() || phone.isEmpty() || address.isEmpty() )
 		{
 			result = "One of your fields is empty";
 		}
@@ -97,21 +97,22 @@ public class MedicalAdministrator extends BasicStaff
 			{
 
 			    //array of field names
-	            String values[][] = new String[14][2];
+	            String values[][] = new String[15][2];
 	            values[0][0] = "cosmoID";
 	            values[1][0] = "firstName";
 	            values[2][0] = "lastName";
 	            values[3][0] = "dateOfBirth";
 	            values[4][0] = "personalHealthNumber";
 	            values[5][0] = "phoneNum";
-	            values[6][0] = "dateUpdated";
-			    values[7][0] = "agencyID";
-			    values[8][0] = "chwNurseID";
-			    values[9][0] = "caregiverID";
-			    values[10][0] = "kinID";
-			    values[11][0] = "landlordID";
-			    values[12][0] = "physicianID";
-			    values[13][0] = "workID";
+	            values[6][0] = "address";
+	            values[7][0] = "dateUpdated";
+			    values[8][0] = "agencyID";
+			    values[9][0] = "chwNurseID";
+			    values[10][0] = "caregiverID";
+			    values[11][0] = "kinID";
+			    values[12][0] = "landlordID";
+			    values[13][0] = "physicianID";
+			    values[14][0] = "workID";
 			    
 	            //get the current date to insert into "lastUpdated"
                 Calendar c = Calendar.getInstance();           
@@ -125,14 +126,15 @@ public class MedicalAdministrator extends BasicStaff
                 values[3][1] = birthDateString;
                 values[4][1] = healthNumber;
                 values[5][1] = phone;
-                values[6][1] = formattedDate;
-                values[7][1] = "1";
+                values[6][1] = address;
+                values[7][1] = formattedDate;
                 values[8][1] = "1";
                 values[9][1] = "1";
                 values[10][1] = "1";
                 values[11][1] = "1";
                 values[12][1] = "1";
                 values[13][1] = "1";
+                values[14][1] = "1";
         
                 //inserting into the database
                 boolean successful = db.insert(values, "Participant");

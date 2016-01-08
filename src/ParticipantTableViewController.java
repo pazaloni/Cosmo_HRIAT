@@ -46,7 +46,7 @@ public class ParticipantTableViewController
 		ArrayList<String> participantInfo = new ArrayList<String>();
 		//TODO fix to query appropriate address, emergency info
 		//correct table Participant instead of Participant
-		ResultSet rs = db.select("cosmoID, firstName, lastName, city, province,  "
+		ResultSet rs = db.select("cosmoID, firstName, lastName, address, "
 				+ "dateUpdated", "Participant", "", "");
 		
 		//Strings to represent the TODO fix it
@@ -55,10 +55,8 @@ public class ParticipantTableViewController
 	    String lastName;
 	    String participantName;
 	    
-	    //concatenate address
-	    String city;
-	    String province;
-	    String participantAddress; 
+	    //address
+	    String address; 
 	    
 	    String emergencyContactName = "";
 	    String emergencyContactPhone = ""; //TODO Get from database
@@ -72,37 +70,20 @@ public class ParticipantTableViewController
 				System.out.println(cosmoID);
 				firstName = rs.getString(2);
 				lastName = rs.getString(3);
-				city = rs.getString(4);
-				province = rs.getString(5);
+				address = rs.getString(4);
+
 				
-				//check if the city is null
-				if(city == null)
-				{
-				    city = "";
-				}
-				else
-				{
-				    city += ", ";
-				}
-				
-				//check if the province is null
-				if(province == null)
-				{
-				    province = "";
-				}
-				
+
 				//concatenate name
 				participantName = firstName + " " + lastName;
-				
-				//concatenate address
-				participantAddress = city + "" + province;
+
 				
 				//get the last time the information was updated
-				informationLastUpdated = rs.getString(6);
+				informationLastUpdated = rs.getString(5);
 				
 				//create the participant object
 				Participant participant = new Participant(cosmoID, participantName,
-			            participantAddress, emergencyContactName,
+			            address, emergencyContactName,
 			            emergencyContactPhone, informationLastUpdated);
 				
 				//add the participant into the tableview

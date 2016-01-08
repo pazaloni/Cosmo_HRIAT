@@ -364,7 +364,7 @@ public class MedicalStaffMainPageGUI extends Application
             	createParticipantStage = new Stage();
             	createParticipantStage.setTitle("Create Participant");
             	
-            	createParticipantStage.setScene(new Scene(createParticipantPopUp(), 300, 315));
+            	createParticipantStage.setScene(new Scene(createParticipantPopUp(), 300, 350));
                 createParticipantStage.initModality(Modality.APPLICATION_MODAL);
                 createParticipantStage.initOwner(medMainStage);            
                 createParticipantStage.setResizable(false);
@@ -406,6 +406,7 @@ public class MedicalStaffMainPageGUI extends Application
         Label healthNumLbl = new Label("Health Number");
         Label phoneLbl = new Label("Phone Number");      
         Label cosmoIdLbl = new Label("Cosmo ID");
+        Label addressLbl = new Label("Address");
         
         //the text fields
         TextField firstNameTxt = new TextField();
@@ -415,8 +416,8 @@ public class MedicalStaffMainPageGUI extends Application
         TextField healthNumTxt = new TextField();
         TextField phoneTxt = new TextField();
         phoneTxt.setPromptText("Ex: 3062879111");
-        
         TextField cosmoIdTxt = new TextField();
+        TextField addressTxt = new TextField();
         
         //add the form to the grid
         grid.add(cosmoIdLbl, 0 , 1);
@@ -425,7 +426,8 @@ public class MedicalStaffMainPageGUI extends Application
         grid.add(birthdateLbl, 0 , 4);
         grid.add(familyPhysicianLbl, 0 , 5);
         grid.add(healthNumLbl, 0 , 6);
-        grid.add(phoneLbl, 0 , 7);      
+        grid.add(phoneLbl, 0 , 7);  
+        grid.add(addressLbl, 0, 8);
 
         grid.add(lblWarning, 1, 0);
         grid.add(cosmoIdTxt, 1 , 1);
@@ -435,6 +437,7 @@ public class MedicalStaffMainPageGUI extends Application
         grid.add(familyPhysicianTxt, 1 , 5);
         grid.add(healthNumTxt, 1 , 6);
         grid.add(phoneTxt, 1 , 7);
+        grid.add(addressTxt, 1, 8);
 
         //setPadding of the grid
         grid.setPadding(new Insets(10, 10, 0, 10));
@@ -452,7 +455,7 @@ public class MedicalStaffMainPageGUI extends Application
                 //call create participant on medical administrator with the text passed in
             	String result = MedicalAdministrator.createParticipant(cosmoIdTxt.getText(), firstNameTxt.getText(), 
             	        lastNameTxt.getText(), birthDatePicker.getValue(), familyPhysicianTxt.getText(), 
-            	        healthNumTxt.getText(), phoneTxt.getText() );
+            	        healthNumTxt.getText(), phoneTxt.getText(), addressTxt.getText() );
             	
             	//if no error message is recieved then close this window and refresh the table
                 	if(result.equals(""))
@@ -491,6 +494,7 @@ public class MedicalStaffMainPageGUI extends Application
                 familyPhysicianTxt.setText("");
                 healthNumTxt.setText("");
                 phoneTxt.setText("");
+                addressTxt.setText("");
                 lblWarning.setText("");
             }
     
@@ -503,8 +507,8 @@ public class MedicalStaffMainPageGUI extends Application
         buttonsHbox.setAlignment(Pos.CENTER);    
         resetHbox.getChildren().addAll(resetBtn);       
         resetHbox.setAlignment(Pos.CENTER_RIGHT);
-        grid.add(buttonsHbox,1,8);      
-        grid.add(resetHbox,0 ,8);
+        grid.add(buttonsHbox,1,9);      
+        grid.add(resetHbox,0 ,9);
                     
 		return grid;
 	}
