@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="G:/git/prj5_cosmo_industries/UCanAccess-3.0.2-bin/lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="G:/git/prj5_cosmo_industries/UCanAccess-3.0.2-bin/lib/hsqldb.jar"/>
 	<classpathentry kind="lib" path="G:/git/prj5_cosmo_industries/UCanAccess-3.0.2-bin/lib/jackcess-2.1.2.jar"/>
+	<classpathentry kind="lib" path="G:/participantImages"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

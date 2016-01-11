@@ -1,15 +1,21 @@
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -31,6 +37,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -50,8 +58,6 @@ public class participantDetailsGUI extends Application
     
     public static Stage participantMainStage;
 
-    private Button logout;
-
     private ImageView previewPicture;
 
     private ListView<String> noteTitleView;
@@ -60,9 +66,9 @@ public class participantDetailsGUI extends Application
     
     private Stage createParticipantStage;
     
-    private VBox allergiesBox = new VBox();
+    private int cosmoID;
     
-    private VBox seizuresBox = new VBox();
+    private DatabaseHelper DBObject = new DatabaseHelper();
     
 
     /**
@@ -72,7 +78,7 @@ public class participantDetailsGUI extends Application
     @Override
     public void start( Stage stage ) throws Exception
     {
-        participantDetailsConstruct(stage);
+        participantDetailsConstruct(stage, this.cosmoID);
     }
 
     /**
@@ -82,10 +88,11 @@ public class participantDetailsGUI extends Application
      * 
      * @param stage: the stage the medical staff will see
      */
-    public void participantDetailsConstruct( Stage stage )
+    public void participantDetailsConstruct( Stage stage, int cosmoID )
     {
         dbObject.connect();
         
+        this.cosmoID = cosmoID;
         
         participantMainStage = stage;
         participantMainStage.setTitle("Cosmo Industries");
@@ -110,28 +117,6 @@ public class participantDetailsGUI extends Application
         logoAndLogin.setPadding(new Insets(15, 12, 15, 12));
         logoAndLogin.setStyle("-fx-background-color: #FFFFFF;");
 
-        // Logout button
-        logout = new Button("Log Out");
-        logout.setPrefSize(100, 20);
-
-        logout.setOnAction(new EventHandler<ActionEvent>()
-        {
-            @Override
-            public void handle( ActionEvent e )
-            {
-                participantMainStage.close();
-                LoginGUI test5 = new LoginGUI();
-                try
-                {
-                    test5.start(participantMainStage);
-                }
-                catch ( Exception e1 )
-                {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-            }
-        });
         // logo image size
         ImageView logo = new ImageView(new Image("images/CosmoIconLong.png"));
         logo.setFitWidth(400);
@@ -139,7 +124,6 @@ public class participantDetailsGUI extends Application
 
         // set the image left and right
         logoAndLogin.setLeft(logo);
-        logoAndLogin.setRight(logout);
 
         return logoAndLogin;
     }
@@ -173,7 +157,7 @@ public class participantDetailsGUI extends Application
         other.closableProperty().set(false);
 
         // set the size of the tabs and add to the pane
-        tabPane.setTabMinWidth(175);
+        tabPane.setTabMinWidth(202);
         tabPane.getTabs().addAll(medicalInformation, medications, vaccinationDetails, other);
         tabPane.setMinHeight(29);
 
@@ -200,7 +184,7 @@ public class participantDetailsGUI extends Application
         BorderPane previewPane = createPreviewPane();
         
         //create allergies and seizures pane
-        VBox allergiesAndSeizuresPane = createAllergiesAndSeizuresInfoPane();
+        HBox allergiesAndSeizuresPane = createAllergiesAndSeizuresInfoPane();
 
         // add preview pane and the allergies and seizures pane
         hbox.getChildren().addAll(previewPane, allergiesAndSeizuresPane);
@@ -274,6 +258,8 @@ public class participantDetailsGUI extends Application
         Label phnLabel = new Label("PHN: ");
         Label diagnosislabel = new Label("Diagnosis: ");
         Label addressLabel = new Label("Address: ");
+        
+        cosmoIDLabel.setMinWidth(100);
 
         // set label margins
         cosmoIDLabel.setPadding(new Insets(5, 5, 5, 5));
@@ -283,13 +269,47 @@ public class participantDetailsGUI extends Application
         diagnosislabel.setPadding(new Insets(5,5,5,5));
         addressLabel.setPadding(new Insets(5,5,5,5));
 
+        
+        //get participant name, phn, diagnosis, and address from database
+        ResultSet results = DBObject.select("firstName, lastName, personalHealthNumber, conditionName,"
+        		+ "description, address, imagePath", "Participant, Condition", 
+        		"cosmoID = 123", "");
+        
+        
         // set the participant Labels
-        Label cosmoIDText = new Label("0");
-        Label firstNameText = new Label("John");
-        Label lastNameText = new Label("Doe");
-        Label phnText = new Label("");
-        Label diagnosisText = new Label("To be determined");
-        Label addressText = new Label("123 Fake Street");
+        Label cosmoIDText = new Label();
+        Label firstNameText = new Label();
+        Label lastNameText = new Label();
+        Label phnText = new Label();
+        Label diagnosisText = new Label();
+        Label addressText = new Label();
+        
+        try {
+			while(results.next())
+			{
+				System.out.println("Results: " + results.getString(1));
+				cosmoIDText.setText(this.cosmoID + "");
+				firstNameText.setText(results.getString(1));
+				lastNameText.setText(results.getString(2));
+				phnText.setText(results.getString(3));
+				diagnosisText.setText(results.getString(4) +  ", " + results.getString(5));
+				addressText.setText(results.getString(6));
+				
+				URL path = getClass().getResource(results.getString(7));
+				
+				try {
+					System.out.println(path.toExternalForm());
+					previewPicture = new ImageView(new Image(path.openStream()));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
         cosmoIDText.setMaxWidth(150);
         cosmoIDText.setMinWidth(150);
@@ -360,20 +380,54 @@ public class participantDetailsGUI extends Application
         return vbox;
     }
     
-    private VBox createAllergiesAndSeizuresInfoPane()
+    
+	/**
+     * 
+     * Purpose: Create Note Box
+     * 
+     * @return HBox create note box
+     */
+    private HBox createAllergiesAndSeizuresInfoPane()
     {
-    	VBox vbox = new VBox();
+        HBox hbox = new HBox();
+       
+        // note display pane
+        VBox noteDisplayPane = new VBox();
+
+        noteDisplayPane.setStyle("-fx-background-color: #FFFFFF;");
+        noteDisplayPane.setPadding(new Insets(10, 10, 0, 10));
+
+        
+        HBox allergiesDescBox = new HBox();
+        allergiesDescBox.setStyle("-fx-border-color: black;");
+        HBox seizuresDescBox = new HBox();
+        seizuresDescBox.setStyle("-fx-border-color: black;");
+        
+        Text allergiesDescription = new Text("Test Allergies Desc");
+    	Text seizuresDescription = new Text("Test Seizures Desc");
     	
-    	vbox.setStyle("-fx-background-color: #FFFFFF;");
-    	vbox.setPadding(new Insets(10, 10, 0, 10));
+    	allergiesDescBox.getChildren().add(allergiesDescription);
+    	allergiesDescBox.setMinHeight(100);
+    	seizuresDescBox.getChildren().add(seizuresDescription);
+    	seizuresDescBox.setMinHeight(100);
+    	
+    	allergiesDescription.setStyle("-fx-border-color: black;");
+    	seizuresDescription.setStyle("-fx-border-color: black;");
     	
     	Label allergiesLabel = new Label("Allergies:");
     	Label seizuresLabel = new Label("Seizures:");
-    	
-    	vbox.getChildren().addAll(allergiesLabel, allergiesBox, 
-    			seizuresLabel, seizuresBox);
-    	
-    	return vbox;
+        
+        noteDisplayPane.getChildren().addAll(allergiesLabel, allergiesDescBox,
+        		seizuresLabel, seizuresDescBox);
+        
+        // set minimum width
+        noteDisplayPane.setMinWidth(265);
+        //Sets the notebox's width to fit that of the parents window when it is resized
+        noteDisplayPane.prefWidthProperty().bind(participantMainStage.widthProperty().divide(1.50));
+        hbox.setPadding(new Insets(10, 0, 0, 0));
+        hbox.getChildren().addAll(noteDisplayPane);
+
+        return hbox;
     }
 
 }

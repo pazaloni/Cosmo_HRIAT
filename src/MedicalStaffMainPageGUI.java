@@ -238,8 +238,8 @@ public class MedicalStaffMainPageGUI extends Application
 			@Override
 			public void handle(ActionEvent event) {
 				participantDetailsGUI detailsGUI = new participantDetailsGUI();
-				
-				detailsGUI.participantDetailsConstruct(viewParticipantDetailsStage);
+				//hard coded cosmo ID for testing purposes
+				detailsGUI.participantDetailsConstruct(viewParticipantDetailsStage, 123);
 				
 			}
         	
