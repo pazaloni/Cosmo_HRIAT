@@ -64,14 +64,13 @@ public class MedicalStaffMainPageGUI extends Application
 
     private Stage createParticipantStage;
 
-    private Stage viewParticipantDetailsStage = new Stage();
 
     /**
      * Purpose: displays the GUI
      * 
      */
     @Override
-    public void start(Stage stage) throws Exception
+    public void start( Stage stage ) throws Exception
     {
         medMainPageConstruct(stage, true);
     }
@@ -81,10 +80,9 @@ public class MedicalStaffMainPageGUI extends Application
      * Purpose: Construct the main stage for the medical staff when they have
      * successfully logged in
      * 
-     * @param stage
-     *            : the stage the medical staff will see
+     * @param stage : the stage the medical staff will see
      */
-    public void medMainPageConstruct(Stage stage, boolean admin)
+    public void medMainPageConstruct( Stage stage, boolean admin )
     {
         dbObject.connect();
 
@@ -121,7 +119,7 @@ public class MedicalStaffMainPageGUI extends Application
         logout.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
-            public void handle(ActionEvent e)
+            public void handle( ActionEvent e )
             {
                 medMainStage.close();
                 LoginGUI test5 = new LoginGUI();
@@ -129,7 +127,7 @@ public class MedicalStaffMainPageGUI extends Application
                 {
                     test5.start(medMainStage);
                 }
-                catch (Exception e1)
+                catch ( Exception e1 )
                 {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
@@ -227,7 +225,7 @@ public class MedicalStaffMainPageGUI extends Application
         {
             previewPicture = new ImageView(new Image(url.openStream()));
         }
-        catch (IOException e)
+        catch ( IOException e )
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -235,7 +233,7 @@ public class MedicalStaffMainPageGUI extends Application
 
         // details button
         Button detailsButton = new Button("View Details");
-        
+
         // set margins
         VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
 
@@ -332,7 +330,7 @@ public class MedicalStaffMainPageGUI extends Application
      * 
      * @return HBox search bar
      */
-    private HBox createSearchBar(boolean admin)
+    private HBox createSearchBar( boolean admin )
     {
         // create search bar
         HBox searchBar = new HBox();
@@ -356,13 +354,13 @@ public class MedicalStaffMainPageGUI extends Application
         HBox.setMargin(searchBy, new Insets(0, 5, 0, 10));
         HBox.setMargin(searchField, new Insets(0, 5, 0, 5));
         HBox.setMargin(searchButton, new Insets(0, 5, 0, 5));
-        if (admin)
+        if ( admin )
         {
             Button addParticipantButton = new Button("Add Participant");
             addParticipantButton.setOnAction(new EventHandler<ActionEvent>()
             {
                 @Override
-                public void handle(ActionEvent e)
+                public void handle( ActionEvent e )
                 {
                     // Open addNewParticipant Window
                     createParticipantStage = new Stage();
@@ -420,6 +418,11 @@ public class MedicalStaffMainPageGUI extends Application
         TextField firstNameTxt = new TextField();
         TextField lastNameTxt = new TextField();
         DatePicker birthDatePicker = new DatePicker();
+        birthDatePicker.setOnMouseClicked(event -> {
+
+            birthDatePicker.setValue(LocalDate.now().minusYears(20));
+
+        });
         TextField familyPhysicianTxt = new TextField();
         TextField healthNumTxt = new TextField();
         TextField phoneTxt = new TextField();
@@ -459,7 +462,7 @@ public class MedicalStaffMainPageGUI extends Application
         createParticipantBtn.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
-            public void handle(ActionEvent e)
+            public void handle( ActionEvent e )
             {
                 // call create participant on medical administrator with the
                 // text passed in
@@ -471,7 +474,7 @@ public class MedicalStaffMainPageGUI extends Application
 
                 // if no error message is recieved then close this window and
                 // refresh the table
-                if (result.equals(""))
+                if ( result.equals("") )
                 {
                     createParticipantStage.close();
                     pTVCont.refreshTable();
@@ -481,7 +484,7 @@ public class MedicalStaffMainPageGUI extends Application
                 {
                     lblWarning.setTextFill(Color.FIREBRICK);
                     lblWarning.setText(result);
-                    if (result.equals("Phone Number must be 10 digits"))
+                    if ( result.equals("Phone Number must be 10 digits") )
                     {
                         phoneTxt.setText("");
                         phoneTxt.setPromptText("Ex: 3062879111");
@@ -496,7 +499,7 @@ public class MedicalStaffMainPageGUI extends Application
         {
 
             @Override
-            public void handle(ActionEvent arg0)
+            public void handle( ActionEvent arg0 )
             {
                 // sets all values to default
                 cosmoIdTxt.setText("");
@@ -609,7 +612,7 @@ public class MedicalStaffMainPageGUI extends Application
      * 
      * @return VBox main VBox
      */
-    private VBox createMainVBox(boolean admin)
+    private VBox createMainVBox( boolean admin )
     {
         VBox vbox = new VBox();
 
