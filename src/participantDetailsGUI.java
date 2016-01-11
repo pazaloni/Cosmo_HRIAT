@@ -219,7 +219,7 @@ public class participantDetailsGUI extends Application
         VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
 
         // add picture and button to picture box
-        pictureBox.getChildren().addAll(previewPicture);
+       
         pictureBox.setAlignment(Pos.CENTER);
         pictureBox.setStyle("-fx-background-color: #FFFFFF;");
         pictureBox.setAlignment(Pos.TOP_CENTER);
@@ -241,8 +241,7 @@ public class participantDetailsGUI extends Application
         generateFormsBtn.setMaxWidth(100);
         generateFormsBtn.setMinWidth(100);
         
-        //add buttons to the previewPane
-        pictureBox.getChildren().addAll(editBtn, viewDocumentsBtn, generateFormsBtn);
+        
         
 
         // create basic info pane
@@ -300,6 +299,10 @@ public class participantDetailsGUI extends Application
 				try {
 					System.out.println(path.toExternalForm());
 					previewPicture = new ImageView(new Image(path.openStream()));
+					previewPicture.setFitWidth(122);
+					previewPicture.setFitHeight(121);
+					
+					pictureBox.getChildren().addAll(previewPicture);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -310,6 +313,9 @@ public class participantDetailsGUI extends Application
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+        
+        //add buttons to the previewPane
+        pictureBox.getChildren().addAll(editBtn, viewDocumentsBtn, generateFormsBtn);
 
         cosmoIDText.setMaxWidth(150);
         cosmoIDText.setMinWidth(150);
