@@ -64,7 +64,6 @@ public class MedicalStaffMainPageGUI extends Application
 
     private Stage createParticipantStage;
 
-
     /**
      * Purpose: displays the GUI
      * 
@@ -418,6 +417,9 @@ public class MedicalStaffMainPageGUI extends Application
         TextField firstNameTxt = new TextField();
         TextField lastNameTxt = new TextField();
         DatePicker birthDatePicker = new DatePicker();
+
+        // Adding a click listener to make the date in thebox default to 20
+        // years ago (client request)
         birthDatePicker.setOnMouseClicked(event -> {
 
             birthDatePicker.setValue(LocalDate.now().minusYears(20));
