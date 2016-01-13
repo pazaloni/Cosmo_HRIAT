@@ -404,21 +404,9 @@ public class participantDetailsGUI extends Application
         noteDisplayPane.setPadding(new Insets(10, 10, 0, 10));
 
         
-        HBox allergiesDescBox = new HBox();
-        allergiesDescBox.setStyle("-fx-border-color: black;");
-        HBox seizuresDescBox = new HBox();
-        seizuresDescBox.setStyle("-fx-border-color: black;");
+        VBox allergiesDescBox = fetchAndFormatAllergyInfo();
+        VBox seizuresDescBox = fetchAndFormatSeizureInfo();
         
-        Text allergiesDescription = new Text("Test Allergies Desc");
-    	Text seizuresDescription = new Text("Test Seizures Desc");
-    	
-    	allergiesDescBox.getChildren().add(allergiesDescription);
-    	allergiesDescBox.setMinHeight(100);
-    	seizuresDescBox.getChildren().add(seizuresDescription);
-    	seizuresDescBox.setMinHeight(100);
-    	
-    	allergiesDescription.setStyle("-fx-border-color: black;");
-    	seizuresDescription.setStyle("-fx-border-color: black;");
     	
     	Label allergiesLabel = new Label("Allergies:");
     	Label seizuresLabel = new Label("Seizures:");
@@ -434,6 +422,62 @@ public class participantDetailsGUI extends Application
         hbox.getChildren().addAll(noteDisplayPane);
 
         return hbox;
+    }
+    
+    private VBox fetchAndFormatAllergyInfo()
+    {
+    	VBox vbox = new VBox();
+    	
+    	vbox.setStyle("-fx-border-color: black;");
+    	vbox.setMinHeight(100);
+    	
+    	Text allergiesDescription = new Text("Test Allergies Desc");
+    	
+    	ResultSet rs = DBObject.select("allergicTo, allergyType, description",
+    			"Allergies", "cosmoID = " + this.cosmoID, "");
+    	
+    	boolean hasRecords = false;
+    	
+    	try
+    	{
+    		while(rs.next())
+    		{
+    			hasRecords = true;
+    			Label allergen = new Label("Allergen: " + rs.getString(1));
+    			allergen.setWrapText(true);
+    			Label type = new Label("Type: " + rs.getString(2));
+    			type.setWrapText(true);
+    			Label desc = new Label("Description: " + rs.getString(3));
+    			desc.setWrapText(true);
+    			
+    			vbox.getChildren().addAll(allergen, type, desc);
+    		}
+    	}
+    	catch(SQLException e)
+    	{
+    		e.printStackTrace();
+    	}
+    	
+    	if(!hasRecords)
+    	{
+    		vbox.getChildren().add(new Label("None"));
+    	}
+    	
+    	return vbox;
+    }
+    
+    private VBox fetchAndFormatSeizureInfo()
+    {
+    	VBox vbox = new VBox();
+    	
+    	vbox.setStyle("-fx-border-color: black;");
+    	vbox.setMinHeight(100);
+    	
+    	Text seizuresDescription = new Text("Test Seizures Desc");
+    	
+    	vbox.getChildren().add(seizuresDescription);
+    	
+    	return vbox;
     }
 
 }
