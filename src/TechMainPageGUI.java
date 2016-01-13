@@ -234,6 +234,8 @@ public class TechMainPageGUI extends Application
     /**
      * 
      * Purpose: Display a pop-up box with information to fill out for a user
+     * 
+     * @param newUser - If true creates a user, if false edits the user
      */
     private void manageUser(boolean newUser)
     {
