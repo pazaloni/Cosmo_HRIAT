@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -175,6 +176,18 @@ public class TechMainPageGUI extends Application
                 lblWarning.setText("");
                 manageUser(EDIT_STAFF);
             }
+            else
+            {
+                Stage popUpStage = new Stage();
+                
+                //pop up a message saying that you cannot delete the current user
+                PopUpMessage messageBox = new PopUpMessage("No user selected", popUpStage);
+                
+                Scene popScene = new Scene(messageBox.root, 300, 75);
+                popUpStage.setScene(popScene);
+                popUpStage.showAndWait();
+                
+            }
 
         });
 
@@ -242,11 +255,34 @@ public class TechMainPageGUI extends Application
         Label lblUsername = new Label("Username");
         lblUsername.setFont(new Font(15));
         TextField username = new TextField();
-
+        
+        //checkbox to show/hide passwords
+        CheckBox showPassword = new CheckBox();
+        Label lblShowPassword = new Label("Show Password");
+        HBox showPasswordBox = new HBox();
+        showPasswordBox.getChildren().addAll(showPassword, lblShowPassword);
+        
         Label lblPassword = new Label("Password");
         lblPassword.setFont(new Font(15));
         PasswordField password = new PasswordField();
-
+        
+        //password field in textfield form, set not visible by default
+        TextField passwordText = new TextField();
+        passwordText.setManaged(false);
+        passwordText.setVisible(false);
+        
+        //bind password to checkbox
+        //show text field when selected
+        passwordText.managedProperty().bind(showPassword.selectedProperty());
+        passwordText.visibleProperty().bind(showPassword.selectedProperty());
+        //show password field when not selected
+        password.managedProperty().bind(showPassword.selectedProperty().not());
+        password.visibleProperty().bind(showPassword.selectedProperty().not());
+        
+        //bind the values bidirectionally
+        passwordText.textProperty().bindBidirectional(password.textProperty());
+        
+        
         Label lblEmail = new Label("Email");
         lblEmail.setFont(new Font(15));
         TextField email = new TextField();
@@ -254,7 +290,24 @@ public class TechMainPageGUI extends Application
         Label lblRepeatPassword = new Label("Repeat Password");
         lblRepeatPassword.setFont(new Font(15));
         PasswordField repeatPassword = new PasswordField();
-
+        
+        //password field in textfield form, set not visible by default
+        TextField repeatPasswordText = new TextField();
+        repeatPasswordText.setManaged(false);
+        repeatPasswordText.setVisible(false);
+        
+        //bind password to checkbox
+        //show text field when selected
+        repeatPasswordText.managedProperty().bind(showPassword.selectedProperty());
+        repeatPasswordText.visibleProperty().bind(showPassword.selectedProperty());
+        //show password field when not selected
+        repeatPassword.managedProperty().bind(showPassword.selectedProperty().not());
+        repeatPassword.visibleProperty().bind(showPassword.selectedProperty().not());
+        
+        //bind the values bidirectionally
+        repeatPasswordText.textProperty().bindBidirectional(repeatPassword.textProperty());
+        
+        
         Label lblSecurityLevel = new Label("Security Level");
         lblSecurityLevel.setFont(new Font(15));
         ObservableList<String> securityLevels = FXCollections
@@ -362,11 +415,14 @@ public class TechMainPageGUI extends Application
         newUserForm.add(email, 1, 4);
         newUserForm.add(lblPassword, 0, 5);
         newUserForm.add(password, 1, 5);
+        newUserForm.add(passwordText, 1, 5);
         newUserForm.add(lblRepeatPassword, 0, 6);
-        newUserForm.add(repeatPassword, 1, 6);
-        newUserForm.add(lblSecurityLevel, 0, 7);
-        newUserForm.add(cboSecurityLevels, 1, 7);
-        newUserForm.add(completionButtons, 1, 8);
+        newUserForm.add(repeatPassword, 1, 6); 
+        newUserForm.add(repeatPasswordText,1,6);
+        newUserForm.add(showPasswordBox,1,7);  // added showPassword checkbox
+        newUserForm.add(lblSecurityLevel, 0, 8);
+        newUserForm.add(cboSecurityLevels, 1, 8);
+        newUserForm.add(completionButtons, 1, 9);
         newUserForm.add(lblWarning, 0, 0, 2, 1);
 
         Scene scene = new Scene(newUserForm);
