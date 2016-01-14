@@ -24,6 +24,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -405,7 +407,7 @@ public class participantDetailsGUI extends Application
 
         
         VBox allergiesDescBox = fetchAndFormatAllergyInfo();
-        VBox seizuresDescBox = fetchAndFormatSeizureInfo();
+        ScrollPane seizuresDescBox = fetchAndFormatSeizureInfo();
         
     	
     	Label allergiesLabel = new Label("Allergies:");
@@ -466,18 +468,61 @@ public class participantDetailsGUI extends Application
     	return vbox;
     }
     
-    private VBox fetchAndFormatSeizureInfo()
+    private ScrollPane fetchAndFormatSeizureInfo()
     {
     	VBox vbox = new VBox();
+    	ScrollPane scrollPane = new ScrollPane();
     	
-    	vbox.setStyle("-fx-border-color: black;");
     	vbox.setMinHeight(100);
     	
-    	Text seizuresDescription = new Text("Test Seizures Desc");
     	
-    	vbox.getChildren().add(seizuresDescription);
     	
-    	return vbox;
+    	ResultSet rs = DBObject.select("seizureType, description, frequency, duration, aftermath, medicationName",
+    			"Seizures", "cosmoID = " + this.cosmoID, "");
+    	
+    	boolean hasRecords = false;
+    	
+    	try
+    	{
+    		while(rs.next())
+    		{
+    			hasRecords = true;
+    			Label seizureType = new Label("Seizure Type: " + rs.getString(1));
+    			 seizureType.setWrapText(true);
+    			Label seizureDesc = new Label("Description:  " + rs.getString(2));
+    			seizureDesc.setWrapText(true);
+    			Label seizureFreq = new Label("Frequency: " + rs.getString(3));
+    			seizureFreq.setWrapText(true);
+    			Label seizureDuration = new Label("Duration: " + rs.getString(4));
+    			seizureDuration.setWrapText(true);
+    			Label seizureAfter = new Label("Aftermath: " + rs.getString(5));
+    			seizureAfter.setWrapText(true);
+    			Label medicationName = new Label("Medication Name: " + rs.getString(6));
+    			medicationName.setWrapText(true);
+    			
+    			vbox.getChildren().addAll(seizureType, seizureDesc, seizureFreq, seizureDuration, seizureAfter, medicationName);
+    		}
+    	}
+    	catch(SQLException e)
+    	{
+    		e.printStackTrace();
+    	}
+    	
+    	if(!hasRecords)
+    	{
+    		vbox.getChildren().add(new Label("None"));
+    	}
+    	
+    	scrollPane.setContent(vbox);
+    	scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+    	scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+    	scrollPane.setHmax(vbox.getWidth());
+    	
+    	
+    	return scrollPane;
+    	
+    
+    
     }
 
 }
