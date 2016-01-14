@@ -99,23 +99,23 @@ public class MedicalAdministrator extends BasicStaff
             // everything is valid
             else
             {
-                boolean insertedPhysician = false;
+                boolean insertedPhysician = true;
                 boolean successful = false;
                 
                 
                 //try to find a doctor already in the database
-                ResultSet physicianExists = db.select("physicianID", 
+                ResultSet physicianExists = db.select("count(*)", 
                         "physician", "firstName = '" + physicianFName + 
                         "' AND lastName = '" + physicianLName + "'"
                         , "");
                 
-                int recordSize = 0;
+                int recordExists = 0;
                 
                 //check if there is already a physician with that name
                 try
                 {
                     physicianExists.next();
-                    recordSize = physicianExists.getFetchSize();  
+                    recordExists = physicianExists.getInt(1);
                 }
                 catch (SQLException e)
                 {
@@ -123,7 +123,7 @@ public class MedicalAdministrator extends BasicStaff
                 }
                 
                 //if there is no physician with that name
-                if (recordSize == 0)
+                if (recordExists == 0)
                 {
                     String physicianValues[][] = new String [2][2];
                     
