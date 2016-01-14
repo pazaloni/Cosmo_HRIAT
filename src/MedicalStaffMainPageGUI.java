@@ -385,7 +385,7 @@ public class MedicalStaffMainPageGUI extends Application
                     createParticipantStage.setTitle("Create Participant");
 
                     createParticipantStage.setScene(new Scene(
-                            createParticipantPopUp(), 300, 350));
+                            createParticipantPopUp(), 325, 400));
                     createParticipantStage
                             .initModality(Modality.APPLICATION_MODAL);
                     createParticipantStage.initOwner(medMainStage);
@@ -426,7 +426,8 @@ public class MedicalStaffMainPageGUI extends Application
         Label firstNameLbl = new Label("First Name");
         Label lastNameLbl = new Label("Last Name");
         Label birthdateLbl = new Label("Birthdate");
-        Label familyPhysicianLbl = new Label("Family Physician");
+        Label physicianFNameLbl = new Label("Physician First Name");
+        Label physicianLNameLbl = new Label("Physician Last Name");
         Label healthNumLbl = new Label("Health Number");
         Label phoneLbl = new Label("Phone Number");
         Label cosmoIdLbl = new Label("Cosmo ID");
@@ -444,7 +445,8 @@ public class MedicalStaffMainPageGUI extends Application
             birthDatePicker.setValue(LocalDate.now().minusYears(20));
 
         });
-        TextField familyPhysicianTxt = new TextField();
+        TextField physicianFNameTxt = new TextField();
+        TextField physicianLNameTxt = new TextField();
         TextField healthNumTxt = new TextField();
         TextField phoneTxt = new TextField();
         phoneTxt.setPromptText("Ex: 3062879111");
@@ -456,20 +458,22 @@ public class MedicalStaffMainPageGUI extends Application
         grid.add(firstNameLbl, 0, 2);
         grid.add(lastNameLbl, 0, 3);
         grid.add(birthdateLbl, 0, 4);
-        grid.add(familyPhysicianLbl, 0, 5);
-        grid.add(healthNumLbl, 0, 6);
-        grid.add(phoneLbl, 0, 7);
-        grid.add(addressLbl, 0, 8);
+        grid.add(physicianFNameLbl, 0, 5);
+        grid.add(physicianLNameLbl, 0, 6);
+        grid.add(healthNumLbl, 0, 7);
+        grid.add(phoneLbl, 0, 8);
+        grid.add(addressLbl, 0, 9);
 
         grid.add(lblWarning, 1, 0);
         grid.add(cosmoIdTxt, 1, 1);
         grid.add(firstNameTxt, 1, 2);
         grid.add(lastNameTxt, 1, 3);
         grid.add(birthDatePicker, 1, 4);
-        grid.add(familyPhysicianTxt, 1, 5);
-        grid.add(healthNumTxt, 1, 6);
-        grid.add(phoneTxt, 1, 7);
-        grid.add(addressTxt, 1, 8);
+        grid.add(physicianFNameTxt, 1, 5);
+        grid.add(physicianLNameTxt, 1, 6);
+        grid.add(healthNumTxt, 1, 7);
+        grid.add(phoneTxt, 1, 8);
+        grid.add(addressTxt, 1, 9);
 
         // setPadding of the grid
         grid.setPadding(new Insets(10, 10, 0, 10));
@@ -490,7 +494,8 @@ public class MedicalStaffMainPageGUI extends Application
                 String result = MedicalAdministrator.createParticipant(
                         cosmoIdTxt.getText(), firstNameTxt.getText(),
                         lastNameTxt.getText(), birthDatePicker.getValue(),
-                        familyPhysicianTxt.getText(), healthNumTxt.getText(),
+                        physicianFNameTxt.getText(), 
+                        physicianLNameTxt.getText(), healthNumTxt.getText(),
                         phoneTxt.getText(), addressTxt.getText());
 
                 // if no error message is recieved then close this window and
@@ -527,7 +532,8 @@ public class MedicalStaffMainPageGUI extends Application
                 firstNameTxt.setText("");
                 lastNameTxt.setText("");
                 birthDatePicker.setValue(null);
-                familyPhysicianTxt.setText("");
+                physicianFNameTxt.setText("");
+                physicianLNameTxt.setText("");
                 healthNumTxt.setText("");
                 phoneTxt.setText("");
                 addressTxt.setText("");
@@ -543,8 +549,8 @@ public class MedicalStaffMainPageGUI extends Application
         buttonsHbox.setAlignment(Pos.CENTER);
         resetHbox.getChildren().addAll(resetBtn);
         resetHbox.setAlignment(Pos.CENTER_RIGHT);
-        grid.add(buttonsHbox, 1, 9);
-        grid.add(resetHbox, 0, 9);
+        grid.add(buttonsHbox, 1, 10);
+        grid.add(resetHbox, 0, 10);
 
         return grid;
     }

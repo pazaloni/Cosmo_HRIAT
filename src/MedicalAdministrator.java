@@ -44,7 +44,8 @@ public class MedicalAdministrator extends BasicStaff
      * @return String - An error message if validation fails
      */
     public static String createParticipant(String cosmoID, String firstName,
-            String lastName, LocalDate birthDate, String familyPhysician,
+            String lastName, LocalDate birthDate, String physicianFName,
+            String physicianLName,
             String healthNumber, String phone, String address)
     {
         // initialize birth date string to an empty string
@@ -63,7 +64,8 @@ public class MedicalAdministrator extends BasicStaff
 
         // check to see if any of the fields are empty
         if (cosmoID.isEmpty() || firstName.isEmpty() || lastName.isEmpty()
-                || birthDateString.equals("") || familyPhysician.isEmpty()
+                || birthDateString.equals("") || physicianFName.isEmpty()
+                || physicianLName.isEmpty()
                 || healthNumber.isEmpty() || phone.isEmpty()
                 || address.isEmpty())
         {
@@ -97,49 +99,110 @@ public class MedicalAdministrator extends BasicStaff
             // everything is valid
             else
             {
-
-                // array of field names
-                String values[][] = new String[15][2];
-                values[0][0] = "cosmoID";
-                values[1][0] = "firstName";
-                values[2][0] = "lastName";
-                values[3][0] = "dateOfBirth";
-                values[4][0] = "personalHealthNumber";
-                values[5][0] = "phoneNum";
-                values[6][0] = "address";
-                values[7][0] = "dateUpdated";
-                values[8][0] = "agencyID";
-                values[9][0] = "chwNurseID";
-                values[10][0] = "caregiverID";
-                values[11][0] = "kinID";
-                values[12][0] = "landlordID";
-                values[13][0] = "physicianID";
-                values[14][0] = "workID";
-
-                // get the current date to insert into "lastUpdated"
-                Calendar c = Calendar.getInstance();
-                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-                String formattedDate = df.format(c.getTime());
-
-                // array of values to insert
-                values[0][1] = cosmoID;
-                values[1][1] = firstName;
-                values[2][1] = lastName;
-                values[3][1] = birthDateString;
-                values[4][1] = healthNumber;
-                values[5][1] = phone;
-                values[6][1] = address;
-                values[7][1] = formattedDate;
-                values[8][1] = "1";
-                values[9][1] = "1";
-                values[10][1] = "1";
-                values[11][1] = "1";
-                values[12][1] = "1";
-                values[13][1] = "1";
-                values[14][1] = "1";
-
-                // inserting into the database
-                boolean successful = db.insert(values, "Participant");
+                boolean insertedPhysician = true;
+                boolean successful = false;
+                
+                
+                //try to find a doctor already in the database
+                ResultSet physicianExists = db.select("count(*)", 
+                        "physician", "firstName = '" + physicianFName + 
+                        "' AND lastName = '" + physicianLName + "'"
+                        , "");
+                
+                int recordExists = 0;
+                
+                //check if there is already a physician with that name
+                try
+                {
+                    physicianExists.next();
+                    recordExists = physicianExists.getInt(1);
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                }
+                
+                //if there is no physician with that name
+                if (recordExists == 0)
+                {
+                    String physicianValues[][] = new String [2][2];
+                    
+                    physicianValues[0][0] = "firstName";
+                    physicianValues[1][0] = "lastName";
+                    
+                    physicianValues[0][1] = physicianFName;
+                    physicianValues[1][1] = physicianLName;
+                    
+                    insertedPhysician = db.insert(physicianValues, "Physician");
+                    
+                }
+                
+                //there is now a physician for the participant
+                if (insertedPhysician)
+                {
+                    //getting physician ID for participant insert
+                    ResultSet idResult = db.select("physicianID", 
+                            "physician", "firstName = '" + physicianFName + 
+                            "' AND lastName = '" + physicianLName + "'"
+                            , "");
+                    String physicianID = "";
+                    
+                    try
+                    {
+                        idResult.next();
+                        physicianID = idResult.getString(1);  
+                    }
+                    catch (SQLException e)
+                    {
+                        e.printStackTrace();
+                    }
+  
+                    
+                    // array of field names
+                    String values[][] = new String[15][2];
+                    values[0][0] = "cosmoID";
+                    values[1][0] = "firstName";
+                    values[2][0] = "lastName";
+                    values[3][0] = "dateOfBirth";
+                    values[4][0] = "personalHealthNumber";
+                    values[5][0] = "phoneNum";
+                    values[6][0] = "address";
+                    values[7][0] = "dateUpdated";
+                    values[8][0] = "agencyID";
+                    values[9][0] = "chwNurseID";
+                    values[10][0] = "caregiverID";
+                    values[11][0] = "kinID";
+                    values[12][0] = "landlordID";
+                    values[13][0] = "physicianID";
+                    values[14][0] = "workID";
+    
+                    // get the current date to insert into "lastUpdated"
+                    Calendar c = Calendar.getInstance();
+                    SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                    String formattedDate = df.format(c.getTime());
+    
+                    // array of values to insert
+                    values[0][1] = cosmoID;
+                    values[1][1] = firstName;
+                    values[2][1] = lastName;
+                    values[3][1] = birthDateString;
+                    values[4][1] = healthNumber;
+                    values[5][1] = phone;
+                    values[6][1] = address;
+                    values[7][1] = formattedDate;
+                    values[8][1] = "1";
+                    values[9][1] = "1";
+                    values[10][1] = "1";
+                    values[11][1] = "1";
+                    values[12][1] = "1";
+                    values[13][1] = physicianID;
+                    values[14][1] = "1";
+    
+                    // inserting into the database
+                    successful = db.insert(values, "Participant");
+                }
+                
+                //if failed on insert of physician or participant
                 if (!successful)
                 {
                     result = "The insertion was not successful";
