@@ -64,6 +64,13 @@ public class MedicalStaffMainPageGUI extends Application
 
     private Stage createParticipantStage;
 
+    // Preveiw labes for the participant
+    private Label cosmoIDText;
+    private Label firstNameText;
+    private Label lastNameText;
+    private Label seizureText;
+    private Label allergyText;
+
     /**
      * Purpose: displays the GUI
      * 
@@ -196,6 +203,7 @@ public class MedicalStaffMainPageGUI extends Application
         hbox.setStyle("-fx-background-color: #336699;");
 
         // create preview pane
+
         BorderPane previewPane = createPreviewPane();
         // create note box
         HBox noteBox = createNoteBox();
@@ -269,11 +277,43 @@ public class MedicalStaffMainPageGUI extends Application
         seizureLabel.setAlignment(Pos.TOP_LEFT);
 
         // set the participant Labels
-        Label cosmoIDText = new Label("0");
-        Label firstNameText = new Label("John");
-        Label lastNameText = new Label("Doe");
-        Label seizureText = new Label("None");
-        Label allergyText = new Label("None");
+        createPreviewLabels();
+
+        // add all labels to the gridpane
+        basicInfoPane.add(cosmoIDLabel, 0, 0);
+        basicInfoPane.add(firstNameLabel, 0, 1);
+        basicInfoPane.add(lastNameLabel, 0, 2);
+        basicInfoPane.add(seizureLabel, 0, 3);
+        basicInfoPane.add(allergyLabel, 0, 4);
+
+        basicInfoPane.add(cosmoIDText, 1, 0);
+        basicInfoPane.add(firstNameText, 1, 1);
+        basicInfoPane.add(lastNameText, 1, 2);
+        basicInfoPane.add(seizureText, 1, 3);
+        basicInfoPane.add(allergyText, 1, 4);
+
+        // set margins
+        BorderPane.setMargin(pictureBox, new Insets(10, 0, 0, 10));
+        BorderPane.setMargin(basicInfoPane, new Insets(10, 0, 0, 0));
+        // previewPane.setTop(searchBar);
+        previewPane.setLeft(pictureBox);
+        previewPane.setCenter(basicInfoPane);
+
+        return previewPane;
+    }
+
+    /**
+     * 
+     * Purpose: Create the preview labes for the participant
+     */
+    private void createPreviewLabels()
+    {
+
+        cosmoIDText = new Label("0");
+        firstNameText = new Label("John");
+        lastNameText = new Label("Doe");
+        seizureText = new Label("None");
+        allergyText = new Label("None");
 
         cosmoIDText.setMaxWidth(150);
         cosmoIDText.setMinWidth(150);
@@ -298,27 +338,6 @@ public class MedicalStaffMainPageGUI extends Application
         allergyText.setWrapText(true);
         allergyText.setAlignment(Pos.TOP_LEFT);
 
-        // add all labels to the gridpane
-        basicInfoPane.add(cosmoIDLabel, 0, 0);
-        basicInfoPane.add(firstNameLabel, 0, 1);
-        basicInfoPane.add(lastNameLabel, 0, 2);
-        basicInfoPane.add(seizureLabel, 0, 3);
-        basicInfoPane.add(allergyLabel, 0, 4);
-
-        basicInfoPane.add(cosmoIDText, 1, 0);
-        basicInfoPane.add(firstNameText, 1, 1);
-        basicInfoPane.add(lastNameText, 1, 2);
-        basicInfoPane.add(seizureText, 1, 3);
-        basicInfoPane.add(allergyText, 1, 4);
-
-        // set margins
-        BorderPane.setMargin(pictureBox, new Insets(10, 0, 0, 10));
-        BorderPane.setMargin(basicInfoPane, new Insets(10, 0, 0, 0));
-        // previewPane.setTop(searchBar);
-        previewPane.setLeft(pictureBox);
-        previewPane.setCenter(basicInfoPane);
-
-        return previewPane;
     }
 
     /**
