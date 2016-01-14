@@ -146,6 +146,12 @@ public class participantDetailsGUI extends Application
         Tab vaccinationDetails = new Tab();
         Tab other = new Tab();
 
+        //set body for tabs
+        medicalInformation.setContent(createMedicalInfoTab());
+        medications.setContent(createMedicationsTab());
+        vaccinationDetails.setContent(createVaccinationDetailsTab());
+        other.setContent(createOtherTab());
+        
         // set text for tabs
         medicalInformation.setText("Medical Information");
         medications.setText("Medications");
@@ -399,6 +405,7 @@ public class participantDetailsGUI extends Application
     {
         HBox hbox = new HBox();
        
+        
         // note display pane
         VBox noteDisplayPane = new VBox();
 
@@ -406,7 +413,7 @@ public class participantDetailsGUI extends Application
         noteDisplayPane.setPadding(new Insets(10, 10, 0, 10));
 
         
-        VBox allergiesDescBox = fetchAndFormatAllergyInfo();
+        ScrollPane allergiesDescBox = fetchAndFormatAllergyInfo();
         ScrollPane seizuresDescBox = fetchAndFormatSeizureInfo();
         
     	
@@ -426,14 +433,15 @@ public class participantDetailsGUI extends Application
         return hbox;
     }
     
-    private VBox fetchAndFormatAllergyInfo()
+    private ScrollPane fetchAndFormatAllergyInfo()
     {
+    	
+    	ScrollPane scrollPane = new ScrollPane();
+    	
     	VBox vbox = new VBox();
     	
-    	vbox.setStyle("-fx-border-color: black;");
+    	scrollPane.setMinHeight(120);
     	vbox.setMinHeight(100);
-    	
-    	Text allergiesDescription = new Text("Test Allergies Desc");
     	
     	ResultSet rs = DBObject.select("allergicTo, allergyType, description",
     			"Allergies", "cosmoID = " + this.cosmoID, "");
@@ -447,10 +455,16 @@ public class participantDetailsGUI extends Application
     			hasRecords = true;
     			Label allergen = new Label("Allergen: " + rs.getString(1));
     			allergen.setWrapText(true);
+    			allergen.setMinWidth(410);
+    			allergen.setMaxWidth(vbox.getWidth());
     			Label type = new Label("Type: " + rs.getString(2));
     			type.setWrapText(true);
-    			Label desc = new Label("Description: " + rs.getString(3));
+    			type.setMinWidth(410);
+    			type.setMaxWidth(vbox.getWidth());
+    			Label desc = new Label("Description: " + rs.getString(3) + "\n\n");
     			desc.setWrapText(true);
+    			desc.setMinWidth(410);
+    			desc.setMaxWidth(vbox.getWidth());
     			
     			vbox.getChildren().addAll(allergen, type, desc);
     		}
@@ -465,7 +479,12 @@ public class participantDetailsGUI extends Application
     		vbox.getChildren().add(new Label("None"));
     	}
     	
-    	return vbox;
+    	scrollPane.setContent(vbox);
+    	scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+    	scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+    	scrollPane.setHmax(vbox.getWidth());
+    	
+    	return scrollPane;
     }
     
     private ScrollPane fetchAndFormatSeizureInfo()
@@ -488,19 +507,33 @@ public class participantDetailsGUI extends Application
     		{
     			hasRecords = true;
     			Label seizureType = new Label("Seizure Type: " + rs.getString(1));
-    			 seizureType.setWrapText(true);
+    			seizureType.setWrapText(true);
+    			seizureType.setMinWidth(410); 
+    			seizureType.setMaxWidth(vbox.getWidth());
     			Label seizureDesc = new Label("Description:  " + rs.getString(2));
     			seizureDesc.setWrapText(true);
+    			seizureDesc.setMinWidth(410);
+    			seizureDesc.setMaxWidth(vbox.getWidth());
     			Label seizureFreq = new Label("Frequency: " + rs.getString(3));
     			seizureFreq.setWrapText(true);
+    			seizureFreq.setMinWidth(410);
+    			seizureFreq.setMaxWidth(vbox.getWidth());
     			Label seizureDuration = new Label("Duration: " + rs.getString(4));
     			seizureDuration.setWrapText(true);
+    			seizureDuration.setMinWidth(410);
+    			seizureDuration.setMaxWidth(vbox.getWidth());
     			Label seizureAfter = new Label("Aftermath: " + rs.getString(5));
     			seizureAfter.setWrapText(true);
+    			seizureAfter.setMinWidth(410);
+    			seizureAfter.setMaxWidth(vbox.getWidth());
     			Label medicationName = new Label("Medication Name: " + rs.getString(6));
     			medicationName.setWrapText(true);
+    			medicationName.setMinWidth(410);
+    			medicationName.setMaxWidth(vbox.getWidth());
     			
-    			vbox.getChildren().addAll(seizureType, seizureDesc, seizureFreq, seizureDuration, seizureAfter, medicationName);
+    			
+    			vbox.getChildren().addAll(seizureType, seizureDesc, seizureFreq, 
+    					seizureDuration, seizureAfter, medicationName);
     		}
     	}
     	catch(SQLException e)
@@ -520,9 +553,150 @@ public class participantDetailsGUI extends Application
     	
     	
     	return scrollPane;
+    	 
+    
+    }
+    
+    
+    private ScrollPane createMedicalInfoTab()
+    {
+    	ScrollPane scrollPane = new ScrollPane();
+    	//since all information we could put here is basically covered in
+    	//other places on the GUI, maybe get rid of this? Unless you can
+    	//find a use for it 
+    	return scrollPane;
+    }
+    
+    private ScrollPane createMedicationsTab()
+    {
+    	ScrollPane scrollPane = new ScrollPane();
     	
+    	VBox vbox = new VBox();
+    	
+    	Label medicationName = new Label();
+    	Label dosage = new Label();
+    	Label timesGiven = new Label();
+    	Label reason = new Label();
+    	
+    	ResultSet rs = DBObject.select("medicationName, dosage, timesGiven, reason",
+    			"Medication", "cosmoID = " + this.cosmoID, "");
+    	
+    	try
+    	{
+    		while(rs.next())
+    		{
+    			medicationName.setText("Medication Name: " + rs.getString(1));
+    			
+    			dosage.setText("Dosage: " + rs.getString(2));
+    			
+    			timesGiven.setText("Times Given: " + rs.getString(3));
+    			
+    			reason.setText("Reason: " + rs.getString(4));
+    			
+    			vbox.getChildren().addAll(medicationName, dosage, timesGiven, reason);
+    		}
+    	}
+    	catch(SQLException e)
+    	{
+    		e.printStackTrace();
+    	}
+    	
+    	scrollPane.setContent(vbox);
+    	
+    	return scrollPane;
+    }
     
     
+    private ScrollPane createVaccinationDetailsTab()
+    {
+    	ScrollPane scrollPane = new ScrollPane();
+    	
+    	VBox vbox = new VBox();
+    	
+    	Label vaccinationName = new Label();
+    	Label dateOf = new Label();
+    	
+    	ResultSet rs = DBObject.select("vaccinationName, dateOFVaccination", 
+    			"Vaccination", "cosmoID = " + this.cosmoID, "");
+    	
+    	
+    	try
+    	{
+    		while(rs.next())
+    		{
+    			vaccinationName.setText("Vaccination Name: " + rs.getString(1));
+    			
+    			dateOf.setText("Date given: " + rs.getString(2) + "\n\n");
+    			
+    			vbox.getChildren().addAll(vaccinationName, dateOf);
+    		}
+    	}
+    	catch(SQLException e)
+    	{
+    		e.printStackTrace();
+    	}
+    	
+    	
+    	scrollPane.setContent(vbox);
+    	
+    	return scrollPane;
+    }
+    
+    private ScrollPane createOtherTab()
+    {
+    	ScrollPane scrollPane = new ScrollPane();
+    	
+    	HBox hbox = new HBox();
+    	
+    	ResultSet rs;
+    	
+    	VBox careGiverBox = new VBox();
+    	
+    	Label careGiverName = new Label();
+    	Label careGivenerPhone = new Label();
+    	
+    	careGiverBox.getChildren().add(new Label("Caregiver:"));
+    	
+    	rs = DBObject.select("firstName, lastName, phone", 
+    			"Caregiver c JOIN Participant p ON c.caregiverID = p.caregiverID",
+    			"cosmoID = " + this.cosmoID, "");
+    	
+    	try
+    	{
+    		while(rs.next())
+    		{
+    			//TODO: use the resultset to set caregiver info labels
+    		}
+    	}
+    	catch(SQLException e)
+    	{
+    		e.printStackTrace();
+    	}
+    	
+    	
+    	VBox kinBox = new VBox();
+    	
+    	Label kinName = new Label();
+    	Label kinAddress = new Label();
+    	Label kinCity = new Label();
+    	Label kinProv = new Label();
+    	Label kinPhone = new Label();
+    	
+    	VBox workBox = new VBox();
+    	
+    	Label workArea = new Label();
+    	Label workFullTime = new Label();
+    	Label workAM = new Label();
+    	Label workPM = new Label();
+    	
+    	VBox physicianBox = new VBox();
+    	
+    	Label physicianName = new Label();
+    	Label physicianPhone = new Label();
+    	
+    	scrollPane.setContent(hbox);
+    	
+    	return scrollPane;
     }
 
 }
