@@ -37,6 +37,16 @@ public class TestMedicalAdministrator
     private String healthNumberTwo;
     private String phoneTwo;
     private String addressTwo;
+    
+    private String cosmoIDThree;
+    private String participantFirstNameThree;
+    private String participantLastNameThree;
+    private LocalDate participantBirthdateThree;
+    private String physicianFNameThree;
+    private String physicianLNameThree;
+    private String healthNumberThree;
+    private String phoneThree;
+    private String addressThree;
 
     private String failEmailWithoutBoth;
     private String failEmailWithoutAt;
@@ -76,6 +86,15 @@ public class TestMedicalAdministrator
         healthNumberTwo = "999999999";
         phoneTwo = "6669116666";
         addressTwo = "123 Cookie Blvd";
+        
+        cosmoIDThree = "999";
+        participantFirstNameThree = "vim";
+        participantLastNameThree = "snickles";
+        participantBirthdateThree = LocalDate.parse(date2, formatter);
+
+        healthNumberThree = "999999999";
+        phoneThree = "6669116666";
+        addressThree = "123 Yummy yum";
 
         failEmailWithoutBoth = "1234";
         failEmailWithoutAt = "hello.hello";
@@ -233,6 +252,24 @@ public class TestMedicalAdministrator
                 participantFirstNameTwo, participantFirstNameTwo,
                 participantBirthdateTwo, physicianFNameTwo, physicianLNameTwo,
                 healthNumberTwo, phoneTwo, addressTwo);
+        
+        assertTrue(result.equals(""));
+
+    }
+    
+    /**
+     * 
+     * Purpose: Checks to see if existing physician was connected to a 
+     * participant
+     * not 10 digits.
+     */
+    @Test
+    public void testPhysicianExists()
+    {
+        String result = MedicalAdministrator.createParticipant(cosmoIDThree,
+                participantFirstNameThree, participantFirstNameThree,
+                participantBirthdateThree, physicianFNameTwo, physicianLNameTwo,
+                healthNumberThree, phoneThree, addressThree);
         
         assertTrue(result.equals(""));
 
