@@ -65,11 +65,12 @@ public class MedicalStaffMainPageGUI extends Application
     private Stage createParticipantStage;
 
     // Preveiw labes for the participant
-    private Label cosmoIDText;
-    private Label firstNameText;
-    private Label lastNameText;
-    private Label seizureText;
-    private Label allergyText;
+    private Label cosmoIDLbl;
+    private Label firstNameLbl;
+    private Label lastNameLbl;
+    private Label seizureLbl;
+    private Label allergyLbl;
+    private Label physicianLbl;
 
     /**
      * Purpose: displays the GUI
@@ -261,11 +262,14 @@ public class MedicalStaffMainPageGUI extends Application
         Label lastNameLabel = new Label("Last Name: ");
         Label seizureLabel = new Label("Seizures: ");
         Label allergyLabel = new Label("Allergies: ");
+        Label physicianLabel = new Label("Physician: ");
 
         // set label margins
         cosmoIDLabel.setPadding(new Insets(5, 5, 5, 5));
         firstNameLabel.setPadding(new Insets(5, 5, 5, 5));
         lastNameLabel.setPadding(new Insets(5, 5, 5, 5));
+        physicianLabel.setPadding(new Insets(5, 5, 5, 5));
+
         seizureLabel.setPadding(new Insets(0, 5, 25, 5));
         allergyLabel.setPadding(new Insets(5, 5, 50, 5));
 
@@ -283,14 +287,16 @@ public class MedicalStaffMainPageGUI extends Application
         basicInfoPane.add(cosmoIDLabel, 0, 0);
         basicInfoPane.add(firstNameLabel, 0, 1);
         basicInfoPane.add(lastNameLabel, 0, 2);
-        basicInfoPane.add(seizureLabel, 0, 3);
-        basicInfoPane.add(allergyLabel, 0, 4);
+        basicInfoPane.add(physicianLabel, 0, 3);
+        basicInfoPane.add(seizureLabel, 0, 4);
+        basicInfoPane.add(allergyLabel, 0, 5);
 
-        basicInfoPane.add(cosmoIDText, 1, 0);
-        basicInfoPane.add(firstNameText, 1, 1);
-        basicInfoPane.add(lastNameText, 1, 2);
-        basicInfoPane.add(seizureText, 1, 3);
-        basicInfoPane.add(allergyText, 1, 4);
+        basicInfoPane.add(cosmoIDLbl, 1, 0);
+        basicInfoPane.add(firstNameLbl, 1, 1);
+        basicInfoPane.add(lastNameLbl, 1, 2);
+        basicInfoPane.add(physicianLbl, 1, 3);
+        basicInfoPane.add(seizureLbl, 1, 4);
+        basicInfoPane.add(allergyLbl, 1, 5);
 
         // set margins
         BorderPane.setMargin(pictureBox, new Insets(10, 0, 0, 10));
@@ -309,34 +315,61 @@ public class MedicalStaffMainPageGUI extends Application
     private void createPreviewLabels()
     {
 
-        cosmoIDText = new Label("0");
-        firstNameText = new Label("John");
-        lastNameText = new Label("Doe");
-        seizureText = new Label("None");
-        allergyText = new Label("None");
+        cosmoIDLbl = new Label();
+        firstNameLbl = new Label();
+        lastNameLbl = new Label();
+        seizureLbl = new Label();
+        allergyLbl = new Label();
+        physicianLbl = new Label();
 
-        cosmoIDText.setMaxWidth(150);
-        cosmoIDText.setMinWidth(150);
+        cosmoIDLbl.setMaxWidth(150);
+        cosmoIDLbl.setMinWidth(150);
 
-        firstNameText.setMaxWidth(150);
-        firstNameText.setMinWidth(150);
+        firstNameLbl.setMaxWidth(150);
+        firstNameLbl.setMinWidth(150);
 
-        lastNameText.setMaxWidth(150);
-        lastNameText.setMinWidth(150);
+        lastNameLbl.setMaxWidth(150);
+        lastNameLbl.setMinWidth(150);
 
-        seizureText.setMaxWidth(175);
-        seizureText.setMinWidth(175);
-        seizureText.setMaxHeight(40);
-        seizureText.setMinHeight(65);
-        seizureText.setWrapText(true);
-        seizureText.setAlignment(Pos.TOP_LEFT);
+        physicianLbl.setMaxWidth(150);
+        physicianLbl.setMinWidth(150);
 
-        allergyText.setMaxWidth(175);
-        allergyText.setMinWidth(175);
-        allergyText.setMaxHeight(80);
-        allergyText.setMinHeight(80);
-        allergyText.setWrapText(true);
-        allergyText.setAlignment(Pos.TOP_LEFT);
+        seizureLbl.setMaxWidth(175);
+        seizureLbl.setMinWidth(175);
+        seizureLbl.setMaxHeight(40);
+        seizureLbl.setMinHeight(65);
+        seizureLbl.setWrapText(true);
+        seizureLbl.setAlignment(Pos.TOP_LEFT);
+
+        allergyLbl.setMaxWidth(175);
+        allergyLbl.setMinWidth(175);
+        allergyLbl.setMaxHeight(80);
+        allergyLbl.setMinHeight(80);
+        allergyLbl.setWrapText(true);
+        allergyLbl.setAlignment(Pos.TOP_LEFT);
+
+        pTVCont.participantTable.setOnMouseClicked(event -> {
+            assignParitipantPreviewLabels(pTVCont.getSelectedPK());
+        });
+
+    }
+
+    /**
+     * 
+     * Purpose: Set the text of all the preview pane labels to the currently
+     * selected user
+     */
+    private void assignParitipantPreviewLabels( String participantID )
+    {
+        PreviewPaneHelper paneHelper = new PreviewPaneHelper();
+        String[] currentParticipant = paneHelper
+                .queryParticipant(participantID);
+        cosmoIDLbl.setText(currentParticipant[0]);
+        firstNameLbl.setText(currentParticipant[1]);
+        lastNameLbl.setText(currentParticipant[2]);
+        physicianLbl.setText(currentParticipant[3]);
+        seizureLbl.setText(currentParticipant[4]);
+        allergyLbl.setText(currentParticipant[5]);
 
     }
 
@@ -344,9 +377,10 @@ public class MedicalStaffMainPageGUI extends Application
      * 
      * Purpose:Create the search bar
      * 
-     * @param admin
+     * @param admin : used to check whether a medical administrator was loggedi
+     *            n
      * 
-     * @return HBox search bar
+     * @return HBox the search bar
      */
     private HBox createSearchBar( boolean admin )
     {
@@ -494,7 +528,7 @@ public class MedicalStaffMainPageGUI extends Application
                 String result = MedicalAdministrator.createParticipant(
                         cosmoIdTxt.getText(), firstNameTxt.getText(),
                         lastNameTxt.getText(), birthDatePicker.getValue(),
-                        physicianFNameTxt.getText(), 
+                        physicianFNameTxt.getText(),
                         physicianLNameTxt.getText(), healthNumTxt.getText(),
                         phoneTxt.getText(), addressTxt.getText());
 

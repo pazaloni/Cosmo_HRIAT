@@ -170,7 +170,7 @@ public class ParticipantTableViewController
     }
 
     /**
-     * Purpose: Get the item that is selected in the table
+     * Purpose: Get the id of the participant that is selected in the table
      * 
      * @return the ID of the row that is selected
      */
