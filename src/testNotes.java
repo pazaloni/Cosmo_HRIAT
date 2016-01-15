@@ -91,6 +91,7 @@ public class testNotes {
     	
     	basicStaff.login(basicUsername, basicPassword);
 		Note test = new Note(test1,"", basicStaff.GetUsername() );
-		assertFalse(!test.addNote().equals(""));
+		
+		assertFalse(test.addNote().equals(""));
 	}
 }

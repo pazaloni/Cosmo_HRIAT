@@ -90,10 +90,10 @@ public class NotePopUp
 				else {
 					lblWarning.setTextFill(Color.FIREBRICK);
 					lblWarning.setText(result);
-					if (messageTxt.getText().isEmpty()) 
-					{
-						lblWarning.setText("Cannot submit a empty description.");
-					}
+//					if (messageTxt.getText().isEmpty()) 
+//					{
+//						lblWarning.setText("Cannot submit a empty description.");
+//					}
 				}
 			}
 		});

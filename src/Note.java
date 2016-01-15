@@ -40,10 +40,17 @@ public class Note
         values[1][1] = this.creatorID;
         values[2][1] = df.format(dateCreated);
         values[3][1] = description;
-        boolean successful = db.insert(values, "Notes");
-        if(!successful)
+        if(!description.equals(""))
         {
-            result = "The insertion was not successful";
+        	boolean successful = db.insert(values, "Notes");
+        	if(!successful)
+            {
+                result = "The insertion was not successful";
+            }
+        }
+        else
+        {
+        	result = "Cannot create a note with a blank description.";
         }
 		return result;		
 	}
