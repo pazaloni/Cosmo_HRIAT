@@ -21,19 +21,35 @@ public class NotePopUp
 	BorderPane root;
 	Scene scene;
 	
-	
+	/**
+	 * Purpose:	This will create the stage for the pop up that will be used to 
+	 * 			create a note.
+	 * 
+	 * @param participant	The cosmoID passed in from the current participant
+	 * @param creator		The username of the currently logged in medical staff
+	 * @param stage			The stage that the pop up will be generated in
+	 * 
+	 * @author  Niklaas Neijmeijer cst207
+     *          Steven Palchinski cst209
+	 */
 	public NotePopUp(Participant participant, String creator, Stage stage)
 	{
 		this.stage = stage;
 		this.stage.setTitle("new Note");
-		//root = new BorderPane();
 		scene = new Scene(createNotePopUp(participant, creator));
-		this.stage.setScene(scene);
-		
-		//root = new BorderPane();
-				
+		this.stage.setScene(scene);			
 	}
 	
+	/**
+	 * Purpose: This will create the visual layout of the pop up window.
+	 * 
+	 * @param participant	The cosmoID of the current participant
+	 * @param creator		The string username of the logged in medical staff
+	 * @return	the gridpane that will be used in the pop up window
+	 * 
+	 * @author  Niklaas Neijmeijer cst207
+     *          Steven Palchinski cst209
+	 */
 	protected GridPane createNotePopUp(Participant participant, String creator) 
 	{
 
@@ -68,14 +84,19 @@ public class NotePopUp
 
 		// Adding participant event handler
 		Button submitNoteBtn = new Button("Submit");
-		submitNoteBtn.setOnAction(new EventHandler<ActionEvent>() {
+		submitNoteBtn.setOnAction(new EventHandler<ActionEvent>() 
+		{
 			@Override
-			public void handle(ActionEvent e) {
+			public void handle(ActionEvent e) 
+			{
 				//call confirmation
-				
-				
-				
-				
+        		PopUpMessage messageBox = new PopUpMessage("Is this the note "
+        				+ "you wish to submit?  " + messageTxt, stage);
+            	
+            	scene = new Scene(messageBox.root, 300, 75);
+            	stage.setScene(scene);
+            	stage.showAndWait();
+            	
 				// call create participant on medical administrator with the
 				// text passed in
 				Note newNote = new Note(participant, messageTxt.getText(), creator);
@@ -83,24 +104,21 @@ public class NotePopUp
 
 				// if no error message is received then close this window and
 				// refresh the table
-				if (result.equals("")) {
+				if (result.equals("")) 
+				{
 					stage.close();
 				}
 				// if there is an error message, display it
 				else {
 					lblWarning.setTextFill(Color.FIREBRICK);
 					lblWarning.setText(result);
-//					if (messageTxt.getText().isEmpty()) 
-//					{
-//						lblWarning.setText("Cannot submit a empty description.");
-//					}
 				}
 			}
 		});
 
 		
 
-		// Add the buttons to the grid
+		//Add the buttons to the grid
 		HBox buttonsHbox = new HBox();
 		buttonsHbox.getChildren().addAll(submitNoteBtn);
 		buttonsHbox.setAlignment(Pos.CENTER);

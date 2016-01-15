@@ -13,6 +13,17 @@ public class Note
 	private boolean viewed;
 	private boolean resolved;
 	
+	
+	/**
+	 * Purpose:	The constructor for the note
+	 * 
+	 * @param participant	The participant that the note will be attached to
+	 * @param description	The note that the medical staff will leave
+	 * @param creator		The username of the medical staff
+	 * 
+	 * @author  Niklaas Neijmeijer cst207
+     *          Steven Palchinski cst209
+	 */
 	public Note(Participant participant, String description, String creator)
 	{
 		this.description = description;
@@ -24,6 +35,19 @@ public class Note
 		resolved = false;
 	}
 	
+	/**
+	 * Purpose:	This will add a note to the database, taking the cosmoID from 
+	 * 			the participant, the creator from the currently logged in staff 
+	 * 			member, the date and time the note was submitted, the note 
+	 * 			description as entered by the medical staff.  If there are any 
+	 * 			errors, a string result describing the error will be returned 
+	 * 
+	 * @return	A string that will submit a error message explaining what error 
+	 * 			has occurred.
+	 * 
+	 * @author  Niklaas Neijmeijer cst207
+     *          Steven Palchinski cst209
+	 */
 	public String addNote()
 	{
 		String result = "";
