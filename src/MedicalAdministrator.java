@@ -159,7 +159,7 @@ public class MedicalAdministrator extends BasicStaff
   
                     
                     // array of field names
-                    String values[][] = new String[15][2];
+                    String values[][] = new String[16][2];
                     values[0][0] = "cosmoID";
                     values[1][0] = "firstName";
                     values[2][0] = "lastName";
@@ -175,7 +175,7 @@ public class MedicalAdministrator extends BasicStaff
                     values[12][0] = "landlordID";
                     values[13][0] = "physicianID";
                     values[14][0] = "workID";
-    
+                    values[15][0]= "picture";
                     // get the current date to insert into "lastUpdated"
                     Calendar c = Calendar.getInstance();
                     SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
@@ -197,6 +197,7 @@ public class MedicalAdministrator extends BasicStaff
                     values[12][1] = "1";
                     values[13][1] = physicianID;
                     values[14][1] = "1";
+                    values[15][1] ="safd";
     
                     // inserting into the database
                     successful = db.insert(values, "Participant");

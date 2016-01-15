@@ -1,13 +1,18 @@
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
+import javax.imageio.ImageIO;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -370,7 +375,38 @@ public class MedicalStaffMainPageGUI extends Application
         physicianLbl.setText(currentParticipant[3]);
         seizureLbl.setText(currentParticipant[4]);
         allergyLbl.setText(currentParticipant[5]);
+        BufferedImage buffImg = null;
+        try
+        {
+            buffImg = ImageIO.read(new ByteArrayInputStream(paneHelper
+                    .retrieveImageBytes()));
+        }
+        catch ( IOException e )
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
+        Image imgToDisplay = SwingFXUtils.toFXImage(buffImg, null);
+        previewPicture.setFitHeight(121);
+        previewPicture.setFitWidth(122);
+//
+//        previewPicture.prefWidth(122);
+//        previewPicture.prefHeight(121);
+//
+//        previewPicture.minWidth(122);
+//        previewPicture.minHeight(121);
+//        
+        previewPicture.setImage(imgToDisplay);
+        
+//        previewPicture.maxHeight(121);
+//        previewPicture.maxWidth(122);
+//
+//        previewPicture.prefWidth(122);
+//        previewPicture.prefHeight(121);
+//
+//        previewPicture.minWidth(122);
+//        previewPicture.minHeight(121);
     }
 
     /**

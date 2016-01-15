@@ -1,6 +1,8 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import net.ucanaccess.complex.Attachment;
+
 /**
  * 
  * Purpose: Query the database with a given participant ID and
@@ -20,6 +22,8 @@ public class PreviewPaneHelper
     private String physician;
     private String seizures;
     private String allergies;
+
+    private byte[] imgBytes;
 
     private DatabaseHelper db;
 
@@ -43,14 +47,15 @@ public class PreviewPaneHelper
         ResultSet participantInfo, physicianInfo;
 
         // Query for the participant information
-        participantInfo = db.select("firstName, lastName, physicianID",
-                "Participant", "cosmoID=" + participantID, "");
+        participantInfo = db.select(
+                "firstName, lastName, physicianID, picture", "Participant",
+                "cosmoID=" + participantID, "");
         String physicianID = "";
 
         // Get the seizure info for the participant
         retreiveSeizureInfo(participantID);
-        
-        //Get the allergies info for the participant 
+
+        // Get the allergies info for the participant
         retreiveAllergieInfo(participantID);
         try
         {
@@ -61,6 +66,13 @@ public class PreviewPaneHelper
 
             // get the phyisican id for the particiapnt
             physicianID = participantInfo.getString(3);
+
+            Attachment[] attachments = (Attachment[]) participantInfo
+                    .getObject(4);
+            for ( Attachment att : attachments )
+            {
+                imgBytes = att.getData();
+            }
 
             // close the result set, free up resources.
             participantInfo.close();
@@ -81,7 +93,6 @@ public class PreviewPaneHelper
         }
         catch ( SQLException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         String[] participantToReturn = assembleParticipantInfo();
@@ -184,5 +195,17 @@ public class PreviewPaneHelper
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    /**
+     * sorry
+     * 
+     * Purpose: "GET" the image bytes for the specified participant
+     * 
+     * @return the bytes from the image
+     */
+    public byte[] retrieveImageBytes()
+    {
+        return imgBytes;
     }
 }
