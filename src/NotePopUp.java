@@ -1,3 +1,5 @@
+import java.util.Date;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -62,16 +64,16 @@ public class NotePopUp
 		// text field labels
 		Label messageLbl = new Label("Message");
 		
-
 		// the text fields
 		TextArea messageTxt = new TextArea();
 		
-
 		// add the form to the grid
 		grid.add(messageLbl, 0, 1);
 		
-
+		//Add the error text to the grid
 		grid.add(lblWarning, 1, 0);
+		
+		//Add the description box to the grid
 		grid.add(messageTxt, 1, 1);
 		
 
@@ -99,7 +101,7 @@ public class NotePopUp
             	
 				// call create participant on medical administrator with the
 				// text passed in
-				Note newNote = new Note(participant, messageTxt.getText(), creator);
+				Note newNote = new Note( participant, messageTxt.getText(), creator, new Date(), false, false);
 				String result = newNote.addNote();
 
 				// if no error message is received then close this window and
