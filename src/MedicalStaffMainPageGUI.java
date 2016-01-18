@@ -31,6 +31,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -92,7 +94,8 @@ public class MedicalStaffMainPageGUI extends Application
      * Purpose: Construct the main stage for the medical staff when they have
      * successfully logged in
      * 
-     * @param stage : the stage the medical staff will see
+     * @param stage
+     *            : the stage the medical staff will see
      */
     public void medMainPageConstruct( Stage stage, boolean admin )
     {
@@ -353,8 +356,29 @@ public class MedicalStaffMainPageGUI extends Application
         allergyLbl.setWrapText(true);
         allergyLbl.setAlignment(Pos.TOP_LEFT);
 
-        pTVCont.participantTable.setOnMouseClicked(event -> {
-            assignParitipantPreviewLabels(pTVCont.getSelectedPK());
+         pTVCont.participantTable.setOnMouseClicked(event -> {
+         assignParitipantPreviewLabels(pTVCont.getSelectedPK());
+         });
+
+        pTVCont.participantTable.setOnKeyPressed(new EventHandler<KeyEvent>()
+        {
+
+            @Override
+            public void handle( KeyEvent ke )
+            {
+                KeyCode keycode = ke.getCode();
+                
+                if(keycode.getName().equals("Up"))
+                {
+                    assignParitipantPreviewLabels(pTVCont.getSelectedPK());
+                }
+                else if(keycode.getName().equals("Down"))
+                {
+                    assignParitipantPreviewLabels(pTVCont.getSelectedPK());
+                }
+                System.out.println(keycode.getName());
+            }
+
         });
 
     }
@@ -375,46 +399,30 @@ public class MedicalStaffMainPageGUI extends Application
         physicianLbl.setText(currentParticipant[3]);
         seizureLbl.setText(currentParticipant[4]);
         allergyLbl.setText(currentParticipant[5]);
-        BufferedImage buffImg = null;
+
+        URL path = getClass().getResource(currentParticipant[6]);
+
         try
         {
-            buffImg = ImageIO.read(new ByteArrayInputStream(paneHelper
-                    .retrieveImageBytes()));
+            System.out.println(path.toExternalForm());
+            previewPicture.setImage(new Image(path.openStream()));
+            previewPicture.setFitHeight(121);
+            previewPicture.setFitWidth(122);
+
         }
         catch ( IOException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        Image imgToDisplay = SwingFXUtils.toFXImage(buffImg, null);
-        previewPicture.setFitHeight(121);
-        previewPicture.setFitWidth(122);
-//
-//        previewPicture.prefWidth(122);
-//        previewPicture.prefHeight(121);
-//
-//        previewPicture.minWidth(122);
-//        previewPicture.minHeight(121);
-//        
-        previewPicture.setImage(imgToDisplay);
-        
-//        previewPicture.maxHeight(121);
-//        previewPicture.maxWidth(122);
-//
-//        previewPicture.prefWidth(122);
-//        previewPicture.prefHeight(121);
-//
-//        previewPicture.minWidth(122);
-//        previewPicture.minHeight(121);
     }
 
     /**
      * 
      * Purpose:Create the search bar
      * 
-     * @param admin : used to check whether a medical administrator was loggedi
-     *            n
+     * @param admin
+     *            : used to check whether a medical administrator was loggedi n
      * 
      * @return HBox the search bar
      */

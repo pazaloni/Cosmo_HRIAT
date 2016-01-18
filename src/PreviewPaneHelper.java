@@ -13,7 +13,7 @@ import net.ucanaccess.complex.Attachment;
  */
 public class PreviewPaneHelper
 {
-    public static final int PARTICIPANT_COLUMN_SIZE = 6;
+    public static final int PARTICIPANT_COLUMN_SIZE = 7;
 
     // Preview pane information
     private String participantId;
@@ -22,8 +22,8 @@ public class PreviewPaneHelper
     private String physician;
     private String seizures;
     private String allergies;
+    private String imagePath;
 
-    private byte[] imgBytes;
 
     private DatabaseHelper db;
 
@@ -48,31 +48,28 @@ public class PreviewPaneHelper
 
         // Query for the participant information
         participantInfo = db.select(
-                "firstName, lastName, physicianID, picture", "Participant",
-                "cosmoID=" + participantID, "");
+                "firstName, lastName, physicianID, imagePath", 
+                "Participant", "cosmoID=" + participantID, "");
         String physicianID = "";
 
         // Get the seizure info for the participant
         retreiveSeizureInfo(participantID);
 
         // Get the allergies info for the participant
-        retreiveAllergieInfo(participantID);
+        retreiveAllergyInfo(participantID);
         try
         {
             participantInfo.next();
             // retreive the first and last name
             firstName = participantInfo.getString(1);
             lastName = participantInfo.getString(2);
+            
 
             // get the phyisican id for the particiapnt
             physicianID = participantInfo.getString(3);
 
-            Attachment[] attachments = (Attachment[]) participantInfo
-                    .getObject(4);
-            for ( Attachment att : attachments )
-            {
-                imgBytes = att.getData();
-            }
+            String imagePath = participantInfo.getString(4);
+            this.imagePath = imagePath;
 
             // close the result set, free up resources.
             participantInfo.close();
@@ -117,6 +114,7 @@ public class PreviewPaneHelper
         participantToReturn[3] = physician;
         participantToReturn[4] = seizures;
         participantToReturn[5] = allergies;
+        participantToReturn[6] = imagePath;
 
         return participantToReturn;
     }
@@ -127,7 +125,7 @@ public class PreviewPaneHelper
      * 
      * @param participantID the participant's id
      */
-    private void retreiveAllergieInfo( String participantID )
+    private void retreiveAllergyInfo( String participantID )
     {
         // Query for the allergies for the participant
         ResultSet allergieInfo = db.select("allergicTo", "Allergies",
@@ -197,15 +195,5 @@ public class PreviewPaneHelper
         }
     }
 
-    /**
-     * sorry
-     * 
-     * Purpose: "GET" the image bytes for the specified participant
-     * 
-     * @return the bytes from the image
-     */
-    public byte[] retrieveImageBytes()
-    {
-        return imgBytes;
-    }
+
 }

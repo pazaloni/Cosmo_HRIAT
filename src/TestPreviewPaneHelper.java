@@ -39,9 +39,11 @@ public class TestPreviewPaneHelper
         phoneOne = "1111111111";
         addressOne = "123 Fake Street";
 
-        MedicalAdministrator.createParticipant(cosmoID, participantFirstName,
-                participantFirstName, participantBirthdate, physicianFName,
+        String result = MedicalAdministrator.createParticipant(cosmoID, participantFirstName,
+                participantLastName, participantBirthdate, physicianFName,
                 physicianLName, healthNumber, phoneOne, addressOne);
+        
+        System.out.println(result);
     }
 
     @After
@@ -98,6 +100,8 @@ public class TestPreviewPaneHelper
         assertTrue(name.equals(physicianFName + " " + physicianLName));
 
     }
+    
+    
 
     /**
      * Purpose: Test that the cosmoID of the participant selected is the
@@ -113,4 +117,45 @@ public class TestPreviewPaneHelper
         assertTrue(id.equals(cosmoID));
     }
 
+    /**
+     * Purpose: Test that the cosmoID of the participant selected is the
+     * same as the one that is being dispalyed
+     */
+    @Test
+    public void testAllergies()
+    {
+        PreviewPaneHelper helper = new PreviewPaneHelper();
+
+        String id = helper.queryParticipant("123")[5];
+        System.out.println(id + "-------------------------------------------");
+        assertTrue(id.equals("Peanuts, Pollen"));
+    }
+    
+    /**
+     * Purpose: Test that the cosmoID of the participant selected is the
+     * same as the one that is being dispalyed
+     */
+    @Test
+    public void testSeizures()
+    {
+        PreviewPaneHelper helper = new PreviewPaneHelper();
+
+        String id = helper.queryParticipant("123")[4];
+        System.out.println(id + "-------------------------------------------");
+        assertTrue(id.equals("eyes roll back"));
+    }
+    
+    /**
+     * Purpose: Test that the cosmoID of the participant selected is the
+     * same as the one that is being dispalyed
+     */
+    @Test
+    public void testCorrectImage()
+    {
+        PreviewPaneHelper helper = new PreviewPaneHelper();
+
+        String id = helper.queryParticipant("123")[6];
+        System.out.println(id + "-------------------------------------------");
+        assertTrue(id.equals("images/jonfroese.jpg"));
+    }
 }

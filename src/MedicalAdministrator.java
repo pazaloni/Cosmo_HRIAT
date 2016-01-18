@@ -175,7 +175,7 @@ public class MedicalAdministrator extends BasicStaff
                     values[12][0] = "landlordID";
                     values[13][0] = "physicianID";
                     values[14][0] = "workID";
-                    values[15][0]= "picture";
+                    values[15][0]= "imagePath";
                     // get the current date to insert into "lastUpdated"
                     Calendar c = Calendar.getInstance();
                     SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
