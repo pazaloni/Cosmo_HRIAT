@@ -91,10 +91,13 @@ public class TechMainPageGUI extends Application
     
     //String that will hold the username of the logged in tech admin 
     private String loggedUser;
+    
+    private TechnicalAdministrator loggedInAdmin;
 
-    public void techMainPageConstruct(Stage stage)
+    public void techMainPageConstruct(Stage stage, StaffAccount loggedInStaff)
     {
 
+        loggedInAdmin = (TechnicalAdministrator) loggedInStaff;
         // open the database connection
         dbObject.connect();
 
@@ -344,17 +347,17 @@ public class TechMainPageGUI extends Application
         btnSubmit.setFont(new Font(15));
         if (!newUser)
         {
-            String[] selectedStaff = manageStaff.queryStaff(sTVCont
+            StaffAccount selectedStaff = manageStaff.queryStaff(sTVCont
                     .getSelectedPK());
-            firstName.setText(selectedStaff[2]);
+            firstName.setText(selectedStaff.GetFirstName());
             username.setDisable(true);
-            lastName.setText(selectedStaff[1]);
-            username.setText(selectedStaff[0]);
-            email.setText(selectedStaff[3]);
-            password.setText(selectedStaff[4]);
-            repeatPassword.setText(selectedStaff[4]);
+            lastName.setText(selectedStaff.GetLastName());
+            username.setText(selectedStaff.GetUsername());
+            email.setText(selectedStaff.GetEmail());
+            password.setText(selectedStaff.GetPassword());
+            repeatPassword.setText(selectedStaff.GetPassword());
             cboSecurityLevels.setValue(securityLevels.get(Integer
-                    .parseInt(selectedStaff[5])));
+                    .parseInt(selectedStaff.GetAccessLevel())));
         }
         btnSubmit.setOnAction(new EventHandler<ActionEvent>()
         {
@@ -479,7 +482,7 @@ public class TechMainPageGUI extends Application
      */
     public void start(Stage stage)
     {
-        techMainPageConstruct(stage);
+        techMainPageConstruct(stage, null);
     }
 
     /**

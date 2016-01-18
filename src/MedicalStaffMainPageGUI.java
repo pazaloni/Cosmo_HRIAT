@@ -63,6 +63,8 @@ public class MedicalStaffMainPageGUI extends Application
     private ObservableList<String> noteTitleList;
 
     private Stage createParticipantStage;
+    
+    private StaffAccount loggedInUser;
 
     /**
      * Purpose: displays the GUI
@@ -71,7 +73,7 @@ public class MedicalStaffMainPageGUI extends Application
     @Override
     public void start( Stage stage ) throws Exception
     {
-        medMainPageConstruct(stage, true);
+        medMainPageConstruct(stage, null);
     }
 
     /**
@@ -81,17 +83,19 @@ public class MedicalStaffMainPageGUI extends Application
      * 
      * @param stage : the stage the medical staff will see
      */
-    public void medMainPageConstruct( Stage stage, boolean admin )
+    public void medMainPageConstruct( Stage stage, StaffAccount loggedInStaff )
     {
         dbObject.connect();
+        
+        loggedInUser = loggedInStaff;
 
         pTVCont = new ParticipantTableViewController();
         pTVCont.initialize();
 
         medMainStage = stage;
-        medMainStage.setTitle("Cosmo Industries");
+        medMainStage.setTitle("Cosmo Industries - " + loggedInUser.GetUsername());
 
-        VBox root = createMainVBox(admin);
+        VBox root = createMainVBox();
 
         medMainStage.setScene(new Scene(root, 875, 580));
         medMainStage.resizableProperty().set(true);
@@ -329,7 +333,7 @@ public class MedicalStaffMainPageGUI extends Application
      * 
      * @return HBox search bar
      */
-    private HBox createSearchBar( boolean admin )
+    private HBox createSearchBar()
     {
         // create search bar
         HBox searchBar = new HBox();
@@ -353,7 +357,7 @@ public class MedicalStaffMainPageGUI extends Application
         HBox.setMargin(searchBy, new Insets(0, 5, 0, 10));
         HBox.setMargin(searchField, new Insets(0, 5, 0, 5));
         HBox.setMargin(searchButton, new Insets(0, 5, 0, 5));
-        if ( admin )
+        if (loggedInUser instanceof MedicalAdministrator )
         {
             Button addParticipantButton = new Button("Add Participant");
             addParticipantButton.setOnAction(new EventHandler<ActionEvent>()
@@ -620,7 +624,7 @@ public class MedicalStaffMainPageGUI extends Application
      * 
      * @return VBox main VBox
      */
-    private VBox createMainVBox( boolean admin )
+    private VBox createMainVBox()
     {
         VBox vbox = new VBox();
 
@@ -629,7 +633,7 @@ public class MedicalStaffMainPageGUI extends Application
         // tab pane
         TabPane tabs = createTabs();
         // Search bar
-        HBox searchBar = createSearchBar(admin);
+        HBox searchBar = createSearchBar();
         VBox.setMargin(searchBar, new Insets(5, 0, 5, 0));
         // preview notes
         HBox previewNotes = createHBoxPreviewNotes();

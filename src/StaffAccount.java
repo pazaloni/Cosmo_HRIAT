@@ -1,6 +1,8 @@
 import java.sql.ResultSet;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
 import java.sql.SQLException;
 
 /**
@@ -15,6 +17,7 @@ import java.sql.SQLException;
 public class StaffAccount
 {
     private DatabaseHelper db;
+    private ManageStaffAccountHelper manageStaff;
 
     protected StringProperty username;
     protected StringProperty lastName;
@@ -41,6 +44,7 @@ public class StaffAccount
     {
         // the account that will be returned upon successful login
         StaffAccount staff = null;
+        manageStaff = new ManageStaffAccountHelper();
 
         // These are set as not found because when there is nothing returned
         // form the database they are assigned nothing so they remain
@@ -57,66 +61,45 @@ public class StaffAccount
         db.connect();
         // query used to find the provided username that returns the username,
         // password and accesslevel
-        ResultSet user = db.select(
-                "UserName, lastName, firstName, email, password, accessLevel",
-                "Staff", "username='" + username + "'", "");
-        try
-        {
-            // if the user result set has values in it
-            while (user.next())
-            {
-                // the username, password and accessLevel returned from the
-                // database
-                returnedUsername = user.getString(1);
-                returnedLastName = user.getString(2);
-                returnedFirstName = user.getString(3);
-                returnedEmail = user.getString(4);
-                returnedPassword = user.getString(5);
-                accessLevel = user.getString(6);
-            }
-        }
-        catch (SQLException e1)
-        {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
+       
+       StaffAccount currentUser = manageStaff.queryStaff(username);
+        
+//        ResultSet user = db.select(
+//                "UserName, lastName, firstName, email, password, accessLevel",
+//                "Staff", "username='" + username + "'", "");
+//        try
+//        {
+//            // if the user result set has values in it
+//            while (user.next())
+//            {
+//                // the username, password and accessLevel returned from the
+//                // database
+//                returnedUsername = user.getString(1);
+//                returnedLastName = user.getString(2);
+//                returnedFirstName = user.getString(3);
+//                returnedEmail = user.getString(4);
+//                returnedPassword = user.getString(5);
+//                accessLevel = user.getString(6);
+//            }
+//        }
+//        catch (SQLException e1)
+//        {
+//            // TODO Auto-generated catch block
+//            e1.printStackTrace();
+//        }
 
-        // flag used to check if the returned username isn't empty
-        if (!returnedUsername.equals("not found"))
+        // flag used to check if the returned user exists
+        if (currentUser != null)
         {
-            if (returnedUsername.equals(username)
-                    && returnedPassword.equals(password))
-            {
-                // if the accessLevel is 0 then instantiate a Basic staff
-                if (Integer.parseInt(accessLevel) == 0)
-                {
-                    staff = new BasicStaff(returnedUsername, returnedLastName,
-                            returnedFirstName, returnedEmail, returnedPassword,
-                            accessLevel);
-                }
-                // if the accessLevel is 1 then instantiate a Medical Admin
-                else if (Integer.parseInt(accessLevel) == 1)
-                {
-                    staff = new MedicalAdministrator(returnedUsername,
-                            returnedLastName, returnedFirstName, returnedEmail,
-                            returnedPassword, accessLevel);
-                }
-                // if the accessLevel is 2 then instantiate a Technical Admin
-                else if (Integer.parseInt(accessLevel) == 2)
-                {
-                    staff = new TechnicalAdministrator(returnedUsername,
-                            returnedLastName, returnedFirstName, returnedEmail,
-                            returnedPassword, accessLevel);
-                }
-            }
-            else
+            if (!(currentUser.GetUsername().equals(username)
+                    && currentUser.GetPassword().equals(password)))
             {
                 // if the returned username is null, make the staff to return
                 // null aswell
-                staff = null;
+                currentUser = null;
             }
         }
-        return staff;
+        return currentUser;
     }
 
     /**
@@ -130,6 +113,68 @@ public class StaffAccount
     {
         return false;
     }
+    
+    
+    /**
+     * 
+     * Purpose: To take in a username, query the database for that username and
+     * if the user exists, return an object of the user
+     * 
+     * @param username
+     *            String of user name to be queried on
+     * @return StaffAccount a staffa ccount object 
+     */
+    public StaffAccount queryStaff(String username)
+    {
+        StaffAccount staffToReturn = null;
+        
+        ResultSet staff = db.select(
+                "UserName, lastName, firstName, email, password, accessLevel",
+                "Staff", "username='" + username + "'", "");
+        
+        String usernameOut = "";
+        String lastName = "";
+        String firstName = "";
+        String email = "";
+        String password = "";
+        String accessLevel = "";
+        
+        try
+        {
+            while (staff.next())
+            {
+                usernameOut = staff.getString(1);
+                lastName = staff.getString(2);
+                firstName = staff.getString(3);
+                email = staff.getString(4);
+                password = staff.getString(5);
+                accessLevel = staff.getString(6);
+            }
+        }
+        catch (SQLException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        
+        if (accessLevel.equals("0"))
+        {
+            staffToReturn = new BasicStaff(usernameOut, lastName, firstName, email, password, accessLevel);
+        }
+        else if (accessLevel.equals("1"))
+        {
+            staffToReturn = new MedicalAdministrator(usernameOut, lastName, firstName, email, password, accessLevel);
+        }
+        else if (accessLevel.equals("2"))
+        {
+            staffToReturn = new TechnicalAdministrator(usernameOut, lastName, firstName, email, password, accessLevel);
+        }
+        
+
+        return staffToReturn;
+    }
+    
 
     /**
      * 
@@ -237,6 +282,11 @@ public class StaffAccount
     public String GetAccessLevel()
     {
         return accessLevel.get();
+    }
+    
+    public String GetPassword()
+    {
+        return password.get();
     }
 
     /**
