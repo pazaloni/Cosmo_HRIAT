@@ -1,11 +1,15 @@
 import static org.junit.Assert.*;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class TestStaffAccount
 {
+    Participant testParticipant;
     StaffAccount test;
     ManageStaffAccountHelper testHelper;
 
@@ -37,12 +41,14 @@ public class TestStaffAccount
     private String failPassword;
     private String failEmptyField;
 
+
+
     @Before
     public void setUp() throws Exception
     {
         test = new StaffAccount();
         testHelper = new ManageStaffAccountHelper();
-
+        
         usernameOne = "lebowskyD";
         firstNameOne = "dude";
         lastNameOne = "lebowsky";
@@ -145,6 +151,7 @@ public class TestStaffAccount
         StaffAccount user = test.login(failEmptyField, failEmptyField);
         assertTrue(user == null);
     }
+
 
     @After
     public void tearDown() throws Exception
