@@ -356,9 +356,9 @@ public class MedicalStaffMainPageGUI extends Application
         allergyLbl.setWrapText(true);
         allergyLbl.setAlignment(Pos.TOP_LEFT);
 
-         pTVCont.participantTable.setOnMouseClicked(event -> {
-         assignParitipantPreviewLabels(pTVCont.getSelectedPK());
-         });
+        pTVCont.participantTable.setOnMousePressed(event -> {
+            assignParitipantPreviewLabels(pTVCont.getSelectedPK());
+        });
 
         pTVCont.participantTable.setOnKeyPressed(new EventHandler<KeyEvent>()
         {
@@ -367,12 +367,12 @@ public class MedicalStaffMainPageGUI extends Application
             public void handle( KeyEvent ke )
             {
                 KeyCode keycode = ke.getCode();
-                
-                if(keycode.getName().equals("Up"))
+
+                if ( keycode.getName().equals("Up") )
                 {
                     assignParitipantPreviewLabels(pTVCont.getSelectedPK());
                 }
-                else if(keycode.getName().equals("Down"))
+                else if ( keycode.getName().equals("Down") )
                 {
                     assignParitipantPreviewLabels(pTVCont.getSelectedPK());
                 }
