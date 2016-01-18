@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.WatchEvent.Kind;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -18,6 +19,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -141,38 +143,54 @@ public class participantDetailsGUI extends Application
         TabPane tabPane = new TabPane();
 
         // Create tabs names
-        Tab medicalInformation = new Tab();
         Tab medications = new Tab();
         Tab vaccinationDetails = new Tab();
+        Tab kinDetails = new Tab();
+        Tab workDetails = new Tab();
+        Tab physicianInfo = new Tab();
+        Tab caregiver = new Tab();
         Tab other = new Tab();
 
         //set body for tabs
-        medicalInformation.setContent(createMedicalInfoTab());
         medications.setContent(createMedicationsTab());
         vaccinationDetails.setContent(createVaccinationDetailsTab());
+        kinDetails.setContent(createKinDetailsTab());
+        workDetails.setContent(createWorkDetailsTab());
+        physicianInfo.setContent(createPhysicianInfoTab());
+        caregiver.setContent(createCaregiverTab());
         other.setContent(createOtherTab());
         
         // set text for tabs
-        medicalInformation.setText("Medical Information");
         medications.setText("Medications");
         vaccinationDetails.setText("Vaccination Details");
+        kinDetails.setText("Kin");
+        workDetails.setText("Work Details");
+        physicianInfo.setText("Physician");
+        caregiver.setText("Caregiver");
         other.setText("Other");
 
         // set tabs to not be closable
         medications.closableProperty().set(false);
-        medicalInformation.closableProperty().set(false);
         vaccinationDetails.closableProperty().set(false);
+        kinDetails.closableProperty().set(false);
+        workDetails.closableProperty().set(false);
+        physicianInfo.closableProperty().set(false);
+        caregiver.closableProperty().set(false);
         other.closableProperty().set(false);
 
         // set the size of the tabs and add to the pane
-        tabPane.setTabMinWidth(202);
-        tabPane.getTabs().addAll(medicalInformation, medications, vaccinationDetails, other);
+        tabPane.setTabMinWidth(100);
+        tabPane.getTabs().addAll( medications, vaccinationDetails, kinDetails, physicianInfo,
+        		workDetails, caregiver, other);
         tabPane.setMinHeight(29);
 
         return tabPane;
     }
 
-    /**
+
+
+
+	/**
      * 
      * Purpose: Create the HBox that will contain the Preview pane and the Note
      * pane
@@ -262,6 +280,7 @@ public class participantDetailsGUI extends Application
         Label cosmoIDLabel = new Label("CosmoID:");
         Label firstNameLabel = new Label("First Name:");
         Label lastNameLabel = new Label("Last Name: ");
+        Label dobLabel = new Label("Date of Birth: ");
         Label phnLabel = new Label("PHN: ");
         Label diagnosislabel = new Label("Diagnosis: ");
         Label addressLabel = new Label("Address: ");
@@ -273,12 +292,13 @@ public class participantDetailsGUI extends Application
         firstNameLabel.setPadding(new Insets(5, 5, 5, 5));
         lastNameLabel.setPadding(new Insets(5, 5, 5, 5));
         phnLabel.setPadding(new Insets(5,5,5,5));
+        dobLabel.setPadding(new Insets(5,5,5,5));
         diagnosislabel.setPadding(new Insets(5,5,5,5));
         addressLabel.setPadding(new Insets(5,5,5,5));
 
         
         //get participant name, phn, diagnosis, and address from database
-        ResultSet results = DBObject.select("firstName, lastName, personalHealthNumber, conditionName,"
+        ResultSet results = DBObject.select("firstName, lastName, dateOfBirth, personalHealthNumber, conditionName,"
         		+ "description, address, imagePath", "Participant, Condition", 
         		"cosmoID = 123", "");
         
@@ -287,6 +307,7 @@ public class participantDetailsGUI extends Application
         Label cosmoIDText = new Label();
         Label firstNameText = new Label();
         Label lastNameText = new Label();
+        Label dobtext = new Label();
         Label phnText = new Label();
         Label diagnosisText = new Label();
         Label addressText = new Label();
@@ -298,11 +319,12 @@ public class participantDetailsGUI extends Application
 				cosmoIDText.setText(this.cosmoID + "");
 				firstNameText.setText(results.getString(1));
 				lastNameText.setText(results.getString(2));
-				phnText.setText(results.getString(3));
-				diagnosisText.setText(results.getString(4) +  ", " + results.getString(5));
-				addressText.setText(results.getString(6));
+				dobtext.setText(results.getString(3));
+				phnText.setText(results.getString(4));
+				diagnosisText.setText(results.getString(5) +  ", " + results.getString(6));
+				addressText.setText(results.getString(7));
 				
-				URL path = getClass().getResource(results.getString(7));
+				URL path = getClass().getResource(results.getString(8));
 				
 				try {
 					System.out.println(path.toExternalForm());
@@ -334,6 +356,9 @@ public class participantDetailsGUI extends Application
         lastNameText.setMaxWidth(150);
         lastNameText.setMinWidth(150);
         
+        dobtext.setMaxWidth(150);
+        dobtext.setMinWidth(150);
+        
         phnText.setMaxWidth(150);
         phnText.setMinWidth(150);
         
@@ -348,16 +373,18 @@ public class participantDetailsGUI extends Application
         basicInfoPane.add(cosmoIDLabel, 0, 0);
         basicInfoPane.add(firstNameLabel, 0, 1);
         basicInfoPane.add(lastNameLabel, 0, 2);
-        basicInfoPane.add(phnLabel, 0, 3);
-        basicInfoPane.add(diagnosislabel, 0, 4);
-        basicInfoPane.add(addressLabel, 0, 5);
+        basicInfoPane.add(dobLabel, 0, 3);
+        basicInfoPane.add(phnLabel, 0, 4);
+        basicInfoPane.add(diagnosislabel, 0, 5);
+        basicInfoPane.add(addressLabel, 0, 6);
 
         basicInfoPane.add(cosmoIDText, 1, 0);
         basicInfoPane.add(firstNameText, 1, 1);
         basicInfoPane.add(lastNameText, 1, 2);
-        basicInfoPane.add(phnText, 1, 3);
-        basicInfoPane.add(diagnosisText, 1, 4);
-        basicInfoPane.add(addressText, 1, 5);
+        basicInfoPane.add(dobtext,1,3);
+        basicInfoPane.add(phnText, 1, 4);
+        basicInfoPane.add(diagnosisText, 1, 5);
+        basicInfoPane.add(addressText, 1, 6);
 
         // set margins
         BorderPane.setMargin(pictureBox, new Insets(10, 0, 0, 10));
@@ -642,22 +669,199 @@ public class participantDetailsGUI extends Application
     	return scrollPane;
     }
     
-    private ScrollPane createOtherTab()
+    private HBox createOtherTab()
     {
-    	ScrollPane scrollPane = new ScrollPane();
     	
     	HBox hbox = new HBox();
     	
     	ResultSet rs;
     	
-    	VBox careGiverBox = new VBox();
+    	VBox agencyBox = new VBox();
+    	
+    	Label name = new Label();
+    	Label clsd = new Label();
+    	Label funding = new Label();
+    	
+    	agencyBox.getChildren().add(new Label("Agency Information: "));
+    	
+    	rs = DBObject.select("agencyName, clsd, funding", 
+    			"Agency a JOIN Participant p ON a.agencyID = p.agencyID",
+    			"cosmoID =" + this.cosmoID, "");
+    	
+    	try
+    	{
+    		while(rs.next())
+    		{
+    			name.setText("Name: " + rs.getString(1));
+    			clsd.setText("CLSD: " + rs.getString(2));
+    			funding.setText("Funding: " + rs.getString(3));
+    			
+    			agencyBox.getChildren().addAll(name, clsd, funding);
+    		}
+    	}
+    	catch(SQLException e)
+    	{
+    		e.printStackTrace();
+    		System.out.println("Error attempting to fetch agency information for the participant");
+    	}
+    	
+    	
+    	VBox landlordBox = new VBox();
+    	
+    	landlordBox.getChildren().add(new Label("Landllord: "));
+    	
+    	Label landlordName = new Label();
+    	Label landlordAddress = new Label();
+    	Label landlordCity = new Label();
+    	Label landlordProv = new Label();
+    	Label landLordPostal = new Label();
+    	Label landlordPhone = new Label();
+    	
+    	rs = DBObject.select("firstName, address, city, prov, postalCode, phoneNumber",
+    			"Landlord l JOIN Participant p ON l.landlordID = p.landlordID", "p.cosmoID = " + this.cosmoID, "");
+    	
+    	try
+    	{
+    		while(rs.next())
+    		{
+    			landlordName.setText("Name: " + rs.getString(1));
+    			landlordAddress.setText("Address: " + rs.getString(2));
+    			landlordCity.setText("City: " + rs.getString(3));
+    			landlordProv.setText("Province: " + rs.getString(4));
+    			landLordPostal.setText("Postal Code: " + rs.getString(5));
+    			landlordPhone.setText("Phone: " + rs.getString(6));
+    			
+    			landlordBox.getChildren().addAll(landlordName, landlordAddress, landlordCity,
+    					landlordProv, landLordPostal, landlordPhone);
+    		}
+    	}
+    	catch(SQLException e)
+    	{
+    		e.printStackTrace();
+    		System.out.println("Error fetching landlord information from DB");
+    	}
+  
+    
+    	hbox.getChildren().addAll(agencyBox, landlordBox);
+    	
+    	return hbox;
+    }
+    
+    private VBox createKinDetailsTab() {
+		
+VBox kinBox = new VBox();
+    	
+    	Label kinName = new Label();
+    	Label kinAddress = new Label();
+    	Label kinCity = new Label();
+    	Label kinProv = new Label();
+    	Label kinPostal = new Label();
+    	Label kinPhone = new Label();
+    	
+    	ResultSet rs = DBObject.select("firstName, lastName, address, city, prov, postalCode, phoneNumber",
+    			"Kin k JOIN Participant p ON k.kinID = p.kinID", "cosmoID = " + this.cosmoID, "");
+    	
+    	try
+    	{
+    		while(rs.next())
+    		{
+    			kinName.setText("Name: " +  rs.getString(1) + " " + rs.getString(2));
+    			kinAddress.setText("Address: " + rs.getString(3));
+    			kinCity.setText("City: " + rs.getString(4));
+    			kinProv.setText("Province: " + rs.getString(5));
+    			kinPostal.setText("Postal Code: " + rs.getString(6));
+    			kinPhone.setText("Phone: " + rs.getString(7) + "\n\n");
+    			
+    			kinBox.getChildren().addAll(kinName, kinAddress, kinCity, kinProv,
+    					kinPostal, kinPhone);
+    		}
+    	}
+    	catch(SQLException e)
+    	{
+    		e.printStackTrace();
+    		System.out.println("Error trying to fetch Kin information from DB.");
+    	}
+    	
+    	
+		return kinBox;
+	}
+
+	private VBox createWorkDetailsTab() {
+		VBox workBox = new VBox();
+    	
+    	Label workArea = new Label();
+    	Label workFullTime = new Label();
+    	Label workAM = new Label();
+    	Label workPM = new Label();
+    	
+    	ResultSet rs = DBObject.select("workArea, fullTime, am, pm", 
+    			"WorkDetails w JOIN Participant p ON w.workID = p.workID", 
+    			"cosmoID = " + this.cosmoID, "");
+    	
+    	
+    	
+    	try
+    	{
+    		while(rs.next())
+    		{
+    			workArea.setText("Work Area: " + rs.getString(1));
+    			workFullTime.setText("Full Time: " + rs.getString(2));
+    			workAM.setText("AM: " + rs.getString(3));
+    			workPM.setText("PM: " + rs.getString(4) + "\n\n");
+    			
+    			workBox.getChildren().addAll(workArea, workFullTime, workAM, workPM);
+    		}
+    	}
+    	catch(SQLException e)
+    	{
+    		e.printStackTrace();
+    		System.out.println("Error trying to fetch information for the participant's work details.");
+    	}
+    	
+    	return workBox;
+    	
+	}
+
+
+	private Node createPhysicianInfoTab() {
+		VBox physicianBox = new VBox();
+    	
+    	Label physicianName = new Label();
+    	Label physicianPhone = new Label();
+    	
+    	ResultSet rs = DBObject.select("firstName, lastName, phone", 
+    			"Physician ph JOIN Participant pa ON ph.physicianID = pa.physicianID", 
+    			"pa.cosmoID = " + this.cosmoID, "");
+    	
+    	try
+    	{
+    		while(rs.next())
+    		{
+    			physicianName.setText("Name: " + rs.getString(1) + " " + rs.getString(2));
+    			physicianPhone.setText("Phone: " + rs.getString(3) + "\n\n");
+    			physicianBox.getChildren().addAll(physicianName, physicianPhone);
+    		}
+    	}
+    	catch(SQLException e)
+    	{
+    		e.printStackTrace();
+    		System.out.println("Error attempting to fetch physician information for"
+    				+ " participant.");
+    	}
+    	
+    	return physicianBox;
+	}
+
+
+	private VBox createCaregiverTab() {
+		VBox careGiverBox = new VBox();
     	
     	Label careGiverName = new Label();
     	Label careGivenerPhone = new Label();
     	
     	careGiverBox.getChildren().add(new Label("Caregiver:"));
     	
-    	rs = DBObject.select("firstName, lastName, phone", 
+    	ResultSet rs = DBObject.select("firstName, lastName, phone", 
     			"Caregiver c JOIN Participant p ON c.caregiverID = p.caregiverID",
     			"cosmoID = " + this.cosmoID, "");
     	
@@ -665,38 +869,20 @@ public class participantDetailsGUI extends Application
     	{
     		while(rs.next())
     		{
-    			//TODO: use the resultset to set caregiver info labels
+    			careGiverName.setText("Name: " + rs.getString(1) + " " + 
+    					rs.getString(2));
+    			careGivenerPhone.setText("Phone: " + rs.getString(3) + "\n\n");
+    			
+    			careGiverBox.getChildren().addAll(careGiverName, careGivenerPhone);
     		}
     	}
     	catch(SQLException e)
     	{
     		e.printStackTrace();
+    		
+    		System.out.println("Error getting caregiver information from DB.");
     	}
     	
-    	
-    	VBox kinBox = new VBox();
-    	
-    	Label kinName = new Label();
-    	Label kinAddress = new Label();
-    	Label kinCity = new Label();
-    	Label kinProv = new Label();
-    	Label kinPhone = new Label();
-    	
-    	VBox workBox = new VBox();
-    	
-    	Label workArea = new Label();
-    	Label workFullTime = new Label();
-    	Label workAM = new Label();
-    	Label workPM = new Label();
-    	
-    	VBox physicianBox = new VBox();
-    	
-    	Label physicianName = new Label();
-    	Label physicianPhone = new Label();
-    	
-    	scrollPane.setContent(hbox);
-    	
-    	return scrollPane;
-    }
-
+    	return careGiverBox;
+	}
 }
