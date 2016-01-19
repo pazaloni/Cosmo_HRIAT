@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
@@ -548,9 +549,12 @@ public class MedicalStaffMainPageGUI extends Application
         noteTitleView = new ListView<String>();
         // create list of notes
         // TODO make this automatically pull from the database of notes
-        noteTitleList = FXCollections.observableArrayList("Note 1", "Note 2",
-                "Note 3", "Note 4", "Note 5", "Note 6", "Note 7", "Note 8",
-                "Note 9", "Note 10", "Note 11");
+        //run query to get all unresolved notes, order by noteId
+        ResultSet rs = dbObject.select("noteID", "Notes", "not resolved", "noteID");
+        noteTitleList = dbObject.displayRows(rs); 
+        		//FXCollections.observableArrayList("Note 1", "Note 2",
+                //"Note 3", "Note 4", "Note 5", "Note 6", "Note 7", "Note 8",
+                //"Note 9", "Note 10", "Note 11");
 
         // set notes list to listview
         noteTitleView.setItems(noteTitleList);
