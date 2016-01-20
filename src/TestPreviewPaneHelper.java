@@ -142,7 +142,7 @@ public class TestPreviewPaneHelper
 
         String id = helper.queryParticipant("123")[4];
         System.out.println(id + "-------------------------------------------");
-        assertTrue(id.equals("eyes roll back"));
+        assertTrue(id.equals("Slightly Violent"));
     }
     
     /**

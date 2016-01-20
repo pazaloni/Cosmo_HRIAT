@@ -94,8 +94,7 @@ public class MedicalStaffMainPageGUI extends Application
      * Purpose: Construct the main stage for the medical staff when they have
      * successfully logged in
      * 
-     * @param stage
-     *            : the stage the medical staff will see
+     * @param stage : the stage the medical staff will see
      */
     public void medMainPageConstruct( Stage stage, boolean admin )
     {
@@ -157,7 +156,7 @@ public class MedicalStaffMainPageGUI extends Application
         // set the image left and right
         logoAndLogin.setLeft(logo);
         logoAndLogin.setRight(logout);
-
+        logoAndLogin.setFocusTraversable(false);
         return logoAndLogin;
     }
 
@@ -190,7 +189,7 @@ public class MedicalStaffMainPageGUI extends Application
         tabPane.setTabMinWidth(175);
         tabPane.getTabs().addAll(participants, forms, stats);
         tabPane.setMinHeight(29);
-
+        tabPane.setFocusTraversable(false);
         return tabPane;
     }
 
@@ -210,7 +209,7 @@ public class MedicalStaffMainPageGUI extends Application
         hbox.setPadding(new Insets(0, 0, 10, 0));
         hbox.setSpacing(10);
         hbox.setStyle("-fx-background-color: #336699;");
-
+        hbox.setFocusTraversable(false);
         // create preview pane
 
         BorderPane previewPane = createPreviewPane();
@@ -404,10 +403,19 @@ public class MedicalStaffMainPageGUI extends Application
 
         try
         {
-            System.out.println(path.toExternalForm());
-            previewPicture.setImage(new Image(path.openStream()));
-            previewPicture.setFitHeight(121);
-            previewPicture.setFitWidth(122);
+            if ( path != null )
+            {
+                previewPicture.setImage(new Image(path.openStream()));
+                previewPicture.setFitHeight(121);
+                previewPicture.setFitWidth(122);
+            }
+            else
+            {
+                URL url = getClass().getResource("images/defaultPicture.png");
+
+                previewPicture.setImage(new Image(url.openStream()));
+
+            }
 
         }
         catch ( IOException e )
@@ -421,8 +429,8 @@ public class MedicalStaffMainPageGUI extends Application
      * 
      * Purpose:Create the search bar
      * 
-     * @param admin
-     *            : used to check whether a medical administrator was loggedi n
+     * @param admin : used to check whether a medical administrator was loggedi
+     *            n
      * 
      * @return HBox the search bar
      */
@@ -436,6 +444,7 @@ public class MedicalStaffMainPageGUI extends Application
         // set width
         searchBy.setStyle("-fx-pref-width: 150;");
         searchBy.setPromptText(("Search By"));
+        searchBy.setFocusTraversable(false);
 
         // create search field
         searchField = new TextField();
@@ -653,7 +662,7 @@ public class MedicalStaffMainPageGUI extends Application
         noteTitleView.setItems(noteTitleList);
         noteTitleView.setMinWidth(170);
         noteTitleView.setMaxWidth(170);
-
+        noteTitleView.setFocusTraversable(false);
         // note display pane
         GridPane noteDisplayPane = new GridPane();
 

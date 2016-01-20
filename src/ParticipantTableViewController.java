@@ -43,6 +43,7 @@ public class ParticipantTableViewController
     {
         initializeParticipantData();
         participantTable.setItems(participantData);
+        participantTable.setFocusTraversable(false);
     }
 
     private void initializeParticipantData()
