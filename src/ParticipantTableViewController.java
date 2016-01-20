@@ -43,6 +43,7 @@ public class ParticipantTableViewController
     {
         initializeParticipantData();
         participantTable.setItems(participantData);
+        participantTable.setFocusTraversable(false);
     }
 
     private void initializeParticipantData()
@@ -70,7 +71,7 @@ public class ParticipantTableViewController
 
         try
         {
-            while (rs.next())
+            while ( rs.next() )
             {
                 // get the information from the database
                 cosmoID = rs.getString(1);
@@ -94,7 +95,7 @@ public class ParticipantTableViewController
                 participantData.add(participant);
             }
         }
-        catch (SQLException e)
+        catch ( SQLException e )
         {
             System.out.println("Failed to populate Participant Table");
             e.printStackTrace();
@@ -143,11 +144,11 @@ public class ParticipantTableViewController
                 new ListChangeListener<Object>()
                 {
                     @Override
-                    public void onChanged(Change change)
+                    public void onChanged( Change change )
                     {
                         change.next();
                         // if the column was changed
-                        if (change.wasReplaced())
+                        if ( change.wasReplaced() )
                         {
                             // clear all columns
                             participantTable.getColumns().clear();
@@ -170,12 +171,13 @@ public class ParticipantTableViewController
     }
 
     /**
-     * Purpose: Get the item that is selected in the table
+     * Purpose: Get the id of the participant that is selected in the table
      * 
      * @return the ID of the row that is selected
      */
     public String getSelectedPK()
     {
+        participantTable.setFocusTraversable(false);
         Participant participant = participantTable.getSelectionModel()
                 .getSelectedItem();
         return participant.getCosmoID();
