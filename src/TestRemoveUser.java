@@ -5,7 +5,7 @@ import javafx.beans.property.StringProperty;
 import org.junit.Before;
 import org.junit.Test;
 
-public class testRemoveUser
+public class TestRemoveUser
 {
 
     private String usernameToRemove;
