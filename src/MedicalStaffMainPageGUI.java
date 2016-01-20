@@ -339,7 +339,6 @@ public class MedicalStaffMainPageGUI extends Application
         HBox searchBar = new HBox();
         searchBy = new ComboBox<String>();
         searchBy.getItems().addAll("Name", "Address", "Allergy", "CosmoID");
-
         // set width
         searchBy.setStyle("-fx-pref-width: 150;");
         searchBy.setPromptText(("Search By"));
@@ -352,7 +351,41 @@ public class MedicalStaffMainPageGUI extends Application
         // search button
         Button searchButton = new Button("Search");
         searchButton.setPrefSize(110, 20);
+        searchButton.setOnAction(new EventHandler<ActionEvent>()
+                {
 
+                    @Override
+                    public void handle(ActionEvent arg0)
+                    {
+                        String type = searchBy.getValue();
+                        if(type == null)
+                        {
+                            type = "Name";
+                        }
+                        String value = searchField.getText();
+                        String condition = "";
+                        if(type == "Name")
+                        {
+                            condition = "firstName" + " = '" + value + "' OR " + "lastName" + " = '" + value + "'";
+                        }
+                        else
+                        {
+                            condition = type + " = '" + value + "'";
+                        }
+                        
+                        if(value.equals(""))
+                        {
+                            pTVCont.refreshTable("");
+                        }
+                        else
+                        {
+                            pTVCont.refreshTable(condition);
+                        }
+                        
+                        
+                    }
+            
+                });
         // set margins
         HBox.setMargin(searchBy, new Insets(0, 5, 0, 10));
         HBox.setMargin(searchField, new Insets(0, 5, 0, 5));
@@ -488,7 +521,7 @@ public class MedicalStaffMainPageGUI extends Application
                 if ( result.equals("") )
                 {
                     createParticipantStage.close();
-                    pTVCont.refreshTable();
+                    pTVCont.refreshTable("");
                 }
                 // if there is an error message, display it
                 else

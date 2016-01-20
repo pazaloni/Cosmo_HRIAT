@@ -31,7 +31,6 @@ public class ParticipantTableViewController
 
     public ObservableList<Participant> participantData = FXCollections
             .observableArrayList();
-
     /**
      * Constructor for the ParticipantTableViewController class.
      * 
@@ -41,19 +40,21 @@ public class ParticipantTableViewController
      */
     public ParticipantTableViewController()
     {
-        initializeParticipantData();
+        retrieveParticipantData("");
         participantTable.setItems(participantData);
     }
 
-    private void initializeParticipantData()
+    public void retrieveParticipantData(String condition)
     {
+        
+        participantData.clear();
         DatabaseHelper db = new DatabaseHelper();
         ObservableList<String> row = FXCollections.observableArrayList();
         ArrayList<String> participantInfo = new ArrayList<String>();
         // TODO fix to query appropriate address, emergency info
         // correct table Participant instead of Participant
         ResultSet rs = db.select("cosmoID, firstName, lastName, address, "
-                + "dateUpdated", "Participant", "", "");
+                + "dateUpdated", "Participant", condition, "");
 
         // Strings to represent the TODO fix it
         String cosmoID;
@@ -185,10 +186,10 @@ public class ParticipantTableViewController
      * Purpose: To refresh the table so other classes can call this when they
      * update the information
      */
-    public void refreshTable()
+    public void refreshTable(String condition)
     {
         this.participantData.clear();
-        this.initializeParticipantData();
+        this.retrieveParticipantData(condition);
         this.participantTable.getColumns().clear();
         this.initialize();
     }
