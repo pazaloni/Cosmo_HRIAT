@@ -66,6 +66,8 @@ public class MedicalStaffMainPageGUI extends Application
     
     private Stage viewParticipantDetailsStage = new Stage();
     
+    private boolean admin;
+    
     /**
      * Purpose: displays the GUI
      * 
@@ -85,6 +87,8 @@ public class MedicalStaffMainPageGUI extends Application
      */
     public void medMainPageConstruct( Stage stage, boolean admin )
     {
+    	this.admin = admin;
+    	
         dbObject.connect();
         
         pTVCont = new ParticipantTableViewController();
@@ -233,17 +237,30 @@ public class MedicalStaffMainPageGUI extends Application
         // details button
         Button detailsButton = new Button("View Details");
         
-        detailsButton.setOnAction(new EventHandler<ActionEvent>(){
-
-			@Override
-			public void handle(ActionEvent event) {
-				participantDetailsGUI detailsGUI = new participantDetailsGUI();
+        if(this.admin)
+        {
+        	detailsButton.setOnAction(event->{
+        		
+        		participantDetailsGUI detailsGUI = new participantDetailsGUI();
 				//hard coded cosmo ID for testing purposes
-				detailsGUI.participantDetailsConstruct(viewParticipantDetailsStage, 123);
-				
-			}
-        	
-        });
+				detailsGUI.participantDetailsConstruct(viewParticipantDetailsStage, 
+						Integer.parseInt(pTVCont.getSelectedPK()), false);
+        		
+            });
+        }
+        else
+        {
+        	detailsButton.setOnAction(event->{
+        		
+        		participantDetailsGUI detailsGUI = new participantDetailsGUI();
+				//hard coded cosmo ID for testing purposes
+				detailsGUI.participantDetailsConstruct(viewParticipantDetailsStage, 
+						Integer.parseInt(pTVCont.getSelectedPK()), false);
+        		
+            });
+        }
+        
+        
 
         // set margins
         VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));

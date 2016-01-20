@@ -4,9 +4,12 @@ import java.net.URL;
 import java.nio.file.WatchEvent.Kind;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Locale;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -46,35 +49,34 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+
 /**
  * 
- * Purpose: To display the main medical staff page,
+ * Purpose: To display the detailed information for a specific participant.
  *
  * @author TEAM CIMP
  * @version 1.0
  */
 public class participantDetailsGUI extends Application
-{
-    
-    private ParticipantTableViewController pTVCont;
-    
-    private DatabaseHelper dbObject = new DatabaseHelper();
-    
+{   
+    //the main stage for the GUI
     public static Stage participantMainStage;
 
+    //the picture of the participant
     private ImageView previewPicture;
-
-    private ListView<String> noteTitleView;
-
-    private ObservableList<String> noteTitleList;
     
-    private Stage createParticipantStage;
-    
+    //the selected participant's cosmo ID
     private int cosmoID;
     
+    //the database helper object that allows querying of the database
     private DatabaseHelper DBObject = new DatabaseHelper();
     
+    private boolean admin;
+    
+    private static final int PREVIEW_TEXT_WIDTH = 150;
+    private static final int ALLERGY_AND_SEIZURE_MIN_WITH = 410;
 
+    
     /**
      * Purpose: displays the GUI
      * 
@@ -82,19 +84,20 @@ public class participantDetailsGUI extends Application
     @Override
     public void start( Stage stage ) throws Exception
     {
-        participantDetailsConstruct(stage, this.cosmoID);
+        participantDetailsConstruct(stage, this.cosmoID, this.admin);
     }
 
     /**
      * 
-     * Purpose: Construct the main stage for the medical staff when they have
-     * successfully logged in
+     * Purpose: Construct the main stage for 
+     * the medical staff once they have selected a participant to view
      * 
      * @param stage: the stage the medical staff will see
      */
-    public void participantDetailsConstruct( Stage stage, int cosmoID )
+    public void participantDetailsConstruct( Stage stage, int cosmoID, boolean admin )
     {
-        dbObject.connect();
+    	this.admin = admin;
+        DBObject.connect();
         
         this.cosmoID = cosmoID;
         
@@ -196,7 +199,7 @@ public class participantDetailsGUI extends Application
      * pane
      * @return
      */
-    private HBox createHBoxPreviewNotes()
+    private HBox createHBoxPreviewDetails()
     {
         // create hbox and set size and padding
         HBox hbox = new HBox();
@@ -266,10 +269,7 @@ public class participantDetailsGUI extends Application
         
         generateFormsBtn.setMaxWidth(100);
         generateFormsBtn.setMinWidth(100);
-        
-        
-        
-
+ 
         // create basic info pane
         GridPane basicInfoPane = new GridPane();
         basicInfoPane.setStyle("-fx-background-color: #FFFFFF;");
@@ -285,6 +285,7 @@ public class participantDetailsGUI extends Application
         Label diagnosislabel = new Label("Diagnosis: ");
         Label addressLabel = new Label("Address: ");
         
+        //use width to made container large enough
         cosmoIDLabel.setMinWidth(100);
 
         // set label margins
@@ -299,8 +300,8 @@ public class participantDetailsGUI extends Application
         
         //get participant name, phn, diagnosis, and address from database
         ResultSet results = DBObject.select("firstName, lastName, dateOfBirth, personalHealthNumber, conditionName,"
-        		+ "description, address, imagePath", "Participant, Condition", 
-        		"cosmoID = 123", "");
+        		+ "description, address, imagePath", "Participant p LEFT OUTER JOIN Condition c ON p.cosmoID = c.cosmoID", 
+        		 "cosmoID =" + this.cosmoID, "");
         
         
         // set the participant Labels
@@ -313,13 +314,19 @@ public class participantDetailsGUI extends Application
         Label addressText = new Label();
         
         try {
+        	//while there are more results
+        	
 			while(results.next())
 			{
+				//get the participants basic information from the databases
 				System.out.println("Results: " + results.getString(1));
 				cosmoIDText.setText(this.cosmoID + "");
 				firstNameText.setText(results.getString(1));
 				lastNameText.setText(results.getString(2));
-				dobtext.setText(results.getString(3));
+
+				DateFormat format = new SimpleDateFormat("MMMM d, yyyy");
+				
+				dobtext.setText(format.format(results.getTimestamp(3)));
 				phnText.setText(results.getString(4));
 				diagnosisText.setText(results.getString(5) +  ", " + results.getString(6));
 				addressText.setText(results.getString(7));
@@ -327,6 +334,8 @@ public class participantDetailsGUI extends Application
 				URL path = getClass().getResource(results.getString(8));
 				
 				try {
+					//formatting the image path for the image view so
+					//it can be viewed
 					System.out.println(path.toExternalForm());
 					previewPicture = new ImageView(new Image(path.openStream()));
 					previewPicture.setFitWidth(122);
@@ -345,28 +354,32 @@ public class participantDetailsGUI extends Application
 		}
         
         //add buttons to the previewPane
-        pictureBox.getChildren().addAll(editBtn, viewDocumentsBtn, generateFormsBtn);
+        if(this.admin)
+        {
+        	pictureBox.getChildren().add(editBtn);
+        }	
+        pictureBox.getChildren().addAll( viewDocumentsBtn, generateFormsBtn);
 
-        cosmoIDText.setMaxWidth(150);
-        cosmoIDText.setMinWidth(150);
+        cosmoIDText.setMaxWidth(PREVIEW_TEXT_WIDTH);
+        cosmoIDText.setMinWidth(PREVIEW_TEXT_WIDTH);
 
-        firstNameText.setMaxWidth(150);
-        firstNameText.setMinWidth(150);
+        firstNameText.setMaxWidth(PREVIEW_TEXT_WIDTH);
+        firstNameText.setMinWidth(PREVIEW_TEXT_WIDTH);
 
-        lastNameText.setMaxWidth(150);
-        lastNameText.setMinWidth(150);
+        lastNameText.setMaxWidth(PREVIEW_TEXT_WIDTH);
+        lastNameText.setMinWidth(PREVIEW_TEXT_WIDTH);
         
-        dobtext.setMaxWidth(150);
-        dobtext.setMinWidth(150);
+        dobtext.setMaxWidth(PREVIEW_TEXT_WIDTH);
+        dobtext.setMinWidth(PREVIEW_TEXT_WIDTH);
         
-        phnText.setMaxWidth(150);
-        phnText.setMinWidth(150);
+        phnText.setMaxWidth(PREVIEW_TEXT_WIDTH);
+        phnText.setMinWidth(PREVIEW_TEXT_WIDTH);
         
-        diagnosisText.setMaxWidth(150);
-        diagnosisText.setMinWidth(150);
+        diagnosisText.setMaxWidth(PREVIEW_TEXT_WIDTH);
+        diagnosisText.setMinWidth(PREVIEW_TEXT_WIDTH);
         
-        addressText.setMaxWidth(150);
-        addressText.setMinWidth(150);
+        addressText.setMaxWidth(PREVIEW_TEXT_WIDTH);
+        addressText.setMinWidth(PREVIEW_TEXT_WIDTH);
 
 
         // add all labels to the gridpane
@@ -412,7 +425,7 @@ public class participantDetailsGUI extends Application
         // tab pane
         TabPane tabs = createTabs();
         // preview notes
-        HBox previewNotes = createHBoxPreviewNotes();
+        HBox previewNotes = createHBoxPreviewDetails();
 
 
         // add everything to vbox
@@ -424,20 +437,21 @@ public class participantDetailsGUI extends Application
     
 	/**
      * 
-     * Purpose: Create Note Box
+     * Purpose: Create the pane containing the information for
+     * a participants allergies and seizures
      * 
-     * @return HBox create note box
+     * @return HBox allergies and seizures information pane
      */
     private HBox createAllergiesAndSeizuresInfoPane()
     {
         HBox hbox = new HBox();
        
         
-        // note display pane
-        VBox noteDisplayPane = new VBox();
+        // allergies and seizures display pane
+        VBox allergiesAndSeizuresPane = new VBox();
 
-        noteDisplayPane.setStyle("-fx-background-color: #FFFFFF;");
-        noteDisplayPane.setPadding(new Insets(10, 10, 0, 10));
+        allergiesAndSeizuresPane.setStyle("-fx-background-color: #FFFFFF;");
+        allergiesAndSeizuresPane.setPadding(new Insets(10, 10, 0, 10));
 
         
         ScrollPane allergiesDescBox = fetchAndFormatAllergyInfo();
@@ -447,19 +461,24 @@ public class participantDetailsGUI extends Application
     	Label allergiesLabel = new Label("Allergies:");
     	Label seizuresLabel = new Label("Seizures:");
         
-        noteDisplayPane.getChildren().addAll(allergiesLabel, allergiesDescBox,
+        allergiesAndSeizuresPane.getChildren().addAll(allergiesLabel, allergiesDescBox,
         		seizuresLabel, seizuresDescBox);
         
         // set minimum width
-        noteDisplayPane.setMinWidth(265);
+        allergiesAndSeizuresPane.setMinWidth(265);
         //Sets the notebox's width to fit that of the parents window when it is resized
-        noteDisplayPane.prefWidthProperty().bind(participantMainStage.widthProperty().divide(1.50));
+        allergiesAndSeizuresPane.prefWidthProperty().bind(participantMainStage.widthProperty().divide(1.50));
         hbox.setPadding(new Insets(10, 0, 0, 0));
-        hbox.getChildren().addAll(noteDisplayPane);
+        hbox.getChildren().addAll(allergiesAndSeizuresPane);
 
         return hbox;
     }
     
+    /**
+     * Purpose: queries the database for the participants allergy information,
+     * and puts it into the scrollpane to be viewed.
+     * @return ScrollPane the allergy pane
+     */
     private ScrollPane fetchAndFormatAllergyInfo()
     {
     	
@@ -470,27 +489,31 @@ public class participantDetailsGUI extends Application
     	scrollPane.setMinHeight(120);
     	vbox.setMinHeight(100);
     	
+    	//finds all allergy information related to the participant
     	ResultSet rs = DBObject.select("allergicTo, allergyType, description",
     			"Allergies", "cosmoID = " + this.cosmoID, "");
     	
+    	//whether records matching have been found
     	boolean hasRecords = false;
     	
     	try
     	{
+    		//while there are more results
     		while(rs.next())
     		{
     			hasRecords = true;
+    			//get information from result and display it in the scrollpane
     			Label allergen = new Label("Allergen: " + rs.getString(1));
     			allergen.setWrapText(true);
-    			allergen.setMinWidth(410);
+    			allergen.setMinWidth(ALLERGY_AND_SEIZURE_MIN_WITH);
     			allergen.setMaxWidth(vbox.getWidth());
     			Label type = new Label("Type: " + rs.getString(2));
     			type.setWrapText(true);
-    			type.setMinWidth(410);
+    			type.setMinWidth(ALLERGY_AND_SEIZURE_MIN_WITH);
     			type.setMaxWidth(vbox.getWidth());
     			Label desc = new Label("Description: " + rs.getString(3) + "\n\n");
     			desc.setWrapText(true);
-    			desc.setMinWidth(410);
+    			desc.setMinWidth(ALLERGY_AND_SEIZURE_MIN_WITH);
     			desc.setMaxWidth(vbox.getWidth());
     			
     			vbox.getChildren().addAll(allergen, type, desc);
@@ -501,6 +524,7 @@ public class participantDetailsGUI extends Application
     		e.printStackTrace();
     	}
     	
+    	//if no records were found, display that there were no records
     	if(!hasRecords)
     	{
     		vbox.getChildren().add(new Label("None"));
@@ -513,19 +537,26 @@ public class participantDetailsGUI extends Application
     	
     	return scrollPane;
     }
-    
+   
+    /**
+     * Purpose: Uses the database to fetch the required seizure information about the participants
+     * and then display the data
+     * @return scrollPane - the pane holding all of the participants seizure info in labels
+     */
     private ScrollPane fetchAndFormatSeizureInfo()
     {
     	VBox vbox = new VBox();
+    	
     	ScrollPane scrollPane = new ScrollPane();
     	
+    	//maintain the size of the vbox
     	vbox.setMinHeight(100);
     	
-    	
-    	
+    	//select statement responsible for fetching the required seizure information
     	ResultSet rs = DBObject.select("seizureType, description, frequency, duration, aftermath, medicationName",
     			"Seizures", "cosmoID = " + this.cosmoID, "");
     	
+    	//Whether or not there are any record to be returned
     	boolean hasRecords = false;
     	
     	try
@@ -535,30 +566,30 @@ public class participantDetailsGUI extends Application
     			hasRecords = true;
     			Label seizureType = new Label("Seizure Type: " + rs.getString(1));
     			seizureType.setWrapText(true);
-    			seizureType.setMinWidth(410); 
+    			seizureType.setMinWidth(ALLERGY_AND_SEIZURE_MIN_WITH); 
     			seizureType.setMaxWidth(vbox.getWidth());
     			Label seizureDesc = new Label("Description:  " + rs.getString(2));
     			seizureDesc.setWrapText(true);
-    			seizureDesc.setMinWidth(410);
+    			seizureDesc.setMinWidth(ALLERGY_AND_SEIZURE_MIN_WITH);
     			seizureDesc.setMaxWidth(vbox.getWidth());
     			Label seizureFreq = new Label("Frequency: " + rs.getString(3));
     			seizureFreq.setWrapText(true);
-    			seizureFreq.setMinWidth(410);
+    			seizureFreq.setMinWidth(ALLERGY_AND_SEIZURE_MIN_WITH);
     			seizureFreq.setMaxWidth(vbox.getWidth());
     			Label seizureDuration = new Label("Duration: " + rs.getString(4));
     			seizureDuration.setWrapText(true);
-    			seizureDuration.setMinWidth(410);
+    			seizureDuration.setMinWidth(ALLERGY_AND_SEIZURE_MIN_WITH);
     			seizureDuration.setMaxWidth(vbox.getWidth());
     			Label seizureAfter = new Label("Aftermath: " + rs.getString(5));
     			seizureAfter.setWrapText(true);
-    			seizureAfter.setMinWidth(410);
+    			seizureAfter.setMinWidth(ALLERGY_AND_SEIZURE_MIN_WITH);
     			seizureAfter.setMaxWidth(vbox.getWidth());
     			Label medicationName = new Label("Medication Name: " + rs.getString(6));
     			medicationName.setWrapText(true);
-    			medicationName.setMinWidth(410);
+    			medicationName.setMinWidth(ALLERGY_AND_SEIZURE_MIN_WITH);
     			medicationName.setMaxWidth(vbox.getWidth());
     			
-    			
+    			//add the labels to the parent container
     			vbox.getChildren().addAll(seizureType, seizureDesc, seizureFreq, 
     					seizureDuration, seizureAfter, medicationName);
     		}
@@ -570,12 +601,16 @@ public class participantDetailsGUI extends Application
     	
     	if(!hasRecords)
     	{
+    		//if no record are found display "None"
     		vbox.getChildren().add(new Label("None"));
     	}
-    	
+    	//attach the vbox to its parent container (scroll pane)
     	scrollPane.setContent(vbox);
+    	//remove Horizontal scroll bar
     	scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+    	//add vertical scroll bar
     	scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+    	//maintain width of the scroll pane
     	scrollPane.setHmax(vbox.getWidth());
     	
     	
@@ -583,17 +618,11 @@ public class participantDetailsGUI extends Application
     	 
     
     }
-    
-    
-    private ScrollPane createMedicalInfoTab()
-    {
-    	ScrollPane scrollPane = new ScrollPane();
-    	//since all information we could put here is basically covered in
-    	//other places on the GUI, maybe get rid of this? Unless you can
-    	//find a use for it 
-    	return scrollPane;
-    }
-    
+
+    /**
+     * Purpose: Creates the "medications" tab which will hold the medications information for the specified participant
+     * @return the scroll pane containing the required medication information
+     */
     private ScrollPane createMedicationsTab()
     {
     	ScrollPane scrollPane = new ScrollPane();
@@ -605,6 +634,7 @@ public class participantDetailsGUI extends Application
     	Label timesGiven = new Label();
     	Label reason = new Label();
     	
+    	//select statement responsible for fetching the required medication information
     	ResultSet rs = DBObject.select("medicationName, dosage, timesGiven, reason",
     			"Medication", "cosmoID = " + this.cosmoID, "");
     	
@@ -620,6 +650,7 @@ public class participantDetailsGUI extends Application
     			
     			reason.setText("Reason: " + rs.getString(4));
     			
+    			//add the labels to the parent Vbox container
     			vbox.getChildren().addAll(medicationName, dosage, timesGiven, reason);
     		}
     	}
@@ -627,22 +658,23 @@ public class participantDetailsGUI extends Application
     	{
     		e.printStackTrace();
     	}
-    	
+    	//set the vbox content to its parent container (scroll pane)
     	scrollPane.setContent(vbox);
     	
     	return scrollPane;
     }
     
-    
+    /**
+     * Purpose: creates the tab that contains the information about vaccinations
+     * @return scrollPane holding all of the specified participants vaccination information
+     */
     private ScrollPane createVaccinationDetailsTab()
     {
     	ScrollPane scrollPane = new ScrollPane();
     	
     	VBox vbox = new VBox();
     	
-    	Label vaccinationName = new Label();
-    	Label dateOf = new Label();
-    	
+    	//select statement responsible for fetching the required vaccination information
     	ResultSet rs = DBObject.select("vaccinationName, dateOFVaccination", 
     			"Vaccination", "cosmoID = " + this.cosmoID, "");
     	
@@ -651,11 +683,9 @@ public class participantDetailsGUI extends Application
     	{
     		while(rs.next())
     		{
-    			vaccinationName.setText("Vaccination Name: " + rs.getString(1));
-    			
-    			dateOf.setText("Date given: " + rs.getString(2) + "\n\n");
-    			
-    			vbox.getChildren().addAll(vaccinationName, dateOf);
+    			//add the vaccination details in the form of a label to the  parent container (scrollPane)
+    			vbox.getChildren().addAll(new Label("Vaccination Name: " + rs.getString(1))
+    			,new Label("Date given: " + rs.getString(2) + "\n\n"));
     		}
     	}
     	catch(SQLException e)
@@ -669,6 +699,10 @@ public class participantDetailsGUI extends Application
     	return scrollPane;
     }
     
+    /**
+     * Purpose: Creates the "other" tab which will hold information such as agency and landlord information
+     * @return hbox holding all of the "other" information in the form of labels.
+     */
     private HBox createOtherTab()
     {
     	
@@ -684,6 +718,7 @@ public class participantDetailsGUI extends Application
     	
     	agencyBox.getChildren().add(new Label("Agency Information: "));
     	
+    	//select statement responsible for fetching the required agency and landlord information
     	rs = DBObject.select("agencyName, clsd, funding", 
     			"Agency a JOIN Participant p ON a.agencyID = p.agencyID",
     			"cosmoID =" + this.cosmoID, "");
@@ -695,7 +730,7 @@ public class participantDetailsGUI extends Application
     			name.setText("Name: " + rs.getString(1));
     			clsd.setText("CLSD: " + rs.getString(2));
     			funding.setText("Funding: " + rs.getString(3));
-    			
+    			//add the labels to the parent container (hbox)
     			agencyBox.getChildren().addAll(name, clsd, funding);
     		}
     	}
@@ -717,6 +752,7 @@ public class participantDetailsGUI extends Application
     	Label landLordPostal = new Label();
     	Label landlordPhone = new Label();
     	
+    	//select statement responsible for fetching the required landlord information
     	rs = DBObject.select("firstName, address, city, prov, postalCode, phoneNumber",
     			"Landlord l JOIN Participant p ON l.landlordID = p.landlordID", "p.cosmoID = " + this.cosmoID, "");
     	
@@ -730,7 +766,7 @@ public class participantDetailsGUI extends Application
     			landlordProv.setText("Province: " + rs.getString(4));
     			landLordPostal.setText("Postal Code: " + rs.getString(5));
     			landlordPhone.setText("Phone: " + rs.getString(6));
-    			
+    			//add the landlord information labels to the hbox
     			landlordBox.getChildren().addAll(landlordName, landlordAddress, landlordCity,
     					landlordProv, landLordPostal, landlordPhone);
     		}
@@ -741,15 +777,19 @@ public class participantDetailsGUI extends Application
     		System.out.println("Error fetching landlord information from DB");
     	}
   
-    
+    	//add the final landlord and angecy text boxes to the hbox.
     	hbox.getChildren().addAll(agencyBox, landlordBox);
     	
     	return hbox;
     }
     
+    /**
+     * Purpose: Create the labels which will hold the specified "kin" information for the selected participant
+     * @return kinBox
+     */
     private VBox createKinDetailsTab() {
 		
-VBox kinBox = new VBox();
+    	VBox kinBox = new VBox();
     	
     	Label kinName = new Label();
     	Label kinAddress = new Label();
@@ -758,6 +798,7 @@ VBox kinBox = new VBox();
     	Label kinPostal = new Label();
     	Label kinPhone = new Label();
     	
+    	//select statement responsible for fetching the required kin information
     	ResultSet rs = DBObject.select("firstName, lastName, address, city, prov, postalCode, phoneNumber",
     			"Kin k JOIN Participant p ON k.kinID = p.kinID", "cosmoID = " + this.cosmoID, "");
     	
@@ -771,7 +812,7 @@ VBox kinBox = new VBox();
     			kinProv.setText("Province: " + rs.getString(5));
     			kinPostal.setText("Postal Code: " + rs.getString(6));
     			kinPhone.setText("Phone: " + rs.getString(7) + "\n\n");
-    			
+    			//add all kin information in the form of labels to the parent kinBox
     			kinBox.getChildren().addAll(kinName, kinAddress, kinCity, kinProv,
     					kinPostal, kinPhone);
     		}
@@ -786,6 +827,10 @@ VBox kinBox = new VBox();
 		return kinBox;
 	}
 
+    /**
+     * Purpose: Create all of the labels which will store the work details information
+     * @return workBox
+     */
 	private VBox createWorkDetailsTab() {
 		VBox workBox = new VBox();
     	
@@ -793,7 +838,7 @@ VBox kinBox = new VBox();
     	Label workFullTime = new Label();
     	Label workAM = new Label();
     	Label workPM = new Label();
-    	
+    	//select statement responsible for fetching the required work details information
     	ResultSet rs = DBObject.select("workArea, fullTime, am, pm", 
     			"WorkDetails w JOIN Participant p ON w.workID = p.workID", 
     			"cosmoID = " + this.cosmoID, "");
@@ -809,6 +854,8 @@ VBox kinBox = new VBox();
     			workAM.setText("AM: " + rs.getString(3));
     			workPM.setText("PM: " + rs.getString(4) + "\n\n");
     			
+    			//add the labels which will be holding the required work details 
+    			//information to the parent container (workBox)
     			workBox.getChildren().addAll(workArea, workFullTime, workAM, workPM);
     		}
     	}
@@ -822,13 +869,17 @@ VBox kinBox = new VBox();
     	
 	}
 
-
-	private Node createPhysicianInfoTab() {
+/**
+ * Purpose: Create the container which will hold all of the physician information in the form of labels 
+ * @return PhysicianBox
+ */
+	private VBox createPhysicianInfoTab() {
 		VBox physicianBox = new VBox();
     	
     	Label physicianName = new Label();
     	Label physicianPhone = new Label();
     	
+    	//select statement responsible for fetching the required physician information
     	ResultSet rs = DBObject.select("firstName, lastName, phone", 
     			"Physician ph JOIN Participant pa ON ph.physicianID = pa.physicianID", 
     			"pa.cosmoID = " + this.cosmoID, "");
@@ -839,6 +890,8 @@ VBox kinBox = new VBox();
     		{
     			physicianName.setText("Name: " + rs.getString(1) + " " + rs.getString(2));
     			physicianPhone.setText("Phone: " + rs.getString(3) + "\n\n");
+    			
+    			//add the required physician information to the parent container
     			physicianBox.getChildren().addAll(physicianName, physicianPhone);
     		}
     	}
@@ -853,6 +906,10 @@ VBox kinBox = new VBox();
 	}
 
 
+	/**
+	 * Purpose: create the box which will hold all of the specified caregiver information for the selected participant
+	 * @return: careGiver
+	 */
 	private VBox createCaregiverTab() {
 		VBox careGiverBox = new VBox();
     	
@@ -860,7 +917,7 @@ VBox kinBox = new VBox();
     	Label careGivenerPhone = new Label();
     	
     	careGiverBox.getChildren().add(new Label("Caregiver:"));
-    	
+    	//select statement responsible for fetching the required  careGiver information
     	ResultSet rs = DBObject.select("firstName, lastName, phone", 
     			"Caregiver c JOIN Participant p ON c.caregiverID = p.caregiverID",
     			"cosmoID = " + this.cosmoID, "");
@@ -872,7 +929,7 @@ VBox kinBox = new VBox();
     			careGiverName.setText("Name: " + rs.getString(1) + " " + 
     					rs.getString(2));
     			careGivenerPhone.setText("Phone: " + rs.getString(3) + "\n\n");
-    			
+    			//Add labels to the parent container.
     			careGiverBox.getChildren().addAll(careGiverName, careGivenerPhone);
     		}
     	}
