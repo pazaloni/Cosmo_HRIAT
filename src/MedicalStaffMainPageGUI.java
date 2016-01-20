@@ -358,28 +358,6 @@ public class MedicalStaffMainPageGUI extends Application
         pTVCont.participantTable.setOnMousePressed(event -> {
             assignParitipantPreviewLabels(pTVCont.getSelectedPK());
         });
-
-        pTVCont.participantTable.setOnKeyPressed(new EventHandler<KeyEvent>()
-        {
-
-            @Override
-            public void handle( KeyEvent ke )
-            {
-                KeyCode keycode = ke.getCode();
-
-                if ( keycode.getName().equals("Up") )
-                {
-                    assignParitipantPreviewLabels(pTVCont.getSelectedPK());
-                }
-                else if ( keycode.getName().equals("Down") )
-                {
-                    assignParitipantPreviewLabels(pTVCont.getSelectedPK());
-                }
-                System.out.println(keycode.getName());
-            }
-
-        });
-
     }
 
     /**
