@@ -172,7 +172,6 @@ public class LoginGUI extends Application
                     success = true;
                     stageLogin.close();
                     TechMainPageGUI techMainGui = new TechMainPageGUI();
-                    techMainGui.passLoggedInUser(username);
                     techMainGui.techMainPageConstruct(stageLogin, loggedInStaff);
                 }
                 else
@@ -181,9 +180,7 @@ public class LoginGUI extends Application
                     stageLogin.close();
                     MedicalStaffMainPageGUI medStaffGUI = new MedicalStaffMainPageGUI();
                     medStaffGUI.medMainPageConstruct(stageLogin, loggedInStaff);
-                }
-                    
-                   
+                }     
             }
         }
         // If they didn't successfully login a incorrect username or

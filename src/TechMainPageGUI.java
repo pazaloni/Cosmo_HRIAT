@@ -89,9 +89,7 @@ public class TechMainPageGUI extends Application
     // the new user main page
     private Stage stageNewUser;
     
-    //String that will hold the username of the logged in tech admin 
-    private String loggedUser;
-    
+    //Tech Administrator object that holds logged in user
     private TechnicalAdministrator loggedInAdmin;
 
     public void techMainPageConstruct(Stage stage, StaffAccount loggedInStaff)
@@ -216,7 +214,7 @@ public class TechMainPageGUI extends Application
 
         // final stage preparation and titling
         stageTech.setScene(scene);
-        stageTech.setTitle("Cosmopolitan Industries");
+        stageTech.setTitle("Cosmo Industries - " + loggedInAdmin.GetUsername());
         // display window
         stageTech.show();
 
@@ -559,7 +557,7 @@ public class TechMainPageGUI extends Application
         if(username != null && username != "null")
         {
             //if the selected username is the same as the current username 
-        	if(username.equals(loggedUser))
+        	if(username.equals(loggedInAdmin.GetUsername()))
             {
             	//pop up a message saying that you cannot delete the current user
         		PopUpMessage messageBox = new PopUpMessage("You cannot delete "
@@ -608,14 +606,4 @@ public class TechMainPageGUI extends Application
 
     }
     
-    /**
-     * Purpose:	To set the username of the currently logged in tech admin
-     * @param username the passed in logged in tech admin
-     * @author 	Steven Palchinski cst209
-     * 			Andrew Hundeby	cst205
-     */
-    public void passLoggedInUser(String username)
-    {
-    	loggedUser = username;
-    }
 }

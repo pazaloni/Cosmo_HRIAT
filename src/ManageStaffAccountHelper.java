@@ -13,8 +13,6 @@ import java.sql.SQLException;
 public class ManageStaffAccountHelper
 {
 
-    private static final int STAFF_COLUMN_SIZE = 6;
-
     private static final String EMPTY_FIELD = "One or more of your fields is empty";
     private static final String PASSWORD_NOT_SAME = "Passwords do not match";
     private static final String EMAIL_NOT_VALID = "Email is not valid";
@@ -227,7 +225,7 @@ public class ManageStaffAccountHelper
      * 
      * @param username
      *            String of user name to be queried on
-     * @return StaffAccount a staffa ccount object 
+     * @return StaffAccount a staff account object 
      */
     public StaffAccount queryStaff(String username)
     {
