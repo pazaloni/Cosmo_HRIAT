@@ -236,6 +236,8 @@ public class MedicalStaffMainPageGUI extends Application
 
         // details button
         Button detailsButton = new Button("View Details");
+        // set margins
+        VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
         
         if(this.admin)
         {
@@ -262,8 +264,7 @@ public class MedicalStaffMainPageGUI extends Application
         
         
 
-        // set margins
-        VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
+        
 
         // add picture and button to picture box
         pictureBox.getChildren().addAll(previewPicture, detailsButton);
@@ -485,7 +486,7 @@ public class MedicalStaffMainPageGUI extends Application
                 //call create participant on medical administrator with the text passed in
             	String result = MedicalAdministrator.createParticipant(cosmoIdTxt.getText(), firstNameTxt.getText(), 
             	        lastNameTxt.getText(), birthDatePicker.getValue(), familyPhysicianTxt.getText(), 
-            	        healthNumTxt.getText(), phoneTxt.getText(), addressTxt.getText() );
+            	        healthNumTxt.getText(), phoneTxt.getText(), addressTxt.getText(), null );
             	
             	//if no error message is recieved then close this window and refresh the table
                 	if(result.equals(""))

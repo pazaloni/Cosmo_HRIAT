@@ -55,14 +55,14 @@ public class ManageStaffAccountHelper
      * @return boolean: true if the user addition was successful, false
      *         otherwise
      */
-    public String addUser( String username, String lastName, String firstName,
-            String email, String password, String repeatPW, String securityLv )
+    public String addUser(String username, String lastName, String firstName,
+            String email, String password, String repeatPW, String securityLv)
     {
         String result = "";
 
-        if ( firstName.isEmpty() || lastName.isEmpty() || username.isEmpty()
+        if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty()
                 || password.isEmpty() || repeatPW.isEmpty()
-                || securityLv.isEmpty() )
+                || securityLv.isEmpty())
 
         {
             result = EMPTY_FIELD;
@@ -70,15 +70,15 @@ public class ManageStaffAccountHelper
         else
         {
             // if the paswords are the same, proceed
-            if ( password.equals(repeatPW) )
+            if (password.equals(repeatPW))
             {
                 // if the email cotains an @ and .
-                if ( email.contains("@") && email.contains(".") )
+                if (email.contains("@") && email.contains("."))
                 {
 
                     db.connect();
                     // if the username does not exist in the database
-                    if ( !usernameExists(username) )
+                    if (!usernameExists(username))
                     {
                         String[] newUserInfo = new String[6];
                         newUserInfo[0] = username;
@@ -123,7 +123,7 @@ public class ManageStaffAccountHelper
      *            : the username for the new account
      * @return boolean: true if the username exists, false otherwise
      */
-    private boolean usernameExists( String username )
+    private boolean usernameExists(String username)
     {
         boolean result = false;
 
@@ -131,17 +131,17 @@ public class ManageStaffAccountHelper
         ResultSet set = db.select("UserName", "Staff", "", "");
         try
         {
-            while ( set.next() && !result )
+            while (set.next() && !result)
             {
                 // if the username for the new user is already in the database
                 // then the result is false
-                if ( username.equals(set.getString(1)) )
+                if (username.equals(set.getString(1)))
                 {
                     result = true;
                 }
             }
         }
-        catch ( SQLException e )
+        catch (SQLException e)
         {
 
             e.printStackTrace();
@@ -155,14 +155,14 @@ public class ManageStaffAccountHelper
      * 
      * @param username
      */
-    public String editUser( String username, String lastName, String firstName,
-            String email, String password, String repeatPW, String securityLv )
+    public String editUser(String username, String lastName, String firstName,
+            String email, String password, String repeatPW, String securityLv)
     {
         String result = "";
 
-        if ( firstName.isEmpty() || lastName.isEmpty() || username.isEmpty()
+        if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty()
                 || password.isEmpty() || repeatPW.isEmpty()
-                || securityLv.isEmpty() )
+                || securityLv.isEmpty())
 
         {
             result = EMPTY_FIELD;
@@ -170,10 +170,10 @@ public class ManageStaffAccountHelper
         else
         {
             // if the paswords are the same, proceed
-            if ( password.equals(repeatPW) )
+            if (password.equals(repeatPW))
             {
                 // if the email cotains an @ and .
-                if ( email.contains("@") && email.contains(".") )
+                if (email.contains("@") && email.contains("."))
                 {
 
                     db.connect();
@@ -213,10 +213,9 @@ public class ManageStaffAccountHelper
      * 
      * @param username
      *            : The user that you will remove
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public boolean removeUser( String username )
+    public boolean removeUser(String username)
     {
         return this.db.delete("Staff", "UserName = \"" + username + "\"");
     }
@@ -230,7 +229,7 @@ public class ManageStaffAccountHelper
      *            String of user name to be queried on
      * @return String[] an array for strings holding the attributes
      */
-    public String[] queryStaff( String username )
+    public String[] queryStaff(String username)
     {
         String[] stafftoReturn = new String[STAFF_COLUMN_SIZE];
         ResultSet staff = db.select(
@@ -238,7 +237,7 @@ public class ManageStaffAccountHelper
                 "Staff", "username='" + username + "'", "");
         try
         {
-            while ( staff.next() )
+            while (staff.next())
             {
 
                 stafftoReturn[0] = staff.getString(1);
@@ -249,7 +248,7 @@ public class ManageStaffAccountHelper
                 stafftoReturn[5] = staff.getString(6);
             }
         }
-        catch ( SQLException e )
+        catch (SQLException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();

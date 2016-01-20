@@ -1,9 +1,8 @@
-
-public class ParticipantUpdateForm 
+public class ParticipantUpdateForm
 {
 
-	public void participantUpdateForm(Participant participant)
-	{
-		
-	}
+    public void participantUpdateForm(Participant participant)
+    {
+
+    }
 }

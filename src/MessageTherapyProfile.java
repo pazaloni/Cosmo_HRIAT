@@ -1,9 +1,8 @@
-
-public class MessageTherapyProfile 
+public class MessageTherapyProfile
 {
 
-	public void messageTherapyProfile(Participant particpant)
-	{
-		
-	}
+    public void messageTherapyProfile(Participant particpant)
+    {
+
+    }
 }

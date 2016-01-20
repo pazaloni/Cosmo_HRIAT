@@ -1,7 +1,5 @@
 import javafx.beans.property.SimpleStringProperty;
 
-
-
 /**
  * 
  * Purpose: Represent the technical administrator in the system
@@ -18,18 +16,17 @@ public class TechnicalAdministrator extends BasicStaff
         super(username, lastName, firstName, email, password, accessLevel);
     }
 
-    public boolean addAccount( String lastName, String firstName,
-            String password )
+    public boolean addAccount(String lastName, String firstName, String password)
     {
         return false;
     }
 
-    public boolean removeAccount( int staffID )
+    public boolean removeAccount(int staffID)
     {
         return false;
     }
 
-    public boolean resetPassword( int staffID, String newPassword )
+    public boolean resetPassword(int staffID, String newPassword)
     {
         return false;
     }

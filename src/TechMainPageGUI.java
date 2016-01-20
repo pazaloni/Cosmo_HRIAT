@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -91,7 +92,7 @@ public class TechMainPageGUI extends Application
     //String that will hold the username of the logged in tech admin 
     private String loggedUser;
 
-    public void techMainPageConstruct( Stage stage )
+    public void techMainPageConstruct(Stage stage)
     {
 
         // open the database connection
@@ -147,13 +148,13 @@ public class TechMainPageGUI extends Application
         btnRemoveUser.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
-            public void handle( ActionEvent e )
+            public void handle(ActionEvent e)
             {
                 try
                 {
                     removeUser(sTVCont.getSelectedPK());
                 }
-                catch ( Exception e1 )
+                catch (Exception e1)
                 {
 
                     e1.printStackTrace();
@@ -164,19 +165,30 @@ public class TechMainPageGUI extends Application
         // appends buttons to the action box to be displayed, and formatts the
         // actionBox
         // set event handler to create a new user
-        btnAddUser.setOnAction(( ActionEvent ) -> 
-        {
+        btnAddUser.setOnAction((ActionEvent) -> {
             lblWarning.setText("");
             manageUser(NEW_STAFF);
         });
 
-        btnEditUser.setOnAction(( ActionEvent ) -> {
+        btnEditUser.setOnAction((ActionEvent) -> {
             if (!(sTVCont.getSelectedPK().equals("null")))
             {
                 lblWarning.setText("");
                 manageUser(EDIT_STAFF);
             }
- 
+            else
+            {
+                Stage popUpStage = new Stage();
+                
+                //pop up a message saying that you cannot delete the current user
+                PopUpMessage messageBox = new PopUpMessage("No user selected", popUpStage);
+                
+                Scene popScene = new Scene(messageBox.root, 300, 75);
+                popUpStage.setScene(popScene);
+                popUpStage.showAndWait();
+                
+            }
+
         });
 
         actionBox.getChildren().addAll(btnViewLog, btnAddUser, btnEditUser,
@@ -214,7 +226,7 @@ public class TechMainPageGUI extends Application
      * 
      * @param warning
      */
-    public static void changeWarning( String warning )
+    public static void changeWarning(String warning)
     {
         lblWarning.setText(warning);
     }
@@ -222,8 +234,10 @@ public class TechMainPageGUI extends Application
     /**
      * 
      * Purpose: Display a pop-up box with information to fill out for a user
+     * 
+     * @param newUser - If true creates a user, if false edits the user
      */
-    private void manageUser( boolean newUser )
+    private void manageUser(boolean newUser)
     {
         stageNewUser = new Stage();
 
@@ -243,11 +257,34 @@ public class TechMainPageGUI extends Application
         Label lblUsername = new Label("Username");
         lblUsername.setFont(new Font(15));
         TextField username = new TextField();
-
+        
+        //checkbox to show/hide passwords
+        CheckBox showPassword = new CheckBox();
+        Label lblShowPassword = new Label("Show Password");
+        HBox showPasswordBox = new HBox();
+        showPasswordBox.getChildren().addAll(showPassword, lblShowPassword);
+        
         Label lblPassword = new Label("Password");
         lblPassword.setFont(new Font(15));
         PasswordField password = new PasswordField();
-
+        
+        //password field in textfield form, set not visible by default
+        TextField passwordText = new TextField();
+        passwordText.setManaged(false);
+        passwordText.setVisible(false);
+        
+        //bind password to checkbox
+        //show text field when selected
+        passwordText.managedProperty().bind(showPassword.selectedProperty());
+        passwordText.visibleProperty().bind(showPassword.selectedProperty());
+        //show password field when not selected
+        password.managedProperty().bind(showPassword.selectedProperty().not());
+        password.visibleProperty().bind(showPassword.selectedProperty().not());
+        
+        //bind the values bidirectionally
+        passwordText.textProperty().bindBidirectional(password.textProperty());
+        
+        
         Label lblEmail = new Label("Email");
         lblEmail.setFont(new Font(15));
         TextField email = new TextField();
@@ -255,7 +292,24 @@ public class TechMainPageGUI extends Application
         Label lblRepeatPassword = new Label("Repeat Password");
         lblRepeatPassword.setFont(new Font(15));
         PasswordField repeatPassword = new PasswordField();
-
+        
+        //password field in textfield form, set not visible by default
+        TextField repeatPasswordText = new TextField();
+        repeatPasswordText.setManaged(false);
+        repeatPasswordText.setVisible(false);
+        
+        //bind password to checkbox
+        //show text field when selected
+        repeatPasswordText.managedProperty().bind(showPassword.selectedProperty());
+        repeatPasswordText.visibleProperty().bind(showPassword.selectedProperty());
+        //show password field when not selected
+        repeatPassword.managedProperty().bind(showPassword.selectedProperty().not());
+        repeatPassword.visibleProperty().bind(showPassword.selectedProperty().not());
+        
+        //bind the values bidirectionally
+        repeatPasswordText.textProperty().bindBidirectional(repeatPassword.textProperty());
+        
+        
         Label lblSecurityLevel = new Label("Security Level");
         lblSecurityLevel.setFont(new Font(15));
         ObservableList<String> securityLevels = FXCollections
@@ -288,7 +342,7 @@ public class TechMainPageGUI extends Application
 
         btnSubmit.minWidth(150);
         btnSubmit.setFont(new Font(15));
-        if ( !newUser )
+        if (!newUser)
         {
             String[] selectedStaff = manageStaff.queryStaff(sTVCont
                     .getSelectedPK());
@@ -306,10 +360,10 @@ public class TechMainPageGUI extends Application
         {
 
             @Override
-            public void handle( ActionEvent event )
+            public void handle(ActionEvent event)
             {
-                
-                if ( newUser )
+
+                if (newUser)
                 {
                     String result = manageStaff.addUser(username.getText(),
                             lastName.getText(), firstName.getText(),
@@ -317,7 +371,7 @@ public class TechMainPageGUI extends Application
                             repeatPassword.getText(),
                             returnSecurityLevel(cboSecurityLevels.getValue()));
 
-                    if ( result.equals("") )
+                    if (result.equals(""))
                     {
                         stageNewUser.close();
                         sTVCont.refreshTable();
@@ -335,7 +389,7 @@ public class TechMainPageGUI extends Application
                             firstName.getText(), email.getText(),
                             password.getText(), repeatPassword.getText(),
                             returnSecurityLevel(cboSecurityLevels.getValue()));
-                    if ( updateResult.equals("") )
+                    if (updateResult.equals(""))
                     {
                         stageNewUser.close();
                         sTVCont.refreshTable();
@@ -346,7 +400,7 @@ public class TechMainPageGUI extends Application
                     }
                 }
                 sTVCont.refreshTable();
-                
+
             }
 
         });
@@ -363,11 +417,14 @@ public class TechMainPageGUI extends Application
         newUserForm.add(email, 1, 4);
         newUserForm.add(lblPassword, 0, 5);
         newUserForm.add(password, 1, 5);
+        newUserForm.add(passwordText, 1, 5);
         newUserForm.add(lblRepeatPassword, 0, 6);
-        newUserForm.add(repeatPassword, 1, 6);
-        newUserForm.add(lblSecurityLevel, 0, 7);
-        newUserForm.add(cboSecurityLevels, 1, 7);
-        newUserForm.add(completionButtons, 1, 8);
+        newUserForm.add(repeatPassword, 1, 6); 
+        newUserForm.add(repeatPasswordText,1,6);
+        newUserForm.add(showPasswordBox,1,7);  // added showPassword checkbox
+        newUserForm.add(lblSecurityLevel, 0, 8);
+        newUserForm.add(cboSecurityLevels, 1, 8);
+        newUserForm.add(completionButtons, 1, 9);
         newUserForm.add(lblWarning, 0, 0, 2, 1);
 
         Scene scene = new Scene(newUserForm);
@@ -397,18 +454,18 @@ public class TechMainPageGUI extends Application
      * @return Return a security level based on the item selected in the text
      *         box
      */
-    private String returnSecurityLevel( String level )
+    private String returnSecurityLevel(String level)
     {
         String securityLevel = "4";
-        if ( level.contains("Basic Staff") )
+        if (level.contains("Basic Staff"))
         {
             securityLevel = "0";
         }
-        else if ( level.contains("Medical Administrator") )
+        else if (level.contains("Medical Administrator"))
         {
             securityLevel = "1";
         }
-        else if ( level.contains("Technical Administrator") )
+        else if (level.contains("Technical Administrator"))
         {
             securityLevel = "2";
         }
@@ -420,7 +477,7 @@ public class TechMainPageGUI extends Application
      * launched
      * 
      */
-    public void start( Stage stage )
+    public void start(Stage stage)
     {
         techMainPageConstruct(stage);
     }
@@ -447,7 +504,7 @@ public class TechMainPageGUI extends Application
         btnLogOut.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
-            public void handle( ActionEvent e )
+            public void handle(ActionEvent e)
             {
                 stageTech.close();
                 LoginGUI test5 = new LoginGUI();
@@ -455,7 +512,7 @@ public class TechMainPageGUI extends Application
                 {
                     test5.start(stageTech);
                 }
-                catch ( Exception e1 )
+                catch (Exception e1)
                 {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
@@ -476,7 +533,7 @@ public class TechMainPageGUI extends Application
         return logoAndLogout;
     }
 
-    public static void main( String[] args )
+    public static void main(String[] args)
     {
         launch(args);
     }
@@ -486,15 +543,15 @@ public class TechMainPageGUI extends Application
      * you wish to delete them, if so, will delete the selected user, then
      * refresh the table of accounts
      * 
-     * @param username The user that you will remove
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * @param username
+     *            The user that you will remove
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public void removeUser( String username )
+    public void removeUser(String username)
     {
-    	Stage stage = new Stage();
-    	Scene scene;
-        
+        Stage stage = new Stage();
+        Scene scene;
+
     	//if the selected username is not null 
         if(username != null && username != "null")
         {
@@ -521,33 +578,31 @@ public class TechMainPageGUI extends Application
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.initOwner(stageTech);
                 stage.showAndWait();
-            
 
                 // when the user is removed from the database
-                if(checkBox.result) 
+                if (checkBox.result)
                 {
-                    if( manageStaff.removeUser(username) )
-                    {
-                        // this.sTVCont.removeViewableUser(username);
-                        this.sTVCont.refreshTable();
-                    }
-                }
-            }   
+                        if( manageStaff.removeUser(username) )
+                        {
+                            // this.sTVCont.removeViewableUser(username);
+                            this.sTVCont.refreshTable();
+                        }
+                   
+                } 
+            }
         }
         //pop up a message saying that no user has been selected to delete
         else
         {
-        	//tell the user to select a user to delete
-        	PopUpMessage messageBox = new PopUpMessage("Please select a user"
-        			+ " to remove.", stage);
-        	
-        	scene = new Scene(messageBox.root, 300, 75);
-        	stage.setScene(scene);
-        	stage.showAndWait();
-        }
-        
+            // tell the user to select a user to delete
+            PopUpMessage messageBox = new PopUpMessage("Please select a user"
+                    + " to remove.", stage);
 
-        
+            scene = new Scene(messageBox.root, 300, 75);
+            stage.setScene(scene);
+            stage.showAndWait();
+        }
+
     }
     
     /**

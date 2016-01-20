@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-
 public class TestStaffAccount
 {
     StaffAccount test;
@@ -17,7 +16,7 @@ public class TestStaffAccount
     private String firstPasswordOne;
     private String secondPasswordOne;
     private String securityOne;
-    
+
     private String usernameTwo;
     private String firstNameTwo;
     private String lastNameTwo;
@@ -25,7 +24,7 @@ public class TestStaffAccount
     private String firstPasswordTwo;
     private String secondPasswordTwo;
     private String securityTwo;
-    
+
     private String usernameThree;
     private String firstNameThree;
     private String lastNameThree;
@@ -37,7 +36,7 @@ public class TestStaffAccount
     private String failUsername;
     private String failPassword;
     private String failEmptyField;
-    
+
     @Before
     public void setUp() throws Exception
     {
@@ -51,7 +50,7 @@ public class TestStaffAccount
         firstPasswordOne = "password";
         secondPasswordOne = "password";
         securityOne = "1";
-        
+
         usernameTwo = "snowJ";
         firstNameTwo = "john";
         lastNameTwo = "snow";
@@ -59,7 +58,7 @@ public class TestStaffAccount
         firstPasswordTwo = "thrones";
         secondPasswordTwo = "thrones";
         securityTwo = "2";
-        
+
         usernameThree = "sallyJ";
         firstNameThree = "Sally";
         lastNameThree = "Jones";
@@ -68,22 +67,20 @@ public class TestStaffAccount
         secondPasswordThree = "sillySally";
         securityThree = "0";
 
-        String result = testHelper.addUser(usernameThree, lastNameThree, 
-                firstNameThree, emailThree, firstPasswordThree, 
+        String result = testHelper.addUser(usernameThree, lastNameThree,
+                firstNameThree, emailThree, firstPasswordThree,
                 secondPasswordThree, securityThree);
-        
-       result = testHelper.addUser(usernameOne, lastNameOne, firstNameOne,
+
+        result = testHelper.addUser(usernameOne, lastNameOne, firstNameOne,
                 emailOne, firstPasswordOne, secondPasswordOne, securityOne);
-       
-       result = testHelper.addUser(usernameTwo, lastNameTwo, firstNameTwo,
-               emailTwo, firstPasswordTwo, secondPasswordTwo, securityTwo);
-        
+
+        result = testHelper.addUser(usernameTwo, lastNameTwo, firstNameTwo,
+                emailTwo, firstPasswordTwo, secondPasswordTwo, securityTwo);
+
         failPassword = "random";
         failEmptyField = "";
         failUsername = "George";
     }
-
-    
 
     @Test
     public void testBasicLogin()
@@ -92,65 +89,63 @@ public class TestStaffAccount
         StaffAccount user = test.login(usernameThree, firstPasswordThree);
         assertTrue(user.getClass().getName().equals("BasicStaff"));
     }
-    
+
     @Test
     public void testMedicalAdminLogin()
     {
-        
+
         StaffAccount user = test.login(usernameOne, firstPasswordOne);
         assertTrue(user.getClass().getName().equals("MedicalAdministrator"));
     }
-    
+
     @Test
     public void testTechAdminLogin()
     {
-        
+
         StaffAccount user = test.login(usernameTwo, firstPasswordTwo);
         assertTrue(user.getClass().getName().equals("TechnicalAdministrator"));
     }
-    
+
     @Test
     public void testWrongUserName()
     {
-        
+
         StaffAccount user = test.login(failUsername, firstPasswordThree);
         assertTrue(user == null);
     }
-    
+
     @Test
     public void testWrongPassword()
     {
-        
+
         StaffAccount user = test.login(usernameOne, failPassword);
         assertTrue(user == null);
     }
-    
+
     @Test
     public void testEmptyUserName()
     {
-        
+
         StaffAccount user = test.login(failEmptyField, firstPasswordThree);
         assertTrue(user == null);
     }
-    
+
     @Test
     public void testEmptyPassword()
     {
-        
+
         StaffAccount user = test.login(usernameOne, failEmptyField);
         assertTrue(user == null);
     }
-    
+
     @Test
     public void testBothEmptyFields()
     {
-        
+
         StaffAccount user = test.login(failEmptyField, failEmptyField);
         assertTrue(user == null);
     }
-    
-    
-    
+
     @After
     public void tearDown() throws Exception
     {
