@@ -7,6 +7,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * 
+ * Purpose: Test the preview pane that will display quick participant
+ * inforamation for a participant one is selected
+ * 
+ * @author TEAM CIMP
+ * @version 1.0
+ */
 public class TestPreviewPaneHelper
 {
 
@@ -39,10 +47,11 @@ public class TestPreviewPaneHelper
         phoneOne = "1111111111";
         addressOne = "123 Fake Street";
 
-        String result = MedicalAdministrator.createParticipant(cosmoID, participantFirstName,
-                participantLastName, participantBirthdate, physicianFName,
-                physicianLName, healthNumber, phoneOne, addressOne);
-        
+        String result = MedicalAdministrator.createParticipant(cosmoID,
+                participantFirstName, participantLastName,
+                participantBirthdate, physicianFName, physicianLName,
+                healthNumber, phoneOne, addressOne);
+
         System.out.println(result);
     }
 
@@ -81,7 +90,8 @@ public class TestPreviewPaneHelper
         PreviewPaneHelper helper = new PreviewPaneHelper();
 
         String lastName = helper.queryParticipant(cosmoID)[2];
-        System.out.println(lastName + " -------------------------------------------");
+        System.out.println(lastName
+                + " -------------------------------------------");
         assertTrue(lastName.equals(participantLastName));
 
     }
@@ -96,16 +106,15 @@ public class TestPreviewPaneHelper
         PreviewPaneHelper helper = new PreviewPaneHelper();
 
         String name = helper.queryParticipant(cosmoID)[3];
-        System.out.println(name + "-------------------------------------------");
+        System.out
+                .println(name + "-------------------------------------------");
         assertTrue(name.equals(physicianFName + " " + physicianLName));
 
     }
-    
-    
 
     /**
-     * Purpose: Test that the cosmoID of the participant selected is the
-     * same as the one that is being dispalyed
+     * Purpose: Test that the cosmoID of the participant selected is the same as
+     * the one that is being dispalyed
      */
     @Test
     public void testCosmoID()
@@ -118,8 +127,8 @@ public class TestPreviewPaneHelper
     }
 
     /**
-     * Purpose: Test that the cosmoID of the participant selected is the
-     * same as the one that is being dispalyed
+     * Purpose: Test that the cosmoID of the participant selected is the same as
+     * the one that is being dispalyed
      */
     @Test
     public void testAllergies()
@@ -130,10 +139,10 @@ public class TestPreviewPaneHelper
         System.out.println(id + "-------------------------------------------");
         assertTrue(id.equals("Peanuts, Pollen"));
     }
-    
+
     /**
-     * Purpose: Test that the cosmoID of the participant selected is the
-     * same as the one that is being dispalyed
+     * Purpose: Test that the cosmoID of the participant selected is the same as
+     * the one that is being dispalyed
      */
     @Test
     public void testSeizures()
@@ -144,10 +153,10 @@ public class TestPreviewPaneHelper
         System.out.println(id + "-------------------------------------------");
         assertTrue(id.equals("Slightly Violent"));
     }
-    
+
     /**
-     * Purpose: Test that the cosmoID of the participant selected is the
-     * same as the one that is being dispalyed
+     * Purpose: Test that the cosmoID of the participant selected is the same as
+     * the one that is being dispalyed
      */
     @Test
     public void testCorrectImage()
