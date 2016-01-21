@@ -368,6 +368,10 @@ public class MedicalStaffMainPageGUI extends Application
                         {
                             condition = "firstName" + " = '" + value + "' OR " + "lastName" + " = '" + value + "'";
                         }
+                        else if(type == "Allergy")
+                        {
+                          
+                        }
                         else
                         {
                             condition = type + " = '" + value + "'";
