@@ -316,7 +316,7 @@ public class MedicalStaffMainPageGUI extends Application {
 	 * 
 	 * Purpose:Create the search bar
 	 * 
-	 * @param admin
+	 * @param
 	 * 
 	 * @return HBox search bar
 	 */
@@ -391,17 +391,20 @@ public class MedicalStaffMainPageGUI extends Application {
 	
 	/**
 	 * 
-	 * Purpose: 
+	 * Purpose: prepare sql statement for query database
 	 */
-	public void handleSearch()
+	private void handleSearch()
 	{
         String table = "Participant";
         String type = searchBy.getValue();
+        //Checks if the search has a type, if it does not, then set type to name.
         if (type == null) {
             type = "Name";
         }
-        String value = searchField.getText();
+        String value = searchField.getText();        
         String condition = "";
+        //Prepares statement to check the full name of every participant if
+        //name was selected
         if (type == "Name") {
             condition = "firstName + ' ' + lastName like '%" + value + "%'";
         } else if (type == "Allergies") {
@@ -410,7 +413,8 @@ public class MedicalStaffMainPageGUI extends Application {
         } else {
             condition = type + " LIKE '%" + value + "%'";
         }
-
+        //Checks if a value was entered, if one was then search for it, if 
+        //one was not then remove all the conditions on the search 
         if (value.equals("")) {
             pTVCont.refreshTable("", table);
         } else {

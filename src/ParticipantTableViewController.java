@@ -47,10 +47,8 @@ public class ParticipantTableViewController {
 
 		participantData.clear();
 		DatabaseHelper db = new DatabaseHelper();
-		ObservableList<String> row = FXCollections.observableArrayList();
-		ArrayList<String> participantInfo = new ArrayList<String>();
-		// TODO fix to query appropriate address, emergency info
-		// correct table Participant instead of Participant
+		// If the table is Allergies, search for all participants with that
+		// Allergy
 		if (table.equals("Allergies")) 
 		{
 			String allergy = condition;
@@ -62,13 +60,11 @@ public class ParticipantTableViewController {
 		ResultSet rs = db.select("cosmoID, firstName, lastName, address, "
 				+ "dateUpdated", table, condition, "");
 
-		// Strings to represent the TODO fix it
+		// Strings to represent the data to be displayed. 
 		String cosmoID;
 		String firstName;
 		String lastName;
 		String participantName;
-
-		// address
 		String address;
 
 		String emergencyContactName = "";
