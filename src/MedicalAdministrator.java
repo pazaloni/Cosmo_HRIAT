@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URL;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,6 +10,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Calendar;
+
+import javafx.scene.image.Image;
 
 /**
  * Purpose: Represent the medical staff within the system
@@ -46,7 +52,7 @@ public class MedicalAdministrator extends BasicStaff
     public static String createParticipant(String cosmoID, String firstName,
             String lastName, LocalDate birthDate, String physicianFName,
             String physicianLName,
-            String healthNumber, String phone, String address)
+            String healthNumber, String phone, String address, String imagePath)
     {
         // initialize birth date string to an empty string
         String birthDateString = "";
@@ -175,11 +181,13 @@ public class MedicalAdministrator extends BasicStaff
                     values[12][0] = "landlordID";
                     values[13][0] = "physicianID";
                     values[14][0] = "workID";
-                    values[15][0]= "imagePath";
+
                     // get the current date to insert into "lastUpdated"
                     Calendar c = Calendar.getInstance();
                     SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
                     String formattedDate = df.format(c.getTime());
+                    
+                    saveImage(imagePath, cosmoID);
     
                     // array of values to insert
                     values[0][1] = cosmoID;
@@ -197,7 +205,7 @@ public class MedicalAdministrator extends BasicStaff
                     values[12][1] = "1";
                     values[13][1] = physicianID;
                     values[14][1] = "1";
-                    values[15][1] ="safd";
+
     
                     // inserting into the database
                     successful = db.insert(values, "Participant");
@@ -212,6 +220,37 @@ public class MedicalAdministrator extends BasicStaff
             db.disconnect();
         }
         return result;
+    }
+
+    /**
+     * 
+     * Purpose:save the image into the image folder using the correct image path
+     * @param imagePath path of the image chosen by the user
+     */
+    private static void saveImage( String imagePath , String cosmoID )
+    {
+        String path = imagePath;
+        
+        if(imagePath.equals(""))
+        {
+            path = "images/defaultImage.jpg";
+        }
+        
+        
+        try
+        {
+           
+            File outputImage = new File("images/" + cosmoID );
+            FileWriter fw = new FileWriter(outputImage);
+            fw.write(path);
+            
+            fw.close();
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     /**

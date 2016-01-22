@@ -1,12 +1,17 @@
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
+
+
 import javax.imageio.ImageIO;
+
+
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -38,6 +43,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -450,7 +456,7 @@ public class MedicalStaffMainPageGUI extends Application
                     createParticipantStage.setTitle("Create Participant");
 
                     createParticipantStage.setScene(new Scene(
-                            createParticipantPopUp(), 325, 400));
+                            createParticipantPopUp(), 325, 425));
                     createParticipantStage
                             .initModality(Modality.APPLICATION_MODAL);
                     createParticipantStage.initOwner(medMainStage);
@@ -496,7 +502,8 @@ public class MedicalStaffMainPageGUI extends Application
         Label healthNumLbl = new Label("Health Number");
         Label phoneLbl = new Label("Phone Number");
         Label cosmoIdLbl = new Label("Cosmo ID");
-        Label addressLbl = new Label("Address");
+        Label addressLbl = new Label("Participant Address");
+        Label imageLbl = new Label("Participant Picture");
 
         // the text fields
         TextField firstNameTxt = new TextField();
@@ -517,6 +524,30 @@ public class MedicalStaffMainPageGUI extends Application
         phoneTxt.setPromptText("Ex: 3062879111");
         TextField cosmoIdTxt = new TextField();
         TextField addressTxt = new TextField();
+        Button imageBrowseBtn = new Button("Browse...");
+        TextField chosenPathTxt = new TextField("");
+        
+        imageBrowseBtn.setOnAction(event -> {
+            FileChooser.ExtensionFilter filter = new FileChooser
+                    .ExtensionFilter("Images", "*.jpg");
+            FileChooser fc = new FileChooser();
+            fc.getExtensionFilters().add(filter);
+            File file = fc.showOpenDialog(medMainStage);
+            
+            String path = "";
+            try
+            {
+                path = file.getAbsolutePath();
+                
+         
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            chosenPathTxt.setText(path);
+        });
+        
 
         // add the form to the grid
         grid.add(cosmoIdLbl, 0, 1);
@@ -528,6 +559,7 @@ public class MedicalStaffMainPageGUI extends Application
         grid.add(healthNumLbl, 0, 7);
         grid.add(phoneLbl, 0, 8);
         grid.add(addressLbl, 0, 9);
+        grid.add(imageLbl, 0, 10);
 
         grid.add(lblWarning, 1, 0);
         grid.add(cosmoIdTxt, 1, 1);
@@ -539,6 +571,7 @@ public class MedicalStaffMainPageGUI extends Application
         grid.add(healthNumTxt, 1, 7);
         grid.add(phoneTxt, 1, 8);
         grid.add(addressTxt, 1, 9);
+        grid.add(imageBrowseBtn, 1, 10);
 
         // setPadding of the grid
         grid.setPadding(new Insets(10, 10, 0, 10));
@@ -561,8 +594,9 @@ public class MedicalStaffMainPageGUI extends Application
                         lastNameTxt.getText(), birthDatePicker.getValue(),
                         physicianFNameTxt.getText(),
                         physicianLNameTxt.getText(), healthNumTxt.getText(),
-                        phoneTxt.getText(), addressTxt.getText());
-
+                        phoneTxt.getText(), addressTxt.getText(), 
+                        chosenPathTxt.getText());
+                        
                 // if no error message is recieved then close this window and
                 // refresh the table
                 if ( result.equals("") )
@@ -602,7 +636,9 @@ public class MedicalStaffMainPageGUI extends Application
                 healthNumTxt.setText("");
                 phoneTxt.setText("");
                 addressTxt.setText("");
+                chosenPathTxt.setText("");
                 lblWarning.setText("");
+               
             }
 
         });
@@ -614,8 +650,8 @@ public class MedicalStaffMainPageGUI extends Application
         buttonsHbox.setAlignment(Pos.CENTER);
         resetHbox.getChildren().addAll(resetBtn);
         resetHbox.setAlignment(Pos.CENTER_RIGHT);
-        grid.add(buttonsHbox, 1, 10);
-        grid.add(resetHbox, 0, 10);
+        grid.add(buttonsHbox, 1, 11);
+        grid.add(resetHbox, 0, 11);
 
         return grid;
     }

@@ -1,5 +1,7 @@
 import static org.junit.Assert.*;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -283,8 +285,26 @@ public class TestMedicalAdministrator
     @Test
     public void testImageIsAdded()
     {
+        DatabaseHelper db = new DatabaseHelper();
+        db.connect();
+        ResultSet testImage = db.select("imagePath", "Participant", "cosmoID="
+                + cosmoIDThree, "");
         
+        String imagePath = "";
+        try
+        {
+            imagePath = testImage.getString(1);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        
+        assertTrue(imagePath.equals(imageThree));
+
     }
+    
+    
 
     @After
     public void tearDown()
