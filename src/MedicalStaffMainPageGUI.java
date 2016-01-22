@@ -333,6 +333,16 @@ public class MedicalStaffMainPageGUI extends Application {
 		searchField = new TextField();
 		searchField.setPromptText("Search...");
 		searchField.setStyle("-fx-pref-width: 245; -fx-pref-height: 26;");
+		searchField.setOnAction(new EventHandler<ActionEvent>(){
+
+            @Override
+            public void handle(ActionEvent arg0)
+            {
+               //search handler
+               handleSearch();                
+            }
+		    
+		});
 
 		// search button
 		Button searchButton = new Button("Search");
@@ -341,28 +351,8 @@ public class MedicalStaffMainPageGUI extends Application {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				String table = "Participant";
-				String type = searchBy.getValue();
-				if (type == null) {
-					type = "Name";
-				}
-				String value = searchField.getText();
-				String condition = "";
-				if (type == "Name") {
-					condition = "firstName + ' ' + lastName like '%" + value + "%'";
-				} else if (type == "Allergies") {
-					table = "Allergies";
-					condition = value;
-				} else {
-					condition = type + " LIKE '%" + value + "%'";
-				}
-
-				if (value.equals("")) {
-					pTVCont.refreshTable("", table);
-				} else {
-					pTVCont.refreshTable(condition, table);
-				}
-
+			    //search handler
+			    handleSearch();
 			}
 
 		});
@@ -397,6 +387,35 @@ public class MedicalStaffMainPageGUI extends Application {
 			searchBar.getChildren().addAll(searchBy, searchField, searchButton);
 		}
 		return searchBar;
+	}
+	
+	/**
+	 * 
+	 * Purpose: 
+	 */
+	public void handleSearch()
+	{
+        String table = "Participant";
+        String type = searchBy.getValue();
+        if (type == null) {
+            type = "Name";
+        }
+        String value = searchField.getText();
+        String condition = "";
+        if (type == "Name") {
+            condition = "firstName + ' ' + lastName like '%" + value + "%'";
+        } else if (type == "Allergies") {
+            table = "Allergies";
+            condition = value;
+        } else {
+            condition = type + " LIKE '%" + value + "%'";
+        }
+
+        if (value.equals("")) {
+            pTVCont.refreshTable("", table);
+        } else {
+            pTVCont.refreshTable(condition, table);
+        }
 	}
 
 	/**
