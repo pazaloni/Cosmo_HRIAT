@@ -11,187 +11,183 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-public class ParticipantTableViewController
-{
-    // the tableview containing the information for all the staff accounts
-    protected TableView<Participant> participantTable = new TableView<Participant>();
-    // the columns of the participant table
-    private TableColumn<Participant, String> cosmoIDColumn = new TableColumn<Participant, String>(
-            "Cosmo ID");
-    private TableColumn<Participant, String> participantNameColumn = new TableColumn<Participant, String>(
-            "Participant");
-    private TableColumn<Participant, String> addressColumn = new TableColumn<Participant, String>(
-            "Home Address");
-    private TableColumn<Participant, String> emergencyNameColumn = new TableColumn<Participant, String>(
-            "Emergency Contact Name");
-    private TableColumn<Participant, String> emergencyPhoneColumn = new TableColumn<Participant, String>(
-            "Emergency Phone");
-    private TableColumn<Participant, String> lastUpdatedColumn = new TableColumn<Participant, String>(
-            "Last Updated");
+public class ParticipantTableViewController {
+	// the tableview containing the information for all the staff accounts
+	protected TableView<Participant> participantTable = new TableView<Participant>();
+	// the columns of the participant table
+	private TableColumn<Participant, String> cosmoIDColumn = new TableColumn<Participant, String>(
+			"Cosmo ID");
+	private TableColumn<Participant, String> participantNameColumn = new TableColumn<Participant, String>(
+			"Participant");
+	private TableColumn<Participant, String> addressColumn = new TableColumn<Participant, String>(
+			"Home Address");
+	private TableColumn<Participant, String> emergencyNameColumn = new TableColumn<Participant, String>(
+			"Emergency Contact Name");
+	private TableColumn<Participant, String> emergencyPhoneColumn = new TableColumn<Participant, String>(
+			"Emergency Phone");
+	private TableColumn<Participant, String> lastUpdatedColumn = new TableColumn<Participant, String>(
+			"Last Updated");
 
-    public ObservableList<Participant> participantData = FXCollections
-            .observableArrayList();
-    /**
-     * Constructor for the ParticipantTableViewController class.
-     * 
-     * Initializes the data from the database
-     * 
-     * Sets the items from the database into the tableview
-     */
-    public ParticipantTableViewController()
-    {
-        retrieveParticipantData("");
-        participantTable.setItems(participantData);
-    }
+	public ObservableList<Participant> participantData = FXCollections
+			.observableArrayList();
 
-    public void retrieveParticipantData(String condition)
-    {
-        
-        participantData.clear();
-        DatabaseHelper db = new DatabaseHelper();
-        ObservableList<String> row = FXCollections.observableArrayList();
-        ArrayList<String> participantInfo = new ArrayList<String>();
-        // TODO fix to query appropriate address, emergency info
-        // correct table Participant instead of Participant
-        ResultSet rs = db.select("cosmoID, firstName, lastName, address, "
-                + "dateUpdated", "Participant", condition, "");
+	/**
+	 * Constructor for the ParticipantTableViewController class.
+	 * 
+	 * Initializes the data from the database
+	 * 
+	 * Sets the items from the database into the tableview
+	 */
+	public ParticipantTableViewController() {
+		retrieveParticipantData("", "Participant");
+		participantTable.setItems(participantData);
+	}
 
-        // Strings to represent the TODO fix it
-        String cosmoID;
-        String firstName;
-        String lastName;
-        String participantName;
+	public void retrieveParticipantData(String condition, String table) {
 
-        // address
-        String address;
+		participantData.clear();
+		DatabaseHelper db = new DatabaseHelper();
+		ObservableList<String> row = FXCollections.observableArrayList();
+		ArrayList<String> participantInfo = new ArrayList<String>();
+		// TODO fix to query appropriate address, emergency info
+		// correct table Participant instead of Participant
+		if (table.equals("Allergies")) 
+		{
+			String allergy = condition;
+			condition = "cosmoID = (SELECT cosmoID FROM Allergies where "
+					+ "allergicTo LIKE '%" + allergy + "%')";
 
-        String emergencyContactName = "";
-        String emergencyContactPhone = ""; // TODO Get from database
-        String informationLastUpdated;
+			table = "Participant";
+		}
+		ResultSet rs = db.select("cosmoID, firstName, lastName, address, "
+				+ "dateUpdated", table, condition, "");
 
-        try
-        {
-            while (rs.next())
-            {
-                // get the information from the database
-                cosmoID = rs.getString(1);
-                System.out.println(cosmoID);
-                firstName = rs.getString(2);
-                lastName = rs.getString(3);
-                address = rs.getString(4);
+		// Strings to represent the TODO fix it
+		String cosmoID;
+		String firstName;
+		String lastName;
+		String participantName;
 
-                // concatenate name
-                participantName = firstName + " " + lastName;
+		// address
+		String address;
 
-                // get the last time the information was updated
-                informationLastUpdated = rs.getString(5);
+		String emergencyContactName = "";
+		String emergencyContactPhone = ""; // TODO Get from database
+		String informationLastUpdated;
 
-                // create the participant object
-                Participant participant = new Participant(cosmoID,
-                        participantName, address, emergencyContactName,
-                        emergencyContactPhone, informationLastUpdated);
+		try {
+			while (rs.next()) {
+				// get the information from the database
+				cosmoID = rs.getString(1);
+				System.out.println(cosmoID);
+				firstName = rs.getString(2);
+				lastName = rs.getString(3);
+				address = rs.getString(4);
 
-                // add the participant into the tableview
-                participantData.add(participant);
-            }
-        }
-        catch (SQLException e)
-        {
-            System.out.println("Failed to populate Participant Table");
-            e.printStackTrace();
-        }
+				// concatenate name
+				participantName = firstName + " " + lastName;
 
-    }
+				// get the last time the information was updated
+				informationLastUpdated = rs.getString(5);
 
-    /**
-     * 
-     * Purpose: To create the table and columns
-     */
-    public void initialize()
-    {
-        cosmoIDColumn.setCellValueFactory(cellData -> cellData.getValue()
-                .getCosmoIDProperty());
-        cosmoIDColumn.setMinWidth(50);
-        cosmoIDColumn.setResizable(false);
+				// create the participant object
+				Participant participant = new Participant(cosmoID,
+						participantName, address, emergencyContactName,
+						emergencyContactPhone, informationLastUpdated);
 
-        participantNameColumn.setCellValueFactory(cellData -> cellData
-                .getValue().getParticipantNameProperty());
-        participantNameColumn.setMinWidth(175);
-        participantNameColumn.setResizable(false);
+				// add the participant into the tableview
+				participantData.add(participant);
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to populate Participant Table");
+			e.printStackTrace();
+		}
 
-        addressColumn.setCellValueFactory(cellData -> cellData.getValue()
-                .getAddressProperty());
-        addressColumn.setMinWidth(200);
-        addressColumn.setResizable(false);
+	}
 
-        emergencyNameColumn.setCellValueFactory(cellData -> cellData.getValue()
-                .getEmergencyContactProperty());
-        emergencyNameColumn.setMinWidth(180);
-        emergencyNameColumn.setResizable(false);
+	/**
+	 * 
+	 * Purpose: To create the table and columns
+	 */
+	public void initialize() {
+		cosmoIDColumn.setCellValueFactory(cellData -> cellData.getValue()
+				.getCosmoIDProperty());
+		cosmoIDColumn.setMinWidth(50);
+		cosmoIDColumn.setResizable(false);
 
-        emergencyPhoneColumn.setCellValueFactory(cellData -> cellData
-                .getValue().getEmergencyContactPhoneProperty());
-        emergencyPhoneColumn.setMinWidth(115);
-        emergencyPhoneColumn.setResizable(false);
+		participantNameColumn.setCellValueFactory(cellData -> cellData
+				.getValue().getParticipantNameProperty());
+		participantNameColumn.setMinWidth(175);
+		participantNameColumn.setResizable(false);
 
-        // lastUpdatedColumn.setCellValueFactory(cellData ->
-        // cellData.getValue().getUpdatedProperty());
-        lastUpdatedColumn.setMinWidth(135);
-        lastUpdatedColumn.setResizable(false);
+		addressColumn.setCellValueFactory(cellData -> cellData.getValue()
+				.getAddressProperty());
+		addressColumn.setMinWidth(200);
+		addressColumn.setResizable(false);
 
-        // make table columns not draggable to reorder it
-        participantTable.getColumns().addListener(
-                new ListChangeListener<Object>()
-                {
-                    @Override
-                    public void onChanged(Change change)
-                    {
-                        change.next();
-                        // if the column was changed
-                        if (change.wasReplaced())
-                        {
-                            // clear all columns
-                            participantTable.getColumns().clear();
-                            // re-add the columns in order
-                            participantTable.getColumns().addAll(cosmoIDColumn,
-                                    participantNameColumn, addressColumn,
-                                    emergencyNameColumn, emergencyPhoneColumn,
-                                    lastUpdatedColumn);
-                        }
-                    }
-                });
+		emergencyNameColumn.setCellValueFactory(cellData -> cellData.getValue()
+				.getEmergencyContactProperty());
+		emergencyNameColumn.setMinWidth(180);
+		emergencyNameColumn.setResizable(false);
 
-        // add the columns to the tableview
-        participantTable.getColumns().addAll(cosmoIDColumn,
-                participantNameColumn, addressColumn, emergencyNameColumn,
-                emergencyPhoneColumn, lastUpdatedColumn);
+		emergencyPhoneColumn.setCellValueFactory(cellData -> cellData
+				.getValue().getEmergencyContactPhoneProperty());
+		emergencyPhoneColumn.setMinWidth(115);
+		emergencyPhoneColumn.setResizable(false);
 
-        // set the data into the table
-        participantTable.setItems(participantData);
-    }
+		// lastUpdatedColumn.setCellValueFactory(cellData ->
+		// cellData.getValue().getUpdatedProperty());
+		lastUpdatedColumn.setMinWidth(135);
+		lastUpdatedColumn.setResizable(false);
 
-    /**
-     * Purpose: Get the item that is selected in the table
-     * 
-     * @return the ID of the row that is selected
-     */
-    public String getSelectedPK()
-    {
-        Participant participant = participantTable.getSelectionModel()
-                .getSelectedItem();
-        return participant.getCosmoID();
-    }
+		// make table columns not draggable to reorder it
+		participantTable.getColumns().addListener(
+				new ListChangeListener<Object>() {
+					@Override
+					public void onChanged(Change change) {
+						change.next();
+						// if the column was changed
+						if (change.wasReplaced()) {
+							// clear all columns
+							participantTable.getColumns().clear();
+							// re-add the columns in order
+							participantTable.getColumns().addAll(cosmoIDColumn,
+									participantNameColumn, addressColumn,
+									emergencyNameColumn, emergencyPhoneColumn,
+									lastUpdatedColumn);
+						}
+					}
+				});
 
-    /**
-     * Purpose: To refresh the table so other classes can call this when they
-     * update the information
-     */
-    public void refreshTable(String condition)
-    {
-        this.participantData.clear();
-        this.retrieveParticipantData(condition);
-        this.participantTable.getColumns().clear();
-        this.initialize();
-    }
+		// add the columns to the tableview
+		participantTable.getColumns().addAll(cosmoIDColumn,
+				participantNameColumn, addressColumn, emergencyNameColumn,
+				emergencyPhoneColumn, lastUpdatedColumn);
+
+		// set the data into the table
+		participantTable.setItems(participantData);
+	}
+
+	/**
+	 * Purpose: Get the item that is selected in the table
+	 * 
+	 * @return the ID of the row that is selected
+	 */
+	public String getSelectedPK() {
+		Participant participant = participantTable.getSelectionModel()
+				.getSelectedItem();
+		return participant.getCosmoID();
+	}
+
+	/**
+	 * Purpose: To refresh the table so other classes can call this when they
+	 * update the information
+	 */
+	public void refreshTable(String condition, String table) {
+		this.participantData.clear();
+		this.retrieveParticipantData(condition, table);
+		this.participantTable.getColumns().clear();
+		this.initialize();
+	}
 
 }
