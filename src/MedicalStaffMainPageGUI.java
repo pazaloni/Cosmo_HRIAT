@@ -349,8 +349,7 @@ public class MedicalStaffMainPageGUI extends Application {
 				String value = searchField.getText();
 				String condition = "";
 				if (type == "Name") {
-					condition = "firstName" + " like '%" + value + "%' OR "
-							+ "lastName" + " like '%" + value + "%'";
+					condition = "firstName + ' ' + lastName like '%" + value + "%'";
 				} else if (type == "Allergies") {
 					table = "Allergies";
 					condition = value;
