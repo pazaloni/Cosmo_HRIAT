@@ -71,7 +71,7 @@ public class participantDetailsGUI extends Application
     //the database helper object that allows querying of the database
     private DatabaseHelper DBObject = new DatabaseHelper();
     
-    private boolean admin;
+    private StaffAccount loggedInUser;
     
     private static final int PREVIEW_TEXT_WIDTH = 150;
     private static final int ALLERGY_AND_SEIZURE_MIN_WITH = 410;
@@ -84,7 +84,7 @@ public class participantDetailsGUI extends Application
     @Override
     public void start( Stage stage ) throws Exception
     {
-        participantDetailsConstruct(stage, this.cosmoID, this.admin);
+        participantDetailsConstruct(stage, this.cosmoID, null);
     }
 
     /**
@@ -94,9 +94,9 @@ public class participantDetailsGUI extends Application
      * 
      * @param stage: the stage the medical staff will see
      */
-    public void participantDetailsConstruct( Stage stage, int cosmoID, boolean admin )
+    public void participantDetailsConstruct( Stage stage, int cosmoID, StaffAccount loggedInUser )
     {
-    	this.admin = admin;
+    	this.loggedInUser = loggedInUser;
         DBObject.connect();
         
         this.cosmoID = cosmoID;
@@ -355,7 +355,7 @@ public class participantDetailsGUI extends Application
 		}
         
         //add buttons to the previewPane
-        if(this.admin)
+        if(loggedInUser instanceof MedicalAdministrator)
         {
         	pictureBox.getChildren().add(editBtn);
         }	

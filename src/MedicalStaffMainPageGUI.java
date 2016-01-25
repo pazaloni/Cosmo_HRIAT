@@ -242,28 +242,16 @@ public class MedicalStaffMainPageGUI extends Application {
 		// set margins
 		VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
 
-		 if(loggedInUser instanceof MedicalAdministrator)
-	        {
-	        	detailsButton.setOnAction(event->{
-	        		
-	        		participantDetailsGUI detailsGUI = new participantDetailsGUI();
-					//hard coded cosmo ID for testing purposes
-					detailsGUI.participantDetailsConstruct(viewParticipantDetailsStage, 
-							Integer.parseInt(pTVCont.getSelectedPK()), false);
-	        		
-	            });
-	        }
-	        else
-	        {
-	        	detailsButton.setOnAction(event->{
-	        		
-	        		participantDetailsGUI detailsGUI = new participantDetailsGUI();
-					//hard coded cosmo ID for testing purposes
-					detailsGUI.participantDetailsConstruct(viewParticipantDetailsStage, 
-							Integer.parseInt(pTVCont.getSelectedPK()), false);
-	        		
-	            });
-	        }
+
+    	detailsButton.setOnAction(event->{
+    		
+    		participantDetailsGUI detailsGUI = new participantDetailsGUI();
+			//hard coded cosmo ID for testing purposes
+			detailsGUI.participantDetailsConstruct(viewParticipantDetailsStage, 
+					Integer.parseInt(pTVCont.getSelectedPK()), loggedInUser);
+    		
+        });
+
 
 			// add picture and button to picture box
 			pictureBox.getChildren().addAll(previewPicture, detailsButton);
