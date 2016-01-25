@@ -1,3 +1,4 @@
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,7 +12,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Calendar;
 
+import javax.imageio.ImageIO;
+
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  * Purpose: Represent the medical staff within the system
@@ -181,13 +185,14 @@ public class MedicalAdministrator extends BasicStaff
                     values[12][0] = "landlordID";
                     values[13][0] = "physicianID";
                     values[14][0] = "workID";
+                    values[15][0] = "imagePath";
 
                     // get the current date to insert into "lastUpdated"
                     Calendar c = Calendar.getInstance();
                     SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
                     String formattedDate = df.format(c.getTime());
                     
-                    saveImage(imagePath, cosmoID);
+                    String dbPath = saveImage(imagePath, cosmoID);
     
                     // array of values to insert
                     values[0][1] = cosmoID;
@@ -205,6 +210,7 @@ public class MedicalAdministrator extends BasicStaff
                     values[12][1] = "1";
                     values[13][1] = physicianID;
                     values[14][1] = "1";
+                    values[15][1] = dbPath;
 
     
                     // inserting into the database
@@ -227,9 +233,10 @@ public class MedicalAdministrator extends BasicStaff
      * Purpose:save the image into the image folder using the correct image path
      * @param imagePath path of the image chosen by the user
      */
-    private static void saveImage( String imagePath , String cosmoID )
+    private static String saveImage( String imagePath , String cosmoID )
     {
         String path = imagePath;
+        String dbPath = "images/" + cosmoID + ".jpg";
         
         if(imagePath.equals(""))
         {
@@ -239,17 +246,23 @@ public class MedicalAdministrator extends BasicStaff
         
         try
         {
-           
-            File outputImage = new File("images/" + cosmoID );
-            FileWriter fw = new FileWriter(outputImage);
-            fw.write(path);
+            //URL url = new URL(path);
+            //Image image = new Image(url.openStream());
+            BufferedImage image = ImageIO.read(new File(path));
+            //File outputImage = new File("images/" + cosmoID );
+            //File outputImage = new File(dbPath);
+            //FileWriter fw = new FileWriter(outputImage);
+            //ImageIO.write(image, "jpg", new File(dbPath));
+            //ByteArrayOutputStream imageBytes = new By
             
-            fw.close();
+            //fw.close();
         }
         catch(IOException e)
         {
             e.printStackTrace();
         }
+        
+        return dbPath;
 
     }
 
