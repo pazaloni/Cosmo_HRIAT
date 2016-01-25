@@ -27,19 +27,18 @@ public class NotePopUp
 	 * Purpose:	This will create the stage for the pop up that will be used to 
 	 * 			create a note.
 	 * 
-	 * @param participant	The cosmoID passed in from the current participant
+	 * @param participant	The participant that the note is being added to
 	 * @param creator		The username of the currently logged in medical staff
 	 * @param stage			The stage that the pop up will be generated in
 	 * 
 	 * @author  Niklaas Neijmeijer cst207
      *          Steven Palchinski cst209
 	 */
-	public NotePopUp(Participant participant, String creator, Stage stage)
+	public NotePopUp(int participant, String creator, Stage stage)
 	{
 		this.stage = stage;
 		this.stage.setTitle("new Note");
-		scene = new Scene(createNotePopUp(participant, creator));
-		this.stage.setScene(scene);			
+		this.root.setBottom(createNotePopUp(participant, creator));
 	}
 	
 	/**
@@ -52,7 +51,7 @@ public class NotePopUp
 	 * @author  Niklaas Neijmeijer cst207
      *          Steven Palchinski cst209
 	 */
-	protected GridPane createNotePopUp(Participant participant, String creator) 
+	protected GridPane createNotePopUp(int participant, String creator) 
 	{
 
 		GridPane grid = new GridPane();
@@ -93,7 +92,7 @@ public class NotePopUp
 			{
 				//call confirmation
         		PopUpMessage messageBox = new PopUpMessage("Is this the note "
-        				+ "you wish to submit?  " + messageTxt, stage);
+        				+ "you wish to submit?  " + messageTxt.getText(), stage);
             	
             	scene = new Scene(messageBox.root, 300, 75);
             	stage.setScene(scene);

@@ -71,10 +71,10 @@ public class testNotes {
 				basicFirstName, basicEmail, basicPassword, basicSecurity);
 
 	}
-
-	/**
+/*
+	*//**
 	 * Success case that determines if a note can be added
-	 */
+	 *//*
 	@Test
 	public void testSuccess() {
 		acctHelper.addUser(basicUsername, basicLastName, basicFirstName,
@@ -88,10 +88,10 @@ public class testNotes {
 
 	}
 
-	/**
+	*//**
 	 * Failure case that checks that a note cannot be added if there is no
 	 * description
-	 */
+	 *//*
 	@Test
 	public void testFail() {
 		acctHelper.addUser(basicUsername, basicLastName, basicFirstName,
@@ -104,4 +104,4 @@ public class testNotes {
 		System.out.println(result);
 		assertFalse(result.equals(""));
 	}
-}
+*/}

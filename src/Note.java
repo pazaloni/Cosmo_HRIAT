@@ -69,12 +69,12 @@ public class Note
 	 *            administrator
 	 * @author Niklaas Neijmeijer cst207 Steven Palchinski cst209
 	 */
-	public Note(Participant participant, String description, String creator,
+	public Note(int participant, String description, String creator,
 			Date dateCreated, boolean viewed, boolean resolved) 
 	{
 		this.description = description;
 		this.creatorID = creator;
-		this.participantID = participant.getCosmoID();
+		this.participantID = ""+participant;
 		this.dateCreated = dateCreated;
 		this.viewed = viewed;
 		this.resolved = resolved;

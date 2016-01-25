@@ -249,7 +249,7 @@ public class MedicalStaffMainPageGUI extends Application {
 	        		participantDetailsGUI detailsGUI = new participantDetailsGUI();
 					//hard coded cosmo ID for testing purposes
 					detailsGUI.participantDetailsConstruct(viewParticipantDetailsStage, 
-							Integer.parseInt(pTVCont.getSelectedPK()), false);
+							Integer.parseInt(pTVCont.getSelectedPK()), loggedInUser);
 	        		
 	            });
 	        }
@@ -260,7 +260,7 @@ public class MedicalStaffMainPageGUI extends Application {
 	        		participantDetailsGUI detailsGUI = new participantDetailsGUI();
 					//hard coded cosmo ID for testing purposes
 					detailsGUI.participantDetailsConstruct(viewParticipantDetailsStage, 
-							Integer.parseInt(pTVCont.getSelectedPK()), false);
+							Integer.parseInt(pTVCont.getSelectedPK()), loggedInUser);
 	        		
 	            });
 	        }
