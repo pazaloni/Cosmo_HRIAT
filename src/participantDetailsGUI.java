@@ -79,7 +79,7 @@ public class participantDetailsGUI extends Application
     
     /**
      * Purpose: displays the GUI
-     * 
+     * @param: Stage: the stage the GUI will be displayed on
      */
     @Override
     public void start( Stage stage ) throws Exception
@@ -165,9 +165,9 @@ public class participantDetailsGUI extends Application
         
         // set text for tabs
         medications.setText("Medications");
-        vaccinationDetails.setText("Vaccination Details");
+        vaccinationDetails.setText("Vaccination");
         kinDetails.setText("Kin");
-        workDetails.setText("Work Details");
+        workDetails.setText("Work");
         physicianInfo.setText("Physician");
         caregiver.setText("Caregiver");
         other.setText("Other");
@@ -197,7 +197,8 @@ public class participantDetailsGUI extends Application
      * 
      * Purpose: Create the HBox that will contain the Preview pane and the Note
      * pane
-     * @return
+     * @return HBox: the container for the preview details of the participants
+     * basic information
      */
     private HBox createHBoxPreviewDetails()
     {
@@ -223,7 +224,7 @@ public class participantDetailsGUI extends Application
 
     /**
      * Purpose: Create the Preview Pane
-     * @return
+     * @return BorderPane: create the preview pane for the basic information
      */
     private BorderPane createPreviewPane()
     {
