@@ -1,9 +1,11 @@
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
-
+import javax.imageio.ImageIO;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -26,6 +28,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -64,6 +68,14 @@ public class MedicalStaffMainPageGUI extends Application {
 	private Stage createParticipantStage;
 
 	private StaffAccount loggedInUser;
+
+	// Preveiw labes for the participant
+	private Label cosmoIDLbl;
+	private Label firstNameLbl;
+	private Label lastNameLbl;
+	private Label seizureLbl;
+	private Label allergyLbl;
+	private Label physicianLbl;
 
 	/**
 	 * Purpose: displays the GUI
@@ -138,7 +150,7 @@ public class MedicalStaffMainPageGUI extends Application {
 		// set the image left and right
 		logoAndLogin.setLeft(logo);
 		logoAndLogin.setRight(logout);
-
+		logoAndLogin.setFocusTraversable(false);
 		return logoAndLogin;
 	}
 
@@ -170,7 +182,7 @@ public class MedicalStaffMainPageGUI extends Application {
 		tabPane.setTabMinWidth(175);
 		tabPane.getTabs().addAll(participants, forms, stats);
 		tabPane.setMinHeight(29);
-
+		tabPane.setFocusTraversable(false);
 		return tabPane;
 	}
 
@@ -189,7 +201,8 @@ public class MedicalStaffMainPageGUI extends Application {
 		hbox.setPadding(new Insets(0, 0, 10, 0));
 		hbox.setSpacing(10);
 		hbox.setStyle("-fx-background-color: #336699;");
-
+		hbox.setFocusTraversable(false);
+		
 		// create preview pane
 		BorderPane previewPane = createPreviewPane();
 		// create note box
@@ -244,11 +257,14 @@ public class MedicalStaffMainPageGUI extends Application {
 		Label lastNameLabel = new Label("Last Name: ");
 		Label seizureLabel = new Label("Seizures: ");
 		Label allergyLabel = new Label("Allergies: ");
+		Label physicianLabel = new Label("Physician: ");
 
 		// set label margins
 		cosmoIDLabel.setPadding(new Insets(5, 5, 5, 5));
 		firstNameLabel.setPadding(new Insets(5, 5, 5, 5));
 		lastNameLabel.setPadding(new Insets(5, 5, 5, 5));
+		physicianLabel.setPadding(new Insets(5, 5, 5, 5));
+
 		seizureLabel.setPadding(new Insets(0, 5, 25, 5));
 		allergyLabel.setPadding(new Insets(5, 5, 50, 5));
 
@@ -260,47 +276,22 @@ public class MedicalStaffMainPageGUI extends Application {
 		seizureLabel.setAlignment(Pos.TOP_LEFT);
 
 		// set the participant Labels
-		Label cosmoIDText = new Label("0");
-		Label firstNameText = new Label("John");
-		Label lastNameText = new Label("Doe");
-		Label seizureText = new Label("None");
-		Label allergyText = new Label("None");
-
-		cosmoIDText.setMaxWidth(150);
-		cosmoIDText.setMinWidth(150);
-
-		firstNameText.setMaxWidth(150);
-		firstNameText.setMinWidth(150);
-
-		lastNameText.setMaxWidth(150);
-		lastNameText.setMinWidth(150);
-
-		seizureText.setMaxWidth(175);
-		seizureText.setMinWidth(175);
-		seizureText.setMaxHeight(40);
-		seizureText.setMinHeight(65);
-		seizureText.setWrapText(true);
-		seizureText.setAlignment(Pos.TOP_LEFT);
-
-		allergyText.setMaxWidth(175);
-		allergyText.setMinWidth(175);
-		allergyText.setMaxHeight(80);
-		allergyText.setMinHeight(80);
-		allergyText.setWrapText(true);
-		allergyText.setAlignment(Pos.TOP_LEFT);
+		createPreviewLabels();
 
 		// add all labels to the gridpane
 		basicInfoPane.add(cosmoIDLabel, 0, 0);
 		basicInfoPane.add(firstNameLabel, 0, 1);
 		basicInfoPane.add(lastNameLabel, 0, 2);
-		basicInfoPane.add(seizureLabel, 0, 3);
-		basicInfoPane.add(allergyLabel, 0, 4);
+		basicInfoPane.add(physicianLabel, 0, 3);
+		basicInfoPane.add(seizureLabel, 0, 4);
+		basicInfoPane.add(allergyLabel, 0, 5);
 
-		basicInfoPane.add(cosmoIDText, 1, 0);
-		basicInfoPane.add(firstNameText, 1, 1);
-		basicInfoPane.add(lastNameText, 1, 2);
-		basicInfoPane.add(seizureText, 1, 3);
-		basicInfoPane.add(allergyText, 1, 4);
+		basicInfoPane.add(cosmoIDLbl, 1, 0);
+		basicInfoPane.add(firstNameLbl, 1, 1);
+		basicInfoPane.add(lastNameLbl, 1, 2);
+		basicInfoPane.add(physicianLbl, 1, 3);
+		basicInfoPane.add(seizureLbl, 1, 4);
+		basicInfoPane.add(allergyLbl, 1, 5);
 
 		// set margins
 		BorderPane.setMargin(pictureBox, new Insets(10, 0, 0, 10));
@@ -310,6 +301,86 @@ public class MedicalStaffMainPageGUI extends Application {
 		previewPane.setCenter(basicInfoPane);
 
 		return previewPane;
+	}
+
+	/**
+	 * 
+	 * Purpose: Create the preview labes for the participant
+	 */
+	private void createPreviewLabels() {
+
+		cosmoIDLbl = new Label();
+		firstNameLbl = new Label();
+		lastNameLbl = new Label();
+		seizureLbl = new Label();
+		allergyLbl = new Label();
+		physicianLbl = new Label();
+
+		cosmoIDLbl.setMaxWidth(150);
+		cosmoIDLbl.setMinWidth(150);
+
+		firstNameLbl.setMaxWidth(150);
+		firstNameLbl.setMinWidth(150);
+
+		lastNameLbl.setMaxWidth(150);
+		lastNameLbl.setMinWidth(150);
+
+		physicianLbl.setMaxWidth(150);
+		physicianLbl.setMinWidth(150);
+
+		seizureLbl.setMaxWidth(175);
+		seizureLbl.setMinWidth(175);
+		seizureLbl.setMaxHeight(40);
+		seizureLbl.setMinHeight(65);
+		seizureLbl.setWrapText(true);
+		seizureLbl.setAlignment(Pos.TOP_LEFT);
+
+		allergyLbl.setMaxWidth(175);
+		allergyLbl.setMinWidth(175);
+		allergyLbl.setMaxHeight(80);
+		allergyLbl.setMinHeight(80);
+		allergyLbl.setWrapText(true);
+		allergyLbl.setAlignment(Pos.TOP_LEFT);
+
+		pTVCont.participantTable.setOnMousePressed(event -> {
+			assignParitipantPreviewLabels(pTVCont.getSelectedPK());
+		});
+	}
+
+	/**
+	 * 
+	 * Purpose: Set the text of all the preview pane labels to the currently
+	 * selected user
+	 */
+	private void assignParitipantPreviewLabels(String participantID) {
+		PreviewPaneHelper paneHelper = new PreviewPaneHelper();
+		String[] currentParticipant = paneHelper
+				.queryParticipant(participantID);
+		cosmoIDLbl.setText(currentParticipant[0]);
+		firstNameLbl.setText(currentParticipant[1]);
+		lastNameLbl.setText(currentParticipant[2]);
+		physicianLbl.setText(currentParticipant[3]);
+		seizureLbl.setText(currentParticipant[4]);
+		allergyLbl.setText(currentParticipant[5]);
+
+		URL path = getClass().getResource(currentParticipant[6]);
+
+		try {
+			if (path != null) {
+				previewPicture.setImage(new Image(path.openStream()));
+				previewPicture.setFitHeight(121);
+				previewPicture.setFitWidth(122);
+			} else {
+				URL url = getClass().getResource("images/defaultPicture.png");
+
+				previewPicture.setImage(new Image(url.openStream()));
+
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	/**
@@ -328,20 +399,20 @@ public class MedicalStaffMainPageGUI extends Application {
 		// set width
 		searchBy.setStyle("-fx-pref-width: 150;");
 		searchBy.setPromptText(("Search By"));
+		searchBy.setFocusTraversable(false);
 
 		// create search field
 		searchField = new TextField();
 		searchField.setPromptText("Search...");
 		searchField.setStyle("-fx-pref-width: 245; -fx-pref-height: 26;");
-		searchField.setOnAction(new EventHandler<ActionEvent>(){
+		searchField.setOnAction(new EventHandler<ActionEvent>() {
 
-            @Override
-            public void handle(ActionEvent arg0)
-            {
-               //search handler
-               handleSearch();                
-            }
-		    
+			@Override
+			public void handle(ActionEvent arg0) {
+				// search handler
+				handleSearch();
+			}
+
 		});
 
 		// search button
@@ -351,8 +422,8 @@ public class MedicalStaffMainPageGUI extends Application {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-			    //search handler
-			    handleSearch();
+				// search handler
+				handleSearch();
 			}
 
 		});
@@ -388,38 +459,38 @@ public class MedicalStaffMainPageGUI extends Application {
 		}
 		return searchBar;
 	}
-	
+
 	/**
 	 * 
 	 * Purpose: prepare sql statement for query database
 	 */
-	private void handleSearch()
-	{
-        String table = "Participant";
-        String type = searchBy.getValue();
-        //Checks if the search has a type, if it does not, then set type to name.
-        if (type == null) {
-            type = "Name";
-        }
-        String value = searchField.getText();        
-        String condition = "";
-        //Prepares statement to check the full name of every participant if
-        //name was selected
-        if (type == "Name") {
-            condition = "firstName + ' ' + lastName like '%" + value + "%'";
-        } else if (type == "Allergies") {
-            table = "Allergies";
-            condition = value;
-        } else {
-            condition = type + " LIKE '%" + value + "%'";
-        }
-        //Checks if a value was entered, if one was then search for it, if 
-        //one was not then remove all the conditions on the search 
-        if (value.equals("")) {
-            pTVCont.refreshTable("", table);
-        } else {
-            pTVCont.refreshTable(condition, table);
-        }
+	private void handleSearch() {
+		String table = "Participant";
+		String type = searchBy.getValue();
+		// Checks if the search has a type, if it does not, then set type to
+		// name.
+		if (type == null) {
+			type = "Name";
+		}
+		String value = searchField.getText();
+		String condition = "";
+		// Prepares statement to check the full name of every participant if
+		// name was selected
+		if (type == "Name") {
+			condition = "firstName + ' ' + lastName like '%" + value + "%'";
+		} else if (type == "Allergies") {
+			table = "Allergies";
+			condition = value;
+		} else {
+			condition = type + " LIKE '%" + value + "%'";
+		}
+		// Checks if a value was entered, if one was then search for it, if
+		// one was not then remove all the conditions on the search
+		if (value.equals("")) {
+			pTVCont.refreshTable("", table);
+		} else {
+			pTVCont.refreshTable(condition, table);
+		}
 	}
 
 	/**
@@ -582,7 +653,7 @@ public class MedicalStaffMainPageGUI extends Application {
 		noteTitleView.setItems(noteTitleList);
 		noteTitleView.setMinWidth(170);
 		noteTitleView.setMaxWidth(170);
-
+		noteTitleView.setFocusTraversable(false);
 		// note display pane
 		GridPane noteDisplayPane = new GridPane();
 

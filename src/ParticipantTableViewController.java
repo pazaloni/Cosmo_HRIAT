@@ -41,6 +41,7 @@ public class ParticipantTableViewController {
 	public ParticipantTableViewController() {
 		retrieveParticipantData("", "Participant");
 		participantTable.setItems(participantData);
+		participantTable.setFocusTraversable(false);
 	}
 
 	public void retrieveParticipantData(String condition, String table) {
@@ -49,8 +50,7 @@ public class ParticipantTableViewController {
 		DatabaseHelper db = new DatabaseHelper();
 		// If the table is Allergies, search for all participants with that
 		// Allergy
-		if (table.equals("Allergies")) 
-		{
+		if (table.equals("Allergies")) {
 			String allergy = condition;
 			condition = "cosmoID = (SELECT cosmoID FROM Allergies where "
 					+ "allergicTo LIKE '%" + allergy + "%')";
@@ -60,7 +60,7 @@ public class ParticipantTableViewController {
 		ResultSet rs = db.select("cosmoID, firstName, lastName, address, "
 				+ "dateUpdated", table, condition, "");
 
-		// Strings to represent the data to be displayed. 
+		// Strings to represent the data to be displayed.
 		String cosmoID;
 		String firstName;
 		String lastName;
@@ -170,6 +170,7 @@ public class ParticipantTableViewController {
 	 * @return the ID of the row that is selected
 	 */
 	public String getSelectedPK() {
+		participantTable.setFocusTraversable(false);
 		Participant participant = participantTable.getSelectionModel()
 				.getSelectedItem();
 		return participant.getCosmoID();
