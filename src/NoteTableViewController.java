@@ -2,9 +2,12 @@ import java.sql.*;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
+import javafx.util.Callback;
 
 public class NoteTableViewController 
 {
@@ -67,6 +70,25 @@ public class NoteTableViewController
 		idColumn.setCellValueFactory(cellData -> cellData.getValue()
 				.getIDProperty());
 		idColumn.setResizable(false);
+		idColumn.setCellFactory(new Callback<TableColumn<Note, String>, TableCell<Note, String>>()
+				{
+					@Override
+					public TableCell<Note, String> call(TableColumn<Note, String> noteStringTableColumn)
+					
+					
+					return new TableCell<Note, String>()
+						{
+							@Override
+							protected void updateItem(String noteID, boolean read)
+							{
+								super.updateItem(noteID, read);
+								if(!read)
+								{
+									currentRow.setStyle("-fx-background-color:mediumblue");
+								}
+							}
+						}
+				});
 		
 		noteTable.getColumns().addAll(idColumn);
 		
@@ -86,5 +108,12 @@ public class NoteTableViewController
 		this.initializeNoteData();
 		this.noteTable.getColumns().clear();
 		this.initialize();
+	}
+	
+	
+
+	private TableRow<Note> getTableRow() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -151,7 +151,7 @@ public class MedicalStaffMainPageGUI extends Application
             }
         });
         // logo image size
-        ImageView logo = new ImageView(new Image("images/CosmoIconLong.png"));
+        ImageView logo = new ImageView(new Image("file:images/CosmoIconLong.png"));
         logo.setFitWidth(400);
         logo.setFitHeight(49);
 
