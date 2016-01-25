@@ -10,7 +10,11 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-
+/**
+ * Purpose: Managing the participant tableview on the MedicalStaffMainPageGUI
+ * @author Team CIMP
+ *
+ */
 public class ParticipantTableViewController 
 {
 	// the tableview containing the information for all the staff accounts
@@ -44,7 +48,11 @@ public class ParticipantTableViewController
 		participantTable.setItems(participantData);
 		participantTable.setFocusTraversable(false);
 	}
-
+/**
+ * Method for updating currently displayed participant data
+ * @param condition: The restrictions on the returned results
+ * @param table: The table we are querying from
+ */
 	public void retrieveParticipantData(String condition, String table) {
 
 		participantData.clear();
