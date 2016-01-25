@@ -29,14 +29,14 @@ public class PopUpCheck
     // instance of the no button
     Button noBtn;
 
-
     /**
      * Purpose: The main constructor for the pop up check
      * 
-     * @param message   The passed in message that will be displayed on the GUI
-     * @param stage     The passed in stage
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * @param message
+     *            The passed in message that will be displayed on the GUI
+     * @param stage
+     *            The passed in stage
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     public PopUpCheck(String message, Stage stage)
     {
@@ -64,7 +64,7 @@ public class PopUpCheck
         {
 
             @Override
-            public void handle( ActionEvent event )
+            public void handle(ActionEvent event)
             {
                 // set the result to true
                 result = true;
@@ -81,7 +81,7 @@ public class PopUpCheck
         noBtn.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
-            public void handle( ActionEvent event )
+            public void handle(ActionEvent event)
             {
                 // set the result to false
                 result = false;
@@ -110,8 +110,7 @@ public class PopUpCheck
      * 
      * @return a boolean value saying whether the deletion was confirmed
      * 
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     public boolean runCheck()
     {

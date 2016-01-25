@@ -37,8 +37,8 @@ public class StaffTableViewController
     /**
      * Purpose: Fetches the account information from the database and then adds
      * the fetched information to observable list.
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * 
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     private void intitializeStaffData()
     {
@@ -57,14 +57,14 @@ public class StaffTableViewController
         String accessLevel;
         try
         {
-            while ( rs.next() )
+            while (rs.next())
             {
                 username = rs.getString(1);
 
                 lastName = rs.getString(2);
                 firstName = rs.getString(3);
                 // if there is no email set, "none" will be displayed
-                if ( rs.getString(4) == null )
+                if (rs.getString(4) == null)
                 {
                     email = "none";
                 }
@@ -77,14 +77,14 @@ public class StaffTableViewController
 
                 StaffAccount account;
                 // if accessLevel is 0, then the user is a basicStaff
-                if ( accessLevel.equals("0") )
+                if (accessLevel.equals("0"))
                 {
                     account = new BasicStaff(username, lastName, firstName,
                             email, password, accessLevel);
                 }
                 // If the accessLevel is 1, then the user is a
                 // medicalAdministrator
-                else if ( accessLevel.equals("1") )
+                else if (accessLevel.equals("1"))
                 {
                     account = new MedicalAdministrator(username, lastName,
                             firstName, email, password, accessLevel);
@@ -101,7 +101,7 @@ public class StaffTableViewController
             }
         }
         // if this fail, print the stack trace
-        catch ( SQLException e )
+        catch (SQLException e)
         {
 
             e.printStackTrace();
@@ -112,8 +112,8 @@ public class StaffTableViewController
     /**
      * Purpose: Sets up the table by setting all the column titles based on the
      * information from the observable list.
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * 
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     public void initialize()
     {
@@ -144,8 +144,7 @@ public class StaffTableViewController
      * 
      * @return A string representing the username of the selected user from the
      *         table
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     public String getSelectedPK()
     {
@@ -153,7 +152,7 @@ public class StaffTableViewController
 
         StaffAccount account = staffTable.getSelectionModel().getSelectedItem();
 
-        if ( account == null )
+        if (account == null)
         {
             result = "null";
         }
@@ -171,10 +170,9 @@ public class StaffTableViewController
      * @param username
      *            The username that identifies which entry to remove from the
      *            table.
-     *  @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public void removeViewableUser( String username )
+    public void removeViewableUser(String username)
     {
         this.staffData.clear();
         this.intitializeStaffData();
@@ -185,8 +183,7 @@ public class StaffTableViewController
     /**
      * Purpose: This will refresh the table when a change is made.
      * 
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     public void refreshTable()
     {

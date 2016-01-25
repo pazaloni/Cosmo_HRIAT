@@ -22,7 +22,6 @@ public class Participant
     private StringProperty emergencyContactName;
     private StringProperty emergencyContactPhone;
 
-    
     /**
      * 
      * Constructor for the Participant class.
@@ -40,16 +39,21 @@ public class Participant
     {
         this.cosmoID = new SimpleStringProperty(cosmoID);
         this.participantName = new SimpleStringProperty(participantName);
-        this.informationLastUpdated = new SimpleStringProperty(""+informationLastUpdated);
-        this.participantAddress = new SimpleStringProperty(""+participantAddress);
-        this.emergencyContactName = new SimpleStringProperty(""+emergencyContactName);
-        this.emergencyContactPhone = new SimpleStringProperty(""+emergencyContactPhone);
+        this.informationLastUpdated = new SimpleStringProperty(""
+                + informationLastUpdated);
+        this.participantAddress = new SimpleStringProperty(""
+                + participantAddress);
+        this.emergencyContactName = new SimpleStringProperty(""
+                + emergencyContactName);
+        this.emergencyContactPhone = new SimpleStringProperty(""
+                + emergencyContactPhone);
 
     }
 
     /**
      * 
      * Purpose: To return the cosmoID string
+     * 
      * @return cosmoID String
      */
     public String getCosmoID()
@@ -60,16 +64,18 @@ public class Participant
     /**
      * 
      * Purpose: To return the cosmoID StringProperty
+     * 
      * @return cosmoID StringProperty
      */
     public StringProperty getCosmoIDProperty()
     {
         return cosmoID;
     }
-    
+
     /**
      * 
      * Purpose: To return the participant name String
+     * 
      * @return participantName String
      */
     public String getParticipantName()
@@ -80,38 +86,44 @@ public class Participant
     /**
      * 
      * Purpose: To return the participantName StringProperty
+     * 
      * @return participantName StringProperty
      */
     public StringProperty getParticipantNameProperty()
     {
         return participantName;
     }
-    
+
     /**
      * 
      * Purpose: To return the informationLastUpdated String
+     * 
      * @return informationLastUpdated String
      */
     public String getInformationLastUpdated()
     {
-    	informationLastUpdated.set(informationLastUpdated.get().substring(0, 11));
+        informationLastUpdated.set(informationLastUpdated.get()
+                .substring(0, 11));
         return informationLastUpdated.get();
     }
 
     /**
      * 
      * Purpose: To return the informationLastUpdated StringProperty
+     * 
      * @return informationLastUpdated StringProperty
      */
     public StringProperty getUpdatedProperty()
     {
-        informationLastUpdated.set(informationLastUpdated.get().substring(0, 11));
+        informationLastUpdated.set(informationLastUpdated.get()
+                .substring(0, 11));
         return informationLastUpdated;
     }
-    
+
     /**
      * 
      * Purpose: To return the participantAddress String
+     * 
      * @return participantAddress String
      */
     public String getParticipantAddress()
@@ -122,46 +134,51 @@ public class Participant
     /**
      * 
      * Purpose: To return the participantAddress StringProperty
+     * 
      * @return participantAddress StringProperty
      */
     public StringProperty getAddressProperty()
     {
         return participantAddress;
     }
-    
+
     /**
      * 
      * Purpose: To return the emergencyContactName String
+     * 
      * @return emergencyContactname String
      */
     public String getEmergencyContactName()
     {
         return emergencyContactName.get();
     }
-    
+
     /**
      * 
      * Purpose: To return the emergencyContactName String Property
+     * 
      * @return emergencyContactName StringProperty
      */
     public StringProperty getEmergencyContactProperty()
     {
         return emergencyContactName;
     }
-    
+
     /**
      * 
      * Purpose: To return the emergencyContactPhone String
+     * 
      * @return emergencyContactPhone String
      */
     public String getEmergencyContactPhone()
     {
         return emergencyContactPhone.get();
     }
-    
+
     /**
      * 
      * Purpose: getEmergencyContactPhone String Property
+     * 
      * @return emergencyContactPhone StringProperty
      */
     public StringProperty getEmergencyContactPhoneProperty()

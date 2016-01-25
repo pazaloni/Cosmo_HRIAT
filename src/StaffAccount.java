@@ -1,6 +1,8 @@
 import java.sql.ResultSet;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
 import java.sql.SQLException;
 
 /**
@@ -15,6 +17,7 @@ import java.sql.SQLException;
 public class StaffAccount
 {
     private DatabaseHelper db;
+    private ManageStaffAccountHelper manageStaff;
 
     protected StringProperty username;
     protected StringProperty lastName;
@@ -35,13 +38,13 @@ public class StaffAccount
      * @return either an instantiated account(basic staff, medical admin, or
      *         techincal admin) or a null account indicating an unsucessful
      *         login
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public StaffAccount login( String username, String password )
+    public StaffAccount login(String username, String password)
     {
         // the account that will be returned upon successful login
         StaffAccount staff = null;
+        manageStaff = new ManageStaffAccountHelper();
 
         // These are set as not found because when there is nothing returned
         // form the database they are assigned nothing so they remain
@@ -58,66 +61,45 @@ public class StaffAccount
         db.connect();
         // query used to find the provided username that returns the username,
         // password and accesslevel
-        ResultSet user = db.select(
-                "UserName, lastName, firstName, email, password, accessLevel",
-                "Staff", "username='" + username + "'", "");
-        try
-        {
-            // if the user result set has values in it
-            while ( user.next() )
-            {
-                // the username, password and accessLevel returned from the
-                // database
-                returnedUsername = user.getString(1);
-                returnedLastName = user.getString(2);
-                returnedFirstName = user.getString(3);
-                returnedEmail = user.getString(4);
-                returnedPassword = user.getString(5);
-                accessLevel = user.getString(6);
-            }
-        }
-        catch ( SQLException e1 )
-        {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
+       
+       StaffAccount currentUser = manageStaff.queryStaff(username);
+        
+//        ResultSet user = db.select(
+//                "UserName, lastName, firstName, email, password, accessLevel",
+//                "Staff", "username='" + username + "'", "");
+//        try
+//        {
+//            // if the user result set has values in it
+//            while (user.next())
+//            {
+//                // the username, password and accessLevel returned from the
+//                // database
+//                returnedUsername = user.getString(1);
+//                returnedLastName = user.getString(2);
+//                returnedFirstName = user.getString(3);
+//                returnedEmail = user.getString(4);
+//                returnedPassword = user.getString(5);
+//                accessLevel = user.getString(6);
+//            }
+//        }
+//        catch (SQLException e1)
+//        {
+//            // TODO Auto-generated catch block
+//            e1.printStackTrace();
+//        }
 
-        // flag used to check if the returned username isn't empty
-        if ( !returnedUsername.equals("not found") )
+        // flag used to check if the returned user exists
+        if (currentUser != null)
         {
-            if ( returnedUsername.equals(username)
-                    && returnedPassword.equals(password) )
-            {
-                // if the accessLevel is 0 then instantiate a Basic staff
-                if ( Integer.parseInt(accessLevel) == 0 )
-                {
-                    staff = new BasicStaff(returnedUsername, returnedLastName,
-                            returnedFirstName, returnedEmail, returnedPassword,
-                            accessLevel);
-                }
-                // if the accessLevel is 1 then instantiate a Medical Admin
-                else if ( Integer.parseInt(accessLevel) == 1 )
-                {
-                    staff = new MedicalAdministrator(returnedUsername,
-                            returnedLastName, returnedFirstName, returnedEmail,
-                            returnedPassword, accessLevel);
-                }
-                // if the accessLevel is 2 then instantiate a Technical Admin
-                else if ( Integer.parseInt(accessLevel) == 2 )
-                {
-                    staff = new TechnicalAdministrator(returnedUsername,
-                            returnedLastName, returnedFirstName, returnedEmail,
-                            returnedPassword, accessLevel);
-                }
-            }
-            else
+            if (!(currentUser.GetUsername().equals(username)
+                    && currentUser.GetPassword().equals(password)))
             {
                 // if the returned username is null, make the staff to return
                 // null aswell
-                staff = null;
+                currentUser = null;
             }
         }
-        return staff;
+        return currentUser;
     }
 
     /**
@@ -131,13 +113,75 @@ public class StaffAccount
     {
         return false;
     }
+    
+    
+    /**
+     * 
+     * Purpose: To take in a username, query the database for that username and
+     * if the user exists, return an object of the user
+     * 
+     * @param username
+     *            String of user name to be queried on
+     * @return StaffAccount a staffa ccount object 
+     */
+    public StaffAccount queryStaff(String username)
+    {
+        StaffAccount staffToReturn = null;
+        
+        ResultSet staff = db.select(
+                "UserName, lastName, firstName, email, password, accessLevel",
+                "Staff", "username='" + username + "'", "");
+        
+        String usernameOut = "";
+        String lastName = "";
+        String firstName = "";
+        String email = "";
+        String password = "";
+        String accessLevel = "";
+        
+        try
+        {
+            while (staff.next())
+            {
+                usernameOut = staff.getString(1);
+                lastName = staff.getString(2);
+                firstName = staff.getString(3);
+                email = staff.getString(4);
+                password = staff.getString(5);
+                accessLevel = staff.getString(6);
+            }
+        }
+        catch (SQLException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        
+        if (accessLevel.equals("0"))
+        {
+            staffToReturn = new BasicStaff(usernameOut, lastName, firstName, email, password, accessLevel);
+        }
+        else if (accessLevel.equals("1"))
+        {
+            staffToReturn = new MedicalAdministrator(usernameOut, lastName, firstName, email, password, accessLevel);
+        }
+        else if (accessLevel.equals("2"))
+        {
+            staffToReturn = new TechnicalAdministrator(usernameOut, lastName, firstName, email, password, accessLevel);
+        }
+        
+
+        return staffToReturn;
+    }
+    
 
     /**
      * 
-     * Purpose: Gets the username from the StringProperty 
-     * @return  username String
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * Purpose: Gets the username from the StringProperty
+     * 
+     * @return username String
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     public String GetUsername()
     {
@@ -147,9 +191,9 @@ public class StaffAccount
     /**
      * 
      * Purpose: Gets the username property
+     * 
      * @return: Username property StringProperty
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     public StringProperty usernameProperty()
     {
@@ -159,9 +203,9 @@ public class StaffAccount
     /**
      * 
      * Purpose: Gets the lastName from the StringProperty
-     * @return  lastName String
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * 
+     * @return lastName String
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     public String GetLastName()
     {
@@ -171,9 +215,9 @@ public class StaffAccount
     /**
      * 
      * Purpose: Gets the lastName property
-     * @return  lastName property StringProperty
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * 
+     * @return lastName property StringProperty
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     public StringProperty lastNameProperty()
     {
@@ -183,9 +227,9 @@ public class StaffAccount
     /**
      * 
      * Purpose: Gets the firstName from the StringProperty
-     * @return  firstName String
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * 
+     * @return firstName String
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     public String GetFirstName()
     {
@@ -195,9 +239,9 @@ public class StaffAccount
     /**
      * 
      * Purpose: Gets the firstName property
-     * @return  firstName property StringProperty
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * 
+     * @return firstName property StringProperty
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     public StringProperty firstNameProperty()
     {
@@ -207,9 +251,9 @@ public class StaffAccount
     /**
      * 
      * Purpose: Gets the email from the StingProperty
-     * @return  email String
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * 
+     * @return email String
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     public String GetEmail()
     {
@@ -219,9 +263,9 @@ public class StaffAccount
     /**
      * 
      * Purpose: Gets the email Property
-     * @return  email property StringProperty
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * 
+     * @return email property StringProperty
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     public StringProperty emailProperty()
     {
@@ -231,31 +275,36 @@ public class StaffAccount
     /**
      * 
      * Purpose: Gets the accesslevel from the StringProperty
-     * @return  accessLevel String
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * 
+     * @return accessLevel String
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     public String GetAccessLevel()
     {
         return accessLevel.get();
     }
+    
+    public String GetPassword()
+    {
+        return password.get();
+    }
 
     /**
      * 
-     * Purpose: Checks the value of the accessLevel and assigns the proper 
-     *          access level String that will be displayed in the table
-     * @return  accessLevel StringProperty
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * Purpose: Checks the value of the accessLevel and assigns the proper
+     * access level String that will be displayed in the table
+     * 
+     * @return accessLevel StringProperty
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     public StringProperty accessLevelProperty()
     {
         String accessStr = " ";
-        if ( accessLevel.getValue().equals("0") )
+        if (accessLevel.getValue().equals("0"))
         {
             accessStr = "Basic Staff";
         }
-        else if ( accessLevel.getValue().equals("1") )
+        else if (accessLevel.getValue().equals("1"))
         {
             accessStr = "Medical Administrator";
         }
@@ -270,10 +319,10 @@ public class StaffAccount
     /**
      * 
      * Purpose: Sets the username StringProperty
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * 
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public void setUsername( String username )
+    public void setUsername(String username)
     {
         this.username.set(username);
     }
@@ -281,10 +330,10 @@ public class StaffAccount
     /**
      * 
      * Purpose: Sets the lastName StringProperty
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * 
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public void setLastName( String lastName )
+    public void setLastName(String lastName)
     {
         this.lastName.set(lastName);
     }
@@ -292,10 +341,10 @@ public class StaffAccount
     /**
      * 
      * Purpose: Sets the firstName StringProperty
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * 
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public void setFirstName( String firstName )
+    public void setFirstName(String firstName)
     {
         this.firstName.set(firstName);
     }
@@ -303,10 +352,10 @@ public class StaffAccount
     /**
      * 
      * Purpose: Sets the email StringProperty
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * 
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public void setEmail( String email )
+    public void setEmail(String email)
     {
         this.email.set(email);
     }
@@ -314,10 +363,10 @@ public class StaffAccount
     /**
      * 
      * Purpose: Sets the accessLevel StringProperty
-     * @author  Breanna Wilson cst215
-     *          Steven Palchinski cst209
+     * 
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public void setAccessLevel( String accessLevel )
+    public void setAccessLevel(String accessLevel)
     {
         this.accessLevel.set(accessLevel);
     }
