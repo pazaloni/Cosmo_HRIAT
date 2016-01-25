@@ -134,7 +134,7 @@ public class DatabaseHelper
                 query += " ORDER BY " + sort;
             }
 
-            System.out.println(query);
+//            System.out.println(query);
             // execute the query
             rs = s.executeQuery(query);
         }
@@ -183,7 +183,7 @@ public class DatabaseHelper
         String insertStatement = "INSERT INTO " + tableName + " " + fieldList
                 + " VALUES " + valueList;
         
-        System.out.println(insertStatement);
+       //System.out.println(insertStatement);
 
         int rows = 0;
         try

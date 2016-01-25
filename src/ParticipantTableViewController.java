@@ -134,8 +134,8 @@ public class ParticipantTableViewController
         emergencyPhoneColumn.setMinWidth(115);
         emergencyPhoneColumn.setResizable(false);
 
-        // lastUpdatedColumn.setCellValueFactory(cellData ->
-        // cellData.getValue().getUpdatedProperty());
+         lastUpdatedColumn.setCellValueFactory(cellData ->
+         cellData.getValue().getUpdatedProperty());
         lastUpdatedColumn.setMinWidth(135);
         lastUpdatedColumn.setResizable(false);
 

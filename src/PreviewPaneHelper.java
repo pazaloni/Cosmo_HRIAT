@@ -70,7 +70,7 @@ public class PreviewPaneHelper
 
             String imagePath = participantInfo.getString(4);
             this.imagePath = imagePath;
-
+            System.out.println("Preview pane helper image path: " + this.imagePath);
             // close the result set, free up resources.
             participantInfo.close();
 

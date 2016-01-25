@@ -32,6 +32,8 @@ public class TestPreviewPaneHelper
     private String phoneOne;
     private String addressOne;
 
+    private String path;
+
     @Before
     public void setUp() throws Exception
     {
@@ -46,11 +48,11 @@ public class TestPreviewPaneHelper
         healthNumber = "111111111";
         phoneOne = "1111111111";
         addressOne = "123 Fake Street";
-
+        path = "asfdsad";
         String result = MedicalAdministrator.createParticipant(cosmoID,
                 participantFirstName, participantLastName,
                 participantBirthdate, physicianFName, physicianLName,
-                healthNumber, phoneOne, addressOne);
+                healthNumber, phoneOne, addressOne, path);
 
         System.out.println(result);
     }
