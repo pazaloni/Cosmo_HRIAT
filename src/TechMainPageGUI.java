@@ -89,12 +89,13 @@ public class TechMainPageGUI extends Application
     // the new user main page
     private Stage stageNewUser;
     
-    //String that will hold the username of the logged in tech admin 
-    private String loggedUser;
+    //Tech Administrator object that holds logged in user
+    private TechnicalAdministrator loggedInAdmin;
 
-    public void techMainPageConstruct(Stage stage)
+    public void techMainPageConstruct(Stage stage, StaffAccount loggedInStaff)
     {
 
+        loggedInAdmin = (TechnicalAdministrator) loggedInStaff;
         // open the database connection
         dbObject.connect();
 
@@ -213,7 +214,7 @@ public class TechMainPageGUI extends Application
 
         // final stage preparation and titling
         stageTech.setScene(scene);
-        stageTech.setTitle("Cosmopolitan Industries");
+        stageTech.setTitle("Cosmo Industries - " + loggedInAdmin.GetUsername());
         // display window
         stageTech.show();
 
@@ -344,17 +345,17 @@ public class TechMainPageGUI extends Application
         btnSubmit.setFont(new Font(15));
         if (!newUser)
         {
-            String[] selectedStaff = manageStaff.queryStaff(sTVCont
+            StaffAccount selectedStaff = manageStaff.queryStaff(sTVCont
                     .getSelectedPK());
-            firstName.setText(selectedStaff[2]);
+            firstName.setText(selectedStaff.GetFirstName());
             username.setDisable(true);
-            lastName.setText(selectedStaff[1]);
-            username.setText(selectedStaff[0]);
-            email.setText(selectedStaff[3]);
-            password.setText(selectedStaff[4]);
-            repeatPassword.setText(selectedStaff[4]);
+            lastName.setText(selectedStaff.GetLastName());
+            username.setText(selectedStaff.GetUsername());
+            email.setText(selectedStaff.GetEmail());
+            password.setText(selectedStaff.GetPassword());
+            repeatPassword.setText(selectedStaff.GetPassword());
             cboSecurityLevels.setValue(securityLevels.get(Integer
-                    .parseInt(selectedStaff[5])));
+                    .parseInt(selectedStaff.GetAccessLevel())));
         }
         btnSubmit.setOnAction(new EventHandler<ActionEvent>()
         {
@@ -479,7 +480,7 @@ public class TechMainPageGUI extends Application
      */
     public void start(Stage stage)
     {
-        techMainPageConstruct(stage);
+        techMainPageConstruct(stage, null);
     }
 
     /**
@@ -556,7 +557,7 @@ public class TechMainPageGUI extends Application
         if(username != null && username != "null")
         {
             //if the selected username is the same as the current username 
-        	if(username.equals(loggedUser))
+        	if(username.equals(loggedInAdmin.GetUsername()))
             {
             	//pop up a message saying that you cannot delete the current user
         		PopUpMessage messageBox = new PopUpMessage("You cannot delete "
@@ -605,14 +606,4 @@ public class TechMainPageGUI extends Application
 
     }
     
-    /**
-     * Purpose:	To set the username of the currently logged in tech admin
-     * @param username the passed in logged in tech admin
-     * @author 	Steven Palchinski cst209
-     * 			Andrew Hundeby	cst205
-     */
-    public void passLoggedInUser(String username)
-    {
-    	loggedUser = username;
-    }
 }
