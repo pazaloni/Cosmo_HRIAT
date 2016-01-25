@@ -14,7 +14,10 @@ import javafx.collections.ObservableList;
  */
 public class DatabaseHelper
 {
-    private final String DB_PATH = "G:/CIMPDatabase.accdb";
+	//the shared database
+    //private final String DB_PATH = "Z:/CIMPDatabase.accdb";
+    //Local database
+	private final String DB_PATH = "G:/CIMPDatabase.accdb";
     private Connection conn;
 
     public DatabaseHelper()

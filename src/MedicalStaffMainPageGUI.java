@@ -635,36 +635,36 @@ public class MedicalStaffMainPageGUI extends Application
         // create list of notes
         // TODO make this automatically pull from the database of notes
         //run query to get all unresolved notes, order by noteId
-        ResultSet rs = dbObject.select("noteID", "Notes", "not resolved", "noteID");
-        try
-        {
-            while (rs.next())
-            {
-                String noteID = rs.getString(1);
-                Boolean read = false;
-                Note note;
-                // if accessLevel is 0, then the user is a basicStaff
-                if (read == false)
-                {
-                    // TODO make the color change for read notes
-                }
-                //note = new Note();
-                noteTitleList.add(note);
-            }
-        }
-        // if this fail, print the stack trace
-        catch (SQLException e)
-        {
-
-            e.printStackTrace();
-        }
-        		//FXCollections.observableArrayList("Note 1", "Note 2",
-                //"Note 3", "Note 4", "Note 5", "Note 6", "Note 7", "Note 8",
-                //"Note 9", "Note 10", "Note 11");
+//        ResultSet rs = dbObject.select("noteID", "Notes", "not resolved", "noteID");
+//        try
+//        {
+//            while (rs.next())
+//            {
+//                String noteID = rs.getString(1);
+//                Boolean read = false;
+//                Note note;
+//                // if accessLevel is 0, then the user is a basicStaff
+//                if (read == false)
+//                {
+//                    // TODO make the color change for read notes
+//                }
+//                //note = new Note();
+//                noteTitleList.add(note);
+//            }
+//        }
+//        // if this fail, print the stack trace
+//        catch (SQLException e)
+//        {
+//
+//            e.printStackTrace();
+//        }
+//        		//FXCollections.observableArrayList("Note 1", "Note 2",
+//                //"Note 3", "Note 4", "Note 5", "Note 6", "Note 7", "Note 8",
+//                //"Note 9", "Note 10", "Note 11");
 
         // set notes list to listview
         //TODO add note to listview
-        noteTitleView.setItems(noteTitleList);
+        //noteTitleView.setItems(noteTitleList);
         noteTitleView.setMinWidth(170);
         noteTitleView.setMaxWidth(170);
         noteTitleView.setFocusTraversable(false);
