@@ -11,7 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-public class ParticipantTableViewController {
+public class ParticipantTableViewController 
+{
 	// the tableview containing the information for all the staff accounts
 	protected TableView<Participant> participantTable = new TableView<Participant>();
 	// the columns of the participant table
