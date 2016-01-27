@@ -71,9 +71,11 @@ public class participantDetailsGUI extends Application {
 
 	private StaffAccount loggedInUser;
 
+	private Stage createNoteStage;
+	
 	private static final int PREVIEW_TEXT_WIDTH = 150;
 	private static final int ALLERGY_AND_SEIZURE_MIN_WITH = 410;
-
+	
 	/**
 	 * Purpose: displays the GUI
 	 * 
@@ -255,16 +257,16 @@ public class participantDetailsGUI extends Application {
 			@Override
 			public void handle(ActionEvent arg0) {
 				// search handler
-				Stage popUpStage = new Stage();
-				NotePopUp betaNote = new NotePopUp(cosmoID, loggedInUser
-						.GetUsername(), popUpStage);
-				
-                //pop up a message saying that you cannot delete the current user
-                PopUpMessage messageBox = new PopUpMessage("No user selected", popUpStage);
-                
-                Scene popScene = new Scene(betaNote.root, 300, 75);
-                popUpStage.setScene(popScene);
-                popUpStage.showAndWait();
+				createNoteStage = new Stage();
+				createNoteStage.setTitle("Create Participant");
+
+				createNoteStage.setScene(new Scene(
+						NotePopUp.createNotePopUp(cosmoID, loggedInUser.GetUsername(), createNoteStage), 300, 200));
+				createNoteStage
+						.initModality(Modality.APPLICATION_MODAL);
+				createNoteStage.initOwner(participantMainStage);
+				createNoteStage.setResizable(false);
+				createNoteStage.showAndWait();				
 			}
 
 		});
