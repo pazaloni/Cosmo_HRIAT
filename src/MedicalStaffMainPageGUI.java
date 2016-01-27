@@ -7,11 +7,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
-
-
 import javax.imageio.ImageIO;
-
-
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -383,13 +379,12 @@ public class MedicalStaffMainPageGUI extends Application
         seizureLbl.setText(currentParticipant[4]);
         allergyLbl.setText(currentParticipant[5]);
 
-        URL path = getClass().getResource(currentParticipant[6]);
-
         try
         {
-            if ( path != null )
+            Image img = new Image("./images/"+ participantID + ".jpg");
+            if ( !(img.isError()) )
             {
-                previewPicture.setImage(new Image(path.openStream()));
+                previewPicture.setImage(img);
                 previewPicture.setFitHeight(121);
                 previewPicture.setFitWidth(122);
             }
@@ -526,28 +521,27 @@ public class MedicalStaffMainPageGUI extends Application
         TextField addressTxt = new TextField();
         Button imageBrowseBtn = new Button("Browse...");
         TextField chosenPathTxt = new TextField("");
-        
-        imageBrowseBtn.setOnAction(event -> {
-            FileChooser.ExtensionFilter filter = new FileChooser
-                    .ExtensionFilter("Images", "*.jpg");
-            FileChooser fc = new FileChooser();
-            fc.getExtensionFilters().add(filter);
-            File file = fc.showOpenDialog(medMainStage);
-            
-            String path = "";
-            try
-            {
-                path = file.getAbsolutePath();
-                
-         
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-            chosenPathTxt.setText(path);
-        });
-        
+
+        imageBrowseBtn
+                .setOnAction(event -> {
+                    FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
+                            "Images", "*.jpg");
+                    FileChooser fc = new FileChooser();
+                    fc.getExtensionFilters().add(filter);
+
+                    String path = "";
+
+                    File file = fc.showOpenDialog(medMainStage);
+                    if ( file == null )
+                    {
+                        path = "";
+                    }
+                    else
+                    {
+                        path = file.getAbsolutePath();
+                    }
+                    chosenPathTxt.setText(path);
+                });
 
         // add the form to the grid
         grid.add(cosmoIdLbl, 0, 1);
@@ -594,9 +588,9 @@ public class MedicalStaffMainPageGUI extends Application
                         lastNameTxt.getText(), birthDatePicker.getValue(),
                         physicianFNameTxt.getText(),
                         physicianLNameTxt.getText(), healthNumTxt.getText(),
-                        phoneTxt.getText(), addressTxt.getText(), 
+                        phoneTxt.getText(), addressTxt.getText(),
                         chosenPathTxt.getText());
-                        
+
                 // if no error message is recieved then close this window and
                 // refresh the table
                 if ( result.equals("") )
@@ -638,7 +632,7 @@ public class MedicalStaffMainPageGUI extends Application
                 addressTxt.setText("");
                 chosenPathTxt.setText("");
                 lblWarning.setText("");
-               
+
             }
 
         });
