@@ -54,6 +54,8 @@ public class MedicalStaffMainPageGUI extends Application
 {
 
     private ParticipantTableViewController pTVCont;
+    
+//    private NoteTableViewController nTVCont;
 
     private DatabaseHelper dbObject = new DatabaseHelper();
 
@@ -104,6 +106,9 @@ public class MedicalStaffMainPageGUI extends Application
 
         pTVCont = new ParticipantTableViewController();
         pTVCont.initialize();
+        
+//        nTVCont = new NoteTableViewController();
+//        nTVCont.initialize();
 
         medMainStage = stage;
         medMainStage.setTitle("Cosmo Industries");
@@ -631,6 +636,13 @@ public class MedicalStaffMainPageGUI extends Application
     private HBox createNoteBox()
     {
         HBox hbox = new HBox();
+        VBox vbox = new VBox();
+        Button refreshBtn = new Button("Refresh Notes");
+//        refreshBtn.setOnAction(new EventHandler<ActionEvent>() 
+//        {
+//        	nTVCont.
+//		}
+//        );
         noteTitleView = new ListView<String>();
         // create list of notes
         // TODO make this automatically pull from the database of notes
@@ -668,6 +680,9 @@ public class MedicalStaffMainPageGUI extends Application
         noteTitleView.setMinWidth(170);
         noteTitleView.setMaxWidth(170);
         noteTitleView.setFocusTraversable(false);
+        
+        vbox.getChildren().addAll(refreshBtn, noteTitleView);
+        vbox.setAlignment(Pos.CENTER);
         // note display pane
         GridPane noteDisplayPane = new GridPane();
 
@@ -718,7 +733,7 @@ public class MedicalStaffMainPageGUI extends Application
         noteDisplayPane.prefWidthProperty().bind(
                 medMainStage.widthProperty().divide(1.60));
         hbox.setPadding(new Insets(10, 0, 0, 0));
-        hbox.getChildren().addAll(noteTitleView, noteDisplayPane);
+        hbox.getChildren().addAll(vbox, noteDisplayPane);
 
         return hbox;
     }
