@@ -381,7 +381,7 @@ public class MedicalStaffMainPageGUI extends Application
 
         try
         {
-            Image img = new Image("./images/"+ participantID + ".jpg");
+            Image img = new Image("./images/" + participantID + ".jpg");
             if ( !(img.isError()) )
             {
                 previewPicture.setImage(img);
@@ -390,16 +390,24 @@ public class MedicalStaffMainPageGUI extends Application
             }
             else
             {
-                URL url = getClass().getResource("images/defaultPicture.png");
-
-                previewPicture.setImage(new Image(url.openStream()));
 
             }
 
         }
-        catch ( IOException e )
+        catch ( IllegalArgumentException ie )
         {
-            e.printStackTrace();
+            URL url = getClass().getResource("images/defaultPicture.png");
+
+            try
+            {
+                previewPicture.setImage(new Image(url.openStream()));
+            }
+            catch ( IOException e )
+            {
+                System.out.println("defaultPicture.png is missing");
+
+            }
+
         }
 
     }
