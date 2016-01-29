@@ -5,12 +5,17 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+
 import javax.imageio.ImageIO;
+
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -181,7 +186,37 @@ public class MedicalStaffMainPageGUI extends Application {
 
 		// set the size of the tabs and add to the pane
 		tabPane.setTabMinWidth(175);
-		tabPane.getTabs().addAll(participants, forms, stats);
+		tabPane.getTabs().addAll(participants, forms);
+		
+		//if they are an administrator, add the stats tab
+		if(loggedInUser instanceof MedicalAdministrator)
+		{
+			tabPane.getTabs().add(stats);
+		}
+		
+		//set initial selected tab to participants
+		tabPane.getSelectionModel().select(participants);
+		
+		//set the changed property
+		tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>(){
+
+			@Override
+			public void changed(ObservableValue<? extends Tab> arg0, Tab arg1,
+					Tab mostRecentlySelectedTab) {
+				if(mostRecentlySelectedTab.equals(forms))
+				{
+					//switch to forms GUI
+				}
+				else if(mostRecentlySelectedTab.equals(stats))
+				{
+					QuarterlyReportGUI reportGUI = new QuarterlyReportGUI();
+					reportGUI.reportsMainStageConstruct(medMainStage, loggedInUser);
+				}
+				
+			}
+			
+		});
+		
 		tabPane.setMinHeight(29);
 		tabPane.setFocusTraversable(false);
 		return tabPane;
@@ -242,6 +277,7 @@ public class MedicalStaffMainPageGUI extends Application {
 		// set margins
 		VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
 
+
 		if(loggedInUser instanceof MedicalAdministrator)
 	        {
 	        	detailsButton.setOnAction(event->{
@@ -264,7 +300,6 @@ public class MedicalStaffMainPageGUI extends Application {
 	        		
 	            });
 	        }
-
 
 			// add picture and button to picture box
 			pictureBox.getChildren().addAll(previewPicture, detailsButton);

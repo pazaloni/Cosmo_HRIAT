@@ -60,21 +60,25 @@ public class participantDetailsGUI extends Application {
 	// the main stage for the GUI
 	public static Stage participantMainStage;
 
-	// the picture of the participant
-	private ImageView previewPicture;
 
-	// the selected participant's cosmo ID
-	private int cosmoID;
+    //the picture of the participant
+    private ImageView previewPicture;
+    
+    //the selected participant's cosmo ID
+    private int cosmoID;
+    
+    //the database helper object that allows querying of the database
+    private DatabaseHelper DBObject = new DatabaseHelper();
+    
+    private StaffAccount loggedInUser;
+    
+    private static final int PREVIEW_TEXT_WIDTH = 150;
+    private static final int ALLERGY_AND_SEIZURE_MIN_WITH = 410;
 
-	// the database helper object that allows querying of the database
-	private DatabaseHelper DBObject = new DatabaseHelper();
 
-	private StaffAccount loggedInUser;
 
 	private Stage createNoteStage;
 
-	private static final int PREVIEW_TEXT_WIDTH = 150;
-	private static final int ALLERGY_AND_SEIZURE_MIN_WITH = 410;
 
 	/**
 	 * Purpose: displays the GUI
