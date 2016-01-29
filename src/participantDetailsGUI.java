@@ -72,10 +72,10 @@ public class participantDetailsGUI extends Application {
 	private StaffAccount loggedInUser;
 
 	private Stage createNoteStage;
-	
+
 	private static final int PREVIEW_TEXT_WIDTH = 150;
 	private static final int ALLERGY_AND_SEIZURE_MIN_WITH = 410;
-	
+
 	/**
 	 * Purpose: displays the GUI
 	 * 
@@ -251,7 +251,7 @@ public class participantDetailsGUI extends Application {
 		Button viewDocumentsBtn = new Button("View \nAttached \nDocuments");
 		Button generateFormsBtn = new Button("Generate Forms");
 		Button createNoteBtn = new Button("Create Note");
-		
+
 		createNoteBtn.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -260,13 +260,13 @@ public class participantDetailsGUI extends Application {
 				createNoteStage = new Stage();
 				createNoteStage.setTitle("Create Participant");
 
-				createNoteStage.setScene(new Scene(
-						NotePopUp.createNotePopUp(cosmoID, loggedInUser.GetUsername(), createNoteStage), 300, 200));
-				createNoteStage
-						.initModality(Modality.APPLICATION_MODAL);
+				createNoteStage.setScene(new Scene(NotePopUp.createNotePopUp(
+						cosmoID, loggedInUser.GetUsername(), createNoteStage),
+						300, 200));
+				createNoteStage.initModality(Modality.APPLICATION_MODAL);
 				createNoteStage.initOwner(participantMainStage);
 				createNoteStage.setResizable(false);
-				createNoteStage.showAndWait();				
+				createNoteStage.showAndWait();
 			}
 
 		});

@@ -242,7 +242,7 @@ public class MedicalStaffMainPageGUI extends Application {
 		// set margins
 		VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
 
-		 if(loggedInUser instanceof MedicalAdministrator)
+		if(loggedInUser instanceof MedicalAdministrator)
 	        {
 	        	detailsButton.setOnAction(event->{
 	        		
@@ -264,6 +264,7 @@ public class MedicalStaffMainPageGUI extends Application {
 	        		
 	            });
 	        }
+
 
 			// add picture and button to picture box
 			pictureBox.getChildren().addAll(previewPicture, detailsButton);
