@@ -186,7 +186,13 @@ public class MedicalStaffMainPageGUI extends Application {
 
 		// set the size of the tabs and add to the pane
 		tabPane.setTabMinWidth(175);
-		tabPane.getTabs().addAll(participants, forms, stats);
+		tabPane.getTabs().addAll(participants, forms);
+		
+		//if they are an administrator, add the stats tab
+		if(loggedInUser instanceof MedicalAdministrator)
+		{
+			tabPane.getTabs().add(stats);
+		}
 		
 		//set initial selected tab to participants
 		tabPane.getSelectionModel().select(participants);
