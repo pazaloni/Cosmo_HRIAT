@@ -23,7 +23,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-
+/**
+ * Purpose: The GUI for the statistics page to view stats as
+ * well as generate quarterly reports.
+ * @author CST215
+ *
+ */
 public class QuarterlyReportGUI extends Application
 {
 	//the listview containing the categories for quarterly reports
@@ -58,6 +63,7 @@ public class QuarterlyReportGUI extends Application
 	
 	public QuarterlyReportGUI() 
 	{
+		//do not need to do any work here
 	}
 	
 	/**
@@ -135,7 +141,7 @@ public class QuarterlyReportGUI extends Application
 		vbox.getChildren().addAll(categoriesView, timePeriod, startDateLabel,
 				startDate, endDateLabel, endDate, generateReports);
 		
-		VBox.setMargin(timePeriod, new Insets(10,10,10,25));
+		VBox.setMargin(timePeriod, new Insets(10,10,10,30));
 		VBox.setMargin(generateReports, new Insets(10,10,10,5));
 		
 		return vbox;
@@ -244,7 +250,7 @@ public class QuarterlyReportGUI extends Application
 	/**
 	 * Purpose: Create the Bar Chart to display the
 	 * statistical information
-	 * @return
+	 * @return BarChart the chart to display the statistics
 	 */
 	private BarChart createGraphBox()
 	{
@@ -285,7 +291,8 @@ public class QuarterlyReportGUI extends Application
 	/**
 	 * Purpose: Creates the VBox containing all of the other nodes
 	 * on the page.
-	 * @return
+	 * @return VBox the VBox holding the bar chart, as well as
+	 * categories list, datepickers, and generate reports button.
 	 */
 	private VBox createMainVBox()
 	{
