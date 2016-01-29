@@ -397,12 +397,13 @@ public class MedicalStaffMainPageGUI extends Application
             }
 
             String url = u.toString();
-            
-            url = url.substring(0, url.length()-(url.length()-url.lastIndexOf("/")));
-            
-            url = url.replace("/bin", "");            
 
-            Image img = new Image(url + "/images/" + participantID + ".jpg");
+            url = url.substring(0,
+                    url.length() - (url.length() - url.lastIndexOf("/")));
+
+            url = url.replace("/bin", "");
+
+            Image img = new Image(url + currentParticipant[6]);
 
             if ( !(img.isError()) )
             {
@@ -410,23 +411,17 @@ public class MedicalStaffMainPageGUI extends Application
                 previewPicture.setFitHeight(121);
                 previewPicture.setFitWidth(122);
             }
+            else
+            {
+                URL defaultURL = getClass().getResource(
+                        "images/defaultPicture.png");
+                previewPicture.setImage(new Image(defaultURL.openStream()));
+            }
         }
-        catch ( IllegalArgumentException | MalformedURLException ie )
+        catch ( IllegalArgumentException | IOException ie )
         {
-            URL url = getClass().getResource("images/defaultPicture.png");
-            System.out.println("Image is invalid, usinf defualt");
-            try
-            {
-                previewPicture.setImage(new Image(url.openStream()));
-            }
-            catch ( IOException e )
-            {
-                System.out.println("defaultPicture.png is missing");
-
-            }
-
+            System.out.println("Image is invalid, using default");
         }
-
     }
 
     /**

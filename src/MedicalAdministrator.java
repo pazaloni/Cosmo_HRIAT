@@ -248,7 +248,7 @@ public class MedicalAdministrator extends BasicStaff
         byte[] imageData;
         // This returns the path to where the jar file is stored
         String pathToSaveTo = "./images/" + cosmoID + ".jpg";
-        System.out.println("Path to save to "+ pathToSaveTo);
+       
         try (FileOutputStream fos = new FileOutputStream(pathToSaveTo))
         {
             File imageToWrite = new File(path);
@@ -261,7 +261,10 @@ public class MedicalAdministrator extends BasicStaff
         {
             System.out.println("File can't be found!");
         }
-
+        
+        //Remove the dot to store them in properly in the database
+        pathToSaveTo = pathToSaveTo.replace("./images/", "/images/");
+        System.out.println("Path to save to "+ pathToSaveTo);
         return pathToSaveTo;
 
     }
