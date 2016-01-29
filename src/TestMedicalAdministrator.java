@@ -20,9 +20,9 @@ public class TestMedicalAdministrator
 {
     MedicalAdministrator testHelper;
 
-    //Used to test the filepath for the participant image
-    PreviewPaneHelper paneHelper; 
-    
+    // Used to test the filepath for the participant image
+    PreviewPaneHelper paneHelper;
+
     private String cosmoIDOne;
     private String participantFirstNameOne;
     private String participantLastNameOne;
@@ -60,8 +60,8 @@ public class TestMedicalAdministrator
     private String failNumeric;
     private String failEmptyField;
     private LocalDate failDate;
-    
-    private String path = "asdsa";
+
+    private String path = "/images/4433.jpg";
 
     /**
      * 
@@ -99,8 +99,8 @@ public class TestMedicalAdministrator
         participantFirstNameThree = "vim";
         participantLastNameThree = "snickles";
         participantBirthdateThree = LocalDate.parse(date2, formatter);
-        imageThree = "images/"+cosmoIDThree + ".jpg";
-        
+        imageThree = "RandomImage.jpg";
+
         healthNumberThree = "999999999";
         phoneThree = "6669116666";
         addressThree = "123 Yummy yum";
@@ -111,7 +111,7 @@ public class TestMedicalAdministrator
         failNumeric = "random";
 
         paneHelper = new PreviewPaneHelper();
-        
+
         failEmptyField = "";
         failDate = null;
 
@@ -128,49 +128,49 @@ public class TestMedicalAdministrator
         String result = MedicalAdministrator.createParticipant(cosmoIDOne,
                 failEmptyField, participantLastNameOne,
                 participantBirthdateOne, physicianFNameOne, physicianLNameOne,
-                healthNumberOne, phoneOne, addressOne,path);
+                healthNumberOne, phoneOne, addressOne, path);
         assertTrue(result.equals("One of your fields is empty"));
 
         result = MedicalAdministrator.createParticipant(failEmptyField,
                 participantFirstNameOne, participantLastNameOne,
                 participantBirthdateOne, physicianFNameOne, physicianLNameOne,
-                healthNumberOne, phoneOne, addressOne,path);
+                healthNumberOne, phoneOne, addressOne, path);
         assertTrue(result.equals("One of your fields is empty"));
 
         result = MedicalAdministrator.createParticipant(cosmoIDOne,
                 participantFirstNameOne, failEmptyField,
                 participantBirthdateOne, physicianFNameOne, physicianLNameOne,
-                healthNumberOne, phoneOne, addressOne,path);
+                healthNumberOne, phoneOne, addressOne, path);
         assertTrue(result.equals("One of your fields is empty"));
 
         result = MedicalAdministrator.createParticipant(cosmoIDOne,
                 participantFirstNameOne, participantLastNameOne, failDate,
                 physicianFNameOne, physicianLNameOne, healthNumberOne,
-                phoneOne, addressOne,path);
+                phoneOne, addressOne, path);
         assertTrue(result.equals("One of your fields is empty"));
 
         result = MedicalAdministrator.createParticipant(cosmoIDOne,
                 participantFirstNameOne, participantLastNameOne,
                 participantBirthdateOne, failEmptyField, physicianLNameOne,
-                healthNumberOne, phoneOne, addressOne,path);
+                healthNumberOne, phoneOne, addressOne, path);
         assertTrue(result.equals("One of your fields is empty"));
 
         result = MedicalAdministrator.createParticipant(cosmoIDOne,
                 participantFirstNameOne, participantLastNameOne,
                 participantBirthdateOne, physicianFNameOne, failEmptyField,
-                healthNumberOne, phoneOne, addressOne,path);
+                healthNumberOne, phoneOne, addressOne, path);
         assertTrue(result.equals("One of your fields is empty"));
 
         result = MedicalAdministrator.createParticipant(cosmoIDOne,
                 participantFirstNameOne, participantLastNameOne,
                 participantBirthdateOne, physicianFNameOne, physicianLNameOne,
-                failEmptyField, phoneOne, addressOne,path);
+                failEmptyField, phoneOne, addressOne, path);
         assertTrue(result.equals("One of your fields is empty"));
 
         result = MedicalAdministrator.createParticipant(cosmoIDOne,
                 participantFirstNameOne, participantLastNameOne,
                 participantBirthdateOne, physicianFNameOne, physicianLNameOne,
-                healthNumberOne, failEmptyField, addressOne,path);
+                healthNumberOne, failEmptyField, addressOne, path);
         assertTrue(result.equals("One of your fields is empty"));
 
         result = MedicalAdministrator.createParticipant(cosmoIDOne,
@@ -191,7 +191,7 @@ public class TestMedicalAdministrator
         String result = MedicalAdministrator.createParticipant(failNumeric,
                 participantFirstNameOne, participantFirstNameOne,
                 participantBirthdateOne, physicianFNameOne, physicianLNameOne,
-                healthNumberOne, phoneOne, addressOne,path);
+                healthNumberOne, phoneOne, addressOne, path);
         assertTrue(result.equals("CosmoID must be a number"));
     }
 
@@ -206,7 +206,7 @@ public class TestMedicalAdministrator
         String result = MedicalAdministrator.createParticipant(cosmoIDOne,
                 participantFirstNameOne, participantFirstNameOne,
                 participantBirthdateOne, physicianFNameOne, physicianLNameOne,
-                failNumeric, phoneOne, addressOne,path);
+                failNumeric, phoneOne, addressOne, path);
         assertTrue(result.equals("Health Number must be 9 digits"));
     }
 
@@ -221,8 +221,10 @@ public class TestMedicalAdministrator
         String result = MedicalAdministrator.createParticipant(cosmoIDOne,
                 participantFirstNameOne, participantFirstNameOne,
                 participantBirthdateOne, physicianFNameOne, physicianLNameOne,
-                healthNumberOne, failNumeric, addressOne,path);
+                healthNumberOne, failNumeric, addressOne, path);
+        System.out.println(result);
         assertTrue(result.equals("Phone Number must be 10 digits"));
+        
     }
 
     /**
@@ -235,16 +237,20 @@ public class TestMedicalAdministrator
         String result = MedicalAdministrator.createParticipant(cosmoIDOne,
                 participantFirstNameOne, participantFirstNameOne,
                 participantBirthdateOne, physicianFNameOne, physicianLNameOne,
-                healthNumberOne, phoneOne, addressOne,path);
+                healthNumberOne, phoneOne, addressOne, path);
 
         // assertTrue(result.equals(""));
 
         result = MedicalAdministrator.createParticipant(cosmoIDOne,
                 participantFirstNameOne, participantFirstNameOne,
                 participantBirthdateOne, physicianFNameOne, physicianLNameOne,
-                healthNumberOne, phoneOne, addressOne,path);
+                healthNumberOne, phoneOne, addressOne, path);
         System.out.println(result);
         assertTrue(result.equals("That CosmoID already exists"));
+        
+        DatabaseHelper db = new DatabaseHelper();
+        db.connect();
+        db.delete("Participant", "cosmoID="+cosmoIDOne);
     }
 
     /**
@@ -257,9 +263,13 @@ public class TestMedicalAdministrator
         String result = MedicalAdministrator.createParticipant(cosmoIDTwo,
                 participantFirstNameTwo, participantFirstNameTwo,
                 participantBirthdateTwo, physicianFNameTwo, physicianLNameTwo,
-                healthNumberTwo, phoneTwo, addressTwo,path);
+                healthNumberTwo, phoneTwo, addressTwo, path);
 
         assertTrue(result.equals(""));
+        
+        DatabaseHelper db = new DatabaseHelper();
+        db.connect();
+        db.delete("Participant", "cosmoID="+cosmoIDTwo);
 
     }
 
@@ -274,9 +284,14 @@ public class TestMedicalAdministrator
         String result = MedicalAdministrator.createParticipant(cosmoIDThree,
                 participantFirstNameThree, participantFirstNameThree,
                 participantBirthdateThree, physicianFNameTwo,
-                physicianLNameTwo, healthNumberThree, phoneThree, addressThree,path);
-
+                physicianLNameTwo, healthNumberThree, phoneThree, addressThree,
+                path);
+        System.out.println(result);
         assertTrue(result.equals(""));
+        
+        DatabaseHelper db = new DatabaseHelper();
+        db.connect();
+        db.delete("Participant", "cosmoID="+cosmoIDThree);
 
     }
 
@@ -287,27 +302,46 @@ public class TestMedicalAdministrator
     @Test
     public void testImageIsAdded()
     {
+        String imagePathDB = "/images/" + cosmoIDThree + ".jpg";
+        String imagePathLocal = "random.jpg";
+
+        MedicalAdministrator.createParticipant(cosmoIDThree,
+                participantFirstNameThree, participantLastNameThree,
+                participantBirthdateThree, physicianFNameTwo,
+                physicianLNameTwo, healthNumberThree, phoneThree, addressThree,
+                imagePathDB);
+
         DatabaseHelper db = new DatabaseHelper();
         db.connect();
+        
+        
+
         ResultSet testImage = db.select("imagePath", "Participant", "cosmoID="
                 + cosmoIDThree, "");
-        
-        String imagePath = "";
+
+        String imagePathSaved = "";
         try
         {
-            imagePath = testImage.getString(1);
+            if(testImage.next())
+            {
+                imagePathSaved = testImage.getString(1);    
+            }
+            else                
+            {
+                throw new SQLException();
+            }
+            
         }
-        catch (SQLException e)
+        catch ( SQLException e )
         {
             e.printStackTrace();
         }
         
-        assertTrue(imagePath.equals(imageThree));
+        assertTrue(imagePathSaved.equals(imagePathDB));
+        db.delete("Participant", "cosmoID="+cosmoIDThree);
+
 
     }
-    
-    
-
     @After
     public void tearDown()
     {
