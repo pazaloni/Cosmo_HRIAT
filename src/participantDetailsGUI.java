@@ -36,6 +36,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -106,7 +107,9 @@ public class participantDetailsGUI extends Application
 
         VBox root = createMainVBox();
 
-        participantMainStage.setScene(new Scene(root, 875, 580));
+        Scene scene = new Scene(root, 875, 580);
+        //scene.getStylesheets().add("css/participantDetailsGUI.css");
+        participantMainStage.setScene(scene);
         participantMainStage.resizableProperty().set(true);
         participantMainStage.show();
     }
@@ -255,13 +258,17 @@ public class participantDetailsGUI extends Application
         pictureBox.setAlignment(Pos.TOP_CENTER);
         
         //create buttons
-        Button editBtn = new Button("Edit");
+        ToggleButton editBtn = new ToggleButton();
         Button viewDocumentsBtn = new Button("View \nAttached \nDocuments");
         Button generateFormsBtn = new Button("Generate Forms");
         
         //set sizes and padding
-        editBtn.setMaxWidth(100);
-        editBtn.setMinWidth(100);
+        editBtn.setMaxWidth(30);
+        editBtn.setMinWidth(30);
+        editBtn.setMaxHeight(25);
+        editBtn.setMaxHeight(25);
+        
+        editBtn.setGraphic(new ImageView("images/edit.png"));
         
         viewDocumentsBtn.setMaxWidth(100);
         viewDocumentsBtn.setMinWidth(100);
@@ -354,11 +361,7 @@ public class participantDetailsGUI extends Application
 			e.printStackTrace();
 		}
         
-        //add buttons to the previewPane
-        if(loggedInUser instanceof MedicalAdministrator)
-        {
-        	pictureBox.getChildren().add(editBtn);
-        }	
+	
         pictureBox.getChildren().addAll( viewDocumentsBtn, generateFormsBtn);
 
         cosmoIDText.setMaxWidth(PREVIEW_TEXT_WIDTH);
@@ -399,6 +402,13 @@ public class participantDetailsGUI extends Application
         basicInfoPane.add(phnText, 1, 4);
         basicInfoPane.add(diagnosisText, 1, 5);
         basicInfoPane.add(addressText, 1, 6);
+        
+        //add buttons to the previewPane
+        if(loggedInUser instanceof MedicalAdministrator)
+        {
+            basicInfoPane.add(editBtn, 2, 0);
+           // pictureBox.getChildren().add(editBtn);
+        }
 
         // set margins
         BorderPane.setMargin(pictureBox, new Insets(10, 0, 0, 10));
