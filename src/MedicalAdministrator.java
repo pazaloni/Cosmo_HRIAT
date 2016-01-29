@@ -111,7 +111,7 @@ public class MedicalAdministrator extends BasicStaff
             {
                 result = "Phone Number must be 10 digits";
             }
-            else if( !imagePath.endsWith(".jpg"))
+            else if ( !imagePath.endsWith(".jpg") )
             {
                 result = "Image is invalid";
             }
@@ -198,7 +198,6 @@ public class MedicalAdministrator extends BasicStaff
                     SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
                     String formattedDate = df.format(c.getTime());
 
-                    
                     String dbPath = saveImage(imagePath, cosmoID);
 
                     // array of values to insert
@@ -246,16 +245,10 @@ public class MedicalAdministrator extends BasicStaff
     {
         String path = imagePath;
 
-        
-
         byte[] imageData;
         // This returns the path to where the jar file is stored
-        String pathToSaveTo = "images/" + cosmoID + ".jpg";
-
-        // pathToSaveTo = pathToSaveTo.replace("bin/", "");
-        // pathToSaveTo = pathToSaveTo.substring(1);
-
-        System.out.println(pathToSaveTo);
+        String pathToSaveTo = "./images/" + cosmoID + ".jpg";
+        System.out.println("Path to save to "+ pathToSaveTo);
         try (FileOutputStream fos = new FileOutputStream(pathToSaveTo))
         {
             File imageToWrite = new File(path);

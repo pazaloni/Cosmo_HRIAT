@@ -2,12 +2,15 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
+import javax.swing.plaf.synth.SynthSeparatorUI;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -381,23 +384,37 @@ public class MedicalStaffMainPageGUI extends Application
 
         try
         {
-            Image img = new Image("./images/" + participantID + ".jpg");
+            URL u = null;
+            try
+            {
+                u = (this.getClass().getProtectionDomain().getCodeSource()
+                        .getLocation().toURI().toURL());
+            }
+            catch ( URISyntaxException e )
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            String url = u.toString();
+            
+            url = url.substring(0, url.length()-(url.length()-url.lastIndexOf("/")));
+            
+            url = url.replace("/bin", "");            
+
+            Image img = new Image(url + "/images/" + participantID + ".jpg");
+
             if ( !(img.isError()) )
             {
                 previewPicture.setImage(img);
                 previewPicture.setFitHeight(121);
                 previewPicture.setFitWidth(122);
             }
-            else
-            {
-
-            }
-
         }
-        catch ( IllegalArgumentException ie )
+        catch ( IllegalArgumentException | MalformedURLException ie )
         {
             URL url = getClass().getResource("images/defaultPicture.png");
-
+            System.out.println("Image is invalid, usinf defualt");
             try
             {
                 previewPicture.setImage(new Image(url.openStream()));
