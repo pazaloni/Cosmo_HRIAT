@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
@@ -63,6 +64,9 @@ public class participantDetailsGUI extends Application
     //the main stage for the GUI
     public static Stage participantMainStage;
 
+    //window used for editing main frame
+	private Stage mainEditWindow;
+	
     //the picture of the participant
     private ImageView previewPicture;
     
@@ -76,6 +80,14 @@ public class participantDetailsGUI extends Application
     
     private static final int PREVIEW_TEXT_WIDTH = 150;
     private static final int ALLERGY_AND_SEIZURE_MIN_WITH = 410;
+    
+    private Label cosmoIDText = new Label();
+    private Label firstNameText = new Label();
+    private Label lastNameText = new Label();
+    private Label dobtext = new Label();
+    private Label phnText = new Label();
+    private Label diagnosisText = new Label();
+    private Label addressText = new Label();
 
     
     /**
@@ -225,6 +237,7 @@ public class participantDetailsGUI extends Application
         return hbox;
     }
 
+    
     /**
      * Purpose: Create the Preview Pane
      * @return BorderPane: create the preview pane for the basic information
@@ -258,7 +271,7 @@ public class participantDetailsGUI extends Application
         pictureBox.setAlignment(Pos.TOP_CENTER);
         
         //create buttons
-        ToggleButton editBtn = new ToggleButton();
+        Button editBtn = new Button();
         Button viewDocumentsBtn = new Button("View \nAttached \nDocuments");
         Button generateFormsBtn = new Button("Generate Forms");
         
@@ -313,13 +326,7 @@ public class participantDetailsGUI extends Application
         
         
         // set the participant Labels
-        Label cosmoIDText = new Label();
-        Label firstNameText = new Label();
-        Label lastNameText = new Label();
-        Label dobtext = new Label();
-        Label phnText = new Label();
-        Label diagnosisText = new Label();
-        Label addressText = new Label();
+       
         
         try {
         	//while there are more results
@@ -332,7 +339,7 @@ public class participantDetailsGUI extends Application
 				firstNameText.setText(results.getString(1));
 				lastNameText.setText(results.getString(2));
 
-				DateFormat format = new SimpleDateFormat("MMMM d, yyyy");
+				DateFormat format = new SimpleDateFormat("dd-MM-YYYY");
 				
 				dobtext.setText(format.format(results.getTimestamp(3)));
 				phnText.setText(results.getString(4));
@@ -415,12 +422,166 @@ public class participantDetailsGUI extends Application
         BorderPane.setMargin(basicInfoPane, new Insets(10, 0, 0, 0));
         previewPane.setLeft(pictureBox);
         previewPane.setCenter(basicInfoPane);
+        
 
+		editBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				// Open addNewParticipant Window
+				mainEditWindow = new Stage();
+				mainEditWindow.setTitle("Edit Participant");
+
+				mainEditWindow.setScene(new Scene(
+						editParticipantPopUp(), 325, 400));
+				mainEditWindow
+						.initModality(Modality.APPLICATION_MODAL);
+				mainEditWindow.initOwner(participantMainStage);
+				mainEditWindow.setResizable(false);
+				mainEditWindow.show();
+			}
+
+		});
+		
+    	
+		
         return previewPane;
     }
 
 
+    protected GridPane editParticipantPopUp() {
 
+		GridPane grid = new GridPane();
+
+		// warning label
+		Label lblWarning = new Label();
+		lblWarning.setTextFill(Color.FIREBRICK);
+
+		// text field labels
+		Label firstNameLbl = new Label("First Name");
+		Label lastNameLbl = new Label("Last Name");
+		Label birthdateLbl = new Label("Date Of Birth");
+		Label healthNumLbl = new Label("PHN");
+		Label diagnosisLbl = new Label("Diagnosis");
+		Label addressLbl = new Label("Address");
+
+		// the text fields
+		TextField firstNameTxt = new TextField(firstNameText.getText());
+		
+		TextField lastNameTxt = new TextField(lastNameText.getText());
+		DatePicker birthDatePicker = new DatePicker();
+		
+		TextField diagnosisTxt = new TextField(diagnosisText.getText());
+
+		int day = Integer.parseInt(dobtext.getText().substring(0, 2));
+		System.out.println(day);
+		int month = Integer.parseInt(dobtext.getText().substring(3, 5));
+		System.out.println(month);
+		int year = Integer.parseInt(dobtext.getText().substring(6));
+		System.out.println(year);
+		LocalDate ld = LocalDate.of(year, month, day);
+		
+		
+		birthDatePicker.setValue(ld);
+
+	
+		TextField healthNumTxt = new TextField(phnText.getText());
+	
+		
+		TextField addressTxt = new TextField(addressText.getText());
+
+		// add the form to the grid
+		
+		grid.add(firstNameLbl, 0, 1);
+		grid.add(lastNameLbl, 0, 2);
+		grid.add(birthdateLbl, 0, 3);
+		
+		grid.add(healthNumLbl, 0, 4);
+		
+		grid.add(diagnosisLbl, 0, 5);
+		grid.add(addressLbl, 0, 6);
+
+		grid.add(lblWarning, 1, 0);
+		
+		grid.add(firstNameTxt, 1, 1);
+		grid.add(lastNameTxt, 1, 2);
+		grid.add(birthDatePicker, 1, 3);
+	
+		grid.add(healthNumTxt, 1, 4);
+		grid.add(diagnosisTxt, 1, 5);
+		grid.add(addressTxt, 1, 6);
+
+		// setPadding of the grid
+		grid.setPadding(new Insets(10, 10, 0, 10));
+
+		grid.setHgap(10);
+
+		grid.setVgap(10);
+
+		// Adding participant event handler
+		Button createParticipantBtn = new Button("Edit");
+		createParticipantBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				// call create participant on medical administrator with the
+				// text passed in
+				String result = MedicalAdministrator.editParticipant(
+						cosmoIDText.getText(),
+						firstNameTxt.getText(),
+						lastNameTxt.getText(), birthDatePicker.getValue(),
+						healthNumTxt.getText(), diagnosisTxt.getText(), addressTxt.getText());
+
+				
+				// if no error message is recieved then close this window and
+				// refresh the table
+				if (result.equals("")) {
+					mainEditWindow.close();
+					
+				}
+				// if there is an error message, display it
+				else {
+					lblWarning.setTextFill(Color.FIREBRICK);
+					lblWarning.setText(result);
+					if (result.equals("Phone Number must be 10 digits")) {
+					
+					}
+				}
+				
+				createPreviewPane(1);
+			}
+		});
+
+		// reset the form event handler
+		Button resetBtn = new Button("Reset");
+		resetBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				// sets all values to default
+		
+				firstNameTxt.setText("");
+				lastNameTxt.setText("");
+				birthDatePicker.setValue(null);
+			
+				healthNumTxt.setText("");
+			
+				addressTxt.setText("");
+				lblWarning.setText("");
+			}
+
+		});
+
+		// Add the buttons to the grid
+		HBox buttonsHbox = new HBox();
+		HBox resetHbox = new HBox();
+		buttonsHbox.getChildren().addAll(createParticipantBtn);
+		buttonsHbox.setAlignment(Pos.CENTER);
+		resetHbox.getChildren().addAll(resetBtn);
+		resetHbox.setAlignment(Pos.CENTER_RIGHT);
+		grid.add(buttonsHbox, 1, 10);
+		grid.add(resetHbox, 0, 10);
+
+		return grid;
+	}
 
     /**
      * 
@@ -624,6 +785,7 @@ public class participantDetailsGUI extends Application
     	//maintain width of the scroll pane
     	scrollPane.setHmax(vbox.getWidth());
     	
+    
     	
     	return scrollPane;
     	 

@@ -60,7 +60,6 @@ public class MedicalStaffMainPageGUI extends Application {
 	private TextField searchField;
 
 	private ImageView previewPicture;
-
 	private ListView<String> noteTitleView;
 
 	private ObservableList<String> noteTitleList;
