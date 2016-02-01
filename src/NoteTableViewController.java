@@ -31,31 +31,35 @@ public class NoteTableViewController
 		
 		ObservableList<String> row = FXCollections.observableArrayList();
 		
-		ResultSet rs = db.select("noteID", "Notes", "not resolved", "noteID");
+		ResultSet rs = db.select("*", "Notes", "not resolved", "noteID");
 		
-		String noteID;
-		int cosmoID;
+		int noteID;
+		int participant;
 		String createdBy;
-		String submitted;
+		Date submitted;
 		String description;
-		Boolean viwed;
+		Boolean viewed;
 		Boolean resolved;
 		try
 		{
 			while(rs.next())
 			{
-				noteID = rs.getString(1);
-				//Boolean read = false;
+				noteID = rs.getInt(1);
+				participant = rs.getInt(2);
+				createdBy = rs.getString(3);
+				submitted = rs.getDate(4);
+				description = rs.getString(5);
+				viewed = rs.getBoolean(6);
+				resolved = rs.getBoolean(7);
+				
 				Note note;
 				
-//				if (read == false)
-//				{
-//					//TODO make the color of the unread notes "insert color here"
-//					setStyle("-fx-background-color:mediumblue"); 
-//				}
 				
-				//note = new Note(noteID, cosmoID, description, createdBy, submitted, viwed, resolved);
-				//noteIDs.add(note);
+				note = new Note(noteID, participant, description, createdBy, submitted, viewed, resolved);
+				
+				noteIDs.add(note);
+				
+
 			}
 		}
 		catch (SQLException e)
@@ -67,32 +71,23 @@ public class NoteTableViewController
 	
 	public void initialize()
 	{
-		idColumn.setCellValueFactory(cellData -> cellData.getValue()
-				.getIDProperty());
-		idColumn.setResizable(false);
-		idColumn.setCellFactory(new Callback<TableColumn<Note, String>, TableCell<Note, String>>()
-				{
-					@Override
-					public TableCell<Note, String> call(TableColumn<Note, String> noteStringTableColumn)
-					
-					
-					return new TableCell<Note, String>()
-						{
-							@Override
-							protected void updateItem(String noteID, boolean read)
-							{
-								super.updateItem(noteID, read);
-								if(!read)
-								{
-									currentRow.setStyle("-fx-background-color:mediumblue");
-								}
-							}
-						}
-				});
 		
-		noteTable.getColumns().addAll(idColumn);
+		idColumn.setCellValueFactory(cellData -> cellData.getValue().getIDProperty());
+		idColumn.setResizable(false);
+		
+		
+		
+		noteTable.getColumns().add(idColumn);
 		
 		noteTable.setItems(noteIDs);
+		
+		for (Note note : noteIDs) 
+		{
+			if(note.getViewed().equals("false"))
+			{
+				
+			}
+		}
 	}
 	
 	public String getSelectedPK()
@@ -112,7 +107,8 @@ public class NoteTableViewController
 	
 	
 
-	private TableRow<Note> getTableRow() {
+	private TableRow<Note> getTableRow() 
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}

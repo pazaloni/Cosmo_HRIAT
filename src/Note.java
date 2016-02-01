@@ -2,6 +2,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.sql.Time;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Note 
 {
 	// The unique ID of the note
@@ -11,7 +14,7 @@ public class Note
 	// The ID of the user who created the note
 	private String creatorID;
 	// The ID of the participant the note was attached to
-	private String participantID;
+	private int participantID;
 	// The date/time that the note was created at
 	private Date dateCreated;
 	// Whether or not the note has been looked at by a medical administrator
@@ -39,13 +42,13 @@ public class Note
 	 *            administrator
 	 * @author Niklaas Neijmeijer cst207 Steven Palchinski cst209
 	 */
-	public Note(int noteID, Participant participant, String description,
+	public Note(int noteID, int participantID, String description,
 			String creator, Date dateCreated, boolean viewed, boolean resolved) 
 	{
 		this.noteID = noteID;
 		this.description = description;
 		this.creatorID = creator;
-		this.participantID = participant.getCosmoID();
+		this.participantID = participantID;
 		this.dateCreated = dateCreated;
 		this.viewed = viewed;
 		this.resolved = resolved;
@@ -74,7 +77,7 @@ public class Note
 	{
 		this.description = description;
 		this.creatorID = creator;
-		this.participantID = ""+participant;
+		this.participantID = participantID;
 		this.dateCreated = dateCreated;
 		this.viewed = viewed;
 		this.resolved = resolved;
@@ -105,7 +108,7 @@ public class Note
 		values[2][0] = "submitted";
 		values[3][0] = "description";
 		SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss");
-		values[0][1] = this.participantID;
+		values[0][1] = this.participantID + "";
 		values[1][1] = this.creatorID;
 		values[2][1] = df.format(dateCreated);
 		values[3][1] = description;
@@ -126,5 +129,37 @@ public class Note
 		}
 		return result;
 	}
+
+	public StringProperty getIDProperty() 
+	{
+		StringProperty p = new SimpleStringProperty();
+		p.set(noteID + "");
+		return p;
+	}
+
+	public String getNoteID() 
+	{
+		return noteID + "";
+	}
+
+	
+	public String toString()
+	{
+		return getNoteID();
+		
+	}
+	
+	public StringProperty getViewedProperty()
+	{
+		StringProperty p = new SimpleStringProperty();
+		p.set(viewed + "");
+		return p;
+	}
+	
+	public String getViewed()
+	{
+		return viewed + "";
+	}
+
 
 }

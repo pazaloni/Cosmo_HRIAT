@@ -56,7 +56,7 @@ public class MedicalStaffMainPageGUI extends Application {
 
 	private DatabaseHelper dbObject = new DatabaseHelper();
     
-//    private NoteTableViewController nTVCont;
+    private NoteTableViewController nTVCont;
 
 	public static Stage medMainStage;
 
@@ -80,7 +80,7 @@ public class MedicalStaffMainPageGUI extends Application {
 	
 	private StaffAccount loggedInUser;
 
-	// Preveiw labes for the participant
+	// Preview labels for the participant
 	private Label cosmoIDLbl;
 	private Label firstNameLbl;
 	private Label lastNameLbl;
@@ -112,6 +112,8 @@ public class MedicalStaffMainPageGUI extends Application {
 		pTVCont = new ParticipantTableViewController();
 		pTVCont.initialize();
 
+		nTVCont = new NoteTableViewController();
+        
 		medMainStage = stage;
 		medMainStage.setTitle("Cosmo Industries - "
 				+ loggedInUser.GetUsername());
@@ -135,8 +137,7 @@ public class MedicalStaffMainPageGUI extends Application {
 		logoAndLogin.setPadding(new Insets(15, 12, 15, 12));
 		logoAndLogin.setStyle("-fx-background-color: #FFFFFF;");
         
-//        nTVCont = new NoteTableViewController();
-//        nTVCont.initialize();
+        
 
 		// Logout button
 		logout = new Button("Log Out");
@@ -713,13 +714,19 @@ public class MedicalStaffMainPageGUI extends Application {
     {
         HBox hbox = new HBox();
         VBox vbox = new VBox();
+        
+        nTVCont.refreshTable();
+        
+        ListView<Note> noteListView = new ListView<Note>();
+        noteListView.setItems(nTVCont.noteIDs);
+        
         Button refreshBtn = new Button("Refresh Notes");
 //        refreshBtn.setOnAction(new EventHandler<ActionEvent>() 
 //        {
 //        	nTVCont.
 //		}
 //        );
-        noteTitleView = new ListView<String>();
+        //noteTitleView = new ListView<String>();
         // create list of notes
         // TODO make this automatically pull from the database of notes
         //run query to get all unresolved notes, order by noteId
@@ -753,11 +760,11 @@ public class MedicalStaffMainPageGUI extends Application {
         // set notes list to listview
         //TODO add note to listview
         //noteTitleView.setItems(noteTitleList);
-        noteTitleView.setMinWidth(170);
-        noteTitleView.setMaxWidth(170);
-        noteTitleView.setFocusTraversable(false);
+        noteListView.setMinWidth(170);
+        noteListView.setMaxWidth(170);
+        noteListView.setFocusTraversable(false);
         
-        vbox.getChildren().addAll(refreshBtn, noteTitleView);
+        vbox.getChildren().addAll(refreshBtn, noteListView);
         vbox.setAlignment(Pos.CENTER);
         // note display pane
         GridPane noteDisplayPane = new GridPane();
