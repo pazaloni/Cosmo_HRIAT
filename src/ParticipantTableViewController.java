@@ -140,10 +140,11 @@ public class ParticipantTableViewController
 		emergencyPhoneColumn.setMinWidth(115);
 		emergencyPhoneColumn.setResizable(false);
 
-		// lastUpdatedColumn.setCellValueFactory(cellData ->
-		// cellData.getValue().getUpdatedProperty());
-		lastUpdatedColumn.setMinWidth(135);
-		lastUpdatedColumn.setResizable(false);
+         lastUpdatedColumn.setCellValueFactory(cellData ->
+         cellData.getValue().getUpdatedProperty());
+        lastUpdatedColumn.setMinWidth(135);
+        lastUpdatedColumn.setResizable(false);
+
 
 		// make table columns not draggable to reorder it
 		participantTable.getColumns().addListener(

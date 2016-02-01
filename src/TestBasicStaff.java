@@ -79,7 +79,7 @@ public class TestBasicStaff
     {
         MedicalAdministrator.createParticipant(cosmoID, participantFirstName, participantLastName, 
                  birthDate, physicianFName, physicianLName, participantHealthNumber, 
-                 participantPhone, participantAddress);
+                 participantPhone, participantAddress, "");
          
     //    ObservableList<Participant> participantData = basicstaff.search
          //       (BasicStaff.SearchType.NAME, participantFirstName);
@@ -98,7 +98,7 @@ public class TestBasicStaff
     {
          MedicalAdministrator.createParticipant(cosmoID, participantFirstName, participantLastName, 
                  birthDate, physicianFName, physicianLName, participantHealthNumber, 
-                 participantPhone, participantAddress);
+                 participantPhone, participantAddress, "");
          
        // ObservableList<Participant> participantData = basicstaff.search
         //        (BasicStaff.SearchType.ADDRESS, participantAddress);
@@ -117,7 +117,7 @@ public class TestBasicStaff
     {
          MedicalAdministrator.createParticipant(cosmoID, participantFirstName, participantLastName, 
                  birthDate, physicianFName, physicianLName, participantHealthNumber, 
-                 participantPhone, participantAddress);
+                 participantPhone, participantAddress, "");
          
       //  ObservableList<Participant> participantData = 
         //        basicstaff.search(BasicStaff.SearchType.ALLERGY, participantAllergy);
@@ -138,7 +138,7 @@ public class TestBasicStaff
     {
          MedicalAdministrator.createParticipant(cosmoID, participantFirstName, participantLastName, 
                  birthDate, physicianFName, physicianLName, participantHealthNumber, 
-                 participantPhone, participantAddress);
+                 participantPhone, participantAddress, "");
          
       //  ObservableList<Participant> participantData = basicstaff.search(BasicStaff.SearchType.NAME, cosmoID);
       //  

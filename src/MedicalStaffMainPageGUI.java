@@ -1,15 +1,18 @@
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
+import javax.swing.plaf.synth.SynthSeparatorUI;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -41,9 +44,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 /**
  * 
@@ -75,7 +78,7 @@ public class MedicalStaffMainPageGUI extends Application {
 	private Stage createParticipantStage;
 
 	private Stage viewParticipantDetailsStage = new Stage();
-
+	
 	private StaffAccount loggedInUser;
 
 	// Preveiw labes for the participant
@@ -95,19 +98,18 @@ public class MedicalStaffMainPageGUI extends Application {
 		medMainPageConstruct(stage, null);
 	}
 
-	/**
-	 * 
-	 * Purpose: Construct the main stage for the medical staff when they have
-	 * successfully logged in
-	 * 
-	 * @param stage
-	 *            : the stage the medical staff will see
-	 */
+    /**
+     * 
+     * Purpose: Construct the main stage for the medical staff when they have
+     * successfully logged in
+     * 
+     * @param stage: the stage the medical staff will see
+     */
 	public void medMainPageConstruct(Stage stage, StaffAccount loggedInStaff) {
 		dbObject.connect();
 
 		loggedInUser = loggedInStaff;
-		dbObject.activtyLogEntry(loggedInStaff.GetUsername(), "Logged In", dbObject);
+
 		pTVCont = new ParticipantTableViewController();
 		pTVCont.initialize();
 
@@ -120,13 +122,6 @@ public class MedicalStaffMainPageGUI extends Application {
 		medMainStage.setScene(new Scene(root, 875, 580));
 		medMainStage.resizableProperty().set(true);
 		medMainStage.show();
-		//Event for when stage is closed
-		  stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-	          public void handle(WindowEvent we) {
-	              dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout", dbObject);
-	          }
-	      });
-		
 	}
 
 	/**
@@ -149,10 +144,8 @@ public class MedicalStaffMainPageGUI extends Application {
 			@Override
 			public void handle(ActionEvent e) {
 				medMainStage.close();
-				dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout", dbObject);
 				LoginGUI test5 = new LoginGUI();
 				try {
-					
 					test5.start(medMainStage);
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
@@ -199,34 +192,36 @@ public class MedicalStaffMainPageGUI extends Application {
 		// set the size of the tabs and add to the pane
 		tabPane.setTabMinWidth(175);
 		tabPane.getTabs().addAll(participants, forms);
-
-		// if they are an administrator, add the stats tab
-		if (loggedInUser instanceof MedicalAdministrator) {
+		
+		//if they are an administrator, add the stats tab
+		if(loggedInUser instanceof MedicalAdministrator)
+		{
 			tabPane.getTabs().add(stats);
 		}
-
-		// set initial selected tab to participants
+		
+		//set initial selected tab to participants
 		tabPane.getSelectionModel().select(participants);
+		
+		//set the changed property
+		tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>(){
 
-		// set the changed property
-		tabPane.getSelectionModel().selectedItemProperty()
-				.addListener(new ChangeListener<Tab>() {
-
-					@Override
-					public void changed(ObservableValue<? extends Tab> arg0,
-							Tab arg1, Tab mostRecentlySelectedTab) {
-						if (mostRecentlySelectedTab.equals(forms)) {
-							// switch to forms GUI
-						} else if (mostRecentlySelectedTab.equals(stats)) {
-							QuarterlyReportGUI reportGUI = new QuarterlyReportGUI();
-							reportGUI.reportsMainStageConstruct(medMainStage,
-									loggedInUser);
-						}
-
-					}
-
-				});
-
+			@Override
+			public void changed(ObservableValue<? extends Tab> arg0, Tab arg1,
+					Tab mostRecentlySelectedTab) {
+				if(mostRecentlySelectedTab.equals(forms))
+				{
+					//switch to forms GUI
+				}
+				else if(mostRecentlySelectedTab.equals(stats))
+				{
+					QuarterlyReportGUI reportGUI = new QuarterlyReportGUI();
+					reportGUI.reportsMainStageConstruct(medMainStage, loggedInUser);
+				}
+				
+			}
+			
+		});
+		
 		tabPane.setMinHeight(29);
 		tabPane.setFocusTraversable(false);
 		return tabPane;
@@ -239,7 +234,8 @@ public class MedicalStaffMainPageGUI extends Application {
 	 * 
 	 * @return
 	 */
-	private HBox createHBoxPreviewNotes() {
+	private HBox createHBoxPreviewNotes() 
+	{
 		// create hbox and set size and padding
 		HBox hbox = new HBox();
 		hbox.setMinHeight(305);
@@ -248,7 +244,7 @@ public class MedicalStaffMainPageGUI extends Application {
 		hbox.setSpacing(10);
 		hbox.setStyle("-fx-background-color: #336699;");
 		hbox.setFocusTraversable(false);
-
+		
 		// create preview pane
 		BorderPane previewPane = createPreviewPane();
 		// create note box
@@ -286,513 +282,585 @@ public class MedicalStaffMainPageGUI extends Application {
 		// set margins
 		VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
 
-		detailsButton
-				.setOnAction(event -> {
 
-					participantDetailsGUI detailsGUI = new participantDetailsGUI();
-					// hard coded cosmo ID for testing purposes
-					detailsGUI.participantDetailsConstruct(
-							medMainStage,
-							Integer.parseInt(pTVCont.getSelectedPK()),
-							loggedInUser);					
-				});
+		if(loggedInUser instanceof MedicalAdministrator)
+	        {
+	        	detailsButton.setOnAction(event->{
+	        		
+	        		participantDetailsGUI detailsGUI = new participantDetailsGUI();
+					//hard coded cosmo ID for testing purposes
+					detailsGUI.participantDetailsConstruct(viewParticipantDetailsStage, 
+							Integer.parseInt(pTVCont.getSelectedPK()), loggedInUser);
+	        		
+	            });
+	        }
+	        else
+	        {
+	        	detailsButton.setOnAction(event->{
+	        		
+	        		participantDetailsGUI detailsGUI = new participantDetailsGUI();
+					//hard coded cosmo ID for testing purposes
+					detailsGUI.participantDetailsConstruct(viewParticipantDetailsStage, 
+							Integer.parseInt(pTVCont.getSelectedPK()), loggedInUser);
+	        		
+	            });
+	        }
 
-		// add picture and button to picture box
-		pictureBox.getChildren().addAll(previewPicture, detailsButton);
-		pictureBox.setAlignment(Pos.CENTER);
-		pictureBox.setStyle("-fx-background-color: #FFFFFF;");
-		pictureBox.setAlignment(Pos.TOP_CENTER);
+			// add picture and button to picture box
+			pictureBox.getChildren().addAll(previewPicture, detailsButton);
+			pictureBox.setAlignment(Pos.CENTER);
+			pictureBox.setStyle("-fx-background-color: #FFFFFF;");
+			pictureBox.setAlignment(Pos.TOP_CENTER);
 
-		// create basic info pane
-		GridPane basicInfoPane = new GridPane();
-		basicInfoPane.setStyle("-fx-background-color: #FFFFFF;");
-		basicInfoPane.setPadding(new Insets(10, 10, 0, 10));
+			// create basic info pane
+			GridPane basicInfoPane = new GridPane();
+			basicInfoPane.setStyle("-fx-background-color: #FFFFFF;");
+			basicInfoPane.setPadding(new Insets(10, 10, 0, 10));
 
-		// set basic labels
-		Label cosmoIDLabel = new Label("CosmoID:");
-		Label firstNameLabel = new Label("First Name:");
-		Label lastNameLabel = new Label("Last Name: ");
-		Label seizureLabel = new Label("Seizures: ");
-		Label allergyLabel = new Label("Allergies: ");
-		Label physicianLabel = new Label("Physician: ");
+			// set basic labels
+			Label cosmoIDLabel = new Label("CosmoID:");
+			Label firstNameLabel = new Label("First Name:");
+			Label lastNameLabel = new Label("Last Name: ");
+			Label seizureLabel = new Label("Seizures: ");
+			Label allergyLabel = new Label("Allergies: ");
+			Label physicianLabel = new Label("Physician: ");
 
-		// set label margins
-		cosmoIDLabel.setPadding(new Insets(5, 5, 5, 5));
-		firstNameLabel.setPadding(new Insets(5, 5, 5, 5));
-		lastNameLabel.setPadding(new Insets(5, 5, 5, 5));
-		physicianLabel.setPadding(new Insets(5, 5, 5, 5));
+			// set label margins
+			cosmoIDLabel.setPadding(new Insets(5, 5, 5, 5));
+			firstNameLabel.setPadding(new Insets(5, 5, 5, 5));
+			lastNameLabel.setPadding(new Insets(5, 5, 5, 5));
+			physicianLabel.setPadding(new Insets(5, 5, 5, 5));
 
-		seizureLabel.setPadding(new Insets(0, 5, 25, 5));
-		allergyLabel.setPadding(new Insets(5, 5, 50, 5));
+			seizureLabel.setPadding(new Insets(0, 5, 25, 5));
+			allergyLabel.setPadding(new Insets(5, 5, 50, 5));
 
-		seizureLabel.setMaxWidth(175);
-		seizureLabel.setMinWidth(80);
-		seizureLabel.setMaxHeight(40);
-		seizureLabel.setMinHeight(65);
-		seizureLabel.setWrapText(true);
-		seizureLabel.setAlignment(Pos.TOP_LEFT);
+			seizureLabel.setMaxWidth(175);
+			seizureLabel.setMinWidth(80);
+			seizureLabel.setMaxHeight(40);
+			seizureLabel.setMinHeight(65);
+			seizureLabel.setWrapText(true);
+			seizureLabel.setAlignment(Pos.TOP_LEFT);
 
-		// set the participant Labels
-		createPreviewLabels();
+			// set the participant Labels
+			createPreviewLabels();
 
-		// add all labels to the gridpane
-		basicInfoPane.add(cosmoIDLabel, 0, 0);
-		basicInfoPane.add(firstNameLabel, 0, 1);
-		basicInfoPane.add(lastNameLabel, 0, 2);
-		basicInfoPane.add(physicianLabel, 0, 3);
-		basicInfoPane.add(seizureLabel, 0, 4);
-		basicInfoPane.add(allergyLabel, 0, 5);
+			// add all labels to the gridpane
+			basicInfoPane.add(cosmoIDLabel, 0, 0);
+			basicInfoPane.add(firstNameLabel, 0, 1);
+			basicInfoPane.add(lastNameLabel, 0, 2);
+			basicInfoPane.add(physicianLabel, 0, 3);
+			basicInfoPane.add(seizureLabel, 0, 4);
+			basicInfoPane.add(allergyLabel, 0, 5);
 
-		basicInfoPane.add(cosmoIDLbl, 1, 0);
-		basicInfoPane.add(firstNameLbl, 1, 1);
-		basicInfoPane.add(lastNameLbl, 1, 2);
-		basicInfoPane.add(physicianLbl, 1, 3);
-		basicInfoPane.add(seizureLbl, 1, 4);
-		basicInfoPane.add(allergyLbl, 1, 5);
+			basicInfoPane.add(cosmoIDLbl, 1, 0);
+			basicInfoPane.add(firstNameLbl, 1, 1);
+			basicInfoPane.add(lastNameLbl, 1, 2);
+			basicInfoPane.add(physicianLbl, 1, 3);
+			basicInfoPane.add(seizureLbl, 1, 4);
+			basicInfoPane.add(allergyLbl, 1, 5);
 
-		// set margins
-		BorderPane.setMargin(pictureBox, new Insets(10, 0, 0, 10));
-		BorderPane.setMargin(basicInfoPane, new Insets(10, 0, 0, 0));
-		// previewPane.setTop(searchBar);
-		previewPane.setLeft(pictureBox);
-		previewPane.setCenter(basicInfoPane);
+			// set margins
+			BorderPane.setMargin(pictureBox, new Insets(10, 0, 0, 10));
+			BorderPane.setMargin(basicInfoPane, new Insets(10, 0, 0, 0));
+			// previewPane.setTop(searchBar);
+			previewPane.setLeft(pictureBox);
+			previewPane.setCenter(basicInfoPane);
 
-		return previewPane;
-	}
-
-	/**
-	 * 
-	 * Purpose: Create the preview labes for the participant
-	 */
-	private void createPreviewLabels() {
-
-		cosmoIDLbl = new Label();
-		firstNameLbl = new Label();
-		lastNameLbl = new Label();
-		seizureLbl = new Label();
-		allergyLbl = new Label();
-		physicianLbl = new Label();
-
-		cosmoIDLbl.setMaxWidth(150);
-		cosmoIDLbl.setMinWidth(150);
-
-		firstNameLbl.setMaxWidth(150);
-		firstNameLbl.setMinWidth(150);
-
-		lastNameLbl.setMaxWidth(150);
-		lastNameLbl.setMinWidth(150);
-
-		physicianLbl.setMaxWidth(150);
-		physicianLbl.setMinWidth(150);
-
-		seizureLbl.setMaxWidth(175);
-		seizureLbl.setMinWidth(175);
-		seizureLbl.setMaxHeight(40);
-		seizureLbl.setMinHeight(65);
-		seizureLbl.setWrapText(true);
-		seizureLbl.setAlignment(Pos.TOP_LEFT);
-
-		allergyLbl.setMaxWidth(175);
-		allergyLbl.setMinWidth(175);
-		allergyLbl.setMaxHeight(80);
-		allergyLbl.setMinHeight(80);
-		allergyLbl.setWrapText(true);
-		allergyLbl.setAlignment(Pos.TOP_LEFT);
-
-		pTVCont.participantTable.setOnMousePressed(event -> {
-			assignParitipantPreviewLabels(pTVCont.getSelectedPK());
-		});
-	}
-
-	/**
-	 * 
-	 * Purpose: Set the text of all the preview pane labels to the currently
-	 * selected user
-	 */
-	private void assignParitipantPreviewLabels(String participantID) {
-		PreviewPaneHelper paneHelper = new PreviewPaneHelper();
-		String[] currentParticipant = paneHelper
-				.queryParticipant(participantID);
-		cosmoIDLbl.setText(currentParticipant[0]);
-		firstNameLbl.setText(currentParticipant[1]);
-		lastNameLbl.setText(currentParticipant[2]);
-		physicianLbl.setText(currentParticipant[3]);
-		seizureLbl.setText(currentParticipant[4]);
-		allergyLbl.setText(currentParticipant[5]);
-
-		URL path = getClass().getResource(currentParticipant[6]);
-
-		try {
-			if (path != null) {
-				previewPicture.setImage(new Image(path.openStream()));
-				previewPicture.setFitHeight(121);
-				previewPicture.setFitWidth(122);
-			} else {
-				URL url = getClass().getResource("images/defaultPicture.png");
-
-				previewPicture.setImage(new Image(url.openStream()));
-
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
+			return previewPane;
 		}
 
-	}
+		/**
+		 * 
+		 * Purpose: Create the preview labes for the participant
+		 */
+		private void createPreviewLabels() 
+		{
 
-	/**
-	 * 
-	 * Purpose:Create the search bar
-	 * 
-	 * @param
-	 * 
-	 * @return HBox search bar
-	 */
-	private HBox createSearchBar() {
-		// create search bar
-		HBox searchBar = new HBox();
-		searchBy = new ComboBox<String>();
-		searchBy.getItems().addAll("Name", "Address", "Allergies", "CosmoID");
-		// set width
-		searchBy.setStyle("-fx-pref-width: 150;");
-		searchBy.setPromptText(("Search By"));
-		searchBy.setFocusTraversable(false);
+			cosmoIDLbl = new Label();
+			firstNameLbl = new Label();
+			lastNameLbl = new Label();
+			seizureLbl = new Label();
+			allergyLbl = new Label();
+			physicianLbl = new Label();
 
-		// create search field
-		searchField = new TextField();
-		searchField.setPromptText("Search...");
-		searchField.setStyle("-fx-pref-width: 245; -fx-pref-height: 26;");
-		searchField.setOnAction(new EventHandler<ActionEvent>() {
+			cosmoIDLbl.setMaxWidth(150);
+			cosmoIDLbl.setMinWidth(150);
 
-			@Override
-			public void handle(ActionEvent arg0) {
-				// search handler
-				handleSearch();
-			}
+			firstNameLbl.setMaxWidth(150);
+			firstNameLbl.setMinWidth(150);
 
-		});
+			lastNameLbl.setMaxWidth(150);
+			lastNameLbl.setMinWidth(150);
 
-		// search button
-		Button searchButton = new Button("Search");
-		searchButton.setPrefSize(110, 20);
-		searchButton.setOnAction(new EventHandler<ActionEvent>() {
+			physicianLbl.setMaxWidth(150);
+			physicianLbl.setMinWidth(150);
 
-			@Override
-			public void handle(ActionEvent arg0) {
-				// search handler
-				handleSearch();
-			}
+			seizureLbl.setMaxWidth(175);
+			seizureLbl.setMinWidth(175);
+			seizureLbl.setMaxHeight(40);
+			seizureLbl.setMinHeight(65);
+			seizureLbl.setWrapText(true);
+			seizureLbl.setAlignment(Pos.TOP_LEFT);
 
-		});
-		// set margins
-		HBox.setMargin(searchBy, new Insets(0, 5, 0, 10));
-		HBox.setMargin(searchField, new Insets(0, 5, 0, 5));
-		HBox.setMargin(searchButton, new Insets(0, 5, 0, 5));
-		if (loggedInUser instanceof MedicalAdministrator) {
-			Button addParticipantButton = new Button("Add Participant");
-			addParticipantButton.setOnAction(new EventHandler<ActionEvent>() {
+			allergyLbl.setMaxWidth(175);
+			allergyLbl.setMinWidth(175);
+			allergyLbl.setMaxHeight(80);
+			allergyLbl.setMinHeight(80);
+			allergyLbl.setWrapText(true);
+			allergyLbl.setAlignment(Pos.TOP_LEFT);
+
+			pTVCont.participantTable.setOnMousePressed(event -> {
+				assignParitipantPreviewLabels(pTVCont.getSelectedPK());
+			});
+		}
+
+		/**
+		 * 
+		 * Purpose: Set the text of all the preview pane labels to the currently
+		 * selected user
+		 */
+		private void assignParitipantPreviewLabels(String participantID) {
+			PreviewPaneHelper paneHelper = new PreviewPaneHelper();
+			String[] currentParticipant = paneHelper
+					.queryParticipant(participantID);
+			cosmoIDLbl.setText(currentParticipant[0]);
+			firstNameLbl.setText(currentParticipant[1]);
+			lastNameLbl.setText(currentParticipant[2]);
+			physicianLbl.setText(currentParticipant[3]);
+			seizureLbl.setText(currentParticipant[4]);
+			allergyLbl.setText(currentParticipant[5]);
+
+
+        try
+        {
+            URL u = null;
+            try
+            {
+                u = (this.getClass().getProtectionDomain().getCodeSource()
+                        .getLocation().toURI().toURL());
+            }
+            catch ( URISyntaxException e )
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            String url = u.toString();
+
+            url = url.substring(0,
+                    url.length() - (url.length() - url.lastIndexOf("/")));
+
+            url = url.replace("/bin", "");
+
+            Image img = new Image(url + currentParticipant[6]);
+
+            if ( !(img.isError()) )
+            {
+                previewPicture.setImage(img);
+                previewPicture.setFitHeight(121);
+                previewPicture.setFitWidth(122);
+            }
+            else
+            {
+                URL defaultURL = getClass().getResource(
+                        "images/defaultPicture.png");
+                previewPicture.setImage(new Image(defaultURL.openStream()));
+            }
+        }
+        catch (IllegalArgumentException | IOException ie )
+        {
+                System.out.println("Image is invalid using default.");
+        }
+		}
+		
+                
+		/**
+		 * 
+		 * Purpose:Create the search bar
+		 * 
+		 * @param
+		 * 
+		 * @return HBox search bar
+		 */
+		private HBox createSearchBar() {
+			// create search bar
+			HBox searchBar = new HBox();
+			searchBy = new ComboBox<String>();
+			searchBy.getItems().addAll("Name", "Address", "Allergies", "CosmoID");
+			// set width
+			searchBy.setStyle("-fx-pref-width: 150;");
+			searchBy.setPromptText(("Search By"));
+			searchBy.setFocusTraversable(false);
+
+			// create search field
+            searchField = new TextField();
+            searchField.setPromptText("Search...");
+            searchField.setStyle("-fx-pref-width: 245; -fx-pref-height: 26;");
+            searchField.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent arg0) {
+                    // search handler
+                    handleSearch();
+                }
+
+            });
+			
+			// search button
+			Button searchButton = new Button("Search");
+			searchButton.setPrefSize(110, 20);
+			searchButton.setOnAction(new EventHandler<ActionEvent>() {
+
 				@Override
-				public void handle(ActionEvent e) {
-					// Open addNewParticipant Window
-					createParticipantStage = new Stage();
-					createParticipantStage.setTitle("Create Participant");
-
-					createParticipantStage.setScene(new Scene(
-							createParticipantPopUp(), 325, 400));
-					createParticipantStage
-							.initModality(Modality.APPLICATION_MODAL);
-					createParticipantStage.initOwner(medMainStage);
-					createParticipantStage.setResizable(false);
-					createParticipantStage.show();
+				public void handle(ActionEvent arg0) {
+					// search handler
+					handleSearch();
 				}
 
 			});
-			addParticipantButton.setPrefSize(200, 20);
-			HBox.setMargin(addParticipantButton, new Insets(0, 5, 0, 5));
-			searchBar.getChildren().addAll(searchBy, searchField, searchButton,
-					addParticipantButton);
-		} else {
-			searchBar.getChildren().addAll(searchBy, searchField, searchButton);
+			
+			
+			// set margins
+			HBox.setMargin(searchBy, new Insets(0, 5, 0, 10));
+			HBox.setMargin(searchField, new Insets(0, 5, 0, 5));
+			HBox.setMargin(searchButton, new Insets(0, 5, 0, 5));
+			if (loggedInUser instanceof MedicalAdministrator) {
+				Button addParticipantButton = new Button("Add Participant");
+				addParticipantButton.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent e) {
+						// Open addNewParticipant Window
+						createParticipantStage = new Stage();
+						createParticipantStage.setTitle("Create Participant");
+
+						createParticipantStage.setScene(new Scene(
+								createParticipantPopUp(), 325, 400));
+						createParticipantStage
+								.initModality(Modality.APPLICATION_MODAL);
+						createParticipantStage.initOwner(medMainStage);
+						createParticipantStage.setResizable(false);
+						createParticipantStage.show();
+					}
+					});
+
+
+				addParticipantButton.setPrefSize(200, 20);
+				HBox.setMargin(addParticipantButton, new Insets(0, 5, 0, 5));
+				searchBar.getChildren().addAll(searchBy, searchField, searchButton,
+						addParticipantButton);
+			} else {
+				searchBar.getChildren().addAll(searchBy, searchField, searchButton);
+			}
+			return searchBar;
 		}
-		return searchBar;
-	}
 
-	/**
-	 * 
-	 * Purpose: prepare sql statement for query database
-	 */
-	private void handleSearch() {
-		String table = "Participant";
-		String type = searchBy.getValue();
-		// Checks if the search has a type, if it does not, then set type to
-		// name.
-		if (type == null) {
-			type = "Name";
+		/**
+		 * 
+		 * Purpose: prepare sql statement for query database
+		 */
+		private void handleSearch() {
+			String table = "Participant";
+			String type = searchBy.getValue();
+			// Checks if the search has a type, if it does not, then set type to
+			// name.
+			if (type == null) {
+				type = "Name";
+			}
+			String value = searchField.getText();
+			String condition = "";
+			// Prepares statement to check the full name of every participant if
+			// name was selected
+			if (type == "Name") {
+				condition = "firstName + ' ' + lastName like '%" + value + "%'";
+			} else if (type == "Allergies") {
+				table = "Allergies";
+				condition = value;
+			} else {
+				condition = type + " LIKE '%" + value + "%'";
+			}
+			// Checks if a value was entered, if one was then search for it, if
+			// one was not then remove all the conditions on the search
+			if (value.equals("")) {
+				pTVCont.refreshTable("", table);
+			} else {
+				pTVCont.refreshTable(condition, table);
+			}
 		}
-		String value = searchField.getText();
-		String condition = "";
-		// Prepares statement to check the full name of every participant if
-		// name was selected
-		if (type == "Name") {
-			condition = "firstName + ' ' + lastName like '%" + value + "%'";
-		} else if (type == "Allergies") {
-			table = "Allergies";
-			condition = value;
-		} else {
-			condition = type + " LIKE '%" + value + "%'";
-		}
-		// Checks if a value was entered, if one was then search for it, if
-		// one was not then remove all the conditions on the search
-		if (value.equals("")) {
-			pTVCont.refreshTable("", table);
-		} else {
-			pTVCont.refreshTable(condition, table);
-		}
-	}
 
-	/**
-	 * 
-	 * Purpose: To create a pop up window to add the participant into the
-	 * database
-	 * 
-	 * @return a GridPane containing the form
-	 */
-	protected GridPane createParticipantPopUp() {
+		/**
+		 * 
+		 * Purpose: To create a pop up window to add the participant into the
+		 * database
+		 * 
+		 * @return a GridPane containing the form
+		 */
+		protected GridPane createParticipantPopUp() {
 
-		GridPane grid = new GridPane();
+			GridPane grid = new GridPane();
 
-		// warning label
-		Label lblWarning = new Label();
-		lblWarning.setTextFill(Color.FIREBRICK);
+			// warning label
+			Label lblWarning = new Label();
+			lblWarning.setTextFill(Color.FIREBRICK);
 
-		// text field labels
-		Label firstNameLbl = new Label("First Name");
-		Label lastNameLbl = new Label("Last Name");
-		Label birthdateLbl = new Label("Birthdate");
-		Label physicianFNameLbl = new Label("Physician First Name");
-		Label physicianLNameLbl = new Label("Physician Last Name");
-		Label healthNumLbl = new Label("Health Number");
-		Label phoneLbl = new Label("Phone Number");
-		Label cosmoIdLbl = new Label("Cosmo ID");
-		Label addressLbl = new Label("Address");
+        // text field labels
+        Label firstNameLbl = new Label("First Name");
+        Label lastNameLbl = new Label("Last Name");
+        Label birthdateLbl = new Label("Birthdate");
+        Label physicianFNameLbl = new Label("Physician First Name");
+        Label physicianLNameLbl = new Label("Physician Last Name");
+        Label healthNumLbl = new Label("Health Number");
+        Label phoneLbl = new Label("Phone Number");
+        Label cosmoIdLbl = new Label("Cosmo ID");
+        Label addressLbl = new Label("Participant Address");
+        Label imageLbl = new Label("Participant Picture");
 
-		// the text fields
-		TextField firstNameTxt = new TextField();
-		TextField lastNameTxt = new TextField();
-		DatePicker birthDatePicker = new DatePicker();
+			// the text fields
+			TextField firstNameTxt = new TextField();
+			TextField lastNameTxt = new TextField();
+			DatePicker birthDatePicker = new DatePicker();
 
-		// Adding a click listener to make the date in thebox default to 20
-		// years ago (client request)
-		birthDatePicker.setOnMouseClicked(event -> {
+			// Adding a click listener to make the date in thebox default to 20
+			// years ago (client request)
+			birthDatePicker.setOnMouseClicked(event -> {
 
-			birthDatePicker.setValue(LocalDate.now().minusYears(20));
+				birthDatePicker.setValue(LocalDate.now().minusYears(20));
 
-		});
-		TextField physicianFNameTxt = new TextField();
-		TextField physicianLNameTxt = new TextField();
-		TextField healthNumTxt = new TextField();
-		TextField phoneTxt = new TextField();
-		phoneTxt.setPromptText("Ex: 3062879111");
-		TextField cosmoIdTxt = new TextField();
-		TextField addressTxt = new TextField();
+			});
+			TextField physicianFNameTxt = new TextField();
+			TextField physicianLNameTxt = new TextField();
+			TextField healthNumTxt = new TextField();
+			TextField phoneTxt = new TextField();
+			phoneTxt.setPromptText("Ex: 3062879111");
+			TextField cosmoIdTxt = new TextField();
+			TextField addressTxt = new TextField();
+        Button imageBrowseBtn = new Button("Browse...");
+        TextField chosenPathTxt = new TextField("");
 
-		// add the form to the grid
-		grid.add(cosmoIdLbl, 0, 1);
-		grid.add(firstNameLbl, 0, 2);
-		grid.add(lastNameLbl, 0, 3);
-		grid.add(birthdateLbl, 0, 4);
-		grid.add(physicianFNameLbl, 0, 5);
-		grid.add(physicianLNameLbl, 0, 6);
-		grid.add(healthNumLbl, 0, 7);
-		grid.add(phoneLbl, 0, 8);
-		grid.add(addressLbl, 0, 9);
+        imageBrowseBtn
+                .setOnAction(event -> {
+                    FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
+                            "Images", "*.jpg");
+                    FileChooser fc = new FileChooser();
+                    fc.getExtensionFilters().add(filter);
 
-		grid.add(lblWarning, 1, 0);
-		grid.add(cosmoIdTxt, 1, 1);
-		grid.add(firstNameTxt, 1, 2);
-		grid.add(lastNameTxt, 1, 3);
-		grid.add(birthDatePicker, 1, 4);
-		grid.add(physicianFNameTxt, 1, 5);
-		grid.add(physicianLNameTxt, 1, 6);
-		grid.add(healthNumTxt, 1, 7);
-		grid.add(phoneTxt, 1, 8);
-		grid.add(addressTxt, 1, 9);
+                    String path = "";
 
-		// setPadding of the grid
-		grid.setPadding(new Insets(10, 10, 0, 10));
+                    File file = fc.showOpenDialog(medMainStage);
+                    if ( file == null )
+                    {
+                        path = "";
+                    }
+                    else
+                    {
+                        path = file.getAbsolutePath();
+                    }
+                    chosenPathTxt.setText(path);
+                });
 
-		grid.setHgap(10);
+			// add the form to the grid
+			grid.add(cosmoIdLbl, 0, 1);
+			grid.add(firstNameLbl, 0, 2);
+			grid.add(lastNameLbl, 0, 3);
+			grid.add(birthdateLbl, 0, 4);
+			grid.add(physicianFNameLbl, 0, 5);
+			grid.add(physicianLNameLbl, 0, 6);
+			grid.add(healthNumLbl, 0, 7);
+			grid.add(phoneLbl, 0, 8);
+			grid.add(addressLbl, 0, 9);
+        grid.add(imageLbl, 0, 10);
 
-		grid.setVgap(10);
+			grid.add(lblWarning, 1, 0);
+			grid.add(cosmoIdTxt, 1, 1);
+			grid.add(firstNameTxt, 1, 2);
+			grid.add(lastNameTxt, 1, 3);
+			grid.add(birthDatePicker, 1, 4);
+			grid.add(physicianFNameTxt, 1, 5);
+			grid.add(physicianLNameTxt, 1, 6);
+			grid.add(healthNumTxt, 1, 7);
+			grid.add(phoneTxt, 1, 8);
+			grid.add(addressTxt, 1, 9);
+        grid.add(imageBrowseBtn, 1, 10);
 
-		// Adding participant event handler
-		Button createParticipantBtn = new Button("Add");
-		createParticipantBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				// call create participant on medical administrator with the
-				// text passed in
-				String result = MedicalAdministrator.createParticipant(
-						cosmoIdTxt.getText(), firstNameTxt.getText(),
-						lastNameTxt.getText(), birthDatePicker.getValue(),
-						physicianFNameTxt.getText(),
-						physicianLNameTxt.getText(), healthNumTxt.getText(),
-						phoneTxt.getText(), addressTxt.getText());
+			// setPadding of the grid
+			grid.setPadding(new Insets(10, 10, 0, 10));
 
-				// if no error message is recieved then close this window and
-				// refresh the table
-				if (result.equals("")) {
-					createParticipantStage.close();
-					pTVCont.refreshTable("", "Participant");
-				}
-				// if there is an error message, display it
-				else {
-					lblWarning.setTextFill(Color.FIREBRICK);
-					lblWarning.setText(result);
-					if (result.equals("Phone Number must be 10 digits")) {
-						phoneTxt.setText("");
-						phoneTxt.setPromptText("Ex: 3062879111");
+			grid.setHgap(10);
+
+			grid.setVgap(10);
+
+        // Adding participant event handler
+        Button createParticipantBtn = new Button("Add");
+        createParticipantBtn.setOnAction(new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle( ActionEvent e )
+            {
+                // call create participant on medical administrator with the
+                // text passed in
+                String result = MedicalAdministrator.createParticipant(
+                        cosmoIdTxt.getText(), firstNameTxt.getText(),
+                        lastNameTxt.getText(), birthDatePicker.getValue(),
+                        physicianFNameTxt.getText(),
+                        physicianLNameTxt.getText(), healthNumTxt.getText(),
+                        phoneTxt.getText(), addressTxt.getText(),
+                        chosenPathTxt.getText());
+
+					// if no error message is recieved then close this window and
+					// refresh the table
+					if (result.equals("")) {
+						createParticipantStage.close();
+						pTVCont.refreshTable("", "Participant");
+					}
+					// if there is an error message, display it
+					else {
+						lblWarning.setTextFill(Color.FIREBRICK);
+						lblWarning.setText(result);
+						if (result.equals("Phone Number must be 10 digits")) {
+							phoneTxt.setText("");
+							phoneTxt.setPromptText("Ex: 3062879111");
+						}
 					}
 				}
-			}
-		});
+			});
 
-		// reset the form event handler
-		Button resetBtn = new Button("Reset");
-		resetBtn.setOnAction(new EventHandler<ActionEvent>() {
+			// reset the form event handler
+			Button resetBtn = new Button("Reset");
+			resetBtn.setOnAction(new EventHandler<ActionEvent>() {
 
-			@Override
-			public void handle(ActionEvent arg0) {
-				// sets all values to default
-				cosmoIdTxt.setText("");
-				firstNameTxt.setText("");
-				lastNameTxt.setText("");
-				birthDatePicker.setValue(null);
-				physicianFNameTxt.setText("");
-				physicianLNameTxt.setText("");
-				healthNumTxt.setText("");
-				phoneTxt.setText("");
-				addressTxt.setText("");
-				lblWarning.setText("");
-			}
+            @Override
+            public void handle( ActionEvent arg0 )
+            {
+                // sets all values to default
+                cosmoIdTxt.setText("");
+                firstNameTxt.setText("");
+                lastNameTxt.setText("");
+                birthDatePicker.setValue(null);
+                physicianFNameTxt.setText("");
+                physicianLNameTxt.setText("");
+                healthNumTxt.setText("");
+                phoneTxt.setText("");
+                addressTxt.setText("");
+                chosenPathTxt.setText("");
+                lblWarning.setText("");
 
-		});
+            }
 
-		// Add the buttons to the grid
-		HBox buttonsHbox = new HBox();
-		HBox resetHbox = new HBox();
-		buttonsHbox.getChildren().addAll(createParticipantBtn);
-		buttonsHbox.setAlignment(Pos.CENTER);
-		resetHbox.getChildren().addAll(resetBtn);
-		resetHbox.setAlignment(Pos.CENTER_RIGHT);
-		grid.add(buttonsHbox, 1, 10);
-		grid.add(resetHbox, 0, 10);
+			});
 
-		return grid;
+        // Add the buttons to the grid
+        HBox buttonsHbox = new HBox();
+        HBox resetHbox = new HBox();
+        buttonsHbox.getChildren().addAll(createParticipantBtn);
+        buttonsHbox.setAlignment(Pos.CENTER);
+        resetHbox.getChildren().addAll(resetBtn);
+        resetHbox.setAlignment(Pos.CENTER_RIGHT);
+        grid.add(buttonsHbox, 1, 11);
+        grid.add(resetHbox, 0, 11);
+
+			return grid;
+		}
+
+		/**
+		 * 
+		 * Purpose: Create Note Box
+		 * 
+		 * @return HBox create note box
+		 */
+		private HBox createNoteBox() {
+			HBox hbox = new HBox();
+			noteTitleView = new ListView<String>();
+			// create list of notes
+			// TODO make this automatically pull from the database of notes
+			noteTitleList = FXCollections.observableArrayList("Note 1", "Note 2",
+					"Note 3", "Note 4", "Note 5", "Note 6", "Note 7", "Note 8",
+					"Note 9", "Note 10", "Note 11");
+
+			// set notes list to listview
+			noteTitleView.setItems(noteTitleList);
+			noteTitleView.setMinWidth(170);
+			noteTitleView.setMaxWidth(170);
+			noteTitleView.setFocusTraversable(false);
+			// note display pane
+			GridPane noteDisplayPane = new GridPane();
+
+			noteDisplayPane.setStyle("-fx-background-color: #FFFFFF;");
+			noteDisplayPane.setPadding(new Insets(10, 10, 0, 10));
+
+			// set basic labels
+			Label dateLabel = new Label("Date:");
+			Label staffLabel = new Label("Staff:");
+			Label participantLabel = new Label("Participant: ");
+			Label subjectLabel = new Label("Subject: ");
+
+			// set label margins
+			dateLabel.setPadding(new Insets(1, 5, 3, 5));
+			staffLabel.setPadding(new Insets(1, 5, 3, 5));
+			participantLabel.setPadding(new Insets(1, 5, 3, 5));
+			subjectLabel.setPadding(new Insets(1, 5, 3, 5));
+
+			// set the participant text fields
+			Label dateInfoLabel = new Label("dateInfo");
+			Label staffInfoLabel = new Label("staffInfo");
+			Label participantInfoLabel = new Label("participantInfo");
+			Label subjectInfoLabel = new Label("subjectInfo");
+
+			// set padding
+			dateInfoLabel.setPadding(new Insets(1, 5, 3, 5));
+			staffInfoLabel.setPadding(new Insets(1, 5, 3, 5));
+			participantInfoLabel.setPadding(new Insets(1, 5, 3, 5));
+			subjectInfoLabel.setPadding(new Insets(1, 5, 3, 5));
+
+			// add all labels to the gridpane
+			// column 0
+			noteDisplayPane.add(dateLabel, 0, 0);
+			noteDisplayPane.add(staffLabel, 0, 1);
+			noteDisplayPane.add(participantLabel, 0, 2);
+			noteDisplayPane.add(subjectLabel, 0, 3);
+
+			// column 1
+			noteDisplayPane.add(dateInfoLabel, 1, 0);
+			noteDisplayPane.add(staffInfoLabel, 1, 1);
+			noteDisplayPane.add(participantInfoLabel, 1, 2);
+			noteDisplayPane.add(subjectInfoLabel, 1, 3);
+
+			// set minimum width
+			noteDisplayPane.setMinWidth(265);
+			// Sets the notebox's width to fit that of the parents window when it is
+			// resized
+			noteDisplayPane.prefWidthProperty().bind(
+					medMainStage.widthProperty().divide(1.60));
+			hbox.setPadding(new Insets(10, 0, 0, 0));
+			hbox.getChildren().addAll(noteTitleView, noteDisplayPane);
+
+			return hbox;
+		}
+
+		/**
+		 * 
+		 * Purpose: Create Main VBox
+		 * 
+		 * @param admin
+		 * 
+		 * @return VBox main VBox
+		 */
+		private VBox createMainVBox() {
+			VBox vbox = new VBox();
+
+			// header HBox
+			BorderPane header = createHBoxHeader();
+			// tab pane
+			TabPane tabs = createTabs();
+			// Search bar
+			HBox searchBar = createSearchBar();
+			VBox.setMargin(searchBar, new Insets(5, 0, 5, 0));
+			// preview notes
+			HBox previewNotes = createHBoxPreviewNotes();
+
+			// add everything to vbox
+			vbox.getChildren().addAll(header, tabs, searchBar, previewNotes,
+					pTVCont.participantTable);
+
+			return vbox;
+		}
+
 	}
-
-	/**
-	 * 
-	 * Purpose: Create Note Box
-	 * 
-	 * @return HBox create note box
-	 */
-	private HBox createNoteBox() {
-		HBox hbox = new HBox();
-		noteTitleView = new ListView<String>();
-		// create list of notes
-		// TODO make this automatically pull from the database of notes
-		noteTitleList = FXCollections.observableArrayList("Note 1", "Note 2",
-				"Note 3", "Note 4", "Note 5", "Note 6", "Note 7", "Note 8",
-				"Note 9", "Note 10", "Note 11");
-
-		// set notes list to listview
-		noteTitleView.setItems(noteTitleList);
-		noteTitleView.setMinWidth(170);
-		noteTitleView.setMaxWidth(170);
-		noteTitleView.setFocusTraversable(false);
-		// note display pane
-		GridPane noteDisplayPane = new GridPane();
-
-		noteDisplayPane.setStyle("-fx-background-color: #FFFFFF;");
-		noteDisplayPane.setPadding(new Insets(10, 10, 0, 10));
-
-		// set basic labels
-		Label dateLabel = new Label("Date:");
-		Label staffLabel = new Label("Staff:");
-		Label participantLabel = new Label("Participant: ");
-		Label subjectLabel = new Label("Subject: ");
-
-		// set label margins
-		dateLabel.setPadding(new Insets(1, 5, 3, 5));
-		staffLabel.setPadding(new Insets(1, 5, 3, 5));
-		participantLabel.setPadding(new Insets(1, 5, 3, 5));
-		subjectLabel.setPadding(new Insets(1, 5, 3, 5));
-
-		// set the participant text fields
-		Label dateInfoLabel = new Label("dateInfo");
-		Label staffInfoLabel = new Label("staffInfo");
-		Label participantInfoLabel = new Label("participantInfo");
-		Label subjectInfoLabel = new Label("subjectInfo");
-
-		// set padding
-		dateInfoLabel.setPadding(new Insets(1, 5, 3, 5));
-		staffInfoLabel.setPadding(new Insets(1, 5, 3, 5));
-		participantInfoLabel.setPadding(new Insets(1, 5, 3, 5));
-		subjectInfoLabel.setPadding(new Insets(1, 5, 3, 5));
-
-		// add all labels to the gridpane
-		// column 0
-		noteDisplayPane.add(dateLabel, 0, 0);
-		noteDisplayPane.add(staffLabel, 0, 1);
-		noteDisplayPane.add(participantLabel, 0, 2);
-		noteDisplayPane.add(subjectLabel, 0, 3);
-
-		// column 1
-		noteDisplayPane.add(dateInfoLabel, 1, 0);
-		noteDisplayPane.add(staffInfoLabel, 1, 1);
-		noteDisplayPane.add(participantInfoLabel, 1, 2);
-		noteDisplayPane.add(subjectInfoLabel, 1, 3);
-
-		// set minimum width
-		noteDisplayPane.setMinWidth(265);
-		// Sets the notebox's width to fit that of the parents window when it is
-		// resized
-		noteDisplayPane.prefWidthProperty().bind(
-				medMainStage.widthProperty().divide(1.60));
-		hbox.setPadding(new Insets(10, 0, 0, 0));
-		hbox.getChildren().addAll(noteTitleView, noteDisplayPane);
-
-		return hbox;
-	}
-
-	/**
-	 * 
-	 * Purpose: Create Main VBox
-	 * 
-	 * @param admin
-	 * 
-	 * @return VBox main VBox
-	 */
-	private VBox createMainVBox() {
-		VBox vbox = new VBox();
-
-		// header HBox
-		BorderPane header = createHBoxHeader();
-		// tab pane
-		TabPane tabs = createTabs();
-		// Search bar
-		HBox searchBar = createSearchBar();
-		VBox.setMargin(searchBar, new Insets(5, 0, 5, 0));
-		// preview notes
-		HBox previewNotes = createHBoxPreviewNotes();
-
-		// add everything to vbox
-		vbox.getChildren().addAll(header, tabs, searchBar, previewNotes,
-				pTVCont.participantTable);
-
-		return vbox;
-	}
-
-	
-}
