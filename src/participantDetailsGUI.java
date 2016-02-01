@@ -105,12 +105,13 @@ public class participantDetailsGUI extends Application {
 
 		this.cosmoID = cosmoID;
 
-		participantMainStage = stage;
+		participantMainStage = new Stage();
 		participantMainStage.setTitle("Cosmo Industries");
 
-		VBox root = createMainVBox();
-
-		participantMainStage.setScene(new Scene(root, 875, 580));
+		VBox root = createMainVBox();		
+		participantMainStage.setScene(new Scene(root, 875, 580));	
+		participantMainStage.initModality(Modality.APPLICATION_MODAL);
+		participantMainStage.initOwner(stage);
 		participantMainStage.resizableProperty().set(true);
 		participantMainStage.show();
 	}
@@ -952,4 +953,7 @@ public class participantDetailsGUI extends Application {
 
 		return careGiverBox;
 	}
+	
+	
 }
+

@@ -334,6 +334,55 @@ public class testDatabase {
 	
 	}
 	
+	/**
+	 * Test that java can successfully insert into the activity log.
+	 */
+	@Test
+	public void testActivityLogInsert()
+	{
+		db.activtyLogEntry("testUser", "Login", db);
+		ResultSet rs = db.select("Who, Event", "ActivityLog", "Who = 'testUser'", "");
+		try
+		{
+			//check that it matches expected result
+			while(rs.next())
+			{
+				String test = rs.getString(1);
+				assertTrue(rs.getString(1).equals("testUser"));
+				assertTrue(rs.getString(2).equals("Login"));
+				
+			}
+		}
+		catch(SQLException e)
+		{
+			
+		}
+	}
+	
+	/**
+	 * Test that java can successfully insert into the activity log with no event.
+	 */
+	@Test
+	public void testNoEventActivityLogInsert()
+	{
+		db.activtyLogEntry("testUser", "", db);
+		ResultSet rs = db.select("Who, Event", "ActivityLog", "Who = 'testUser'", "");
+		try
+		{
+			//check that it matches expected result
+			while(rs.next())
+			{
+				String test = rs.getString(1);
+				assertTrue(rs.getString(1).equals("testUser"));
+				assertTrue(rs.getString(2).equals("Login"));
+				
+			}
+		}
+		catch(SQLException e)
+		{
+			
+		}
+	}
 	
 
 }

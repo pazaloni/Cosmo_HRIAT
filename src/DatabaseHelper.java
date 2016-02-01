@@ -1,6 +1,9 @@
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
+import java.util.Date;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -436,6 +439,28 @@ public class DatabaseHelper
         }
 
         return rows;
+    }
+    
+    /**
+     * A method for entering an event into the activity log.
+     * @param who The user who triggered the event 
+     * @param date When the event happened
+     * @param event What the event was
+     * @param db The database to insert into
+     */
+    public void activtyLogEntry(String who, String event, DatabaseHelper db)
+    {
+        String whenString = "";
+             
+        String activityValues[][] = new String [2][2];
+        
+        activityValues[0][0] = "Who";
+        activityValues[1][0] = "Event";
+        
+        activityValues[0][1] = who;
+        activityValues[1][1] = event;
+        
+        db.insert(activityValues, "ActivityLog");
     }
 
 }
