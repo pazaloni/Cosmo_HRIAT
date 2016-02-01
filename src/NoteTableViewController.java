@@ -54,8 +54,8 @@ public class NoteTableViewController
 //					setStyle("-fx-background-color:mediumblue"); 
 //				}
 				
-				note = new Note(noteID, cosmoID, description, createdBy, submitted, viwed, resolved);
-				noteIDs.add(note);
+				//note = new Note(noteID, cosmoID, description, createdBy, submitted, viwed, resolved);
+				//noteIDs.add(note);
 			}
 		}
 		catch (SQLException e)

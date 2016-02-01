@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+
 /**
  * 
  * Purpose: Provide all database needs to the system
@@ -49,7 +50,6 @@ public class DatabaseHelper
             e.printStackTrace();
         }
     }
-
     /**
      * 
      * Purpose: close the database connection;
@@ -60,14 +60,13 @@ public class DatabaseHelper
         {
             conn.close();
         }
-        catch (SQLException e)
+        catch ( SQLException e )
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
-
-    public String[][] createArray(String tableName, String[] values)
+    public String[][] createArray( String tableName, String[] values )
     {
         Statement s = null;
         ResultSet rs = null;
@@ -79,7 +78,7 @@ public class DatabaseHelper
             s = conn.createStatement();
             rs = s.executeQuery(query);
             ResultSetMetaData rsmd = rs.getMetaData();
-            for (int i = 0; i < values.length; i++)
+            for ( int i = 0; i < values.length; i++ )
             {
                 // set the field name of the array
                 result[i][0] = rsmd.getColumnLabel(i + 1);
@@ -89,7 +88,7 @@ public class DatabaseHelper
 
             }
         }
-        catch (SQLException e)
+        catch ( SQLException e )
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -113,8 +112,8 @@ public class DatabaseHelper
      *            optional sql sort statement to supply
      * @return ResultSet rs The result of the SELECT query
      */
-    public ResultSet select(String columnList, String tableList,
-            String condition, String sort)
+    public ResultSet select( String columnList, String tableList,
+            String condition, String sort )
     {
 
         Statement s = null;
@@ -126,24 +125,22 @@ public class DatabaseHelper
             s = conn.createStatement();
 
             // If a condition is specified, add it to the query
-            if (!condition.equals(""))
+            if ( !condition.equals("") )
             {
                 query += " WHERE " + condition;
             }
 
             // If a sort order is specified, add it to the query
-            if (!sort.equals(""))
+            if ( !sort.equals("") )
             {
                 query += " ORDER BY " + sort;
             }
 
-            System.out.println(query);
             // execute the query
             rs = s.executeQuery(query);
         }
-        catch (SQLException e)
+        catch ( SQLException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -162,7 +159,7 @@ public class DatabaseHelper
      * @return boolean True if rows were affected, false if 0 rows were affected
      *         (failed insert)
      */
-    public boolean insert(String[] values, String tableName)
+    public boolean insert( String[] values, String tableName )
     {
         String[][] newRecord = this.createArray(tableName, values);
 
@@ -171,7 +168,7 @@ public class DatabaseHelper
         String valueList = "( ";
 
         // add each field and value to their strings
-        for (int r = 0; r < newRecord.length; r++)
+        for ( int r = 0; r < newRecord.length; r++ )
         {
             fieldList += newRecord[r][0] + ", ";
             valueList += "'" + newRecord[r][1] + "', ";
@@ -185,8 +182,6 @@ public class DatabaseHelper
 
         String insertStatement = "INSERT INTO " + tableName + " " + fieldList
                 + " VALUES " + valueList;
-        
-        System.out.println(insertStatement);
 
         int rows = 0;
         try
@@ -201,7 +196,7 @@ public class DatabaseHelper
         }
         return rows != 0;
     }
-
+    
     /**
      * 
      * Purpose: This method will add a new record to the specified table,
@@ -272,7 +267,8 @@ public class DatabaseHelper
      * @return boolean True if rows were affected, false if 0 rows were affected
      *         (failed update)
      */
-    public boolean update(String[] values, String tableName, String primaryKey)
+    public boolean update( String[] values, String tableName,
+            String primaryKey )
     {
         String[][] updateRecord = this.createArray(tableName, values);
 

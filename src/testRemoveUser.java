@@ -1,3 +1,4 @@
+
 import static org.junit.Assert.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -5,7 +6,7 @@ import javafx.beans.property.StringProperty;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestRemoveUser
+public class testRemoveUser
 {
 
     private String usernameToRemove;
@@ -47,16 +48,16 @@ public class TestRemoveUser
                 firstNameToRemove, emailToRemove, passwordToRemove,
                 passwordToRemove, securityToRemove);
 
-        String[] userToMatch = acctHelper.queryStaff(usernameToRemove);
+        StaffAccount userToMatch = acctHelper.queryStaff(usernameToRemove);
 
-        assertTrue(userToMatch[0].equals(usernameToRemove));
+        assertTrue(userToMatch.GetUsername().equals(usernameToRemove));
 
         acctHelper.removeUser(usernameToRemove);
 
-        String[] RemovedUser = acctHelper.queryStaff(usernameToRemove);
+        StaffAccount RemovedUser = acctHelper.queryStaff(usernameToRemove);
 
-        // only need to check username, since it should always be unique
-        assertTrue(RemovedUser[0] == null);
+        //check if the removed user exists
+        assertTrue(RemovedUser == null);
     }
 
     public void testGetUsername()

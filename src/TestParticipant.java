@@ -32,12 +32,9 @@ public class TestParticipant
     private String emergencyContactNameTwo;
     private String emergencyContactPhoneTwo;
 
-    /**
-     * 
-     * Purpose: Set up the data for the participant to be tested on
-     * 
-     * @throws Exception
-     */
+    private String descriptionOne = "This person has Autism";
+    private String descriptionTwo = "This person has Cancer";
+
     @Before
     public void setUp() throws Exception
     {

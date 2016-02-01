@@ -1,4 +1,5 @@
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 
 /**
  * Purpose: Represent the basic staff within the system
@@ -9,9 +10,8 @@ import javafx.beans.property.SimpleStringProperty;
 public class BasicStaff extends StaffAccount
 {
 
-    /**
+	/**
      * Constructor for the BasicStaff class.
-     * 
      * @param username
      * @param lastName
      * @param firstName
@@ -31,4 +31,6 @@ public class BasicStaff extends StaffAccount
         this.accessLevel = new SimpleStringProperty(accessLevel);
     }
 
+    
 }
+
