@@ -1,23 +1,13 @@
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.Calendar;
-
-import javax.imageio.ImageIO;
-
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 /**
  * Purpose: Represent the medical staff within the system
