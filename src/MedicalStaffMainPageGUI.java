@@ -47,6 +47,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * 
@@ -109,7 +110,7 @@ public class MedicalStaffMainPageGUI extends Application {
 		dbObject.connect();
 
 		loggedInUser = loggedInStaff;
-
+		dbObject.activtyLogEntry(loggedInStaff.GetUsername(), "Logged In", dbObject);
 		pTVCont = new ParticipantTableViewController();
 		pTVCont.initialize();
 
@@ -122,6 +123,12 @@ public class MedicalStaffMainPageGUI extends Application {
 		medMainStage.setScene(new Scene(root, 875, 580));
 		medMainStage.resizableProperty().set(true);
 		medMainStage.show();
+		//Event for when stage is closed
+		  stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+	          public void handle(WindowEvent we) {
+	              dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout", dbObject);
+	          }
+	      });
 	}
 
 	/**
@@ -144,6 +151,7 @@ public class MedicalStaffMainPageGUI extends Application {
 			@Override
 			public void handle(ActionEvent e) {
 				medMainStage.close();
+				dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout", dbObject);
 				LoginGUI test5 = new LoginGUI();
 				try {
 					test5.start(medMainStage);
