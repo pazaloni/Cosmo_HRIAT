@@ -252,7 +252,7 @@ public class MedicalAdministrator extends BasicStaff
 	public static String editParticipant(String cosmoId, String firstName,
             String lastName, LocalDate birthDate,
             String phn,
-            String diagnosis, String address)
+            String diagnosis, String diagnosisDesc, String address)
 	{
         // initialize birth date string to an empty string
         String birthDateString = "";
@@ -269,7 +269,7 @@ public class MedicalAdministrator extends BasicStaff
         // check to see if any of the fields are empty
         if (firstName.isEmpty() || lastName.isEmpty()
                 || birthDateString.equals("") || phn.isEmpty()
-                || diagnosis.isEmpty()
+                || diagnosis.isEmpty() || diagnosisDesc.isEmpty()
                      || address.isEmpty())
         {
             result = "One of your fields is empty";
@@ -332,6 +332,15 @@ public class MedicalAdministrator extends BasicStaff
                     String formattedDatee = dfa.format(ca.getTime());
                     // inserting into the database
                     successful = db.update(values, "Participant", cosmoId);
+                    
+                    String diagnosisArray[][] = new String[2][2];
+                    diagnosisArray[0][0] = "conditionName";
+                    diagnosisArray[1][0] = "description";
+                    		
+                    diagnosisArray[0][1] = diagnosis;
+                    diagnosisArray[1][1] = diagnosisDesc;
+                    
+                    //successful = db.update(diagnosisArray, "Condition", cosmoID + " AND " + diagnosis);
                 
                 
                 //if failed on insert of physician or participant

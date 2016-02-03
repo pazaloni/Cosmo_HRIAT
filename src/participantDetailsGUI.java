@@ -50,6 +50,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 
 /**
@@ -470,7 +471,8 @@ public class participantDetailsGUI extends Application
 		TextField lastNameTxt = new TextField(lastNameText.getText());
 		DatePicker birthDatePicker = new DatePicker();
 		
-		TextField diagnosisTxt = new TextField(diagnosisText.getText());
+		
+		TextField diagnosisTxt = new TextField(diagnosisText.getText().split(", ")[0]); 
 
 		int day = Integer.parseInt(dobtext.getText().substring(0, 2));
 		System.out.println(day);
@@ -480,10 +482,41 @@ public class participantDetailsGUI extends Application
 		System.out.println(year);
 		LocalDate ld = LocalDate.of(year, month, day);
 		
+		TextField diagnosisDescTxt = new TextField(diagnosisText.getText().split(", ")[1]);
+		
+		
+		
+		
+		String pattern = "dd-MM-yyyy";
+		StringConverter converter = new StringConverter<LocalDate>() {
+		            DateTimeFormatter dateFormatter = 
+		                DateTimeFormatter.ofPattern(pattern);
+		            @Override
+		            public String toString(LocalDate date) {
+		                if (date != null) {
+		                    return dateFormatter.format(date);
+		                } else {
+		                    return "";
+		                }
+		            }
+		            @Override
+		            public LocalDate fromString(String string) {
+		                if (string != null && !string.isEmpty()) {
+		                    return LocalDate.parse(string, dateFormatter);
+		                } else {
+		                    return null;
+		                }
+		            }
+		        };             
+		        birthDatePicker.setConverter(converter);
+		        birthDatePicker.setPromptText(pattern.toLowerCase());
+		
+		
+		
 		
 		birthDatePicker.setValue(ld);
-
-	
+		
+		
 		TextField healthNumTxt = new TextField(phnText.getText());
 	
 		
@@ -508,7 +541,8 @@ public class participantDetailsGUI extends Application
 	
 		grid.add(healthNumTxt, 1, 4);
 		grid.add(diagnosisTxt, 1, 5);
-		grid.add(addressTxt, 1, 6);
+		grid.add(diagnosisDescTxt,1 ,6);
+		grid.add(addressTxt, 1, 7);
 
 		// setPadding of the grid
 		grid.setPadding(new Insets(10, 10, 0, 10));
@@ -528,8 +562,8 @@ public class participantDetailsGUI extends Application
 						cosmoIDText.getText(),
 						firstNameTxt.getText(),
 						lastNameTxt.getText(), birthDatePicker.getValue(),
-						healthNumTxt.getText(), diagnosisTxt.getText(), addressTxt.getText());
-
+						healthNumTxt.getText(), diagnosisTxt.getText(), diagnosisDescTxt.getText(), addressTxt.getText());
+				
 				
 				// if no error message is recieved then close this window and
 				// refresh the table
@@ -546,7 +580,20 @@ public class participantDetailsGUI extends Application
 					}
 				}
 				
-				createPreviewPane(1);
+			    LocalDate date = birthDatePicker.getValue();
+	            String birthDateString = date.format(DateTimeFormatter
+	                    .ofPattern("dd-MM-yyyy"));
+			    
+			
+				firstNameText.setText(firstNameTxt.getText());
+				lastNameText.setText(lastNameTxt.getText());
+				dobtext.setText(birthDateString);
+				phnText.setText(healthNumTxt.getText());
+				diagnosisText.setText(diagnosisTxt.getText());
+				addressText.setText(addressTxt.getText());
+				
+				
+				
 			}
 		});
 
@@ -639,7 +686,7 @@ public class participantDetailsGUI extends Application
         // set minimum width
         allergiesAndSeizuresPane.setMinWidth(265);
         //Sets the notebox's width to fit that of the parents window when it is resized
-        allergiesAndSeizuresPane.prefWidthProperty().bind(participantMainStage.widthProperty().divide(1.50));
+        allergiesAndSeizuresPane.prefWidthProperty().bind(participantMainStage.widthProperty().divide(1.38));
         hbox.setPadding(new Insets(10, 0, 0, 0));
         hbox.getChildren().addAll(allergiesAndSeizuresPane);
 
