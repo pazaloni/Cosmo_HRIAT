@@ -606,4 +606,22 @@ public class TechMainPageGUI extends Application
 
     }
     
+    
+    /**
+     * 
+     * Purpose: create and display the activity log as a popup.
+     * 
+     */
+    private void constructActivityLog()
+    {
+        Stage activityLogStage = new Stage();
+        
+        //Making this a pop-up that will be obtain focus.
+        activityLogStage.initModality(Modality.WINDOW_MODAL);
+        activityLogStage.initOwner(stageTech);
+        
+        
+                
+    } 
+    
 }
