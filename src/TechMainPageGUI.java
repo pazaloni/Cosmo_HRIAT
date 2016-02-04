@@ -25,6 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Purpose: To display the GUI for the technical administrator
@@ -101,7 +102,7 @@ public class TechMainPageGUI extends Application
         loggedInAdmin = (TechnicalAdministrator) loggedInStaff;
         // open the database connection
         dbObject.connect();
-
+        dbObject.activtyLogEntry(loggedInStaff.GetUsername(), "Logged In", dbObject);
         // create a staff table view controller and initialize it
         sTVCont = new StaffTableViewController();
         sTVCont.initialize();
@@ -231,7 +232,12 @@ public class TechMainPageGUI extends Application
         stageTech.setTitle("Cosmo Industries - " + loggedInAdmin.GetUsername());
         // display window
         stageTech.show();
-
+        
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                dbObject.activtyLogEntry(loggedInAdmin.GetUsername(), "Logout", dbObject);
+            }
+        });
     }
 
     /**
@@ -522,6 +528,7 @@ public class TechMainPageGUI extends Application
             public void handle(ActionEvent e)
             {
                 stageTech.close();
+                dbObject.activtyLogEntry(loggedInAdmin.GetUsername(), "Logout", dbObject);
                 LoginGUI test5 = new LoginGUI();
                 try
                 {

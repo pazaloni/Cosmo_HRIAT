@@ -126,16 +126,18 @@ public class ActivityLogPopUp
      */
     private void assignHandlers()
     {
+        //Handler for the search button 
         searchButton.setOnAction(new EventHandler<ActionEvent>()
         {
             // TODO add the event to be handled here
             @Override
             public void handle( ActionEvent arg0 )
             {
-
+                
             }
         });
 
+        //Handler for the searchbox
         searchCriteria.setOnAction(new EventHandler<ActionEvent>()
         {
             // TODO add the event to be handled here
@@ -172,6 +174,4 @@ public class ActivityLogPopUp
         localStage.setTitle(TITLE);
         localStage.show();
     }
-    
-
 }

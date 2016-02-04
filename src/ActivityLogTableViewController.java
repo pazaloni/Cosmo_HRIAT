@@ -19,18 +19,20 @@ import javafx.scene.control.TableView;
 public class ActivityLogTableViewController
 {
 
-    //Table 
+    // Table
     protected TableView<ActivityLog> activityLogTable = new TableView<ActivityLog>();
 
-    //Table columns
-    protected TableColumn<ActivityLog, String> whoColumn = new TableColumn<ActivityLog, String>("Who");
-    protected TableColumn<ActivityLog, String> whenColumn = new TableColumn<ActivityLog, String>("When");
-    protected TableColumn<ActivityLog, String> eventColumn = new TableColumn<ActivityLog, String>("Event");
+    // Table columns
+    protected TableColumn<ActivityLog, String> whoColumn = new TableColumn<ActivityLog, String>(
+            "Who");
+    protected TableColumn<ActivityLog, String> whenColumn = new TableColumn<ActivityLog, String>(
+            "When");
+    protected TableColumn<ActivityLog, String> eventColumn = new TableColumn<ActivityLog, String>(
+            "Event");
 
-    //database helper
+    // database helper
     private DatabaseHelper db;
 
-   
     private ObservableList<ActivityLog> activityLogData = FXCollections
             .observableArrayList();
 
@@ -73,7 +75,10 @@ public class ActivityLogTableViewController
                 who = activityLogResults.getString(1);
                 when = activityLogResults.getString(2);
                 event = activityLogResults.getString(3);
-  
+
+                // Remove extra 0's at the end of the timestamp
+                when = when.substring(0, when.length() - 7);
+
                 ActivityLog currentLog = new ActivityLog(who, when, event);
 
                 // Add the log to the list
@@ -133,7 +138,5 @@ public class ActivityLogTableViewController
                 .addAll(whoColumn, whenColumn, eventColumn);
 
     }
-    
-    
 
 }
