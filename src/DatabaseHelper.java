@@ -133,7 +133,7 @@ public class DatabaseHelper
                 query += " ORDER BY " + sort;
             }
 
-            // System.out.println(query);
+             System.out.println(query);
             // execute the query
             rs = s.executeQuery(query);
         }

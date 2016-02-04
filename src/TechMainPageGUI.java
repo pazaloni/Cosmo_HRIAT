@@ -40,6 +40,9 @@ public class TechMainPageGUI extends Application
 
     // Controller used to fill the tableview
     private StaffTableViewController sTVCont;
+    
+    // Class used to fill the activity log and to create and manage the controls
+    private ActivityLogPopUp activityLog;
 
     // Instance of the database helper
     private DatabaseHelper dbObject = new DatabaseHelper();
@@ -191,7 +194,18 @@ public class TechMainPageGUI extends Application
             }
 
         });
+        
+        btnViewLog.setOnAction(new EventHandler<ActionEvent>(){
 
+            @Override
+            public void handle( ActionEvent arg0 )
+            {
+                activityLog = new ActivityLogPopUp(stageTech);         
+                activityLog.showActivityLog();
+            }
+            
+        });
+        
         actionBox.getChildren().addAll(btnViewLog, btnAddUser, btnEditUser,
                 btnRemoveUser);
         actionBox.setPadding(new Insets(25, 0, 20, 0));
