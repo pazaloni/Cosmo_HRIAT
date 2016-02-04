@@ -77,7 +77,7 @@ public class Note
 	{
 		this.description = description;
 		this.creatorID = creator;
-		this.participantID = participantID;
+		this.participantID = participant;
 		this.dateCreated = dateCreated;
 		this.viewed = viewed;
 		this.resolved = resolved;
@@ -161,5 +161,11 @@ public class Note
 		return viewed + "";
 	}
 
+	
+	public void setAsViewed()
+	{
+			
+		viewed = true;
+	}
 
 }
