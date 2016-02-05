@@ -87,7 +87,6 @@ public class participantDetailsGUI extends Application
     private Label lastNameText = new Label();
     private Label dobtext = new Label();
     private Label phnText = new Label();
-    private Label diagnosisText = new Label();
     private Label addressText = new Label();
 
     
@@ -206,9 +205,6 @@ public class participantDetailsGUI extends Application
         return tabPane;
     }
 
-
-
-
 	/**
      * 
      * Purpose: Create the HBox that will contain the Preview pane and the Note
@@ -237,7 +233,6 @@ public class participantDetailsGUI extends Application
         
         return hbox;
     }
-
     
     /**
      * Purpose: Create the Preview Pane
@@ -304,7 +299,6 @@ public class participantDetailsGUI extends Application
         Label lastNameLabel = new Label("Last Name: ");
         Label dobLabel = new Label("Date of Birth: ");
         Label phnLabel = new Label("PHN: ");
-        Label diagnosislabel = new Label("Diagnosis: ");
         Label addressLabel = new Label("Address: ");
         
         //use width to made container large enough
@@ -316,18 +310,12 @@ public class participantDetailsGUI extends Application
         lastNameLabel.setPadding(new Insets(5, 5, 5, 5));
         phnLabel.setPadding(new Insets(5,5,5,5));
         dobLabel.setPadding(new Insets(5,5,5,5));
-        diagnosislabel.setPadding(new Insets(5,5,5,5));
         addressLabel.setPadding(new Insets(5,5,5,5));
 
-        
-        //get participant name, phn, diagnosis, and address from database
+        //get participant name, phn, and address from database
         ResultSet results = DBObject.select("firstName, lastName, dateOfBirth, personalHealthNumber, conditionName,"
         		+ "description, address, imagePath", "Participant p LEFT OUTER JOIN Condition c ON p.cosmoID = c.cosmoID", 
-        		 "cosmoID =" + this.cosmoID, "");
-        
-        
-        // set the participant Labels
-       
+        		 "cosmoID =" + this.cosmoID, "");       
         
         try {
         	//while there are more results
@@ -344,7 +332,6 @@ public class participantDetailsGUI extends Application
 				
 				dobtext.setText(format.format(results.getTimestamp(3)));
 				phnText.setText(results.getString(4));
-				diagnosisText.setText(results.getString(5) +  ", " + results.getString(6));
 				addressText.setText(results.getString(7));
 				
 				URL path = getClass().getResource(results.getString(8));
@@ -387,8 +374,6 @@ public class participantDetailsGUI extends Application
         phnText.setMaxWidth(PREVIEW_TEXT_WIDTH);
         phnText.setMinWidth(PREVIEW_TEXT_WIDTH);
         
-        diagnosisText.setMaxWidth(PREVIEW_TEXT_WIDTH);
-        diagnosisText.setMinWidth(PREVIEW_TEXT_WIDTH);
         
         addressText.setMaxWidth(PREVIEW_TEXT_WIDTH);
         addressText.setMinWidth(PREVIEW_TEXT_WIDTH);
@@ -400,7 +385,6 @@ public class participantDetailsGUI extends Application
         basicInfoPane.add(lastNameLabel, 0, 2);
         basicInfoPane.add(dobLabel, 0, 3);
         basicInfoPane.add(phnLabel, 0, 4);
-        basicInfoPane.add(diagnosislabel, 0, 5);
         basicInfoPane.add(addressLabel, 0, 6);
 
         basicInfoPane.add(cosmoIDText, 1, 0);
@@ -408,7 +392,6 @@ public class participantDetailsGUI extends Application
         basicInfoPane.add(lastNameText, 1, 2);
         basicInfoPane.add(dobtext,1,3);
         basicInfoPane.add(phnText, 1, 4);
-        basicInfoPane.add(diagnosisText, 1, 5);
         basicInfoPane.add(addressText, 1, 6);
         
         //add buttons to the previewPane
@@ -433,7 +416,7 @@ public class participantDetailsGUI extends Application
 				mainEditWindow.setTitle("Edit Participant");
 
 				mainEditWindow.setScene(new Scene(
-						editParticipantPopUp(), 325, 400));
+						editParticipantPopUp(), 290, 300));
 				mainEditWindow
 						.initModality(Modality.APPLICATION_MODAL);
 				mainEditWindow.initOwner(participantMainStage);
@@ -449,7 +432,12 @@ public class participantDetailsGUI extends Application
     }
 
 
-    protected GridPane editParticipantPopUp() {
+    /**
+     * Purpose: To create a pop up window that allows the user
+     *  to edit a participants basic information  
+     * @return GridPane
+     */
+    private GridPane editParticipantPopUp() {
 
 		GridPane grid = new GridPane();
 
@@ -462,7 +450,6 @@ public class participantDetailsGUI extends Application
 		Label lastNameLbl = new Label("Last Name");
 		Label birthdateLbl = new Label("Date Of Birth");
 		Label healthNumLbl = new Label("PHN");
-		Label diagnosisLbl = new Label("Diagnosis");
 		Label addressLbl = new Label("Address");
 
 		// the text fields
@@ -471,9 +458,7 @@ public class participantDetailsGUI extends Application
 		TextField lastNameTxt = new TextField(lastNameText.getText());
 		DatePicker birthDatePicker = new DatePicker();
 		
-		
-		TextField diagnosisTxt = new TextField(diagnosisText.getText().split(", ")[0]); 
-
+		//convert the dobtext into a localdate
 		int day = Integer.parseInt(dobtext.getText().substring(0, 2));
 		System.out.println(day);
 		int month = Integer.parseInt(dobtext.getText().substring(3, 5));
@@ -482,11 +467,8 @@ public class participantDetailsGUI extends Application
 		System.out.println(year);
 		LocalDate ld = LocalDate.of(year, month, day);
 		
-		TextField diagnosisDescTxt = new TextField(diagnosisText.getText().split(", ")[1]);
 		
-		
-		
-		
+		//change the pattern of the birthDatePicker to dd-MM-yyyy
 		String pattern = "dd-MM-yyyy";
 		StringConverter converter = new StringConverter<LocalDate>() {
 		            DateTimeFormatter dateFormatter = 
@@ -511,48 +493,35 @@ public class participantDetailsGUI extends Application
 		        birthDatePicker.setConverter(converter);
 		        birthDatePicker.setPromptText(pattern.toLowerCase());
 		
-		
-		
-		
+		//set the value of the birth date picker
 		birthDatePicker.setValue(ld);
 		
-		
+		//set the health num
 		TextField healthNumTxt = new TextField(phnText.getText());
 	
-		
+		//address text
 		TextField addressTxt = new TextField(addressText.getText());
 
 		// add the form to the grid
-		
 		grid.add(firstNameLbl, 0, 1);
 		grid.add(lastNameLbl, 0, 2);
 		grid.add(birthdateLbl, 0, 3);
-		
 		grid.add(healthNumLbl, 0, 4);
-		
-		grid.add(diagnosisLbl, 0, 5);
-		grid.add(addressLbl, 0, 6);
-
+		grid.add(addressLbl, 0, 5);
 		grid.add(lblWarning, 1, 0);
-		
 		grid.add(firstNameTxt, 1, 1);
 		grid.add(lastNameTxt, 1, 2);
 		grid.add(birthDatePicker, 1, 3);
-	
 		grid.add(healthNumTxt, 1, 4);
-		grid.add(diagnosisTxt, 1, 5);
-		grid.add(diagnosisDescTxt,1 ,6);
-		grid.add(addressTxt, 1, 7);
+		grid.add(addressTxt, 1, 5);
 
 		// setPadding of the grid
 		grid.setPadding(new Insets(10, 10, 0, 10));
-
 		grid.setHgap(10);
-
 		grid.setVgap(10);
 
 		// Adding participant event handler
-		Button createParticipantBtn = new Button("Edit");
+		Button createParticipantBtn = new Button("Save");
 		createParticipantBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -562,7 +531,7 @@ public class participantDetailsGUI extends Application
 						cosmoIDText.getText(),
 						firstNameTxt.getText(),
 						lastNameTxt.getText(), birthDatePicker.getValue(),
-						healthNumTxt.getText(), diagnosisTxt.getText(), diagnosisDescTxt.getText(), addressTxt.getText());
+						healthNumTxt.getText(), addressTxt.getText());
 				
 				
 				// if no error message is recieved then close this window and
@@ -580,20 +549,18 @@ public class participantDetailsGUI extends Application
 					}
 				}
 				
+				//set the pattern of the date coming in
 			    LocalDate date = birthDatePicker.getValue();
 	            String birthDateString = date.format(DateTimeFormatter
 	                    .ofPattern("dd-MM-yyyy"));
 			    
 			
+	            //first name text
 				firstNameText.setText(firstNameTxt.getText());
 				lastNameText.setText(lastNameTxt.getText());
 				dobtext.setText(birthDateString);
 				phnText.setText(healthNumTxt.getText());
-				diagnosisText.setText(diagnosisTxt.getText());
 				addressText.setText(addressTxt.getText());
-				
-				
-				
 			}
 		});
 
@@ -608,9 +575,7 @@ public class participantDetailsGUI extends Application
 				firstNameTxt.setText("");
 				lastNameTxt.setText("");
 				birthDatePicker.setValue(null);
-			
 				healthNumTxt.setText("");
-			
 				addressTxt.setText("");
 				lblWarning.setText("");
 			}

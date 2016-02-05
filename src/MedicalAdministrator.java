@@ -249,10 +249,21 @@ public class MedicalAdministrator extends BasicStaff
         return result;
     }
 
+    /**
+     * 
+     * Purpose: To format and update the new participant info into the database
+     * 
+     * @param cosmoId - the cosmoID of the participant
+     * @param firstName - the first Name of the participant
+     * @param lastName - the last name of the participant
+     * @param birthDate - the birth date of the participant
+     * @param phn - the personal health number of the participant
+     * @param address - the participant address
+     * @return
+     */
 	public static String editParticipant(String cosmoId, String firstName,
             String lastName, LocalDate birthDate,
-            String phn,
-            String diagnosis, String diagnosisDesc, String address)
+            String phn, String address)
 	{
         // initialize birth date string to an empty string
         String birthDateString = "";
@@ -269,7 +280,6 @@ public class MedicalAdministrator extends BasicStaff
         // check to see if any of the fields are empty
         if (firstName.isEmpty() || lastName.isEmpty()
                 || birthDateString.equals("") || phn.isEmpty()
-                || diagnosis.isEmpty() || diagnosisDesc.isEmpty()
                      || address.isEmpty())
         {
             result = "One of your fields is empty";
@@ -286,21 +296,9 @@ public class MedicalAdministrator extends BasicStaff
             {
                 result = "Health Number must be 9 digits";
             }
-            // check to see if the Phone number is 10 digits.
             else
             {
-               
                 successful = false;
-                
-                
-                int recordExists = 0;
-                
-                //check if there is already a physician with that name
-                
-                
-              
-  
-                    
                     // array of field names
                     String values[][] = new String[7][2];
                     values[0][0] = "cosmoID";
@@ -310,7 +308,7 @@ public class MedicalAdministrator extends BasicStaff
                     values[4][0] = "personalHealthNumber";
                     values[5][0] = "address";
                     values[6][0] = "dateUpdated";
-                    //values[8][0] = "diagnosis";
+
                  
                     // get the current date to insert into "lastUpdated"
                     Calendar c = Calendar.getInstance();
@@ -324,26 +322,12 @@ public class MedicalAdministrator extends BasicStaff
                     values[3][1] = birthDateString;
                     values[4][1] = phn;
                     values[5][1] = address;
-                    values[6][1] = formattedDate;
-         
+                    values[6][1] = formattedDate;         
     
                     Calendar ca = Calendar.getInstance();
-                    SimpleDateFormat dfa = new SimpleDateFormat("dd-MM-YYYY");
-                    String formattedDatee = dfa.format(ca.getTime());
                     // inserting into the database
                     successful = db.update(values, "Participant", cosmoId);
                     
-                    String diagnosisArray[][] = new String[2][2];
-                    diagnosisArray[0][0] = "conditionName";
-                    diagnosisArray[1][0] = "description";
-                    		
-                    diagnosisArray[0][1] = diagnosis;
-                    diagnosisArray[1][1] = diagnosisDesc;
-                    
-                    //successful = db.update(diagnosisArray, "Condition", cosmoID + " AND " + diagnosis);
-                
-                
-                //if failed on insert of physician or participant
                 if (!successful)
                 {
                     result = "The insertion was not successful";

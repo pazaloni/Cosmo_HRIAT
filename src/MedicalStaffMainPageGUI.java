@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+
 import javax.imageio.ImageIO;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -37,6 +40,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 /**
  * 
@@ -535,6 +539,32 @@ public class MedicalStaffMainPageGUI extends Application {
 			TextField firstNameTxt = new TextField();
 			TextField lastNameTxt = new TextField();
 			DatePicker birthDatePicker = new DatePicker();
+			
+			//change the birth date picker to a different format
+			String pattern = "dd-MM-yyyy";
+	        StringConverter converter = new StringConverter<LocalDate>() {
+	                    DateTimeFormatter dateFormatter = 
+	                        DateTimeFormatter.ofPattern(pattern);
+	                    @Override
+	                    public String toString(LocalDate date) {
+	                        if (date != null) {
+	                            return dateFormatter.format(date);
+	                        } else {
+	                            return "";
+	                        }
+	                    }
+	                    @Override
+	                    public LocalDate fromString(String string) {
+	                        if (string != null && !string.isEmpty()) {
+	                            return LocalDate.parse(string, dateFormatter);
+	                        } else {
+	                            return null;
+	                        }
+	                    }
+	                };             
+	                birthDatePicker.setConverter(converter);
+	                birthDatePicker.setPromptText(pattern.toLowerCase());
+			
 
 			// Adding a click listener to make the date in thebox default to 20
 			// years ago (client request)
