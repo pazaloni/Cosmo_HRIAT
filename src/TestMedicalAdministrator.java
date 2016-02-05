@@ -1,5 +1,7 @@
 import static org.junit.Assert.*;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -34,6 +36,7 @@ public class TestMedicalAdministrator
     private LocalDate participantBirthdateTwo;
     private String physicianFNameTwo;
     private String physicianLNameTwo;
+    
     private String healthNumberTwo;
     private String phoneTwo;
     private String addressTwo;
@@ -47,6 +50,16 @@ public class TestMedicalAdministrator
     private String healthNumberThree;
     private String phoneThree;
     private String addressThree;
+    
+    private String cosmoIDFour;
+    private String participantFirstNameFour;
+    private String participantLastNameFour;
+    private LocalDate participantBirthdateFour;
+    private String physicianFNameFour;
+    private String physicianLNameFour;
+    private String healthNumberFour;
+    private String phoneFour;
+    private String addressFour;
 
     private String failEmailWithoutBoth;
     private String failEmailWithoutAt;
@@ -95,6 +108,17 @@ public class TestMedicalAdministrator
         healthNumberThree = "999999999";
         phoneThree = "6669116666";
         addressThree = "123 Yummy yum";
+        
+        cosmoIDFour = "18481";
+        participantFirstNameFour = "Jon";
+        participantLastNameFour = "Smith";
+        LocalDate participantBirthdateFour = LocalDate.parse(date2, formatter);
+        physicianFNameFour = "Doc";
+        physicianLNameFour = "Brown";
+        healthNumberFour = "123123132";
+        phoneFour = "1231231231";
+        addressFour = "123 Crescent Street";
+    
 
         failEmailWithoutBoth = "1234";
         failEmailWithoutAt = "hello.hello";
@@ -273,6 +297,40 @@ public class TestMedicalAdministrator
         
         assertTrue(result.equals(""));
 
+    }
+    
+    /**
+     * 
+     * Purpose: to test if the first name is changed
+     * @throws SQLException 
+     */
+    @Test public void testChangeFirstName() throws SQLException
+    {
+        String result = MedicalAdministrator.createParticipant(cosmoIDFour,
+                participantFirstNameFour, participantFirstNameFour,
+                participantBirthdateFour, physicianFNameFour, physicianLNameFour,
+                healthNumberFour, phoneFour, addressFour);
+        
+        DatabaseHelper db = new DatabaseHelper();
+        
+        db.connect();
+        
+        
+        ResultSet results = db.select("firstName" , "Participant", "cosmoID =" + this.cosmoIDFour, "");
+        
+        String name = results.getString(1);
+        
+        System.out.println(name);
+        
+        assertTrue(result.equals(""));
+        
+        String editResult = MedicalAdministrator.editParticipant(cosmoIDFour,
+                "Bob", participantLastNameFour,
+                participantBirthdateFour, healthNumberFour, addressFour);
+        
+        assertTrue(editResult.equals(""));
+        
+        
     }
 
     @After
