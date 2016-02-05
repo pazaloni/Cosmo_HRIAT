@@ -151,7 +151,7 @@ public class participantDetailsGUI extends Application {
 		TabPane tabPane = new TabPane();
 
 		// Create tabs names
-		Tab medications = new Tab();
+		Tab healthStatus = new Tab();
 		Tab vaccinationDetails = new Tab();
 		Tab kinDetails = new Tab();
 		Tab workDetails = new Tab();
@@ -160,7 +160,9 @@ public class participantDetailsGUI extends Application {
 		Tab other = new Tab();
 
 		// set body for tabs
-		medications.setContent(createMedicationsTab());
+		HealthStatusForm hsf = new HealthStatusForm(healthStatus, loggedInUser);
+		healthStatus.setContent(hsf.showHealthStatusInfo().getContent());
+		
 		vaccinationDetails.setContent(createVaccinationDetailsTab());
 		kinDetails.setContent(createKinDetailsTab());
 		workDetails.setContent(createWorkDetailsTab());
@@ -169,7 +171,7 @@ public class participantDetailsGUI extends Application {
 		other.setContent(createOtherTab());
 
 		// set text for tabs
-		medications.setText("Medications");
+		healthStatus.setText("Health Status");
 		vaccinationDetails.setText("Vaccination");
 		kinDetails.setText("Kin");
 		workDetails.setText("Work");
@@ -178,7 +180,7 @@ public class participantDetailsGUI extends Application {
 		other.setText("Other");
 
 		// set tabs to not be closable
-		medications.closableProperty().set(false);
+		healthStatus.closableProperty().set(false);
 		vaccinationDetails.closableProperty().set(false);
 		kinDetails.closableProperty().set(false);
 		workDetails.closableProperty().set(false);
@@ -188,10 +190,12 @@ public class participantDetailsGUI extends Application {
 
 		// set the size of the tabs and add to the pane
 		tabPane.setTabMinWidth(100);
-		tabPane.getTabs().addAll(medications, vaccinationDetails, kinDetails,
+		tabPane.getTabs().addAll(healthStatus, vaccinationDetails, kinDetails,
 				physicianInfo, workDetails, caregiver, other);
 		tabPane.setMinHeight(29);
 
+		
+		
 		return tabPane;
 	}
 
