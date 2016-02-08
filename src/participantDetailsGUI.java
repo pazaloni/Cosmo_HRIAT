@@ -539,6 +539,16 @@ public class participantDetailsGUI extends Application
 				if (result.equals("")) {
 					mainEditWindow.close();
 					
+					//set the pattern of the date coming in
+				    LocalDate date = birthDatePicker.getValue();
+		            String birthDateString = date.format(DateTimeFormatter
+		                    .ofPattern("dd-MM-yyyy"));
+					
+					firstNameText.setText(firstNameTxt.getText());
+					lastNameText.setText(lastNameTxt.getText());
+					dobtext.setText(birthDateString);
+					phnText.setText(healthNumTxt.getText());
+					addressText.setText(addressTxt.getText());
 				}
 				// if there is an error message, display it
 				else {
@@ -549,18 +559,12 @@ public class participantDetailsGUI extends Application
 					}
 				}
 				
-				//set the pattern of the date coming in
-			    LocalDate date = birthDatePicker.getValue();
-	            String birthDateString = date.format(DateTimeFormatter
-	                    .ofPattern("dd-MM-yyyy"));
-			    
 			
-	            //first name text
-				firstNameText.setText(firstNameTxt.getText());
-				lastNameText.setText(lastNameTxt.getText());
-				dobtext.setText(birthDateString);
-				phnText.setText(healthNumTxt.getText());
-				addressText.setText(addressTxt.getText());
+			    
+	            
+	            
+	            
+				
 			}
 		});
 

@@ -288,7 +288,7 @@ public class MedicalAdministrator extends BasicStaff
         {
             DatabaseHelper db = new DatabaseHelper();
             db.connect();
-
+            System.out.println("Shouldnt happen");
 
             boolean successful = false;
             // check to see if the Health Number is a 9 digit number
