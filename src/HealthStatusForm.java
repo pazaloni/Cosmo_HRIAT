@@ -50,16 +50,17 @@ public class HealthStatusForm
      * 
      * Purpose: This method will make everything and display it.
      */
-    public Tab showHealthStatusInfo( int cosmoId )
+    public Tab showHealthStatusInfo( String cosmoId )
     {
         Label title = new Label(FORM_TITLE);
         title.setFont(new Font(22));
         mainBox = new VBox();
 
         mainBox.getChildren().addAll(title, createDiagnosisInfo(cosmoId),
-                createMedicalConditions(cosmoId));
+                createMedicalConditions(cosmoId), createAllergiesInfo(cosmoId),
+                createMedicationInfo(cosmoId));
         mainBox.setPadding(new Insets(10, 10, 10, 10));
-        assignDiagnosisInfo(cosmoId+"");
+        assignDiagnosisInfo(cosmoId + "");
         this.parentTab.setContent(mainBox);
         return parentTab;
     }
@@ -73,29 +74,6 @@ public class HealthStatusForm
 
     }
 
-    /**
-     * 
-     * Purpose: Create the medical conditions table
-     * 
-     * @return: HBox containing the medical conditions
-     */
-    private VBox createMedicalConditions( int cosmoId )
-    {
-        VBox mainBox = new VBox();
-
-        Label medicalCondtionsLbl = new Label("Medical Conditions");
-        medicalCondtionsLbl.setFont(Font.font(22));
-
-        MedicalConditionsTableViewController medicalConditionsTable = new MedicalConditionsTableViewController(
-                cosmoId + "");
-
-        TableView<MedicalCondition> table = medicalConditionsTable.conditionTable;
-        table.setMaxWidth(500);
-        mainBox.getChildren().addAll(medicalCondtionsLbl, table);
-        mainBox.setPadding(new Insets(10, 10, 10, 5));
-
-        return mainBox;
-    }
 
     /**
      * 
@@ -103,7 +81,7 @@ public class HealthStatusForm
      * 
      * @return
      */
-    private HBox createDiagnosisInfo( int cosmoId )
+    private HBox createDiagnosisInfo( String cosmoId )
     {
         HBox mainBox = new HBox();
 
@@ -174,7 +152,7 @@ public class HealthStatusForm
      * 
      * Purpose: assign diagnosis info for particiapnts
      */
-    private void assignDiagnosisInfo(String cosmoId)
+    private void assignDiagnosisInfo( String cosmoId )
     {
         HealthStatusInformationHelper helper = new HealthStatusInformationHelper();
         String[] info = helper.retrieveHealthStatusInfo(cosmoId);
@@ -183,6 +161,75 @@ public class HealthStatusForm
         participantDiagnosisTxt.setText(info[2]);
         tylenolGiven.setSelected(Boolean.parseBoolean(info[3]));
         careGiverPermission.setSelected(Boolean.parseBoolean(info[4]));
-        
+
+    }
+    
+
+    /**
+     * 
+     * Purpose: Create the medical conditions table
+     * 
+     * @return: HBox containing the medical conditions
+     */
+    private VBox createMedicalConditions( String cosmoId )
+    {
+        VBox mainBox = new VBox();
+
+        Label medicalCondtionsLbl = new Label("Medical Conditions");
+        medicalCondtionsLbl.setFont(Font.font(22));
+
+        TableView<MedicalCondition> table = new MedicalConditionsTableViewController(
+                cosmoId).conditionTable;
+
+        table.setMaxWidth(700);
+        mainBox.getChildren().addAll(medicalCondtionsLbl, table);
+        mainBox.setPadding(new Insets(10, 10, 10, 5));
+
+        return mainBox;
+    }
+
+    /**
+     * 
+     * Purpose: Create the allergies info for the participant
+     * 
+     * @param cosmoId The participant cosmoId which is used to pull the
+     *            information from the database
+     *
+     * @return VBox with a label and a table view
+     */
+    private VBox createAllergiesInfo( String cosmoId )
+    {
+        VBox box = new VBox();
+        Label allergiesLbl = new Label("Allergies");
+        allergiesLbl.setFont(Font.font(22));
+        TableView<Allergies> table = new AllergiesTableViewController(cosmoId
+                + "").allergiesTable;
+        table.setMaxWidth(700);
+        box.getChildren().addAll(allergiesLbl, table);
+
+        return box;
+    }
+
+    /**
+     * 
+     * Purpose: Create the medications info for the participant
+     * 
+     * @param cosmoId The participant cosmoId which is used to pull the
+     *            information from the database
+     *
+     * @return VBox with a label and a table view
+     */
+    private VBox createMedicationInfo( String cosmoId )
+    {
+        VBox box = new VBox();
+        Label medicationsLbl = new Label("Medications");
+        medicationsLbl.setFont(Font.font(22));
+        TableView<Medication> table = new MedicationsTableViewController(
+                cosmoId).medicationsTable;
+        table.setMaxWidth(700);
+        box.getChildren().addAll(medicationsLbl, table);
+
+        return box;
+
     }
 }

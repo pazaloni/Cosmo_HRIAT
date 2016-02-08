@@ -58,8 +58,7 @@ public class MedicalAdministrator extends BasicStaff
         // get a null pointer exception
         if ( birthDate != null )
         {
-            birthDateString = birthDate.format(DateTimeFormatter
-                    .ofPattern("dd-MMM-yyyy"));
+            birthDateString = birthDate.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
         }
 
         // set the result error message to en empty string

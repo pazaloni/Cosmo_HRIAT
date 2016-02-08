@@ -76,11 +76,11 @@ public class MedicalConditionsTableViewController
     private void initialize()
     {
         conditionColumn.setCellValueFactory(cellData->cellData.getValue().getCondition());
-        conditionColumn.setMinWidth(180);
+        conditionColumn.setMinWidth(230);
         conditionColumn.setResizable(false);
         
         descriptionColumn.setCellValueFactory(cellData->cellData.getValue().getCondition());
-        descriptionColumn.setMinWidth(320);
+        descriptionColumn.setMinWidth(370);
         descriptionColumn.setResizable(false);
         
         conditionTable.getColumns().addListener(
