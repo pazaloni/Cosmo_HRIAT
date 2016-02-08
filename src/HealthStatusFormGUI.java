@@ -14,7 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public class HealthStatusFormGui
+public class HealthStatusFormGUI
 {
     public static final String FORM_TITLE = "Health Status Information";
     public static final int SPACING = 10;
@@ -42,7 +42,7 @@ public class HealthStatusFormGui
      * 
      * @param ctrl the pane, or box that this will be placed on
      */
-    public HealthStatusFormGui(Tab healthStatusTab, StaffAccount loggedInUser)
+    public HealthStatusFormGUI(Tab healthStatusTab, StaffAccount loggedInUser)
     {
         this.parentTab = healthStatusTab;
 
