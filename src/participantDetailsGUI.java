@@ -152,6 +152,7 @@ public class participantDetailsGUI extends Application
 
         // Create tabs names
         Tab healthStatus = new Tab();
+        
         Tab vaccinationDetails = new Tab();
         Tab kinDetails = new Tab();
         Tab workDetails = new Tab();
@@ -160,9 +161,8 @@ public class participantDetailsGUI extends Application
         Tab other = new Tab();
 
         // set body for tabs
-        HealthStatusForm hsf = new HealthStatusForm(healthStatus, loggedInUser);
-        healthStatus.setContent(hsf.showHealthStatusInfo(cosmoID + "")
-                .getContent());
+        HealthStatusFormGui hsf = new HealthStatusFormGui(healthStatus, loggedInUser);
+        healthStatus.setContent(hsf.showHealthStatusInfo(cosmoID + "").getContent());
 
         vaccinationDetails.setContent(createVaccinationDetailsTab());
         kinDetails.setContent(createKinDetailsTab());

@@ -21,15 +21,16 @@ public class HealthStatusInformationHelper
      */
     public String[] retrieveHealthStatusInfo( String cosmoId )
     {
-        String[] healthStatusInfo = new String[5];
+        String[] healthStatusInfo = new String[7];
 
         String physicianId = null;
         String diagnosis = null;
         boolean tylenol = false;
         boolean permission = false;
-
+        String lastUpdated = null;
+        String otherInfo = null;
         ResultSet participantQuery = db
-                .select("physicianID, diagnosis,tylenolPermission,careGiverPermissionGive",
+                .select("physicianID, diagnosis,tylenolPermission,careGiverPermissionGive, healthStatusUpdated, otherInfo",
                         "Participant", "cosmoID=" + cosmoId, "");
 
         try
@@ -40,6 +41,9 @@ public class HealthStatusInformationHelper
                 diagnosis = participantQuery.getString(2);
                 tylenol = participantQuery.getBoolean(3);
                 permission = participantQuery.getBoolean(4);
+                lastUpdated = participantQuery.getString(5);
+                otherInfo = participantQuery.getString(6);
+
             }
         }
         catch ( SQLException e )
@@ -64,16 +68,16 @@ public class HealthStatusInformationHelper
         }
         catch ( SQLException e )
         {
-   
+
             e.printStackTrace();
         }
         healthStatusInfo[0] = phyisicanName;
         healthStatusInfo[1] = physicianPhone;
         healthStatusInfo[2] = diagnosis;
         healthStatusInfo[3] = "" + tylenol;
-        System.out.println(permission);
         healthStatusInfo[4] = "" + permission;
-
+        healthStatusInfo[5] = lastUpdated;
+        healthStatusInfo[6] = otherInfo;
         return healthStatusInfo;
     }
 }

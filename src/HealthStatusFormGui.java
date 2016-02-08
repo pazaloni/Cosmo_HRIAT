@@ -8,12 +8,13 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public class HealthStatusForm
+public class HealthStatusFormGui
 {
     public static final String FORM_TITLE = "Health Status Information";
     public static final int SPACING = 10;
@@ -33,6 +34,7 @@ public class HealthStatusForm
 
     private CheckBox tylenolGiven;
     private CheckBox careGiverPermission;
+    private TextArea otherInfoTxt;
 
     /**
      * 
@@ -40,7 +42,7 @@ public class HealthStatusForm
      * 
      * @param ctrl the pane, or box that this will be placed on
      */
-    public HealthStatusForm(Tab healthStatusTab, StaffAccount loggedInUser)
+    public HealthStatusFormGui(Tab healthStatusTab, StaffAccount loggedInUser)
     {
         this.parentTab = healthStatusTab;
 
@@ -55,10 +57,12 @@ public class HealthStatusForm
         Label title = new Label(FORM_TITLE);
         title.setFont(new Font(22));
         mainBox = new VBox();
-
+        Label otherLbl = new Label("Other Information");
+        otherInfoTxt = new TextArea();
+        otherInfoTxt.setMaxWidth(700);
         mainBox.getChildren().addAll(title, createDiagnosisInfo(cosmoId),
                 createMedicalConditions(cosmoId), createAllergiesInfo(cosmoId),
-                createMedicationInfo(cosmoId));
+                createMedicationInfo(cosmoId), otherLbl, otherInfoTxt);
         mainBox.setPadding(new Insets(10, 10, 10, 10));
         assignDiagnosisInfo(cosmoId + "");
         this.parentTab.setContent(mainBox);
@@ -104,7 +108,7 @@ public class HealthStatusForm
         participantDiagnosisTxt = new TextField();
         physicianPhoneTxt = new TextField();
         dateCompletedTxt = new TextField();
-
+        
         tylenolGiven = new CheckBox();
         tylenolGiven.setText("Tylenol Given");
         careGiverPermission = new CheckBox();
@@ -161,6 +165,9 @@ public class HealthStatusForm
         participantDiagnosisTxt.setText(info[2]);
         tylenolGiven.setSelected(Boolean.parseBoolean(info[3]));
         careGiverPermission.setSelected(Boolean.parseBoolean(info[4]));
+        info[5]= info[5].substring(0, info[5].length() - 7);
+        dateCompletedTxt.setText(info[5]);
+        otherInfoTxt.setText(info[6]);
 
     }
     

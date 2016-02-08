@@ -1,13 +1,12 @@
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -76,12 +75,11 @@ public class MedicationsTableViewController {
 			while (medicationResults.next()) {
 				medicationName = medicationResults.getString(1);
 				dosage = medicationResults.getString(2);
-				LocalDate date = medicationResults.getDate(3).toLocalDate();
+				timesGiven = medicationResults.getString(3);
 				reason = medicationResults.getString(4);
 
-				timesGiven= date.format(DateTimeFormatter.ofPattern("hh:mm:ss"));
 				// Remove extra 0's at the end of the timestamp
-				//dosage = dosage.substring(0, dosage.length() - 7);
+				timesGiven = timesGiven.substring(0, timesGiven.length() - 7);
 
 				Medication medication = new Medication(medicationName, dosage, timesGiven, reason);
 
