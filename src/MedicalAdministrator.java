@@ -312,7 +312,7 @@ public class MedicalAdministrator extends BasicStaff
                  
                     // get the current date to insert into "lastUpdated"
                     Calendar c = Calendar.getInstance();
-                    SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                    SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
                     String formattedDate = df.format(c.getTime());
 
                     // array of values to insert

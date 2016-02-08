@@ -216,10 +216,12 @@ public class DatabaseHelper
         for (int r = 0; r < newRecord.length; r++)
         {
             fieldList += newRecord[r][0] + ", ";
+
             if (newRecord[r][1] != null)
             {
                 valueList += "'" + newRecord[r][1] + "', ";
             }
+           
             else
             {
                 valueList += "" + newRecord[r][1] + ", ";
