@@ -8,37 +8,59 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.util.Callback;
 
+/**
+ * 
+ * @author Breanna Wilson cst215 Steven Palchinski cst209
+ *
+ */
 public class NoteTableViewController 
 {
-	//TableView that will hold the 
+	//TableView that will hold the note information
 	protected TableView<Note> noteTable;
 
+	//table column that will hold all the note IDs
 	private TableColumn<Note, String> idColumn = 
 			new TableColumn<Note, String>("Sort");
 	
+	//that data for each note
 	public ObservableList<Note> noteIDs = FXCollections.observableArrayList();
 
+	//Instance of the database helper
 	private DatabaseHelper db = new DatabaseHelper();
 	
-	
+	/**
+	 * Purpose:	The constructor for the NoteTableViewController
+	 * 
+	 * @param noteTable:	The tableView that will be used
+	 * 
+	 * @author Breanna Wilson cst215 Steven Palchinski cst209
+	 */
 	public NoteTableViewController(TableView noteTable)
 	{
+		//Takes passed in TableView
 		this.noteTable = noteTable;
+		//runs the initialize class
 		initialize();
+		//sets the note items to the TableView
 		this.noteTable.setItems(noteIDs);
-
-		
 	}
 
+	/**
+	 * Purpose: Fetches the note data from the database and then adds the 
+	 * 			fetched data to the observable list
+	 * 
+	 * @author Breanna Wilson cst215 Steven Palchinski cst209
+	 */
 	private void initializeNoteData() 
 	{
-
-		
-		
+		//ResultSet that will get back all of the notes that are not resolved 
 		ResultSet rs = db.select("*", "Notes", "not resolved", "noteID");
 		
+		//Integer that will store the note id
 		int noteID;
+		//Integer that will store the participant ID/CosmoID
 		int participant;
+		//Sting that will store
 		String createdBy;
 		Date submitted;
 		String description;
