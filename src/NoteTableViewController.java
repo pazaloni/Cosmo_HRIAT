@@ -1,40 +1,39 @@
-import java.sql.*;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import java.sql.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
 public class NoteTableViewController 
 {
-	
-	protected TableView<Note> noteTable = new TableView<Note>();
+	//TableView that will hold the 
+	protected TableView<Note> noteTable;
 
-	private TableColumn<Note, String> idColumn = new TableColumn<Note, String>();
+	private TableColumn<Note, String> idColumn = 
+			new TableColumn<Note, String>("Sort");
 	
 	public ObservableList<Note> noteIDs = FXCollections.observableArrayList();
+
+	private DatabaseHelper db = new DatabaseHelper();
 	
-	public NoteTableViewController()
+	
+	public NoteTableViewController(TableView noteTable)
 	{
-		
-		initializeNoteData();
+		this.noteTable = noteTable;
 		initialize();
-		noteTable.setItems(noteIDs);
+		this.noteTable.setItems(noteIDs);
 
-
+		
 	}
 
 	private void initializeNoteData() 
 	{
 
-		DatabaseHelper db = new DatabaseHelper();
+		
 		
 		ResultSet rs = db.select("*", "Notes", "not resolved", "noteID");
 		
@@ -54,6 +53,7 @@ public class NoteTableViewController
 				createdBy = rs.getString(3);
 				submitted = rs.getDate(4);
 				description = rs.getString(5);
+
 				viewed = rs.getBoolean(6);
 				resolved = rs.getBoolean(7);
 				
@@ -62,9 +62,11 @@ public class NoteTableViewController
 				
 				note = new Note(noteID, participant, description, createdBy, submitted, viewed, resolved);
 				
+				
+				
 				noteIDs.add(note);
 				
-
+				System.out.println("Pulling info...");
 			}
 		}
 		catch (SQLException e)
@@ -79,37 +81,70 @@ public class NoteTableViewController
 	
 	public void initialize()
 	{
+		initializeNoteData();
 		
-		idColumn.setCellValueFactory(cellData -> cellData.getValue().getIDProperty());
-		idColumn.setResizable(false);
+		idColumn.setCellValueFactory(cellData -> cellData.getValue()
+				.getIDProperty());
 		
-		System.out.println( "Started  We are here");
+		idColumn.setMaxWidth(170);
+		idColumn.setMinWidth(170);
 		
-		//TODO make this thing work
-		noteTable.setRowFactory(tv -> {
-			System.out.println("Inside of the row factory");
-			TableRow<Note> row = new TableRow<>();
-			row.setStyle("-fx-background-color: #0000cd;");
-			System.out.println("In setRowFactory");
+		idColumn.setCellFactory(new Callback<TableColumn<Note,String>, TableCell<Note,String>>()
+		{
+
+			@Override
+			public TableCell<Note, String> call(TableColumn<Note, String> n) {
+				return new TableCell<Note, String>()
+				{
+					@Override
+					public void updateItem(String item, boolean empty)
+					{
+						super.updateItem(item, empty);
+						
+						if(!isEmpty())
+						{
+							Note note = getNoteFromID(item);
+							
+							if(note.getViewed().equals("true"))
+							{
+								setStyle("-fx-background-color: lightblue;");
+							}
+							
+							setText(item);
+						}
+					}
+				};
+			}
 			
-			row.setOnMouseClicked(event -> {
-				System.out.println( "We are here");
-				row.setStyle("-fx-background-color: #0000cd;");
-				setAsRead();
-				
-			
-			});
 		});
 		
+		idColumn.setResizable(false);
 		
-		noteTable.getColumns().add(idColumn);
 		
+		noteTable.getColumns().addAll(idColumn);
 		
 		
 		noteTable.setItems(noteIDs);
 		
 		
 		
+		
+		noteTable.setRowFactory(tv -> {
+			System.out.println("Inside row factory..");
+			TableRow<Note> row = new TableRow<Note>();
+			
+			row.setOnMouseClicked(event -> {
+				if(! row.isEmpty())
+				{
+					row.setStyle("-fx-background-color: lightblue;");
+					setAsRead(row.getItem());
+				}
+			});
+			
+			
+			
+			return row;
+		});
 		
 		
 	}
@@ -121,24 +156,38 @@ public class NoteTableViewController
 		return note.getNoteID();
 	}
 	
+	public Note getNoteFromID(String id)
+	{
+		int intID = Integer.parseInt(id);
+		int index = noteIDs.indexOf(new Note(intID, 0, null, null, null, false, false));
+		
+		return noteIDs.get(index);
+	}
+	
 	public void refreshTable()
 	{
 		this.noteIDs.clear();
-		this.initializeNoteData();
 		this.noteTable.getColumns().clear();
 		this.initialize();
 	}
 	
-	public void setAsRead()
+	public void setAsRead(Note note)
 	{
-		noteTable.getSelectionModel().getSelectedItem().setAsViewed();
+		String vals[][] = new String[2][2];
+		vals[0][0] = "noteID";
+		vals[1][0] = "viewed";
+		vals[0][1] = note.getNoteID();
+		vals[1][1] = "true";
+		
+		
+		db.update(vals, "Notes", note.getNoteID());
+		
+		this.noteIDs.clear();
+		this.noteTable.getColumns().clear();
+		initialize();
 		
 	}
 	
 
-	private TableRow<Note> getTableRow() 
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 }

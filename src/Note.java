@@ -7,6 +7,7 @@ import javafx.beans.property.StringProperty;
 
 public class Note 
 {
+	
 	// The unique ID of the note
 	private int noteID;
 	// the description attached to the note
@@ -136,12 +137,92 @@ public class Note
 		p.set(noteID + "");
 		return p;
 	}
-
+	
 	public String getNoteID() 
 	{
 		return noteID + "";
 	}
-
+	
+	public String getDescription()
+	{
+		return description + "";
+	}
+	
+	public String getCreatorID()
+	{
+		return creatorID + "";
+	}
+	
+	public String getParticipant()
+	{
+		return participantID +"";
+	}
+	
+	public String getDate()
+	{
+		return dateCreated + "";
+	}
+	
+	public String getViewed()
+	{
+		return viewed + "";
+	}
+	
+	public String getResolved()
+	{
+		return resolved +"";
+	}
+	
+	public StringProperty descriptionProperty()
+	{
+		StringProperty p = new SimpleStringProperty();
+		p.set(description + "");
+		return p;
+	}
+	
+	public StringProperty creatorProperty()
+	{
+		StringProperty p = new SimpleStringProperty();
+		p.set(creatorID + "");
+		return p;
+	}
+	
+	public StringProperty participantProperty()
+	{
+		StringProperty p = new SimpleStringProperty();
+		p.set(participantID + "");
+		return p;
+	}
+	
+	public StringProperty dateCreatedProperty()
+	{
+		StringProperty p = new SimpleStringProperty();
+		p.set(dateCreated + "");
+		return p;
+	}
+	
+	public StringProperty viewedProperty()
+	{
+		String read = " ";
+		if(viewed)
+		{
+			read = "Read";
+		}
+		else
+		{
+			read = "Unread";
+		}
+		StringProperty p = new SimpleStringProperty();
+		p.set(read + "");
+		return p;
+	}
+	
+	public StringProperty resolvedProperty()
+	{
+		StringProperty p = new SimpleStringProperty();
+		p.set(resolved + "");
+		return p;
+	}
 	
 	public String toString()
 	{
@@ -156,16 +237,41 @@ public class Note
 		return p;
 	}
 	
-	public String getViewed()
-	{
-		return viewed + "";
-	}
-
-	
 	public void setAsViewed()
 	{
 			
 		viewed = true;
+	} 
+	
+	public SimpleStringProperty getReadAsString()
+	{
+		if(this.viewed)
+		{
+			return new SimpleStringProperty("Read");
+		}
+		return new SimpleStringProperty("Unread");
+	}
+	
+	public String getRead()
+	{
+		String read = "Unread";
+		if(this.viewed)
+		{
+			read = "Read";
+		}
+		return read;
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		boolean result = false;
+		if(!(o == null) && o.getClass() == Note.class && 
+				((Note)o).noteID == this.noteID)
+		{
+			result = true;
+		}
+		return result;
 	}
 
 }

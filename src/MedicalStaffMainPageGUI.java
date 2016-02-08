@@ -69,6 +69,8 @@ public class MedicalStaffMainPageGUI extends Application {
 	private ImageView previewPicture;
 
 	private ListView<String> noteTitleView;
+	
+	private TableView noteTableView;
 
 	//private ObservableList<String> noteTitleList;
 
@@ -112,7 +114,8 @@ public class MedicalStaffMainPageGUI extends Application {
 		pTVCont = new ParticipantTableViewController();
 		pTVCont.initialize();
 
-		nTVCont = new NoteTableViewController();
+		this.noteTableView = new TableView<Note>();
+		nTVCont = new NoteTableViewController(noteTableView);
         
 		medMainStage = stage;
 		medMainStage.setTitle("Cosmo Industries - "
@@ -252,7 +255,16 @@ public class MedicalStaffMainPageGUI extends Application {
 		// create preview pane
 		BorderPane previewPane = createPreviewPane();
 		// create note box
-		HBox noteBox = createNoteBox();
+		HBox noteBox;
+		if(loggedInUser.GetAccessLevel().equals("1"))
+		{
+			noteBox = createNoteBox();
+		}
+		else
+		{
+			noteBox = new HBox();
+		}
+		 
 
 		// add preview pane and note box together
 		hbox.getChildren().addAll(previewPane, noteBox);
@@ -717,8 +729,7 @@ public class MedicalStaffMainPageGUI extends Application {
         
         nTVCont.refreshTable();
         
-        ListView<Note> noteListView = new ListView<Note>();
-        noteListView.setItems(nTVCont.noteIDs);
+       // noteListView.setItems(nTVCont.noteIDs);
         
         Button refreshBtn = new Button("Refresh Notes");
         
@@ -739,11 +750,11 @@ public class MedicalStaffMainPageGUI extends Application {
         // set notes list to listview
         //TODO add note to listview
         //noteTitleView.setItems(noteTitleList);
-        noteListView.setMinWidth(170);
-        noteListView.setMaxWidth(170);
-        noteListView.setFocusTraversable(false);
+        noteTableView.setMinWidth(170);
+        noteTableView.setMaxWidth(170);
+        noteTableView.setFocusTraversable(false);
         
-        vbox.getChildren().addAll(refreshBtn, noteListView);
+        vbox.getChildren().addAll(refreshBtn, noteTableView);
         vbox.setAlignment(Pos.CENTER);
         // note display pane
         GridPane noteDisplayPane = new GridPane();
