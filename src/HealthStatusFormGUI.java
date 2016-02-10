@@ -3,6 +3,7 @@ import java.util.List;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
@@ -10,14 +11,15 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 /**
  *
- * Purpose: Represents the healt status from gui, which by deafult pulls 
- * information 
+ * Purpose: Represents the healt status from gui, which by deafult pulls
+ * information
  *
  * @author CIMP
  * @version 1.0
@@ -26,7 +28,7 @@ public class HealthStatusFormGUI
 {
     public static final String FORM_TITLE = "Health Status Information";
     public static final int SPACING = 10;
-    private VBox mainBox;
+    private BorderPane mainBox;
 
     // The Control that this will be placed in
     private Tab parentTab;
@@ -43,6 +45,8 @@ public class HealthStatusFormGUI
     private CheckBox tylenolGiven;
     private CheckBox careGiverPermission;
     private TextArea otherInfoTxt;
+
+    private Button btnSave = new Button("Save");
 
     /**
      * 
@@ -63,17 +67,32 @@ public class HealthStatusFormGUI
     public Tab showHealthStatusInfo( String cosmoId )
     {
         Label title = new Label(FORM_TITLE);
+        HBox titleBox = new HBox();
+
         title.setFont(new Font(22));
-        mainBox = new VBox();
+        
+        mainBox = new BorderPane();        
+        
+        titleBox.getChildren().addAll(title,btnSave);
+        titleBox.setSpacing(300);
+        VBox contentBox = new VBox();
+
+        btnSave.setMinWidth(150);
+
         Label otherLbl = new Label("Other Information");
         otherInfoTxt = new TextArea();
         otherInfoTxt.setMaxWidth(700);
-        mainBox.getChildren().addAll(title, createDiagnosisInfo(cosmoId),
+
+        contentBox.getChildren().addAll(titleBox, createDiagnosisInfo(cosmoId),
                 createMedicalConditions(cosmoId), createAllergiesInfo(cosmoId),
                 createMedicationInfo(cosmoId), otherLbl, otherInfoTxt);
+
+        mainBox.setLeft(contentBox);
+
         mainBox.setPadding(new Insets(10, 10, 10, 10));
         assignDiagnosisInfo(cosmoId + "");
         this.parentTab.setContent(mainBox);
+
         return parentTab;
     }
 
@@ -86,7 +105,6 @@ public class HealthStatusFormGUI
 
     }
 
-
     /**
      * 
      * Purpose: Create the diagnositc controls
@@ -96,7 +114,6 @@ public class HealthStatusFormGUI
     private HBox createDiagnosisInfo( String cosmoId )
     {
         HBox mainBox = new HBox();
-
         VBox leftVBox = new VBox();
         VBox rightVBox = new VBox();
 
@@ -116,7 +133,7 @@ public class HealthStatusFormGUI
         participantDiagnosisTxt = new TextField();
         physicianPhoneTxt = new TextField();
         dateCompletedTxt = new TextField();
-        
+
         tylenolGiven = new CheckBox();
         tylenolGiven.setText("Tylenol Given");
         careGiverPermission = new CheckBox();
@@ -129,8 +146,8 @@ public class HealthStatusFormGUI
         editableItems.add(participantDiagnosisTxt);
         editableItems.add(familyPhysicianTxt);
 
-        //Following is just adding stuff to their boxes and setting some 
-        // spacing and alignment 
+        // Following is just adding stuff to their boxes and setting some
+        // spacing and alignment
         familyPhysicianHBox.getChildren().addAll(familyPhysicianLbl,
                 familyPhysicianTxt);
         familyPhysicianHBox.setSpacing(SPACING);
@@ -162,10 +179,10 @@ public class HealthStatusFormGUI
         return mainBox;
     }
 
-
     /**
      * 
      * Purpose: assign diagnosis info for particiapnts
+     * 
      * @param cosmoId the participant to assign the diagnosis information for
      */
     private void assignDiagnosisInfo( String cosmoId )
@@ -177,12 +194,11 @@ public class HealthStatusFormGUI
         participantDiagnosisTxt.setText(info[2]);
         tylenolGiven.setSelected(Boolean.parseBoolean(info[3]));
         careGiverPermission.setSelected(Boolean.parseBoolean(info[4]));
-        info[5]= info[5].substring(0, info[5].length() - 7);
+        info[5] = info[5].substring(0, info[5].length() - 7);
         dateCompletedTxt.setText(info[5]);
         otherInfoTxt.setText(info[6]);
 
     }
-    
 
     /**
      * 
