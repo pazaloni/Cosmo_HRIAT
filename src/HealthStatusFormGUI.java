@@ -57,12 +57,13 @@ public class HealthStatusFormGUI
     public HealthStatusFormGUI(Tab healthStatusTab, StaffAccount loggedInUser)
     {
         this.parentTab = healthStatusTab;
-
+        this.loggedInUser = loggedInUser;
     }
 
     /**
      * 
      * Purpose: This method will make everything and display it.
+     * @param cosmoId: The cosmoId for the paritcipant 
      */
     public Tab showHealthStatusInfo( String cosmoId )
     {
@@ -72,6 +73,11 @@ public class HealthStatusFormGUI
         title.setFont(new Font(22));
         
         mainBox = new BorderPane();        
+        
+        if(!(this.loggedInUser instanceof MedicalAdministrator))
+        {
+            this.btnSave.setVisible(false);
+        }        
         
         titleBox.getChildren().addAll(title,btnSave);
         titleBox.setSpacing(300);
