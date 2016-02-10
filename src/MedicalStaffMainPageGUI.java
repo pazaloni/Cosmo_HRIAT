@@ -68,12 +68,13 @@ public class MedicalStaffMainPageGUI extends Application {
 
 	private ImageView previewPicture;
 
+	//the listview that will hold the note titles
 	private ListView<String> noteTitleView;
 	
+	//the tableview used for the notes
 	private TableView noteTableView;
 
-	//private ObservableList<String> noteTitleList;
-
+	//the observable list used but the note tableview
     private ObservableList<Note> noteTitleList;
     
 	private Stage createParticipantStage;
@@ -114,7 +115,9 @@ public class MedicalStaffMainPageGUI extends Application {
 		pTVCont = new ParticipantTableViewController();
 		pTVCont.initialize();
 
+		//the table view of notes
 		this.noteTableView = new TableView<Note>();
+		//the note table view controller instance
 		nTVCont = new NoteTableViewController(noteTableView);
         
 		medMainStage = stage;
@@ -721,42 +724,43 @@ public class MedicalStaffMainPageGUI extends Application {
      * Purpose: Create Note Box
      * 
      * @return HBox create note box
+     * 
+     * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     private HBox createNoteBox()
     {
-        HBox hbox = new HBox();
+        //the hbox instance
+    	HBox hbox = new HBox();
+    	//teh vbox instance
         VBox vbox = new VBox();
         
+        //refresh the tableview 
         nTVCont.refreshTable();
         
-       // noteListView.setItems(nTVCont.noteIDs);
-        
+        //create the refresh button for the note list
         Button refreshBtn = new Button("Refresh Notes");
         
+        //set the size of the refresh button to fit the note table's size
         refreshBtn.setMinWidth(170);
         refreshBtn.setMaxWidth(170);
         
+        //set the refresh button to run the refresh function when clicked
         refreshBtn.setOnAction(new EventHandler<ActionEvent>(){
-
 			@Override
 			public void handle(ActionEvent event) {
-				
-				nTVCont.refreshTable();
-				
+				nTVCont.refreshTable();	
 			}
-        	
         });
 
-        // set notes list to listview
-        //TODO add note to listview
-        //noteTitleView.setItems(noteTitleList);
+        //set the size of the tableview and make it unresizeable
         noteTableView.setMinWidth(170);
         noteTableView.setMaxWidth(170);
         noteTableView.setFocusTraversable(false);
         
+        //add the refresh button and the note table to the vbox 
         vbox.getChildren().addAll(refreshBtn, noteTableView);
+        //set the alignment to center
         vbox.setAlignment(Pos.CENTER);
-        // note display pane
         GridPane noteDisplayPane = new GridPane();
 
 			noteDisplayPane.setStyle("-fx-background-color: #FFFFFF;");
@@ -806,6 +810,7 @@ public class MedicalStaffMainPageGUI extends Application {
         noteDisplayPane.prefWidthProperty().bind(
                 medMainStage.widthProperty().divide(1.60));
         hbox.setPadding(new Insets(10, 0, 0, 0));
+        //add the note table vbox to the hbox
         hbox.getChildren().addAll(vbox, noteDisplayPane);
 
 			return hbox;
