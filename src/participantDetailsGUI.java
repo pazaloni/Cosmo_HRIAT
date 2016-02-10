@@ -107,13 +107,12 @@ public class participantDetailsGUI extends Application {
 
 		this.cosmoID = cosmoID;
 
-		participantMainStage = new Stage();
+		participantMainStage = stage;
 		participantMainStage.setTitle("Cosmo Industries");
 
-		VBox root = createMainVBox();		
-		participantMainStage.setScene(new Scene(root, 875, 580));	
-		participantMainStage.initModality(Modality.APPLICATION_MODAL);
-		participantMainStage.initOwner(stage);
+		VBox root = createMainVBox();
+
+		participantMainStage.setScene(new Scene(root, 875, 580));
 		participantMainStage.resizableProperty().set(true);
 		participantMainStage.show();
 	}
@@ -149,10 +148,10 @@ public class participantDetailsGUI extends Application {
 	 */
 	private TabPane createTabs() {
 		TabPane tabPane = new TabPane();
-
+		
 		// Create tabs names
 		Tab medications = new Tab();
-		Tab vaccinationDetails = new Tab();
+		Tab seizureDescription = new Tab();
 		Tab kinDetails = new Tab();
 		Tab workDetails = new Tab();
 		Tab physicianInfo = new Tab();
@@ -161,7 +160,13 @@ public class participantDetailsGUI extends Application {
 
 		// set body for tabs
 		medications.setContent(createMedicationsTab());
-		vaccinationDetails.setContent(createVaccinationDetailsTab());
+		
+		//create the seizure tab
+		SeizureDescriptionFormGUI sDescForm = 
+		        new SeizureDescriptionFormGUI(seizureDescription, loggedInUser);
+		seizureDescription.setContent(
+		        sDescForm.ShowSeizureForm(cosmoID + "").getContent());
+		
 		kinDetails.setContent(createKinDetailsTab());
 		workDetails.setContent(createWorkDetailsTab());
 		physicianInfo.setContent(createPhysicianInfoTab());
@@ -170,7 +175,7 @@ public class participantDetailsGUI extends Application {
 
 		// set text for tabs
 		medications.setText("Medications");
-		vaccinationDetails.setText("Vaccination");
+		seizureDescription.setText("Seizure Description");
 		kinDetails.setText("Kin");
 		workDetails.setText("Work");
 		physicianInfo.setText("Physician");
@@ -179,7 +184,7 @@ public class participantDetailsGUI extends Application {
 
 		// set tabs to not be closable
 		medications.closableProperty().set(false);
-		vaccinationDetails.closableProperty().set(false);
+		seizureDescription.closableProperty().set(false);
 		kinDetails.closableProperty().set(false);
 		workDetails.closableProperty().set(false);
 		physicianInfo.closableProperty().set(false);
@@ -188,7 +193,7 @@ public class participantDetailsGUI extends Application {
 
 		// set the size of the tabs and add to the pane
 		tabPane.setTabMinWidth(100);
-		tabPane.getTabs().addAll(medications, vaccinationDetails, kinDetails,
+		tabPane.getTabs().addAll(medications, seizureDescription, kinDetails,
 				physicianInfo, workDetails, caregiver, other);
 		tabPane.setMinHeight(29);
 
@@ -691,7 +696,7 @@ public class participantDetailsGUI extends Application {
 	 * @return scrollPane holding all of the specified participants vaccination
 	 *         information
 	 */
-	private ScrollPane createVaccinationDetailsTab() {
+	private ScrollPane createSeizureDescriptionTab() {
 		ScrollPane scrollPane = new ScrollPane();
 
 		VBox vbox = new VBox();
@@ -967,7 +972,4 @@ public class participantDetailsGUI extends Application {
 
 		return careGiverBox;
 	}
-	
-	
 }
-
