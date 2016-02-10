@@ -1,8 +1,14 @@
 import static org.junit.Assert.*;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+/**
+ * 
+ *  Purpose: Test the medication class 
+ *
+ * @author CIMP
+ * @version 1.0
+ */
 
 public class TestMedications
 {
@@ -45,9 +51,10 @@ public class TestMedications
     {
 
     }
+
     /**
      * 
-     * Purpose: checks that the medication names are the same 
+     * Purpose: checks that the medication names are the same
      */
     @Test
     public void testGetMedicationName()
@@ -55,9 +62,10 @@ public class TestMedications
         assertTrue(test1.getMedicationName().get().equals(medicationName1));
         assertTrue(test2.getMedicationName().get().equals(medicationName2));
     }
+
     /**
      * 
-     * Purpose: checks that the dosages are the same 
+     * Purpose: checks that the dosages are the same
      */
     @Test
     public void testGetDosage()
@@ -66,4 +74,25 @@ public class TestMedications
         assertTrue(test2.getDosage().get().equals(dosage2));
     }
 
+    /**
+     * 
+     * Purpose: checks the times given are the same
+     */
+    @Test
+    public void testGetTimesGiven()
+    {
+        assertTrue(test1.getTimesGiven().get().equals(timesGiven1));
+        assertTrue(test2.getTimesGiven().get().equals(timesGiven2));
+    }
+
+    /**
+     * 
+     * Purpose: checks that the reasons are the same
+     */
+    @Test
+    public void testGetReason()
+    {
+        assertTrue(test1.getReason().get().equals(reason1));
+        assertTrue(test2.getReason().get().equals(reason2));
+    }
 }

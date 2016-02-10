@@ -17,7 +17,7 @@ public class HealthStatusInformationHelper
      * participant
      * 
      * @param cosmoId particiapnts id
-     * @return array containg the cosmoId
+     * @return array containg the healthstatus information for the participant 
      */
     public String[] retrieveHealthStatusInfo( String cosmoId )
     {
@@ -78,6 +78,7 @@ public class HealthStatusInformationHelper
         healthStatusInfo[4] = "" + permission;
         healthStatusInfo[5] = lastUpdated;
         healthStatusInfo[6] = otherInfo;
+        
         return healthStatusInfo;
     }
 }

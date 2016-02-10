@@ -1,10 +1,15 @@
-
-
-import java.util.Date;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+
+/**
+ *
+ * Purpose: represents the medication that one pariticipant can be getting 
+ * 
+ *
+ * @author CIMP
+ * @version 1.0
+ */
 public class Medication
 {
     private StringProperty medicationName;

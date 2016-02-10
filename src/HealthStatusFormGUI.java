@@ -14,6 +14,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
+/**
+ *
+ * Purpose: Represents the healt status from gui, which by deafult pulls 
+ * information 
+ *
+ * @author CIMP
+ * @version 1.0
+ */
 public class HealthStatusFormGUI
 {
     public static final String FORM_TITLE = "Health Status Information";
@@ -121,6 +129,8 @@ public class HealthStatusFormGUI
         editableItems.add(participantDiagnosisTxt);
         editableItems.add(familyPhysicianTxt);
 
+        //Following is just adding stuff to their boxes and setting some 
+        // spacing and alignment 
         familyPhysicianHBox.getChildren().addAll(familyPhysicianLbl,
                 familyPhysicianTxt);
         familyPhysicianHBox.setSpacing(SPACING);
@@ -152,9 +162,11 @@ public class HealthStatusFormGUI
         return mainBox;
     }
 
+
     /**
      * 
      * Purpose: assign diagnosis info for particiapnts
+     * @param cosmoId the participant to assign the diagnosis information for
      */
     private void assignDiagnosisInfo( String cosmoId )
     {
