@@ -8,6 +8,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView.EditEvent;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -21,6 +23,7 @@ public class SeizureDescriptionFormGUI
 {
     public static final String FORM_TITLE = "Seizure Description Form";
     
+    private ScrollPane mainContainer = new ScrollPane();
     private VBox mainBox;
     
     private Tab parentTab;
@@ -30,12 +33,14 @@ public class SeizureDescriptionFormGUI
     private List<Control> editableItems = new ArrayList<Control>();
     
     private TextField seizureType;
-    private TextField description;
-    private TextField frequency;
-    private TextField duration;
-    private TextField aftermath;
-    private TextField EmergencyTreatment;
-    private TextField lastUpdated;
+    private TextArea description;
+    private TextArea frequency;
+    private TextArea duration;
+    private TextArea aftermath;
+    private TextArea EmergencyTreatment;
+    private TextArea lastUpdated;
+    
+    private Button btnSave = new Button("Save");
     
     /**
      * purpose:constructor for the seizure gui
@@ -46,6 +51,7 @@ public class SeizureDescriptionFormGUI
     public SeizureDescriptionFormGUI(Tab seizureTab, StaffAccount loggedInUser)
     {
         this.parentTab = seizureTab;
+        this.loggedInUser = loggedInUser;
     }
     
     
@@ -58,15 +64,30 @@ public class SeizureDescriptionFormGUI
     public Tab ShowSeizureForm(String cosmoId)
     {
         Label title = new Label(FORM_TITLE);
+        HBox titleBox = new HBox();
         title.setFont(new Font(22));
-        title.setPadding(new Insets(0,0,10,0));
+        
+        
         mainBox = new VBox();
 
-        mainBox.getChildren().addAll(title, 
+        if(!(this.loggedInUser instanceof MedicalAdministrator))
+        {
+            this.btnSave.setVisible(false);
+        }
+        
+        titleBox.getChildren().addAll(title, btnSave);
+        titleBox.setSpacing(300);
+        
+        mainBox.getChildren().addAll(titleBox, 
                 createBasicSeizureInfo(cosmoId));
         mainBox.setPadding(new Insets(10, 10, 10, 10));
-
-        this.parentTab.setContent(mainBox);
+        
+        mainContainer.setContent(mainBox);
+        mainContainer.setHbarPolicy(ScrollBarPolicy.NEVER);
+        mainContainer.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+        mainContainer.setHmax(mainBox.getWidth());
+        
+        this.parentTab.setContent(mainContainer);
         return parentTab;
     }
     
@@ -102,17 +123,29 @@ public class SeizureDescriptionFormGUI
         
         CheckBox seizureBoolCheck = new CheckBox();
         seizureBoolCheck.setText("Yes/No (box checked if yes)");
+        seizureBoolCheck.setPadding(new Insets(0,300,0,0));
         
-        Button saveButton = new Button("Save");
         
         TextField dateCompletedTxt = new TextField();
         TextField typeTxt = new TextField();
-        TextField descriptionTxt = new TextField();
-        TextField frequencyTxt = new TextField();
-        TextField durationTxt = new TextField();
-        TextField treatmentTxt = new TextField();
-        TextField postTypicalTxt = new TextField();
-        TextField postAssistanceTxt = new TextField();
+        TextArea descriptionTxt = new TextArea();
+        descriptionTxt.setWrapText(true);
+        descriptionTxt.setPrefRowCount(3);
+        TextArea frequencyTxt = new TextArea();
+        frequencyTxt.setWrapText(true);
+        frequencyTxt.setPrefRowCount(3);
+        TextArea durationTxt = new TextArea();
+        durationTxt.setWrapText(true);
+        durationTxt.setPrefRowCount(3);
+        TextArea treatmentTxt = new TextArea();
+        treatmentTxt.setWrapText(true);
+        treatmentTxt.setPrefRowCount(3);
+        TextArea postTypicalTxt = new TextArea();
+        treatmentTxt.setWrapText(true);
+        treatmentTxt.setPrefRowCount(3);
+        TextArea postAssistanceTxt = new TextArea();
+        postAssistanceTxt.setWrapText(true);
+        postAssistanceTxt.setPrefRowCount(3);
        
         editableItems.add(dateCompletedTxt);
         editableItems.add(typeTxt);
@@ -123,10 +156,10 @@ public class SeizureDescriptionFormGUI
         editableItems.add(postTypicalTxt);
         editableItems.add(postAssistanceTxt);
         
-        updateBox.getChildren().addAll(dateCompletedLbl, 
-                dateCompletedTxt, saveButton);
+        updateBox.getChildren().addAll(seizureBoolCheck, dateCompletedLbl, 
+                 dateCompletedTxt);
         
-        seizureInfoBox.getChildren().addAll(seizureBoolCheck, descriptionLbl, 
+        seizureInfoBox.getChildren().addAll(descriptionLbl, 
                 descriptionTxt, frequencyLbl, frequencyTxt, durationLbl, 
                 durationTxt, treatmentLbl, treatmentTxt);
         seizureInfoBox.setPadding(new Insets(10,20,10,20));
