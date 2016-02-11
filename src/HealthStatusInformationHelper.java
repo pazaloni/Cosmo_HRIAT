@@ -76,8 +76,16 @@ public class HealthStatusInformationHelper
         healthStatusInfo[2] = diagnosis;
         healthStatusInfo[3] = "" + tylenol;
         healthStatusInfo[4] = "" + permission;
+        if(lastUpdated == null)
+        {
+        	lastUpdated = " ";
+        }
         healthStatusInfo[5] = lastUpdated;
-        healthStatusInfo[6] = otherInfo;
+        if(otherInfo == null )
+        {
+        	otherInfo = " ";
+        }
+        healthStatusInfo[6] = otherInfo + " ";
         
         return healthStatusInfo;
     }
