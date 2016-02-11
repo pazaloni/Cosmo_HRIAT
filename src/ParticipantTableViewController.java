@@ -104,8 +104,9 @@ public class ParticipantTableViewController
 				participantData.add(participant);
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to populate Participant Table");
+	
 			e.printStackTrace();
+		     System.out.println("Failed to populate Participant Table");
 		}
 
 	}
