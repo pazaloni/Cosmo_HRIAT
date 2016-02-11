@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
@@ -47,6 +48,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import javafx.stage.WindowEvent;
 
 /**
@@ -61,8 +63,6 @@ public class MedicalStaffMainPageGUI extends Application {
 	private ParticipantTableViewController pTVCont;
 
 	private DatabaseHelper dbObject = new DatabaseHelper();
-    
-    private NoteTableViewController nTVCont;
 
 	public static Stage medMainStage;
 
@@ -74,22 +74,17 @@ public class MedicalStaffMainPageGUI extends Application {
 
 	private ImageView previewPicture;
 
-	//the listview that will hold the note titles
 	private ListView<String> noteTitleView;
-	
-	//the tableview used for the notes
-	private TableView noteTableView;
 
-	//the observable list used but the note tableview
-    private ObservableList<Note> noteTitleList;
-    
+	private ObservableList<String> noteTitleList;
+
 	private Stage createParticipantStage;
 
 	private Stage viewParticipantDetailsStage = new Stage();
 	
 	private StaffAccount loggedInUser;
 
-	// Preview labels for the participant
+	// Preveiw labes for the participant
 	private Label cosmoIDLbl;
 	private Label firstNameLbl;
 	private Label lastNameLbl;
@@ -121,11 +116,6 @@ public class MedicalStaffMainPageGUI extends Application {
 		pTVCont = new ParticipantTableViewController();
 		pTVCont.initialize();
 
-		//the table view of notes
-		this.noteTableView = new TableView<Note>();
-		//the note table view controller instance
-		nTVCont = new NoteTableViewController(noteTableView);
-        
 		medMainStage = stage;
 		medMainStage.setTitle("Cosmo Industries - "
 				+ loggedInUser.GetUsername());
@@ -154,8 +144,6 @@ public class MedicalStaffMainPageGUI extends Application {
 		BorderPane logoAndLogin = new BorderPane();
 		logoAndLogin.setPadding(new Insets(15, 12, 15, 12));
 		logoAndLogin.setStyle("-fx-background-color: #FFFFFF;");
-        
-        
 
 		// Logout button
 		logout = new Button("Log Out");
@@ -200,7 +188,6 @@ public class MedicalStaffMainPageGUI extends Application {
 		Tab participants = new Tab();
 		Tab forms = new Tab();
 		Tab stats = new Tab();
-
 
 		// set text for tabs
 		participants.setText("Participants");
@@ -271,16 +258,7 @@ public class MedicalStaffMainPageGUI extends Application {
 		// create preview pane
 		BorderPane previewPane = createPreviewPane();
 		// create note box
-		HBox noteBox;
-		if(loggedInUser.GetAccessLevel().equals("1"))
-		{
-			noteBox = createNoteBox();
-		}
-		else
-		{
-			noteBox = new HBox();
-		}
-		 
+		HBox noteBox = createNoteBox();
 
 		// add preview pane and note box together
 		hbox.getChildren().addAll(previewPane, noteBox);
@@ -650,6 +628,32 @@ public class MedicalStaffMainPageGUI extends Application {
 			TextField firstNameTxt = new TextField();
 			TextField lastNameTxt = new TextField();
 			DatePicker birthDatePicker = new DatePicker();
+			
+			//change the birth date picker to a different format
+			String pattern = "dd-MM-yyyy";
+	        StringConverter converter = new StringConverter<LocalDate>() {
+	                    DateTimeFormatter dateFormatter = 
+	                        DateTimeFormatter.ofPattern(pattern);
+	                    @Override
+	                    public String toString(LocalDate date) {
+	                        if (date != null) {
+	                            return dateFormatter.format(date);
+	                        } else {
+	                            return "";
+	                        }
+	                    }
+	                    @Override
+	                    public LocalDate fromString(String string) {
+	                        if (string != null && !string.isEmpty()) {
+	                            return LocalDate.parse(string, dateFormatter);
+	                        } else {
+	                            return null;
+	                        }
+	                    }
+	                };             
+	                birthDatePicker.setConverter(converter);
+	                birthDatePicker.setPromptText(pattern.toLowerCase());
+			
 
 			// Adding a click listener to make the date in thebox default to 20
 			// years ago (client request)
@@ -792,49 +796,28 @@ public class MedicalStaffMainPageGUI extends Application {
 			return grid;
 		}
 
-    /**
-     * 
-     * Purpose: Create Note Box
-     * 
-     * @return HBox create note box
-     * 
-     * @author Breanna Wilson cst215 Steven Palchinski cst209
-     */
-    private HBox createNoteBox()
-    {
-        //the hbox instance
-    	HBox hbox = new HBox();
-    	//teh vbox instance
-        VBox vbox = new VBox();
-        
-        //refresh the tableview 
-        nTVCont.refreshTable();
-        
-        //create the refresh button for the note list
-        Button refreshBtn = new Button("Refresh Notes");
-        
-        //set the size of the refresh button to fit the note table's size
-        refreshBtn.setMinWidth(170);
-        refreshBtn.setMaxWidth(170);
-        
-        //set the refresh button to run the refresh function when clicked
-        refreshBtn.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent event) {
-				nTVCont.refreshTable();	
-			}
-        });
+		/**
+		 * 
+		 * Purpose: Create Note Box
+		 * 
+		 * @return HBox create note box
+		 */
+		private HBox createNoteBox() {
+			HBox hbox = new HBox();
+			noteTitleView = new ListView<String>();
+			// create list of notes
+			// TODO make this automatically pull from the database of notes
+			noteTitleList = FXCollections.observableArrayList("Note 1", "Note 2",
+					"Note 3", "Note 4", "Note 5", "Note 6", "Note 7", "Note 8",
+					"Note 9", "Note 10", "Note 11");
 
-        //set the size of the tableview and make it unresizeable
-        noteTableView.setMinWidth(170);
-        noteTableView.setMaxWidth(170);
-        noteTableView.setFocusTraversable(false);
-        
-        //add the refresh button and the note table to the vbox 
-        vbox.getChildren().addAll(refreshBtn, noteTableView);
-        //set the alignment to center
-        vbox.setAlignment(Pos.CENTER);
-        GridPane noteDisplayPane = new GridPane();
+			// set notes list to listview
+			noteTitleView.setItems(noteTitleList);
+			noteTitleView.setMinWidth(170);
+			noteTitleView.setMaxWidth(170);
+			noteTitleView.setFocusTraversable(false);
+			// note display pane
+			GridPane noteDisplayPane = new GridPane();
 
 			noteDisplayPane.setStyle("-fx-background-color: #FFFFFF;");
 			noteDisplayPane.setPadding(new Insets(10, 10, 0, 10));
@@ -876,15 +859,14 @@ public class MedicalStaffMainPageGUI extends Application {
 			noteDisplayPane.add(participantInfoLabel, 1, 2);
 			noteDisplayPane.add(subjectInfoLabel, 1, 3);
 
-        // set minimum width
-        noteDisplayPane.setMinWidth(265);
-        // Sets the notebox's width to fit that of the parents window when it is
-        // resized
-        noteDisplayPane.prefWidthProperty().bind(
-                medMainStage.widthProperty().divide(1.60));
-        hbox.setPadding(new Insets(10, 0, 0, 0));
-        //add the note table vbox to the hbox
-        hbox.getChildren().addAll(vbox, noteDisplayPane);
+			// set minimum width
+			noteDisplayPane.setMinWidth(265);
+			// Sets the notebox's width to fit that of the parents window when it is
+			// resized
+			noteDisplayPane.prefWidthProperty().bind(
+					medMainStage.widthProperty().divide(1.60));
+			hbox.setPadding(new Insets(10, 0, 0, 0));
+			hbox.getChildren().addAll(noteTitleView, noteDisplayPane);
 
 			return hbox;
 		}
