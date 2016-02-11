@@ -1,12 +1,16 @@
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
+import javax.swing.plaf.synth.SynthSeparatorUI;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -40,8 +44,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * 
@@ -111,7 +117,7 @@ public class MedicalStaffMainPageGUI extends Application {
 		dbObject.connect();
 
 		loggedInUser = loggedInStaff;
-
+		dbObject.activtyLogEntry(loggedInStaff.GetUsername(), "Logged In", dbObject);
 		pTVCont = new ParticipantTableViewController();
 		pTVCont.initialize();
 
@@ -129,6 +135,12 @@ public class MedicalStaffMainPageGUI extends Application {
 		medMainStage.setScene(new Scene(root, 875, 580));
 		medMainStage.resizableProperty().set(true);
 		medMainStage.show();
+		//Event for when stage is closed
+		  stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+	          public void handle(WindowEvent we) {
+	              dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout", dbObject);
+	          }
+	      });
 	}
 
 	/**
@@ -153,6 +165,7 @@ public class MedicalStaffMainPageGUI extends Application {
 			@Override
 			public void handle(ActionEvent e) {
 				medMainStage.close();
+				dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout", dbObject);
 				LoginGUI test5 = new LoginGUI();
 				try {
 					test5.start(medMainStage);
@@ -392,7 +405,8 @@ public class MedicalStaffMainPageGUI extends Application {
 		 * 
 		 * Purpose: Create the preview labes for the participant
 		 */
-		private void createPreviewLabels() {
+		private void createPreviewLabels() 
+		{
 
 			cosmoIDLbl = new Label();
 			firstNameLbl = new Label();
@@ -448,26 +462,50 @@ public class MedicalStaffMainPageGUI extends Application {
 			seizureLbl.setText(currentParticipant[4]);
 			allergyLbl.setText(currentParticipant[5]);
 
-			URL path = getClass().getResource(currentParticipant[6]);
 
-			try {
-				if (path != null) {
-					previewPicture.setImage(new Image(path.openStream()));
-					previewPicture.setFitHeight(121);
-					previewPicture.setFitWidth(122);
-				} else {
-					URL url = getClass().getResource("images/defaultPicture.png");
+        try
+        {
+            URL u = null;
+            try
+            {
+                u = (this.getClass().getProtectionDomain().getCodeSource()
+                        .getLocation().toURI().toURL());
+            }
+            catch ( URISyntaxException e )
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
-					previewPicture.setImage(new Image(url.openStream()));
+            String url = u.toString();
 
-				}
+            url = url.substring(0,
+                    url.length() - (url.length() - url.lastIndexOf("/")));
 
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+            url = url.replace("/bin", "");
 
+            Image img = new Image(url + currentParticipant[6]);
+
+            if ( !(img.isError()) )
+            {
+                previewPicture.setImage(img);
+                previewPicture.setFitHeight(121);
+                previewPicture.setFitWidth(122);
+            }
+            else
+            {
+                URL defaultURL = getClass().getResource(
+                        "images/defaultPicture.png");
+                previewPicture.setImage(new Image(defaultURL.openStream()));
+            }
+        }
+        catch (IllegalArgumentException | IOException ie )
+        {
+                System.out.println("Image is invalid using default.");
+        }
 		}
-
+		
+                
 		/**
 		 * 
 		 * Purpose:Create the search bar
@@ -487,19 +525,19 @@ public class MedicalStaffMainPageGUI extends Application {
 			searchBy.setFocusTraversable(false);
 
 			// create search field
-			searchField = new TextField();
-			searchField.setPromptText("Search...");
-			searchField.setStyle("-fx-pref-width: 245; -fx-pref-height: 26;");
-			searchField.setOnAction(new EventHandler<ActionEvent>() {
+            searchField = new TextField();
+            searchField.setPromptText("Search...");
+            searchField.setStyle("-fx-pref-width: 245; -fx-pref-height: 26;");
+            searchField.setOnAction(new EventHandler<ActionEvent>() {
 
-				@Override
-				public void handle(ActionEvent arg0) {
-					// search handler
-					handleSearch();
-				}
+                @Override
+                public void handle(ActionEvent arg0) {
+                    // search handler
+                    handleSearch();
+                }
 
-			});
-
+            });
+			
 			// search button
 			Button searchButton = new Button("Search");
 			searchButton.setPrefSize(110, 20);
@@ -512,6 +550,8 @@ public class MedicalStaffMainPageGUI extends Application {
 				}
 
 			});
+			
+			
 			// set margins
 			HBox.setMargin(searchBy, new Insets(0, 5, 0, 10));
 			HBox.setMargin(searchField, new Insets(0, 5, 0, 5));
@@ -533,8 +573,9 @@ public class MedicalStaffMainPageGUI extends Application {
 						createParticipantStage.setResizable(false);
 						createParticipantStage.show();
 					}
+					});
 
-				});
+
 				addParticipantButton.setPrefSize(200, 20);
 				HBox.setMargin(addParticipantButton, new Insets(0, 5, 0, 5));
 				searchBar.getChildren().addAll(searchBy, searchField, searchButton,
@@ -593,16 +634,17 @@ public class MedicalStaffMainPageGUI extends Application {
 			Label lblWarning = new Label();
 			lblWarning.setTextFill(Color.FIREBRICK);
 
-			// text field labels
-			Label firstNameLbl = new Label("First Name");
-			Label lastNameLbl = new Label("Last Name");
-			Label birthdateLbl = new Label("Birthdate");
-			Label physicianFNameLbl = new Label("Physician First Name");
-			Label physicianLNameLbl = new Label("Physician Last Name");
-			Label healthNumLbl = new Label("Health Number");
-			Label phoneLbl = new Label("Phone Number");
-			Label cosmoIdLbl = new Label("Cosmo ID");
-			Label addressLbl = new Label("Address");
+        // text field labels
+        Label firstNameLbl = new Label("First Name");
+        Label lastNameLbl = new Label("Last Name");
+        Label birthdateLbl = new Label("Birthdate");
+        Label physicianFNameLbl = new Label("Physician First Name");
+        Label physicianLNameLbl = new Label("Physician Last Name");
+        Label healthNumLbl = new Label("Health Number");
+        Label phoneLbl = new Label("Phone Number");
+        Label cosmoIdLbl = new Label("Cosmo ID");
+        Label addressLbl = new Label("Participant Address");
+        Label imageLbl = new Label("Participant Picture");
 
 			// the text fields
 			TextField firstNameTxt = new TextField();
@@ -623,6 +665,29 @@ public class MedicalStaffMainPageGUI extends Application {
 			phoneTxt.setPromptText("Ex: 3062879111");
 			TextField cosmoIdTxt = new TextField();
 			TextField addressTxt = new TextField();
+        Button imageBrowseBtn = new Button("Browse...");
+        TextField chosenPathTxt = new TextField("");
+
+        imageBrowseBtn
+                .setOnAction(event -> {
+                    FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
+                            "Images", "*.jpg");
+                    FileChooser fc = new FileChooser();
+                    fc.getExtensionFilters().add(filter);
+
+                    String path = "";
+
+                    File file = fc.showOpenDialog(medMainStage);
+                    if ( file == null )
+                    {
+                        path = "";
+                    }
+                    else
+                    {
+                        path = file.getAbsolutePath();
+                    }
+                    chosenPathTxt.setText(path);
+                });
 
 			// add the form to the grid
 			grid.add(cosmoIdLbl, 0, 1);
@@ -634,6 +699,7 @@ public class MedicalStaffMainPageGUI extends Application {
 			grid.add(healthNumLbl, 0, 7);
 			grid.add(phoneLbl, 0, 8);
 			grid.add(addressLbl, 0, 9);
+        grid.add(imageLbl, 0, 10);
 
 			grid.add(lblWarning, 1, 0);
 			grid.add(cosmoIdTxt, 1, 1);
@@ -645,6 +711,7 @@ public class MedicalStaffMainPageGUI extends Application {
 			grid.add(healthNumTxt, 1, 7);
 			grid.add(phoneTxt, 1, 8);
 			grid.add(addressTxt, 1, 9);
+        grid.add(imageBrowseBtn, 1, 10);
 
 			// setPadding of the grid
 			grid.setPadding(new Insets(10, 10, 0, 10));
@@ -653,19 +720,22 @@ public class MedicalStaffMainPageGUI extends Application {
 
 			grid.setVgap(10);
 
-			// Adding participant event handler
-			Button createParticipantBtn = new Button("Add");
-			createParticipantBtn.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent e) {
-					// call create participant on medical administrator with the
-					// text passed in
-					String result = MedicalAdministrator.createParticipant(
-							cosmoIdTxt.getText(), firstNameTxt.getText(),
-							lastNameTxt.getText(), birthDatePicker.getValue(),
-							physicianFNameTxt.getText(),
-							physicianLNameTxt.getText(), healthNumTxt.getText(),
-							phoneTxt.getText(), addressTxt.getText());
+        // Adding participant event handler
+        Button createParticipantBtn = new Button("Add");
+        createParticipantBtn.setOnAction(new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle( ActionEvent e )
+            {
+                // call create participant on medical administrator with the
+                // text passed in
+                String result = MedicalAdministrator.createParticipant(
+                        cosmoIdTxt.getText(), firstNameTxt.getText(),
+                        lastNameTxt.getText(), birthDatePicker.getValue(),
+                        physicianFNameTxt.getText(),
+                        physicianLNameTxt.getText(), healthNumTxt.getText(),
+                        phoneTxt.getText(), addressTxt.getText(),
+                        chosenPathTxt.getText());
 
 					// if no error message is recieved then close this window and
 					// refresh the table
@@ -689,32 +759,35 @@ public class MedicalStaffMainPageGUI extends Application {
 			Button resetBtn = new Button("Reset");
 			resetBtn.setOnAction(new EventHandler<ActionEvent>() {
 
-				@Override
-				public void handle(ActionEvent arg0) {
-					// sets all values to default
-					cosmoIdTxt.setText("");
-					firstNameTxt.setText("");
-					lastNameTxt.setText("");
-					birthDatePicker.setValue(null);
-					physicianFNameTxt.setText("");
-					physicianLNameTxt.setText("");
-					healthNumTxt.setText("");
-					phoneTxt.setText("");
-					addressTxt.setText("");
-					lblWarning.setText("");
-				}
+            @Override
+            public void handle( ActionEvent arg0 )
+            {
+                // sets all values to default
+                cosmoIdTxt.setText("");
+                firstNameTxt.setText("");
+                lastNameTxt.setText("");
+                birthDatePicker.setValue(null);
+                physicianFNameTxt.setText("");
+                physicianLNameTxt.setText("");
+                healthNumTxt.setText("");
+                phoneTxt.setText("");
+                addressTxt.setText("");
+                chosenPathTxt.setText("");
+                lblWarning.setText("");
+
+            }
 
 			});
 
-			// Add the buttons to the grid
-			HBox buttonsHbox = new HBox();
-			HBox resetHbox = new HBox();
-			buttonsHbox.getChildren().addAll(createParticipantBtn);
-			buttonsHbox.setAlignment(Pos.CENTER);
-			resetHbox.getChildren().addAll(resetBtn);
-			resetHbox.setAlignment(Pos.CENTER_RIGHT);
-			grid.add(buttonsHbox, 1, 10);
-			grid.add(resetHbox, 0, 10);
+        // Add the buttons to the grid
+        HBox buttonsHbox = new HBox();
+        HBox resetHbox = new HBox();
+        buttonsHbox.getChildren().addAll(createParticipantBtn);
+        buttonsHbox.setAlignment(Pos.CENTER);
+        resetHbox.getChildren().addAll(resetBtn);
+        resetHbox.setAlignment(Pos.CENTER_RIGHT);
+        grid.add(buttonsHbox, 1, 11);
+        grid.add(resetHbox, 0, 11);
 
 			return grid;
 		}

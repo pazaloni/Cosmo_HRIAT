@@ -36,8 +36,7 @@ public class NotePopUp {
 	 *            The participant that the note is being added to
 	 * @param creator
 	 *            The username of the currently logged in medical staff
-	 * @param stage
-	 *            The stage that the pop up will be generated in
+	 * @param stage The stage that the pop up will be generated in
 	 * 
 	 * @author Niklaas Neijmeijer cst207 Steven Palchinski cst209
 	 */
@@ -47,6 +46,8 @@ public class NotePopUp {
 		this.root.setBottom(createNotePopUp(participant, creator, stage));
 	}
 
+	//TODO make this class not rely on the next static method and instead use 
+	// the cosntructor to get the parent stage 
 	/**
 	 * Purpose: This will create the visual layout of the pop up window.
 	 * 

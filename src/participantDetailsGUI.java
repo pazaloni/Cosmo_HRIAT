@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.WatchEvent.Kind;
 import java.sql.ResultSet;
@@ -105,12 +107,13 @@ public class participantDetailsGUI extends Application {
 
 		this.cosmoID = cosmoID;
 
-		participantMainStage = stage;
+		participantMainStage = new Stage();
 		participantMainStage.setTitle("Cosmo Industries");
 
-		VBox root = createMainVBox();
-
-		participantMainStage.setScene(new Scene(root, 875, 580));
+		VBox root = createMainVBox();		
+		participantMainStage.setScene(new Scene(root, 875, 580));	
+		participantMainStage.initModality(Modality.APPLICATION_MODAL);
+		participantMainStage.initOwner(stage);
 		participantMainStage.resizableProperty().set(true);
 		participantMainStage.show();
 	}
@@ -349,21 +352,33 @@ public class participantDetailsGUI extends Application {
 						+ results.getString(6));
 				addressText.setText(results.getString(7));
 
-				URL path = getClass().getResource(results.getString(8));
+				URL u = null;
+	            try
+	            {
+	                u = (this.getClass().getProtectionDomain().getCodeSource()
+	                        .getLocation().toURI().toURL());
+	            }
+	            catch ( URISyntaxException | MalformedURLException e )
+	            {
+	                // TODO Auto-generated catch block
+	                e.printStackTrace();
+	            }
 
-				try {
-					// formatting the image path for the image view so
-					// it can be viewed
-					System.out.println(path.toExternalForm());
-					previewPicture = new ImageView(new Image(path.openStream()));
-					previewPicture.setFitWidth(122);
-					previewPicture.setFitHeight(121);
+	            String urlPic = u.toString();
 
-					pictureBox.getChildren().addAll(previewPicture);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+	            urlPic = urlPic.substring(0,
+	                    urlPic.length() - (urlPic.length() - urlPic.lastIndexOf("/")));
+
+	            urlPic = urlPic.replace("/bin", "");
+
+	            Image img = new Image(urlPic + results.getString(8));
+
+
+				previewPicture = new ImageView(img);
+                previewPicture.setFitWidth(122);
+                previewPicture.setFitHeight(121);
+
+                pictureBox.getChildren().addAll(previewPicture);
 
 			}
 		} catch (SQLException e) {
@@ -952,4 +967,7 @@ public class participantDetailsGUI extends Application {
 
 		return careGiverBox;
 	}
+	
+	
 }
+

@@ -25,6 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Purpose: To display the GUI for the technical administrator
@@ -40,6 +41,9 @@ public class TechMainPageGUI extends Application
 
     // Controller used to fill the tableview
     private StaffTableViewController sTVCont;
+    
+    // Class used to fill the activity log and to create and manage the controls
+    private ActivityLogPopUp activityLog;
 
     // Instance of the database helper
     private DatabaseHelper dbObject = new DatabaseHelper();
@@ -98,7 +102,7 @@ public class TechMainPageGUI extends Application
         loggedInAdmin = (TechnicalAdministrator) loggedInStaff;
         // open the database connection
         dbObject.connect();
-
+        dbObject.activtyLogEntry(loggedInStaff.GetUsername(), "Logged In", dbObject);
         // create a staff table view controller and initialize it
         sTVCont = new StaffTableViewController();
         sTVCont.initialize();
@@ -191,7 +195,18 @@ public class TechMainPageGUI extends Application
             }
 
         });
+        
+        btnViewLog.setOnAction(new EventHandler<ActionEvent>(){
 
+            @Override
+            public void handle( ActionEvent arg0 )
+            {
+                activityLog = new ActivityLogPopUp(stageTech);         
+                activityLog.showActivityLog();
+            }
+            
+        });
+        
         actionBox.getChildren().addAll(btnViewLog, btnAddUser, btnEditUser,
                 btnRemoveUser);
         actionBox.setPadding(new Insets(25, 0, 20, 0));
@@ -217,7 +232,12 @@ public class TechMainPageGUI extends Application
         stageTech.setTitle("Cosmo Industries - " + loggedInAdmin.GetUsername());
         // display window
         stageTech.show();
-
+        
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                dbObject.activtyLogEntry(loggedInAdmin.GetUsername(), "Logout", dbObject);
+            }
+        });
     }
 
     /**
@@ -508,6 +528,7 @@ public class TechMainPageGUI extends Application
             public void handle(ActionEvent e)
             {
                 stageTech.close();
+                dbObject.activtyLogEntry(loggedInAdmin.GetUsername(), "Logout", dbObject);
                 LoginGUI test5 = new LoginGUI();
                 try
                 {
@@ -605,5 +626,23 @@ public class TechMainPageGUI extends Application
         }
 
     }
+    
+    
+    /**
+     * 
+     * Purpose: create and display the activity log as a popup.
+     * 
+     */
+    private void constructActivityLog()
+    {
+        Stage activityLogStage = new Stage();
+        
+        //Making this a pop-up that will be obtain focus.
+        activityLogStage.initModality(Modality.WINDOW_MODAL);
+        activityLogStage.initOwner(stageTech);
+        
+        
+                
+    } 
     
 }

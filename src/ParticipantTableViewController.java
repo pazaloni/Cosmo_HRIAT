@@ -115,8 +115,7 @@ public class ParticipantTableViewController
 	 * Purpose: To create the table and columns
 	 */
 	public void initialize() {
-		cosmoIDColumn.setCellValueFactory(cellData -> cellData.getValue()
-				.getCosmoIDProperty());
+		cosmoIDColumn.setCellValueFactory(cellData -> cellData.getValue().getCosmoIDProperty());
 		cosmoIDColumn.setMinWidth(50);
 		cosmoIDColumn.setResizable(false);
 
@@ -140,10 +139,11 @@ public class ParticipantTableViewController
 		emergencyPhoneColumn.setMinWidth(115);
 		emergencyPhoneColumn.setResizable(false);
 
-		// lastUpdatedColumn.setCellValueFactory(cellData ->
-		// cellData.getValue().getUpdatedProperty());
-		lastUpdatedColumn.setMinWidth(135);
-		lastUpdatedColumn.setResizable(false);
+         lastUpdatedColumn.setCellValueFactory(cellData ->
+         cellData.getValue().getUpdatedProperty());
+        lastUpdatedColumn.setMinWidth(135);
+        lastUpdatedColumn.setResizable(false);
+
 
 		// make table columns not draggable to reorder it
 		participantTable.getColumns().addListener(
@@ -170,7 +170,7 @@ public class ParticipantTableViewController
 				emergencyPhoneColumn, lastUpdatedColumn);
 
 		// set the data into the table
-		participantTable.setItems(participantData);
+//		participantTable.setItems(participantData);
 	}
 
 	/**
