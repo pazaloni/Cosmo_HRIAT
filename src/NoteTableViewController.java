@@ -8,6 +8,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.paint.Paint;
 import javafx.util.Callback;
 
 /**
