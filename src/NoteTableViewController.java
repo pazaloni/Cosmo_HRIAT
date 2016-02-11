@@ -1,14 +1,11 @@
 
-import java.awt.Color;
 import java.sql.*;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.paint.Paint;
 import javafx.util.Callback;
 
 /**
@@ -23,7 +20,7 @@ public class NoteTableViewController
 
 	//table column that will hold all the note IDs
 	private TableColumn<Note, String> idColumn = 
-			new TableColumn<Note, String>("Sort");
+			new TableColumn<Note, String>("Notes");
 	
 	//that data for each note
 	public ObservableList<Note> noteIDs = FXCollections.observableArrayList();
@@ -161,7 +158,8 @@ public class NoteTableViewController
 		
 		//make the column not resizeable
 		idColumn.setResizable(false);
-		
+		idColumn.setSortable(false);
+
 		//add the column to the tableview
 		noteTable.getColumns().addAll(idColumn);
 		

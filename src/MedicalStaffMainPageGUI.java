@@ -25,6 +25,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -96,7 +97,13 @@ public class MedicalStaffMainPageGUI extends Application {
 	private Label seizureLbl;
 	private Label allergyLbl;
 	private Label physicianLbl;
-
+	
+	//Detail labels for the note details
+	private Label dateInfoLabel;
+	private Label staffInfoLabel;
+	private Label participantInfoLabel;
+	private Label subjectInfoLabel;
+	
 	/**
 	 * Purpose: displays the GUI
 	 * 
@@ -851,30 +858,33 @@ public class MedicalStaffMainPageGUI extends Application {
 			participantLabel.setPadding(new Insets(1, 5, 3, 5));
 			subjectLabel.setPadding(new Insets(1, 5, 3, 5));
 
-			// set the participant text fields
-			Label dateInfoLabel = new Label("dateInfo");
-			Label staffInfoLabel = new Label("staffInfo");
-			Label participantInfoLabel = new Label("participantInfo");
-			Label subjectInfoLabel = new Label("subjectInfo");
+			// set the note text fields
+			createNoteDetailLabels();
+			Label dateInfoLabel;
+			Label staffInfoLabel;
+			Label participantInfoLabel;
+			Label subjectInfoLabel;
+
 
 			// set padding
-			dateInfoLabel.setPadding(new Insets(1, 5, 3, 5));
-			staffInfoLabel.setPadding(new Insets(1, 5, 3, 5));
-			participantInfoLabel.setPadding(new Insets(1, 5, 3, 5));
-			subjectInfoLabel.setPadding(new Insets(1, 5, 3, 5));
+//			dateInfoLabel.setPadding(new Insets(1, 5, 3, 5));
+//			staffInfoLabel.setPadding(new Insets(1, 5, 3, 5));
+//			participantInfoLabel.setPadding(new Insets(1, 5, 3, 5));
+//			subjectInfoLabel.setPadding(new Insets(1, 5, 3, 5));
 
 			// add all labels to the gridpane
 			// column 0
 			noteDisplayPane.add(dateLabel, 0, 0);
-			noteDisplayPane.add(staffLabel, 0, 1);
-			noteDisplayPane.add(participantLabel, 0, 2);
+			noteDisplayPane.add(staffLabel, 0, 2);
+			noteDisplayPane.add(participantLabel, 0, 1);
 			noteDisplayPane.add(subjectLabel, 0, 3);
 
 			// column 1
-			noteDisplayPane.add(dateInfoLabel, 1, 0);
-			noteDisplayPane.add(staffInfoLabel, 1, 1);
-			noteDisplayPane.add(participantInfoLabel, 1, 2);
-			noteDisplayPane.add(subjectInfoLabel, 1, 3);
+//			noteDisplayPane.add(dateInfoLabel, 1, 0);
+//			noteDisplayPane.add(staffInfoLabel, 1, 1);
+//			noteDisplayPane.add(participantInfoLabel, 1, 2);
+//			noteDisplayPane.add(subjectInfoLabel, 1, 3);
+//			noteDisplayPane.add(resolvedCb, 0, 4);
 
         // set minimum width
         noteDisplayPane.setMinWidth(265);
@@ -887,6 +897,55 @@ public class MedicalStaffMainPageGUI extends Application {
         hbox.getChildren().addAll(vbox, noteDisplayPane);
 
 			return hbox;
+		}
+
+		private void createNoteDetailLabels() 
+		{
+
+			Label dateInfoLabel = new Label();
+			Label staffInfoLabel = new Label();
+			Label participantInfoLabel = new Label();
+			Label subjectInfoLabel = new Label();
+			
+			CheckBox resolvedCb = new CheckBox("Resolved");
+
+			dateInfoLabel.setMaxWidth(150);
+			dateInfoLabel.setMinWidth(150);
+
+			staffInfoLabel.setMaxWidth(150);
+			staffInfoLabel.setMinWidth(150);
+
+			participantInfoLabel.setMaxWidth(150);
+			participantInfoLabel.setMinWidth(150);
+
+			subjectInfoLabel.setMaxWidth(150);
+			subjectInfoLabel.setMinWidth(150);
+			subjectInfoLabel.setWrapText(true);
+
+			nTVCont.noteTable.setOnMousePressed(event -> 
+			{
+				assignNoteDetailLabels(nTVCont.getSelectedPK());
+			});
+		}
+
+		private void assignNoteDetailLabels(String selectedPK) 
+		{
+			NotePaneHelper noteHelper = new NotePaneHelper();
+			String[] currentNote = noteHelper.queryNote(selectedPK);
+			
+			dateInfoLabel.setText(currentNote[0]);
+			participantInfoLabel.setText(currentNote[1]);
+			staffInfoLabel.setText(currentNote[2]);
+			subjectInfoLabel.setText(currentNote[3]);
+			
+			try
+			{
+				
+			}
+			catch
+			{
+				
+			}
 		}
 
 		/**
