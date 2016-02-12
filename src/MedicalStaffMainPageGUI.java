@@ -862,12 +862,7 @@ public class MedicalStaffMainPageGUI extends Application {
 
 			// set the note text fields
 			createNoteDetailLabels();
-			Label dateInfoLabel;
-			Label staffInfoLabel;
-			Label participantInfoLabel;
-			Label subjectInfoLabel;
-
-
+			
 			// set padding
 //			dateInfoLabel.setPadding(new Insets(1, 5, 3, 5));
 //			staffInfoLabel.setPadding(new Insets(1, 5, 3, 5));
@@ -933,21 +928,14 @@ public class MedicalStaffMainPageGUI extends Application {
 		private void assignNoteDetailLabels(String selectedPK) 
 		{
 			NotePaneHelper noteHelper = new NotePaneHelper();
-			String[] currentNote = noteHelper.queryNote(selectedPK);
+			Note currentNote = noteHelper.queryNote(selectedPK);
 			
-			dateInfoLabel.setText(currentNote[0]);
-			participantInfoLabel.setText(currentNote[1]);
+			dateInfoLabel.setText(currentNote.getDate());
+			
+			participantInfoLabel.setText(currentNote.);
 			staffInfoLabel.setText(currentNote[2]);
 			subjectInfoLabel.setText(currentNote[3]);
 			
-			try
-			{
-				
-			}
-			catch
-			{
-				
-			}
 		}
 
 		/**
