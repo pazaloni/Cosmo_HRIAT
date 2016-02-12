@@ -93,17 +93,17 @@ public class participantDetailsGUI extends Application
     private Stage createNoteStage;
 
 
-	
-	/**
-	 * Purpose: displays the GUI
-	 * 
-	 * @param: Stage: the stage the GUI will be displayed on
-	 */
-	@Override
-	public void start(Stage stage) throws Exception
-	{
-		participantDetailsConstruct(stage, this.cosmoID, loggedInUser);
-	}
+    
+    /**
+     * Purpose: displays the GUI
+     * 
+     * @param: Stage: the stage the GUI will be displayed on
+     */
+    @Override
+    public void start(Stage stage) throws Exception
+    {
+        participantDetailsConstruct(stage, this.cosmoID, loggedInUser);
+    }
 
 
     /**
@@ -111,9 +111,7 @@ public class participantDetailsGUI extends Application
      * Purpose: Construct the main stage for the medical staff once they have
      * selected a participant to view
      * 
-     * 
-     * @param stage
-     *            : the stage the medical staff will see
+     * @param stage : the stage the medical staff will see
      */
     public void participantDetailsConstruct(Stage stage, int cosmoID,
             StaffAccount loggedInUser)
@@ -123,14 +121,15 @@ public class participantDetailsGUI extends Application
 
         this.cosmoID = cosmoID;
 
-        participantMainStage = stage;
+        participantMainStage = new Stage();
         participantMainStage.setTitle("Cosmo Industries");
 
-		VBox root = createMainVBox();		
-		participantMainStage.setScene(new Scene(root, 875, 580));	
- 	    participantMainStage.initModality(Modality.APPLICATION_MODAL);    
-		participantMainStage.resizableProperty().set(true);
-		participantMainStage.show();
+    VBox root = createMainVBox();       
+    participantMainStage.setScene(new Scene(root, 875, 580));   
+        participantMainStage.initModality(Modality.APPLICATION_MODAL);    
+        participantMainStage.initOwner(stage);
+    participantMainStage.resizableProperty().set(true);
+    participantMainStage.show();
     }
 
     /**
@@ -157,60 +156,63 @@ public class participantDetailsGUI extends Application
         return logoAndLogin;
     }
 
-	/**
-	 * 
-	 * Purpose: Create the Tabs Pane for display
-	 * 
-	 * @return a TabPane object
-	 */
-	private TabPane createTabs() 
-	{
-		TabPane tabPane = new TabPane();
+    /**
+     * 
+     * Purpose: Create the Tabs Pane for display
+     * 
+     * @return a TabPane object
+     */
+    private TabPane createTabs() 
+    {
+        TabPane tabPane = new TabPane();
 
-		// Create tabs names
-		Tab medications = new Tab();
-		Tab vaccinationDetails = new Tab();
-		Tab kinDetails = new Tab();
-		Tab workDetails = new Tab();
-		Tab physicianInfo = new Tab();
-		Tab caregiver = new Tab();
-		Tab other = new Tab();
+        // Create tabs names
+        Tab healthStatus = new Tab();
+        
+        Tab vaccinationDetails = new Tab();
+        Tab kinDetails = new Tab();
+        Tab workDetails = new Tab();
+        Tab physicianInfo = new Tab();
+        Tab caregiver = new Tab();
+        Tab other = new Tab();
 
-		// set body for tabs
-		medications.setContent(createMedicationsTab());
-		vaccinationDetails.setContent(createVaccinationDetailsTab());
-		kinDetails.setContent(createKinDetailsTab());
-		workDetails.setContent(createWorkDetailsTab());
-		physicianInfo.setContent(createPhysicianInfoTab());
-		caregiver.setContent(createCaregiverTab());
-		other.setContent(createOtherTab());
+        // set body for tabs
+  //      HealthStatusFormGUI hsf = new HealthStatusFormGUI(healthStatus, loggedInUser);
+    //    healthStatus.setContent(hsf.showHealthStatusInfo(cosmoID + "").getContent());
 
-		// set text for tabs
-		medications.setText("Medications");
-		vaccinationDetails.setText("Vaccination");
-		kinDetails.setText("Kin");
-		workDetails.setText("Work");
-		physicianInfo.setText("Physician");
-		caregiver.setText("Caregiver");
-		other.setText("Other");
+        vaccinationDetails.setContent(createVaccinationDetailsTab());
+        kinDetails.setContent(createKinDetailsTab());
+        workDetails.setContent(createWorkDetailsTab());
+        physicianInfo.setContent(createPhysicianInfoTab());
+        caregiver.setContent(createCaregiverTab());
+        other.setContent(createOtherTab());
 
-		// set tabs to not be closable
-		medications.closableProperty().set(false);
-		vaccinationDetails.closableProperty().set(false);
-		kinDetails.closableProperty().set(false);
-		workDetails.closableProperty().set(false);
-		physicianInfo.closableProperty().set(false);
-		caregiver.closableProperty().set(false);
-		other.closableProperty().set(false);
+        // set text for tabs
+        healthStatus.setText("Health Status");
+        vaccinationDetails.setText("Vaccination");
+        kinDetails.setText("Kin");
+        workDetails.setText("Work");
+        physicianInfo.setText("Physician");
+        caregiver.setText("Caregiver");
+        other.setText("Other");
 
-		// set the size of the tabs and add to the pane
-		tabPane.setTabMinWidth(100);
-		tabPane.getTabs().addAll(medications, vaccinationDetails, kinDetails,
-				physicianInfo, workDetails, caregiver, other);
-		tabPane.setMinHeight(29);
+        // set tabs to not be closable
+        healthStatus.closableProperty().set(false);
+        vaccinationDetails.closableProperty().set(false);
+        kinDetails.closableProperty().set(false);
+        workDetails.closableProperty().set(false);
+        physicianInfo.closableProperty().set(false);
+        caregiver.closableProperty().set(false);
+        other.closableProperty().set(false);
 
-		return tabPane;
-	}
+        // set the size of the tabs and add to the pane
+        tabPane.setTabMinWidth(100);
+        tabPane.getTabs().addAll(healthStatus, vaccinationDetails, kinDetails,
+                physicianInfo, workDetails, caregiver, other);
+        tabPane.setMinHeight(29);
+
+        return tabPane;
+    }
 
     /**
      * 
