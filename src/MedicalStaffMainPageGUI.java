@@ -104,6 +104,8 @@ public class MedicalStaffMainPageGUI extends Application {
 	private Label participantInfoLabel;
 	private Label subjectInfoLabel;
 	
+	private CheckBox resolvedCb;
+	
 	/**
 	 * Purpose: displays the GUI
 	 * 
@@ -907,7 +909,7 @@ public class MedicalStaffMainPageGUI extends Application {
 			Label participantInfoLabel = new Label();
 			Label subjectInfoLabel = new Label();
 			
-			CheckBox resolvedCb = new CheckBox("Resolved");
+			resolvedCb = new CheckBox("Resolved");
 
 			dateInfoLabel.setMaxWidth(150);
 			dateInfoLabel.setMinWidth(150);
