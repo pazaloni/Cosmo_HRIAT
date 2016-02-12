@@ -163,7 +163,8 @@ public class participantDetailsGUI extends Application
         // set body for tabs
         HealthStatusFormGUI hsf = new HealthStatusFormGUI(healthStatus, loggedInUser);
         healthStatus.setContent(hsf.showHealthStatusInfo(cosmoID + "").getContent());
-
+        
+        
         vaccinationDetails.setContent(createVaccinationDetailsTab());
         kinDetails.setContent(createKinDetailsTab());
         workDetails.setContent(createWorkDetailsTab());
