@@ -982,6 +982,7 @@ public class MedicalStaffMainPageGUI extends Application
         staffInfoLabel.setText(noteHelper.getStaffName(currentNote
                 .getCreatorID()));
         subjectInfoLabel.setText(currentNote.getDescription());
+        resolvedCb.setSelected(Boolean.parseBoolean(currentNote.getResolved()));
         resolvedCb.setOnAction(event -> {
             if ( resolvedCb.isSelected() )
             {
