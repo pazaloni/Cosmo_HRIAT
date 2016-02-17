@@ -1189,6 +1189,10 @@ public class participantDetailsGUI extends Application
                     dobtext.setText(birthDateString);
                     phnText.setText(healthNumTxt.getText());
                     addressText.setText(addressTxt.getText());
+                    
+                    DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant",
+                            DBObject);
+                    
                 }
                 // if there is an error message, display it
                 else
