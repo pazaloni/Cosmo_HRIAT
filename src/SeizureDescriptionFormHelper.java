@@ -14,13 +14,14 @@ public class SeizureDescriptionFormHelper
     
     public String[] retieveSeizureInformation(String cosmoId)
     {
-        String[] SeizureStatusInfo = new String[7];
+        String[] seizureStatusInfo = new String[8];
         
         String seizureType = null;
         String description = null;
         String frequency = null;
         String duration = null;
         String aftermath = null;
+        String aftermathAssistance = null;
         String emergencyTreatment = null;
         Date lastUpdated = new Date(); 
         
@@ -30,7 +31,7 @@ public class SeizureDescriptionFormHelper
         
         ResultSet participantQuery = db
                 .select("seizureType, description, frequency, duration, "
-                        + "aftermath, emergencyTreatment, seizureLastUpdated",
+                        + "aftermath, aftermathAssistance, emergencyTreatment, seizuresLastUpdated",
                         "Seizures", "cosmoID=" + cosmoId, "");
         
         try
@@ -42,6 +43,7 @@ public class SeizureDescriptionFormHelper
                 frequency = participantQuery.getString(3);
                 duration = participantQuery.getString(4);
                 aftermath = participantQuery.getString(5);
+                aftermathAssistance = participantQuery.getString(6);
                 emergencyTreatment = participantQuery.getString(7);
                 lastUpdated = participantQuery.getDate(8);
             }
@@ -51,31 +53,24 @@ public class SeizureDescriptionFormHelper
             e.printStackTrace();
 
             System.out.println("Failed to query paritipant's seizure info");
-        }
+        }        
+        seizureStatusInfo[0] = seizureType;
+        seizureStatusInfo[1] = description;
+        seizureStatusInfo[2] = frequency;
+        seizureStatusInfo[3] = duration;
+        seizureStatusInfo[4] = aftermath;
+        seizureStatusInfo[5] = aftermathAssistance;
+        seizureStatusInfo[6] = emergencyTreatment;
+        seizureStatusInfo[7] = lastUpdated.toString();
         
-        ResultSet medicationQuery = db
-                .select("medicationName, dosage, timesGiven",
-                        "Medication", "cosmoID=" + cosmoId, " AND reason=seizure");
-        
-        try
+        for(int i = 0; i < seizureStatusInfo.length;i++)
         {
-            while(medicationQuery.next())
+            if (seizureStatusInfo[i] == null)
             {
-                medicationName = medicationQuery.getString(1);
-                dosage = medicationQuery.getString(2);
-                timesGiven = medicationQuery.getDate(3);
+                seizureStatusInfo[i] = " ";
             }
         }
-        catch ( SQLException e )
-        {
-            e.printStackTrace();
-
-        }
         
-        
-        
-        
-        
-        return SeizureStatusInfo;
+        return seizureStatusInfo;
     }
 }
