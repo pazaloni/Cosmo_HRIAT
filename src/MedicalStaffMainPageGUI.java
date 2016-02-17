@@ -925,8 +925,8 @@ public class MedicalStaffMainPageGUI extends Application
 
         // column 1
         noteDisplayPane.add(dateInfoLabel, 1, 0);
-        noteDisplayPane.add(staffInfoLabel, 1, 1);
-        noteDisplayPane.add(participantInfoLabel, 1, 2);
+        noteDisplayPane.add(staffInfoLabel, 1, 2);
+        noteDisplayPane.add(participantInfoLabel, 1, 1);
         noteDisplayPane.add(subjectInfoLabel, 1, 3);
         noteDisplayPane.add(resolvedCb, 0, 4);
 
@@ -939,19 +939,43 @@ public class MedicalStaffMainPageGUI extends Application
         hbox.setPadding(new Insets(10, 0, 0, 0));
         // add the note table vbox to the hbox
         hbox.getChildren().addAll(vbox, noteDisplayPane);
-
+        assignNoteDetailLabels(nTVCont.noteIDs.get(0).getIDProperty().get());
         return hbox;
     }
 
     private void createNoteDetailLabels()
     {
-
-        Label dateInfoLabel = new Label();
-        Label staffInfoLabel = new Label();
-        Label participantInfoLabel = new Label();
-        Label subjectInfoLabel = new Label();
-
         resolvedCb = new CheckBox("Resolved");
+
+        nTVCont.noteTable.setOnMousePressed(event -> {
+            assignNoteDetailLabels(nTVCont.getSelectedPK());
+        });
+    }
+
+    /**
+     * 
+     * Purpose: Assign the information pulled from the database to the various 
+     * control 
+     * @param selectedPK the note selected
+     */
+    private void assignNoteDetailLabels( String selectedPK )
+    {
+        NotePaneHelper noteHelper = new NotePaneHelper();
+        Note currentNote = noteHelper.queryNote(selectedPK);
+
+        dateInfoLabel.setText(currentNote.getDate());
+        participantInfoLabel.setText(noteHelper.getParticipantName(currentNote.getParticipant()));
+        staffInfoLabel.setText(noteHelper.getStaffName(currentNote.getCreatorID()));
+        subjectInfoLabel.setText(currentNote.getDescription());
+        resolvedCb.setSelected(Boolean.parseBoolean(currentNote.getResolved()));
+        resolvedCb.setOnAction(event -> {
+            if ( resolvedCb.isSelected() )
+            {
+                // TODO update to database to be resolved
+                noteHelper.setNoteAsResolved(currentNote);
+            }
+            System.out.println("Resolved");
+        });
 
         dateInfoLabel.setMaxWidth(150);
         dateInfoLabel.setMinWidth(150);
@@ -965,32 +989,6 @@ public class MedicalStaffMainPageGUI extends Application
         subjectInfoLabel.setMaxWidth(150);
         subjectInfoLabel.setMinWidth(150);
         subjectInfoLabel.setWrapText(true);
-
-        nTVCont.noteTable.setOnMousePressed(event -> {
-            assignNoteDetailLabels(nTVCont.getSelectedPK());
-        });
-    }
-
-    private void assignNoteDetailLabels( String selectedPK )
-    {
-        NotePaneHelper noteHelper = new NotePaneHelper();
-        Note currentNote = noteHelper.queryNote(selectedPK);
-
-        dateInfoLabel.setText(currentNote.getDate());
-        participantInfoLabel.setText(noteHelper.getParticipantName(currentNote
-                .getParticipant()));
-        staffInfoLabel.setText(noteHelper.getStaffName(currentNote
-                .getCreatorID()));
-        subjectInfoLabel.setText(currentNote.getDescription());
-        resolvedCb.setSelected(Boolean.parseBoolean(currentNote.getResolved()));
-        resolvedCb.setOnAction(event -> {
-            if ( resolvedCb.isSelected() )
-            {
-                //TODO update to database to be resolved
-                noteHelper.setNoteAsResolved(currentNote);
-            }
-            System.out.println("Resolved");
-        });
 
     }
 
