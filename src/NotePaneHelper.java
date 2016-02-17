@@ -63,26 +63,84 @@ public class NotePaneHelper
         {
             e.printStackTrace();
         }
-
-        
-
         return note;
     }
 
-    private String getParticipantName(String cosmoID)
+    /**
+     * 
+     * Purpose: Get the participant first and last name
+     * 
+     * @param cosmoID the participants comsoid
+     * @return string containing the participants first and last name
+     */
+    public String getParticipantName( String cosmoID )
     {
-        ResultSet rs = db.select("firstName, lastName", "Participant", "cosmoID=" + cosmoID, "");
-        
+        ResultSet rs = db.select("firstName, lastName", "Participant",
+                "cosmoID=" + cosmoID, "");
+
         String participantName = null;
         try
         {
-            participantName = rs.getString(1) + " " + rs.getString(2);
+            while ( rs.next() )
+            {
+                participantName = rs.getString(1) + " " + rs.getString(2);
+            }
         }
         catch ( SQLException e )
         {
             e.printStackTrace();
         }
-        
+
         return participantName;
+    }
+
+    /**
+     * 
+     * Purpose: Get the first and last name of the staff
+     * 
+     * @param username: the username of the staff
+     * @return String containing the staff first and last name
+     */
+    public String getStaffName( String username )
+    {
+
+        ResultSet rs = db.select("firstName, lastName", "Staff", "UserName="
+                + "'" + username + "'", "");
+
+        String staffName = null;
+        try
+        {
+            while ( rs.next() )
+            {
+                staffName = rs.getString(1) + " " + rs.getString(2);
+            }
+        }
+        catch ( SQLException e )
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return staffName;
+    }
+
+    /**
+     * 
+     * Purpose: set a note as "resolved" in the database when they click the
+     * checkbox that says resolved
+     * 
+     * @param noteID the note that will be resolved
+     */
+    public void setNoteAsResolved( Note note )
+    {
+        // creates a string array that will hold the values that will be used to
+        // update the note
+        String vals[][] = new String[2][2];
+        vals[0][0] = "noteID";
+        vals[0][1] = note.getNoteID();
+        vals[1][0] = "resolved";
+        vals[1][1] = "true";
+        // updates the note in the database, using the array of values
+        db.update(vals, "Notes", note.getNoteID());
+
     }
 }

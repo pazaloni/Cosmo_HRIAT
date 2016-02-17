@@ -331,7 +331,7 @@ public class DatabaseHelper
         String updateStatement = "Update " + tableName + " SET ";
 
         // add each field and value to their strings
-        for ( int r = 0; r < values.length; r++ )
+        for ( int r = 1; r < values.length; r++ )
         {
             String fieldName = "" + values[r][0];
             String value = "" + values[r][1];
