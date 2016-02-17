@@ -391,6 +391,8 @@ public class participantDetailsGUI extends Application
                 urlPic = urlPic.replace("/bin", "");
 
                 Image img = new Image(urlPic + results.getString(8));
+                
+                System.out.println(urlPic + results.getString(8));
 
                 previewPicture = new ImageView(img);
                 previewPicture.setFitWidth(122);
