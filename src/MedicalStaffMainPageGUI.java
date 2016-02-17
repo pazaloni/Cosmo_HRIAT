@@ -876,7 +876,14 @@ public class MedicalStaffMainPageGUI extends Application
             @Override
             public void handle( ActionEvent event )
             {
-                nTVCont.refreshTable();
+
+                if ( !nTVCont.noteIDs.isEmpty() )
+                {
+                    nTVCont.refreshTable();
+                    // By default, we select the first note in the list
+                    assignNoteDetailLabels(nTVCont.noteIDs.get(0)
+                            .getIDProperty().get());
+                }
             }
         });
 
@@ -939,7 +946,7 @@ public class MedicalStaffMainPageGUI extends Application
         hbox.setPadding(new Insets(10, 0, 0, 0));
         // add the note table vbox to the hbox
         hbox.getChildren().addAll(vbox, noteDisplayPane);
-        assignNoteDetailLabels(nTVCont.noteIDs.get(0).getIDProperty().get());
+
         return hbox;
     }
 
@@ -954,42 +961,61 @@ public class MedicalStaffMainPageGUI extends Application
 
     /**
      * 
-     * Purpose: Assign the information pulled from the database to the various 
-     * control 
+     * Purpose: Assign the information pulled from the database to the various
+     * control
+     * 
      * @param selectedPK the note selected
      */
     private void assignNoteDetailLabels( String selectedPK )
     {
         NotePaneHelper noteHelper = new NotePaneHelper();
         Note currentNote = noteHelper.queryNote(selectedPK);
+        // Refresh table before removing
+        nTVCont.refreshTable();
+        if ( !nTVCont.noteIDs.isEmpty() )
+        {
 
-        dateInfoLabel.setText(currentNote.getDate());
-        participantInfoLabel.setText(noteHelper.getParticipantName(currentNote.getParticipant()));
-        staffInfoLabel.setText(noteHelper.getStaffName(currentNote.getCreatorID()));
-        subjectInfoLabel.setText(currentNote.getDescription());
-        resolvedCb.setSelected(Boolean.parseBoolean(currentNote.getResolved()));
-        resolvedCb.setOnAction(event -> {
-            if ( resolvedCb.isSelected() )
-            {
-                // TODO update to database to be resolved
-                noteHelper.setNoteAsResolved(currentNote);
-            }
-            System.out.println("Resolved");
-        });
+            dateInfoLabel.setText(currentNote.getDate());
+            participantInfoLabel.setText(noteHelper
+                    .getParticipantName(currentNote.getParticipant()));
+            staffInfoLabel.setText(noteHelper.getStaffName(currentNote
+                    .getCreatorID()));
+            subjectInfoLabel.setText(currentNote.getDescription());
+            resolvedCb.setSelected(Boolean.parseBoolean(currentNote
+                    .getResolved()));
+            resolvedCb.setOnAction(event -> {
+                if ( resolvedCb.isSelected() )
+                {
+                    // TODO update to database to be resolved
+                    noteHelper.setNoteAsResolved(currentNote);
+                    nTVCont.refreshTable();
+                    dateInfoLabel.setText("");
+                    staffInfoLabel.setText("");
+                    participantInfoLabel.setText("");
+                    subjectInfoLabel.setText("");
+                    resolvedCb.setSelected(false);
+                    // By default, we select the first note in the list
+                    if ( !nTVCont.noteIDs.isEmpty() )
+                    {
+                        assignNoteDetailLabels(nTVCont.noteIDs.get(0)
+                                .getIDProperty().get());
+                    }
+                }
+            });
 
-        dateInfoLabel.setMaxWidth(150);
-        dateInfoLabel.setMinWidth(150);
+            dateInfoLabel.setMaxWidth(150);
+            dateInfoLabel.setMinWidth(150);
 
-        staffInfoLabel.setMaxWidth(150);
-        staffInfoLabel.setMinWidth(150);
+            staffInfoLabel.setMaxWidth(150);
+            staffInfoLabel.setMinWidth(150);
 
-        participantInfoLabel.setMaxWidth(150);
-        participantInfoLabel.setMinWidth(150);
+            participantInfoLabel.setMaxWidth(150);
+            participantInfoLabel.setMinWidth(150);
 
-        subjectInfoLabel.setMaxWidth(150);
-        subjectInfoLabel.setMinWidth(150);
-        subjectInfoLabel.setWrapText(true);
-
+            subjectInfoLabel.setMaxWidth(150);
+            subjectInfoLabel.setMinWidth(150);
+            subjectInfoLabel.setWrapText(true);
+        }
     }
 
     /**

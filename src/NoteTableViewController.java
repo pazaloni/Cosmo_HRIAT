@@ -1,5 +1,6 @@
 
 import java.sql.*;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
@@ -216,11 +217,12 @@ public class NoteTableViewController
      * 
      * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-	public void refreshTable()
+
+    public void refreshTable()
 	{
-		this.noteIDs.clear();
-		this.noteTable.getColumns().clear();
-		this.initialize();
+        this.noteIDs.clear();
+        this.noteTable.getColumns().clear();
+        this.initialize();;
 	}
 	
 	/**
