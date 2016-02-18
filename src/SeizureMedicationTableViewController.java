@@ -53,7 +53,7 @@ public class SeizureMedicationTableViewController
 
         db.connect();
         
-        // Select statemtn for the
+        // Select statement to get the seizure id
         ResultSet rs = db.select("seizureID", "Seizures",
                 "cosmoID=" + cosmoId, "");
         String seizureID = "";
@@ -73,6 +73,7 @@ public class SeizureMedicationTableViewController
 
         if (!seizureID.equals(""))
         {
+        	//Select statement to get the medication id.
             ResultSet sm = db.select("medicationID", "SeizureMedication",
                 "seizureID=" + seizureID, "");
             String medicationID;
@@ -83,7 +84,7 @@ public class SeizureMedicationTableViewController
                 {
     
                     medicationID = sm.getString(1);
-                    
+                    //Select statement to get the medication for the seizure
                     rs = db.select("medicationName, dosage, timesGiven", 
                             "Medication", "MedicationID=" + medicationID, "");
                     

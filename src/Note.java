@@ -2,8 +2,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.sql.Time;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Note 
 {
+	
 	// The unique ID of the note
 	private int noteID;
 	// the description attached to the note
@@ -11,7 +15,7 @@ public class Note
 	// The ID of the user who created the note
 	private String creatorID;
 	// The ID of the participant the note was attached to
-	private String participantID;
+	private int participantID;
 	// The date/time that the note was created at
 	private Date dateCreated;
 	// Whether or not the note has been looked at by a medical administrator
@@ -39,13 +43,13 @@ public class Note
 	 *            administrator
 	 * @author Niklaas Neijmeijer cst207 Steven Palchinski cst209
 	 */
-	public Note(int noteID, Participant participant, String description,
+	public Note(int noteID, int participantID, String description,
 			String creator, Date dateCreated, boolean viewed, boolean resolved) 
 	{
 		this.noteID = noteID;
 		this.description = description;
 		this.creatorID = creator;
-		this.participantID = participant.getCosmoID();
+		this.participantID = participantID;
 		this.dateCreated = dateCreated;
 		this.viewed = viewed;
 		this.resolved = resolved;
@@ -74,7 +78,7 @@ public class Note
 	{
 		this.description = description;
 		this.creatorID = creator;
-		this.participantID = ""+participant;
+		this.participantID = participant;
 		this.dateCreated = dateCreated;
 		this.viewed = viewed;
 		this.resolved = resolved;
@@ -105,7 +109,7 @@ public class Note
 		values[2][0] = "submitted";
 		values[3][0] = "description";
 		SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss");
-		values[0][1] = this.participantID;
+		values[0][1] = this.participantID + "";
 		values[1][1] = this.creatorID;
 		values[2][1] = df.format(dateCreated);
 		values[3][1] = description;
@@ -123,6 +127,149 @@ public class Note
 		{
 			//A blank description error is returned
 			result = "Cannot create a note with a blank description.";
+		}
+		return result;
+	}
+
+	public StringProperty getIDProperty() 
+	{
+		StringProperty p = new SimpleStringProperty();
+		p.set(noteID + "");
+		return p;
+	}
+	
+	public String getNoteID() 
+	{
+		return noteID + "";
+	}
+	
+	public String getDescription()
+	{
+		return description + "";
+	}
+	
+	public String getCreatorID()
+	{
+		return creatorID + "";
+	}
+	
+	public String getParticipant()
+	{
+		return participantID +"";
+	}
+	
+	public String getDate()
+	{
+		return dateCreated + "";
+	}
+	
+	public String getViewed()
+	{
+		return viewed + "";
+	}
+	
+	public String getResolved()
+	{
+		return resolved +"";
+	}
+	
+	public StringProperty descriptionProperty()
+	{
+		StringProperty p = new SimpleStringProperty();
+		p.set(description + "");
+		return p;
+	}
+	
+	public StringProperty creatorProperty()
+	{
+		StringProperty p = new SimpleStringProperty();
+		p.set(creatorID + "");
+		return p;
+	}
+	
+	public StringProperty participantProperty()
+	{
+		StringProperty p = new SimpleStringProperty();
+		p.set(participantID + "");
+		return p;
+	}
+	
+	public StringProperty dateCreatedProperty()
+	{
+		StringProperty p = new SimpleStringProperty();
+		p.set(dateCreated + "");
+		return p;
+	}
+	
+	public StringProperty viewedProperty()
+	{
+		String read = " ";
+		if(viewed)
+		{
+			read = "Read";
+		}
+		else
+		{
+			read = "Unread";
+		}
+		StringProperty p = new SimpleStringProperty();
+		p.set(read + "");
+		return p;
+	}
+	
+	public StringProperty resolvedProperty()
+	{
+		StringProperty p = new SimpleStringProperty();
+		p.set(resolved + "");
+		return p;
+	}
+	
+	public String toString()
+	{
+		return getNoteID();
+		
+	}
+	
+	public StringProperty getViewedProperty()
+	{
+		StringProperty p = new SimpleStringProperty();
+		p.set(viewed + "");
+		return p;
+	}
+	
+	public void setAsViewed()
+	{
+			
+		viewed = true;
+	} 
+	
+	public SimpleStringProperty getReadAsString()
+	{
+		if(this.viewed)
+		{
+			return new SimpleStringProperty("Read");
+		}
+		return new SimpleStringProperty("Unread");
+	}
+	
+	public String getRead()
+	{
+		String read = "Unread";
+		if(this.viewed)
+		{
+			read = "Read";
+		}
+		return read;
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		boolean result = false;
+		if(!(o == null) && o.getClass() == Note.class && 
+				((Note)o).noteID == this.noteID)
+		{
+			result = true;
 		}
 		return result;
 	}

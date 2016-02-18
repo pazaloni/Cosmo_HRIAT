@@ -18,7 +18,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-
+/**
+ * Purpose: Display a seizure description form tab
+ * @author cst205, cst207
+ *
+ */
 public class SeizureDescriptionFormGUI
 {
     public static final String FORM_TITLE = "Seizure Description Form";
@@ -107,11 +111,9 @@ public class SeizureDescriptionFormGUI
         VBox postSeizureInfoBox = new VBox();
 
         Label dateCompletedLbl = new Label("Date Completed: ");
-        Label booleanQuestionLbl = new Label("Does this individual have "
-                + "a seizure disorder/epilepsy?");
         Label typeQuestionLbl = new Label("What type of seizure does this"
                 + " individual have?");
-
+        
         Label personalSeizureInfoLbl = new Label("Personal Seizure Information");
         personalSeizureInfoLbl.setFont(new Font(18));
 
@@ -163,7 +165,7 @@ public class SeizureDescriptionFormGUI
         updateBox.getChildren().addAll( dateCompletedLbl,
                 lastUpdatedTxt);
 
-        seizureInfoBox.getChildren().addAll(descriptionLbl, descriptionTxt,
+        seizureInfoBox.getChildren().addAll(typeQuestionLbl, seizureTypeTxt, descriptionLbl, descriptionTxt,
                 frequencyLbl, frequencyTxt, durationLbl, durationTxt,
                 treatmentLbl, emergencyTreatmentTxt);
         seizureInfoBox.setPadding(new Insets(10, 20, 10, 20));
