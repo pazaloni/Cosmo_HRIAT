@@ -70,6 +70,7 @@ public class SeizureDescriptionFormGUI
 
         mainBox = new VBox();
 
+        //make sure basic staff can't save
         if ( !(this.loggedInUser instanceof MedicalAdministrator) )
         {
             this.btnSave.setVisible(false);
@@ -91,6 +92,12 @@ public class SeizureDescriptionFormGUI
         return parentTab;
     }
 
+    /**
+     * 
+     * Purpose:GUI to create the basic layout of the seizure form tab
+     * @param cosmoId of the participant in question
+     * @return VBox that will be displayed
+     */
     private VBox createBasicSeizureInfo( String cosmoId )
     {
         VBox mainBox = new VBox();
@@ -172,6 +179,13 @@ public class SeizureDescriptionFormGUI
 
     }
 
+    /**
+     * 
+     * Purpose: take in information from the database and display it in the 
+     *  proper fields, fields will be empty if the participant does not have
+     *  seizures
+     * @param cosmoId of the participant
+     */
     private void assignSeizureInfo( String cosmoId )
     {
         SeizureDescriptionFormHelper helper = new SeizureDescriptionFormHelper();
@@ -183,20 +197,27 @@ public class SeizureDescriptionFormGUI
         aftermathTxt.setText(info[4]);
         aftermathAssistanceTxt.setText(info[5]);
         emergencyTreatmentTxt.setText(info[6]);
-        //info[7] = info[7].substring(0, info[7].length() - 7);
         lastUpdatedTxt.setText(info[7]);
 
 
     }
     
+    /**
+     * 
+     * Purpose: to take in information from the database and product a table
+     *  that shows all medications the participant is taking for seizures
+     * @param cosmoId
+     * @return
+     */
     private VBox seizureMedicationTable( String cosmoId )
     {
         VBox medicationBox = new VBox();
 
         Label medicationLbl = new Label("Current Seizure Medication(s)");
 
-        TableView<SeizureMedication> table = new SeizureMedicationTableViewController(
-                cosmoId).seizureMedicationTable;
+        TableView<SeizureMedication> table = new
+                SeizureMedicationTableViewController(
+                        cosmoId).seizureMedicationTable;
 
         table.setMaxWidth(700);
         medicationBox.getChildren().addAll(medicationLbl, table);
