@@ -14,16 +14,34 @@ import javafx.scene.text.Text;
 public class PartcipantUpdateForm extends ScrollPane
 {
 	private int cosmoID;
-	private DatabaseHelper db;
 	private VBox mainBox;
-	private Button saveBtn;
+	public Button saveBtn;
+	private ParticipantUpdateFormController controller;
+	
+	public TextField participantNameTxt = new TextField();
+	public TextField participantAddressTxt = new TextField();
+	public TextField participantCityTxt = new TextField();
+	public TextField participantPostalCodeTxt = new TextField();
+	public TextField participantPhoneNumberTxt = new TextField();
+	public TextField participantBirthdateTxt = new TextField();
+	public TextField participantSinTxt = new TextField();
+	
+	public TextField kinNameTxt = new TextField();
+	public TextField kinAddressTxt = new TextField();
+	public TextField kinCityTxt = new TextField();
+	public TextField kinPostalCodeTxt = new TextField();
+	public TextField kinHomePhoneTxt = new TextField();
+	public TextField kinWorkPhoneTxt = new TextField();
 	
 	public PartcipantUpdateForm(int cosmoID)
 	{
 		this.cosmoID = cosmoID;
 		mainBox = new VBox();
+		controller = new ParticipantUpdateFormController(cosmoID);
+		
 		Separator line1 = new Separator();
 		line1.minWidth(1000);
+		
 		
 		mainBox.getChildren().addAll(createHeader(), createParticipantInfoArea(),
 				line1);
@@ -80,36 +98,36 @@ public class PartcipantUpdateForm extends ScrollPane
 		birthdateLbl.setPadding(insets);
 		sinLbl.setPadding(insets);
 		
-		TextField nameTxt = new TextField();
-		TextField addressTxt = new TextField();
-		TextField cityTxt = new TextField();
-		TextField postalCodeTxt = new TextField();
-		TextField phoneNumberTxt = new TextField();
-		TextField birthdateTxt = new TextField();
-		TextField sinTxt = new TextField();
+		participantNameTxt = new TextField();
+		participantAddressTxt = new TextField();
+		participantCityTxt = new TextField();
+		participantPostalCodeTxt = new TextField();
+		participantPhoneNumberTxt = new TextField();
+		participantBirthdateTxt = new TextField();
+		participantSinTxt = new TextField();
 		
 		
 		mainPane.add(nameLbl, 0, 0);
-		mainPane.add(nameTxt, 1, 0);
+		mainPane.add(participantNameTxt, 1, 0);
 		mainPane.add(addressLbl, 0, 1);
-		mainPane.add(addressTxt, 1, 1);
+		mainPane.add(participantAddressTxt, 1, 1);
 		mainPane.add(cityLbl, 0, 2);
-		mainPane.add(cityTxt, 1, 2);
+		mainPane.add(participantCityTxt, 1, 2);
 		mainPane.add(postalCodeLbl, 0, 3);
-		mainPane.add(postalCodeTxt, 1, 3);
+		mainPane.add(participantPostalCodeTxt, 1, 3);
 		mainPane.add(phoneNumberLbl, 3, 0);
-		mainPane.add(phoneNumberTxt, 4, 0);
+		mainPane.add(participantPhoneNumberTxt, 4, 0);
 		mainPane.add(birthdateLbl, 3, 1);
-		mainPane.add(birthdateTxt, 4, 1);
+		mainPane.add(participantBirthdateTxt, 4, 1);
 		mainPane.add(sinLbl, 3, 2);
-		mainPane.add(sinTxt, 4, 2);
+		mainPane.add(participantSinTxt, 4, 2);
 		
-		mainPane.setMargin(nameTxt, insets);
-		mainPane.setMargin(addressTxt, insets);
-		mainPane.setMargin(cityTxt, insets);
-		mainPane.setMargin(postalCodeTxt, insets);
-		mainPane.setMargin(birthdateTxt, insets);
-		mainPane.setMargin(sinTxt, insets);
+		mainPane.setMargin(participantNameTxt, insets);
+		mainPane.setMargin(participantAddressTxt, insets);
+		mainPane.setMargin(participantCityTxt, insets);
+		mainPane.setMargin(participantPostalCodeTxt, insets);
+		mainPane.setMargin(participantBirthdateTxt, insets);
+		mainPane.setMargin(participantSinTxt, insets);
 		
 		mainPane.setPadding(new Insets(5,5,5,5));
 		
@@ -139,17 +157,26 @@ public class PartcipantUpdateForm extends ScrollPane
 		homePhoneLbl.setPadding(insets);
 		workPhoneLbl.setPadding(insets);
 		
-		TextField nameTxt = new TextField();
-		TextField addressTxt = new TextField();
-		TextField cityTxt = new TextField();
-		TextField postalCodeTxt = new TextField();
-		TextField homePhoneTxt = new TextField();
-		TextField workPhoneTxt = new TextField();
+		kinNameTxt = new TextField();
+		kinAddressTxt = new TextField();
+		kinCityTxt = new TextField();
+		kinPostalCodeTxt = new TextField();
+		kinHomePhoneTxt = new TextField();
+		kinWorkPhoneTxt = new TextField();
 		
 		main.add(nameLbl, 0, 0);
-		main.add(nameTxt, 1, 0);
+		main.add(kinNameTxt, 1, 0);
 		main.add(addressLbl, 0, 1);
-		main.add(addressTxt, 1, 1);
+		main.add(kinAddressTxt, 1, 1);
+		main.add(cityLbl, 0, 2);
+		main.add(kinCityTxt, 1, 2);
+		main.add(postalCodeLbl, 0, 3);
+		main.add(kinPostalCodeTxt, 1, 3);
+		main.add(phoneLbl, 2, 0);
+		main.add(homePhoneLbl, 2, 1);
+		main.add(kinHomePhoneTxt, 3, 1);
+		main.add(workPhoneLbl, 2, 2);
+		main.add(kinWorkPhoneTxt, 3, 2);
 		
 		return main;
 		
