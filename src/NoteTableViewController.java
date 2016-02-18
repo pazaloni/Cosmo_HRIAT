@@ -27,7 +27,7 @@ public class NoteTableViewController
 	public ObservableList<Note> noteIDs = FXCollections.observableArrayList();
 
 	//Instance of the database helper
-	private DatabaseHelper db = new DatabaseHelper();
+	private DatabaseHelper db;
 	
 	/**
 	 * Purpose:	The constructor for the NoteTableViewController
@@ -40,6 +40,8 @@ public class NoteTableViewController
 	{
 		//Takes passed in TableView
 		this.noteTable = noteTable;
+		db = new DatabaseHelper();
+		db.connect();
 		//runs the initialize class
 		initialize();
 		//sets the note items to the TableView
@@ -54,8 +56,9 @@ public class NoteTableViewController
 	 */
 	private void initializeNoteData() 
 	{
+	    db.connect();
 		//ResultSet that will get back all of the notes that are not resolved 
-		ResultSet rs = db.select("*", "Notes", "not resolved", "noteID");
+		ResultSet rs = db.select("*", "Notes", "(((Notes.resolved)=False))", "noteID");
 		
 		//Integer that will store the note id
 		int noteID;
@@ -107,6 +110,7 @@ public class NoteTableViewController
 		{
 			e.printStackTrace();
 		}
+		db.disconnect();
 	}
 	
 	/**
@@ -119,7 +123,7 @@ public class NoteTableViewController
 	{
 		//calls the initialize data function
 		initializeNoteData();
-		
+		db.connect();
 		idColumn.setCellValueFactory(cellData -> cellData.getValue()
 				.getIDProperty());
 		
@@ -180,6 +184,7 @@ public class NoteTableViewController
 			});
 			return row;
 		});
+		db.disconnect();
 	}
 	
 	/**
@@ -220,9 +225,12 @@ public class NoteTableViewController
 
     public void refreshTable()
 	{
+        db.connect();
         this.noteIDs.clear();
         this.noteTable.getColumns().clear();
-        this.initialize();;
+        
+        this.initialize();
+        db.disconnect();
 	}
 	
 	/**
@@ -234,6 +242,7 @@ public class NoteTableViewController
      */
 	public void setAsRead(Note note)
 	{
+	    db.connect();
 		//creates a string array that will hold the values that will be used to 
 		//update the note
 		String vals[][] = new String[2][2];
@@ -246,7 +255,9 @@ public class NoteTableViewController
 		db.update(vals, "Notes", note.getNoteID());
 		
 		//refresh the table
-		refreshTable();		
+		refreshTable();	
+		
+		db.disconnect();
 	}
 	
 

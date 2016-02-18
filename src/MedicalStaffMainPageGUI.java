@@ -881,9 +881,9 @@ public class MedicalStaffMainPageGUI extends Application
                 {
                     nTVCont.refreshTable();
                     // By default, we select the first note in the list
-                    assignNoteDetailLabels(nTVCont.noteIDs.get(0)
-                            .getIDProperty().get());
+                    //assignNoteDetailLabels(nTVCont.noteIDs.get(0).getIDProperty().get());
                 }
+                nTVCont.refreshTable();
             }
         });
 
@@ -975,18 +975,16 @@ public class MedicalStaffMainPageGUI extends Application
         if ( !nTVCont.noteIDs.isEmpty() )
         {
 
-            dateInfoLabel.setText(currentNote.getDate());
-            participantInfoLabel.setText(noteHelper
-                    .getParticipantName(currentNote.getParticipant()));
-            staffInfoLabel.setText(noteHelper.getStaffName(currentNote
-                    .getCreatorID()));
+            dateInfoLabel.setText(currentNote.getDate());participantInfoLabel.
+            setText(noteHelper.getParticipantName(currentNote.getParticipant()));
+            staffInfoLabel.setText(noteHelper.getStaffName(currentNote.getCreatorID()));
             subjectInfoLabel.setText(currentNote.getDescription());
-            resolvedCb.setSelected(Boolean.parseBoolean(currentNote
-                    .getResolved()));
+            resolvedCb.setSelected(Boolean.parseBoolean(currentNote.getResolved()));
+            
             resolvedCb.setOnAction(event -> {
                 if ( resolvedCb.isSelected() )
                 {
-                    // TODO update to database to be resolved
+                
                     noteHelper.setNoteAsResolved(currentNote);
                     nTVCont.refreshTable();
                     dateInfoLabel.setText("");
@@ -997,8 +995,8 @@ public class MedicalStaffMainPageGUI extends Application
                     // By default, we select the first note in the list
                     if ( !nTVCont.noteIDs.isEmpty() )
                     {
-                        assignNoteDetailLabels(nTVCont.noteIDs.get(0)
-                                .getIDProperty().get());
+//                        assignNoteDetailLabels(nTVCont.noteIDs.get(0)
+//                                .getIDProperty().get());
                     }
                 }
             });
