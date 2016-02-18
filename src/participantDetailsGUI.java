@@ -11,7 +11,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import javafx.application.Application;
@@ -1183,16 +1185,55 @@ public class participantDetailsGUI extends Application
                     LocalDate date = birthDatePicker.getValue();
                     String birthDateString = date.format(DateTimeFormatter
                             .ofPattern("dd-MM-yyyy"));
+                    
+                    
+                    //check for changed data
+                    //check first name
+                    if(!firstNameTxt.getText().equals(firstNameText.getText()))
+                    {                       
+                        
+                        DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant",
+                        "First Name: \"" + firstNameText.getText() + "\" → \"" + firstNameTxt.getText() + "\"" );
+                         firstNameText.setText(firstNameTxt.getText());
+                    }
+                    
+                    //check last name
+                    if(!lastNameTxt.getText().equals(lastNameText.getText()))
+                    {
+                     
+                        DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant",
+                        "Last Name: \"" + lastNameText.getText() + "\" → \"" + lastNameTxt.getText() + "\"" );
+                        lastNameText.setText(lastNameTxt.getText());
+                    }
+                    
+                    //check birth date string
+                    if(!birthDateString.equals(dobtext.getText()))
+                    {
+                         
+                         DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant",
+                         "Birth Date: \"" + dobtext.getText() + "\" → \"" + birthDateString + "\"" );
+                         dobtext.setText(birthDateString);
+                    }
+                    
+                    //check health number
+                    if(!healthNumTxt.getText().equals(phnText.getText()))
+                    {
+                        
+                        DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant",
+                        "Health Number: \"" + phnText.getText() + "\" → \"" + healthNumTxt.getText() + "\"" );
+                        phnText.setText(healthNumTxt.getText());
+                    }
+                    
+                    //check address 
+                    if(!addressTxt.getText().equals(addressText.getText()))
+                    {
+                        
+                        DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant",
+                        "Address: \"" + addressText.getText() + "\" → \"" + addressTxt.getText() + "\"" );
+                        addressText.setText(addressTxt.getText());
+                    }
+                    
 
-                    firstNameText.setText(firstNameTxt.getText());
-                    lastNameText.setText(lastNameTxt.getText());
-                    dobtext.setText(birthDateString);
-                    phnText.setText(healthNumTxt.getText());
-                    addressText.setText(addressTxt.getText());
-                    
-                    DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant",
-                            DBObject);
-                    
                 }
                 // if there is an error message, display it
                 else

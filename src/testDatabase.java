@@ -340,7 +340,7 @@ public class testDatabase {
 	@Test
 	public void testActivityLogInsert()
 	{
-		db.activtyLogEntry("testUser", "Login", db);
+		db.activtyLogEntry("testUser", "Login", "");
 		ResultSet rs = db.select("Who, Event", "ActivityLog", "Who = 'testUser'", "");
 		try
 		{
@@ -365,7 +365,7 @@ public class testDatabase {
 	@Test
 	public void testNoEventActivityLogInsert()
 	{
-		db.activtyLogEntry("testUser", "", db);
+		db.activtyLogEntry("testUser", "", "");
 		ResultSet rs = db.select("Who, Event", "ActivityLog", "Who = 'testUser'", "");
 		try
 		{

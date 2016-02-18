@@ -6,12 +6,14 @@ public class ActivityLog
     private StringProperty who;
     private StringProperty when;
     private StringProperty event;
+    private StringProperty details;
 
-    public ActivityLog(String who, String when, String event)
+    public ActivityLog(String who, String when, String event, String details)
     {
         this.who = new SimpleStringProperty(who);
         this.when = new SimpleStringProperty(when);
         this.event = new SimpleStringProperty(event);
+        this.details = new SimpleStringProperty(details);
     }
 
     /**
@@ -42,6 +44,16 @@ public class ActivityLog
     public StringProperty getEvent()
     {
         return event;
+    }
+    
+    /**
+     * 
+     * Purpose: return the details for the event
+     * @return
+     */
+    public StringProperty getDetails()
+    {
+        return details;
     }
     
     

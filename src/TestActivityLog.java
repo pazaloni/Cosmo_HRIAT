@@ -37,8 +37,8 @@ public class TestActivityLog
         timeStamp1 = "2/1/2016 2:23:25";
         timeStamp2 = "2/3/2016 1:20:19";
 
-        test1 = new ActivityLog(who1, timeStamp1, event1);
-        test2 = new ActivityLog(who2, timeStamp2, event2);
+        test1 = new ActivityLog(who1, timeStamp1, event1, "");
+        test2 = new ActivityLog(who2, timeStamp2, event2, "");
 
     }
 

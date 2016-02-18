@@ -129,8 +129,7 @@ public class MedicalStaffMainPageGUI extends Application
         dbObject.connect();
 
         loggedInUser = loggedInStaff;
-        dbObject.activtyLogEntry(loggedInStaff.GetUsername(), "Logged In",
-                dbObject);
+        dbObject.activtyLogEntry(loggedInStaff.GetUsername(), "Logged In", "");
         pTVCont = new ParticipantTableViewController();
         pTVCont.initialize();
 
@@ -153,8 +152,7 @@ public class MedicalStaffMainPageGUI extends Application
         {
             public void handle( WindowEvent we )
             {
-                dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout",
-                        dbObject);
+                dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout","");
             }
         });
     }
@@ -182,8 +180,7 @@ public class MedicalStaffMainPageGUI extends Application
             public void handle( ActionEvent e )
             {
                 medMainStage.close();
-                dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout",
-                        dbObject);
+                dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout","");
                 LoginGUI test5 = new LoginGUI();
                 try
                 {

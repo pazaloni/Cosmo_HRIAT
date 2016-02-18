@@ -17,7 +17,8 @@ import javafx.collections.ObservableList;
  */
 public class DatabaseHelper
 {
-    private final String DB_PATH = "G:/CIMPDatabase.accdb";
+   // private final String DB_PATH = "G:/CIMPDatabase.accdb";
+    private final String DB_PATH = "Z:/CIMPDatabaseTest.accdb";
     private Connection conn;
 
     public DatabaseHelper()
@@ -440,19 +441,20 @@ public class DatabaseHelper
      * @param event What the event was
      * @param db The database to insert into
      */
-    public void activtyLogEntry(String who, String event, DatabaseHelper db)
+    public void activtyLogEntry(String who, String event, String details)
     {
-        String whenString = "";
              
-        String activityValues[][] = new String [2][2];
+        String activityValues[][] = new String [3][3];
         
         activityValues[0][0] = "Who";
         activityValues[1][0] = "Event";
+        activityValues[2][0] = "Details";
         
         activityValues[0][1] = who;
         activityValues[1][1] = event;
+        activityValues[2][1] = details;
         
-        db.insert(activityValues, "ActivityLog");
+        this.insert(activityValues, "ActivityLog");
     }
 
 }

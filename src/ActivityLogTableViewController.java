@@ -29,6 +29,8 @@ public class ActivityLogTableViewController
             "When");
     protected TableColumn<ActivityLog, String> eventColumn = new TableColumn<ActivityLog, String>(
             "Event");
+    protected TableColumn<ActivityLog, String> detailsColumn = new TableColumn<ActivityLog, String>(
+            "Details");
 
     // database helper
     private DatabaseHelper db;
@@ -44,7 +46,7 @@ public class ActivityLogTableViewController
     {
         // When the activity log is instantiated, then pull all the information
         // from the database.
-        retrieveActiviyLogData();
+        retrieveActivityLogData();
         this.initialize();
         activityLogTable.setItems(activityLogData);
         activityLogTable.setFocusTraversable(false);
@@ -54,7 +56,7 @@ public class ActivityLogTableViewController
      * 
      * Purpose: Query the database for all the activity-log information
      */
-    private void retrieveActiviyLogData()
+    private void retrieveActivityLogData()
     {
         db = new DatabaseHelper();
 
@@ -67,19 +69,21 @@ public class ActivityLogTableViewController
         String who;
         String when;
         String event;
+        String details;
 
         try
         {
             while ( activityLogResults.next() )
             {
-                who = activityLogResults.getString(1);
-                when = activityLogResults.getString(2);
-                event = activityLogResults.getString(3);
+                who = activityLogResults.getString(2);
+                when = activityLogResults.getString(3);
+                event = activityLogResults.getString(4);
+                details = activityLogResults.getString(5);
 
                 // Remove extra 0's at the end of the timestamp
                 when = when.substring(0, when.length() - 7);
 
-                ActivityLog currentLog = new ActivityLog(who, when, event);
+                ActivityLog currentLog = new ActivityLog(who, when, event, details);
 
                 // Add the log to the list
                 activityLogData.add(currentLog);
@@ -115,6 +119,11 @@ public class ActivityLogTableViewController
                 .getEvent());
         eventColumn.setMinWidth(100);
         eventColumn.setResizable(false);
+        
+        detailsColumn.setCellValueFactory(cellData -> cellData.getValue()
+                .getDetails());
+        detailsColumn.setMinWidth(400);
+        detailsColumn.setResizable(false);
 
         activityLogTable.getColumns().addListener(
                 new ListChangeListener<Object>()
@@ -130,12 +139,12 @@ public class ActivityLogTableViewController
                             activityLogTable.getColumns().clear();
                             // re-add the columns in order
                             activityLogTable.getColumns().addAll(whoColumn,
-                                    whenColumn, eventColumn);
+                                    whenColumn, eventColumn, detailsColumn);
                         }
                     }
                 });
         activityLogTable.getColumns()
-                .addAll(whoColumn, whenColumn, eventColumn);
+                .addAll(whoColumn, whenColumn, eventColumn, detailsColumn);
 
     }
 

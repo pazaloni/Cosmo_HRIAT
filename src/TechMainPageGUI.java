@@ -102,7 +102,7 @@ public class TechMainPageGUI extends Application
         loggedInAdmin = (TechnicalAdministrator) loggedInStaff;
         // open the database connection
         dbObject.connect();
-        dbObject.activtyLogEntry(loggedInStaff.GetUsername(), "Logged In", dbObject);
+        dbObject.activtyLogEntry(loggedInStaff.GetUsername(), "Logged In", "");
         // create a staff table view controller and initialize it
         sTVCont = new StaffTableViewController();
         sTVCont.initialize();
@@ -235,7 +235,7 @@ public class TechMainPageGUI extends Application
         
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
-                dbObject.activtyLogEntry(loggedInAdmin.GetUsername(), "Logout", dbObject);
+                dbObject.activtyLogEntry(loggedInAdmin.GetUsername(), "Logout", "");
             }
         });
     }
@@ -528,7 +528,7 @@ public class TechMainPageGUI extends Application
             public void handle(ActionEvent e)
             {
                 stageTech.close();
-                dbObject.activtyLogEntry(loggedInAdmin.GetUsername(), "Logout", dbObject);
+                dbObject.activtyLogEntry(loggedInAdmin.GetUsername(), "Logout", "");
                 LoginGUI test5 = new LoginGUI();
                 try
                 {
