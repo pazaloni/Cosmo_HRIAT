@@ -149,7 +149,7 @@ public class MedicalStaffMainPageGUI extends Application
         medMainStage.resizableProperty().set(true);
         medMainStage.show();
         // Event for when stage is closed
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>()
+        medMainStage.setOnCloseRequest(new EventHandler<WindowEvent>()
         {
             public void handle( WindowEvent we )
             {
@@ -181,6 +181,7 @@ public class MedicalStaffMainPageGUI extends Application
             @Override
             public void handle( ActionEvent e )
             {
+            	medMainStage.setOnCloseRequest(null);
                 medMainStage.close();
                 dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout",
                         dbObject);
