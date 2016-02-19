@@ -17,9 +17,9 @@ import javafx.collections.ObservableList;
  */
 public class DatabaseHelper
 {
-	//the shared database
-    //private final String DB_PATH = "Z:/CIMPDatabase.accdb";
-    //Local database
+    // the shared database
+    // private final String DB_PATH = "Z:/CIMPDatabase.accdb";
+    // Local database
     private final String DB_PATH = "G:/CIMPDatabase.accdb";
     private Connection conn;
 
@@ -136,7 +136,7 @@ public class DatabaseHelper
                 query += " ORDER BY " + sort;
             }
 
-             System.out.println(query);
+            System.out.println(query);
             // execute the query
             rs = s.executeQuery(query);
         }
@@ -184,7 +184,7 @@ public class DatabaseHelper
         String insertStatement = "INSERT INTO " + tableName + " " + fieldList
                 + " VALUES " + valueList;
 
-        // System.out.println(insertStatement);
+        System.out.println(insertStatement);
 
         int rows = 0;
         try
@@ -433,26 +433,27 @@ public class DatabaseHelper
 
         return rows;
     }
-    
+
     /**
      * A method for entering an event into the activity log.
-     * @param who The user who triggered the event 
+     * 
+     * @param who The user who triggered the event
      * @param date When the event happened
      * @param event What the event was
      * @param db The database to insert into
      */
-    public void activtyLogEntry(String who, String event, DatabaseHelper db)
+    public void activtyLogEntry( String who, String event, DatabaseHelper db )
     {
         String whenString = "";
-             
-        String activityValues[][] = new String [2][2];
-        
+
+        String activityValues[][] = new String[2][2];
+
         activityValues[0][0] = "Who";
         activityValues[1][0] = "Event";
-        
+
         activityValues[0][1] = who;
         activityValues[1][1] = event;
-        
+
         db.insert(activityValues, "ActivityLog");
     }
 

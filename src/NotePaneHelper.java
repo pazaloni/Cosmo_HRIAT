@@ -125,6 +125,32 @@ public class NotePaneHelper
 
     /**
      * 
+     * Purpose: Get the id of the last note in the database
+     * 
+     * @return an int representing the last in the database
+     */
+    public int getLastNote()
+    {
+        int noteID = -1;
+        ResultSet rs = db.select("Max(noteID)", "Notes", "", "");
+        try
+        {
+            while ( rs.next() )
+            {
+                noteID = rs.getInt(1);
+            }
+        }
+        catch ( SQLException e )
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return noteID;
+
+    }
+
+    /**
+     * 
      * Purpose: set a note as "resolved" in the database when they click the
      * checkbox that says resolved
      * 

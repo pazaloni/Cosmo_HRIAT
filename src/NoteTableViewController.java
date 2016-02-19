@@ -133,41 +133,8 @@ public class NoteTableViewController
                 .viewedProperty());
         
         statusColumn.setMaxWidth(55);
-        statusColumn.setMinWidth(55);
-        
-        //Will set the color of read notes to light blue
-//        idColumn.setCellFactory(new Callback<TableColumn<Note,String>, TableCell<Note,String>>()
-//        {
-//            @Override
-//            public TableCell<Note, String> call(TableColumn<Note, String> n) {
-//                return new TableCell<Note, String>()
-//                {
-//                    @Override
-//                    public void updateItem(String item, boolean empty)
-//                    {
-//                        super.updateItem(item, empty);
-//                        
-//                        
-//                        if(!isEmpty())
-//                        {
-//                            TableRow<Note> currentRow = getTableRow();
-//                            
-//                            Note note = getNoteFromID(item);
-//                            //if  the viewed boolean is true 
-//                            if(note.getViewed().equals("true"))
-//                            {
-//                                currentRow.setStyle("-fx-background-color: lightblue;");
-//                                
-////                                //set the background color to light blue
-////                                setStyle("-fx-background-color: lightblue;");
-//                            }                            
-//                            setText(item);
-//                        }
-//                    }
-//                };
-//            }            
-//        });
-        
+        statusColumn.setMinWidth(55);       
+       
         //make the column not resizeable
         idColumn.setResizable(false);
         idColumn.setSortable(false);
@@ -181,19 +148,6 @@ public class NoteTableViewController
         
         //set the observable list to the tableview
         noteTable.setItems(noteIDs);
-        
-        
-        //sets the on click for each note to change the note to read and 
-//        noteTable.setRowFactory(tv -> {
-//            TableRow<Note> row = new TableRow<Note>();
-//            row.setOnMouseClicked(event -> {
-//                if(! row.isEmpty())
-//                {
-//                    setAsRead(row.getItem());
-//                }
-//            });
-//            return row;
-//        });
     }
     
     /**

@@ -880,10 +880,7 @@ public class MedicalStaffMainPageGUI extends Application
                 if ( !nTVCont.noteIDs.isEmpty() )
                 {
                     nTVCont.refreshTable();
-                    // By default, we select the first note in the list
-                    //assignNoteDetailLabels(nTVCont.noteIDs.get(0).getIDProperty().get());
                 }
-                nTVCont.refreshTable();
             }
         });
 
