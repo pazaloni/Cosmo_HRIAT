@@ -23,6 +23,9 @@ public class NoteTableViewController
     private TableColumn<Note, String> idColumn = 
             new TableColumn<Note, String>("Notes");
     
+    private TableColumn<Note, String> statusColumn = 
+            new TableColumn<Note, String>("Viewed");
+    
     //that data for each note
     public ObservableList<Note> noteIDs = FXCollections.observableArrayList();
 
@@ -55,8 +58,8 @@ public class NoteTableViewController
     private void initializeNoteData() 
     {
         //ResultSet that will get back all of the notes that are not resolved 
-        ResultSet rs = db.select("*", "Notes", "not resolved", "noteID");
-        
+        ResultSet rs = db.select("*", "Notes", "(((Notes.resolved)=False))", "noteID");
+
         //Integer that will store the note id
         int noteID;
         //Integer that will store the participant ID/CosmoID
@@ -123,8 +126,14 @@ public class NoteTableViewController
         idColumn.setCellValueFactory(cellData -> cellData.getValue()
                 .getIDProperty());
         
-        idColumn.setMaxWidth(170);
-        idColumn.setMinWidth(170);
+        idColumn.setMaxWidth(100);
+        idColumn.setMinWidth(100);
+        
+        statusColumn.setCellValueFactory(cellData -> cellData.getValue()
+                .viewedProperty());
+        
+        statusColumn.setMaxWidth(55);
+        statusColumn.setMinWidth(55);
         
         //Will set the color of read notes to light blue
 //        idColumn.setCellFactory(new Callback<TableColumn<Note,String>, TableCell<Note,String>>()
@@ -162,21 +171,24 @@ public class NoteTableViewController
         //make the column not resizeable
         idColumn.setResizable(false);
         idColumn.setSortable(false);
+        idColumn.setStyle("-fx-alignment: CENTER;");
+        
+        statusColumn.setResizable(false);
+        statusColumn.setStyle("-fx-alignment: CENTER;");
 
         //add the column to the tableview
-        noteTable.getColumns().addAll(idColumn);
+        noteTable.getColumns().addAll(idColumn, statusColumn);
         
         //set the observable list to the tableview
         noteTable.setItems(noteIDs);
         
+        
         //sets the on click for each note to change the note to read and 
-        //change the background color
 //        noteTable.setRowFactory(tv -> {
 //            TableRow<Note> row = new TableRow<Note>();
 //            row.setOnMouseClicked(event -> {
 //                if(! row.isEmpty())
 //                {
-//                    row.setStyle("-fx-background-color: lightblue;");
 //                    setAsRead(row.getItem());
 //                }
 //            });
@@ -196,6 +208,7 @@ public class NoteTableViewController
     {
         noteTable.setFocusTraversable(false);
         Note note = noteTable.getSelectionModel().getSelectedItem();
+        this.setAsRead(note);
         return note.getNoteID();
     }
     
