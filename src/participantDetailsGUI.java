@@ -285,7 +285,7 @@ public class participantDetailsGUI extends Application {
 			public void handle(ActionEvent arg0) {
 				// search handler
 				createNoteStage = new Stage();
-				createNoteStage.setTitle("Create Participant");
+				createNoteStage.setTitle("Create Note");
 
 				createNoteStage.setScene(new Scene(NotePopUp.createNotePopUp(
 						cosmoID, loggedInUser.GetUsername(), createNoteStage),

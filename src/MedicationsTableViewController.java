@@ -77,10 +77,6 @@ public class MedicationsTableViewController {
 				dosage = medicationResults.getString(2);
 				timesGiven = medicationResults.getString(3);
 				reason = medicationResults.getString(4);
-
-				// Remove extra 0's at the end of the timestamp
-				timesGiven = timesGiven.substring(0, timesGiven.length() - 7);
-
 				Medication medication = new Medication(medicationName, dosage, timesGiven, reason);
 
 				// Add the log to the list

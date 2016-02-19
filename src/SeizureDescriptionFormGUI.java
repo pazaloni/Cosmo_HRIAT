@@ -1,6 +1,13 @@
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -14,12 +21,16 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+
 /**
  * Purpose: Display a seizure description form tab
+ * 
  * @author cst205, cst207
  *
  */
@@ -34,7 +45,8 @@ public class SeizureDescriptionFormGUI
 
     private StaffAccount loggedInUser;
 
-    private List<Control> editableItems = new ArrayList<Control>();
+    private List<TextInputControl> editableItems = new ArrayList<TextInputControl>();
+    private Label warningLbl;
 
     private TextField seizureTypeTxt;
     private TextArea descriptionTxt;
@@ -42,10 +54,10 @@ public class SeizureDescriptionFormGUI
     private TextArea durationTxt;
     private TextArea aftermathTxt;
     private TextArea emergencyTreatmentTxt;
-    private TextField lastUpdatedTxt;
+    private Label lastUpdatedTxt;
     private TextArea aftermathAssistanceTxt;
 
-    private Button btnSave = new Button("Save");
+    private Button btnSave = new Button("Save Information");
 
     /**
      * purpose:constructor for the seizure gui Constructor for the
@@ -74,16 +86,45 @@ public class SeizureDescriptionFormGUI
 
         mainBox = new VBox();
 
-        //make sure basic staff can't save
+        // make sure basic staff can't save
         if ( !(this.loggedInUser instanceof MedicalAdministrator) )
         {
             this.btnSave.setVisible(false);
         }
+        btnSave.setOnAction(new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle( ActionEvent e )
+            {
+                String[] values = new String[editableItems.size() + 1];
+                for ( int i = 0; i < 7; i++ )
+                {
+                    values[i] = editableItems.get(i).getText();
+                }
+                if ( values[0].equals(" ") || values[0].length() == 0 )
+                {
+                    warningLbl.setTextFill(Color.FIREBRICK);
+                    warningLbl
+                            .setText("Please enter a seizure type before saving.");
+                }
+                else
+                {
+                    warningLbl.setTextFill(Color.BLUE);
+                    warningLbl.setText("Save successful");
+                    Date now = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat();
+                    formatter.applyPattern("dd-MMM-yyyy");
+                    values[7] = formatter.format(now);
 
+                    SeizureDescriptionFormHelper helper = new SeizureDescriptionFormHelper();
+                    helper.saveSeizureInformation(values, cosmoId);
+                }
+            }
+        });
         titleBox.getChildren().addAll(title, btnSave);
-        titleBox.setSpacing(400);
+        titleBox.setSpacing(340);
 
-        mainBox.getChildren().addAll(titleBox, createBasicSeizureInfo(cosmoId), 
+        mainBox.getChildren().addAll(titleBox, createBasicSeizureInfo(cosmoId),
                 seizureMedicationTable(cosmoId));
         mainBox.setPadding(new Insets(10, 10, 10, 10));
 
@@ -99,7 +140,9 @@ public class SeizureDescriptionFormGUI
     /**
      * 
      * Purpose:GUI to create the basic layout of the seizure form tab
-     * @param cosmoId of the participant in question
+     * 
+     * @param cosmoId
+     *            of the participant in question
      * @return VBox that will be displayed
      */
     private VBox createBasicSeizureInfo( String cosmoId )
@@ -107,13 +150,14 @@ public class SeizureDescriptionFormGUI
         VBox mainBox = new VBox();
 
         HBox updateBox = new HBox();
+        BorderPane subHeaderBox = new BorderPane();
         VBox seizureInfoBox = new VBox();
         VBox postSeizureInfoBox = new VBox();
 
         Label dateCompletedLbl = new Label("Date Completed: ");
         Label typeQuestionLbl = new Label("What type of seizure does this"
                 + " individual have?");
-        
+
         Label personalSeizureInfoLbl = new Label("Personal Seizure Information");
         personalSeizureInfoLbl.setFont(new Font(18));
 
@@ -130,9 +174,9 @@ public class SeizureDescriptionFormGUI
                 + "typical behavior?");
         Label postAssistanceLbl = new Label("What assistance is needed?");
 
-
-
-        lastUpdatedTxt = new TextField();
+        lastUpdatedTxt = new Label();
+        warningLbl = new Label();
+        warningLbl.setPadding(new Insets(0, 0, 0, 25));
         seizureTypeTxt = new TextField();
         descriptionTxt = new TextArea();
         descriptionTxt.setWrapText(true);
@@ -153,28 +197,28 @@ public class SeizureDescriptionFormGUI
         aftermathAssistanceTxt.setWrapText(true);
         aftermathAssistanceTxt.setPrefRowCount(3);
 
-        editableItems.add(lastUpdatedTxt);
         editableItems.add(seizureTypeTxt);
         editableItems.add(descriptionTxt);
         editableItems.add(frequencyTxt);
         editableItems.add(durationTxt);
-        editableItems.add(emergencyTreatmentTxt);
         editableItems.add(aftermathTxt);
         editableItems.add(aftermathAssistanceTxt);
+        editableItems.add(emergencyTreatmentTxt);
 
-        updateBox.getChildren().addAll( dateCompletedLbl,
-                lastUpdatedTxt);
-
-        seizureInfoBox.getChildren().addAll(typeQuestionLbl, seizureTypeTxt, descriptionLbl, descriptionTxt,
-                frequencyLbl, frequencyTxt, durationLbl, durationTxt,
-                treatmentLbl, emergencyTreatmentTxt);
+        updateBox.getChildren().addAll(dateCompletedLbl, lastUpdatedTxt);
+        subHeaderBox.setLeft(warningLbl);
+        subHeaderBox.setRight(updateBox);
+        updateBox.setPadding(new Insets(0, 30, 0, 0));
+        seizureInfoBox.getChildren().addAll(typeQuestionLbl, seizureTypeTxt,
+                descriptionLbl, descriptionTxt, frequencyLbl, frequencyTxt,
+                durationLbl, durationTxt, treatmentLbl, emergencyTreatmentTxt);
         seizureInfoBox.setPadding(new Insets(10, 20, 10, 20));
 
         postSeizureInfoBox.getChildren().addAll(postTypicalLbl, aftermathTxt,
                 postAssistanceLbl, aftermathAssistanceTxt);
         postSeizureInfoBox.setPadding(new Insets(10, 20, 10, 20));
 
-        mainBox.getChildren().addAll(updateBox, personalSeizureInfoLbl,
+        mainBox.getChildren().addAll(subHeaderBox, personalSeizureInfoLbl,
                 seizureInfoBox, postSeizureLbl, postSeizureInfoBox);
 
         return mainBox;
@@ -183,10 +227,12 @@ public class SeizureDescriptionFormGUI
 
     /**
      * 
-     * Purpose: take in information from the database and display it in the 
-     *  proper fields, fields will be empty if the participant does not have
-     *  seizures
-     * @param cosmoId of the participant
+     * Purpose: take in information from the database and display it in the
+     * proper fields, fields will be empty if the participant does not have
+     * seizures
+     * 
+     * @param cosmoId
+     *            of the participant
      */
     private void assignSeizureInfo( String cosmoId )
     {
@@ -201,28 +247,34 @@ public class SeizureDescriptionFormGUI
         emergencyTreatmentTxt.setText(info[6]);
         lastUpdatedTxt.setText(info[7]);
 
-
     }
-    
+
     /**
      * 
      * Purpose: to take in information from the database and product a table
-     *  that shows all medications the participant is taking for seizures
+     * that shows all medications the participant is taking for seizures
+     * 
      * @param cosmoId
      * @return
      */
     private VBox seizureMedicationTable( String cosmoId )
     {
         VBox medicationBox = new VBox();
-
+        HBox medicationHeader = new HBox();
+        Button addBtn = new Button("Add");
+        Button editBtn = new Button("Edit");
+        Button deleteBtn = new Button("Delete");                
         Label medicationLbl = new Label("Current Seizure Medication(s)");
-
-        TableView<SeizureMedication> table = new
-                SeizureMedicationTableViewController(
-                        cosmoId).seizureMedicationTable;
+        medicationLbl.setPadding(new Insets(0,330,0,0));
+        medicationLbl.setFont(new Font(18));
+        TableView<SeizureMedication> table = new SeizureMedicationTableViewController(
+                cosmoId).seizureMedicationTable;
 
         table.setMaxWidth(700);
-        medicationBox.getChildren().addAll(medicationLbl, table);
+        medicationHeader.getChildren().addAll(medicationLbl, addBtn, editBtn,
+                deleteBtn);
+        medicationHeader.setPadding(new Insets(0,0,10,0));
+        medicationBox.getChildren().addAll(medicationHeader, table);
         medicationBox.setPadding(new Insets(10, 10, 10, 5));
 
         return medicationBox;
