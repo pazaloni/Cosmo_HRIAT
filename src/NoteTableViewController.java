@@ -24,7 +24,7 @@ public class NoteTableViewController
             new TableColumn<Note, String>("Notes");
     
     private TableColumn<Note, String> statusColumn = 
-            new TableColumn<Note, String>("Viewed");
+            new TableColumn<Note, String>("New");
     
     //that data for each note
     public ObservableList<Note> noteIDs = FXCollections.observableArrayList();
@@ -132,15 +132,17 @@ public class NoteTableViewController
         statusColumn.setCellValueFactory(cellData -> cellData.getValue()
                 .viewedProperty());
         
-        statusColumn.setMaxWidth(55);
-        statusColumn.setMinWidth(55);       
+        statusColumn.setMaxWidth(70);
+        statusColumn.setMinWidth(70);       
        
-        //make the column not resizeable
+        //make the column not resizeable or sortable
         idColumn.setResizable(false);
         idColumn.setSortable(false);
         idColumn.setStyle("-fx-alignment: CENTER;");
         
+        //make the column not resizeable or sortable
         statusColumn.setResizable(false);
+        statusColumn.setSortable(false);
         statusColumn.setStyle("-fx-alignment: CENTER;");
 
         //add the column to the tableview

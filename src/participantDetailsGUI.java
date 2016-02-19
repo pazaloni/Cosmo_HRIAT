@@ -240,21 +240,21 @@ public class participantDetailsGUI extends Application
 
         // create picture box for left side of preview pane
         VBox pictureBox = new VBox();
-        // default preview picture
+        // default preview picture 
+        previewPicture = new ImageView();
         URL url = getClass().getResource("images/defaultPicture.png");
         try
         {
-            previewPicture = new ImageView(new Image(url.openStream()));
+            previewPicture.setImage(new Image(url.openStream()));
         }
         catch ( IOException e )
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            System.err.println("Image could not be opened");
         }
 
-        // set margins
-        VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
-
+     
         // add picture and button to picture box
 
         pictureBox.setAlignment(Pos.CENTER);
@@ -388,6 +388,8 @@ public class participantDetailsGUI extends Application
                 previewPicture = new ImageView(img);
                 previewPicture.setFitWidth(122);
                 previewPicture.setFitHeight(121);
+                // set margins
+                VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
 
                 pictureBox.getChildren().addAll(previewPicture);
 

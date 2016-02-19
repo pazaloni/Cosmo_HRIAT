@@ -2,6 +2,14 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Purpose: Provide the functionality when the user has to deal with notes and 
+ * when they set the notes as "resolved"
+ * 
+ *
+ * @author CIMP
+ * @version 1.0
+ */
 public class NotePaneHelper
 {
     private DatabaseHelper db;
@@ -12,7 +20,12 @@ public class NotePaneHelper
         db = new DatabaseHelper();
 
     }
-
+    /**
+     * 
+     * Purpose: Query the database for the note based on the primary key
+     * @param selectedPK the pimary key of the note 
+     * @return the Note queried from the database 
+     */
     public Note queryNote( String selectedPK )
     {
         // ResultSet that will get back all of the notes that are not resolved
@@ -117,7 +130,7 @@ public class NotePaneHelper
         }
         catch ( SQLException e )
         {
-            // TODO Auto-generated catch block
+            //  Auto-generated catch block
             e.printStackTrace();
         }
         return staffName;
@@ -142,7 +155,7 @@ public class NotePaneHelper
         }
         catch ( SQLException e )
         {
-            // TODO Auto-generated catch block
+            //  Auto-generated catch block
             e.printStackTrace();
         }
         return noteID;
