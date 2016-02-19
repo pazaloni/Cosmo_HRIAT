@@ -1,30 +1,43 @@
+import java.sql.ResultSet;
+
 
 public class ParticipantUpdateFormController 
 {
 	private int cosmoID;
+	private DatabaseHelper db;
 	
 	public ParticipantUpdateFormController(int cosmoID)
 	{
 		this.cosmoID = cosmoID;
+		db = new DatabaseHelper();
 	}
 	
 	public String[] fetchParticipantBasicInfo()
 	{
-		String[] participantInfo = new String[8];
+		db.connect();
+		String[] participantInfo = new String[9];
 		
+		ResultSet rs = db.select("firstName, lastName, city,"
+				+ " postalCode, phoneNum, dateOfBirth, personalHealthNumber"
+				, "Participant", "cosmoID = " + cosmoID, "");
+		
+		
+		
+		
+		db.disconnect();
 		return participantInfo;
 	}
 	
 	public String[] fetchKinInfo()
 	{
-		String[] kinInfo = new String[6];
+		String[] kinInfo = new String[7];
 		
 		return kinInfo;
 	}
 	
 	public String[] fetchCaregiverInfo()
 	{
-		String[] caregiverInfo = new String[6];
+		String[] caregiverInfo = new String[7];
 		
 		return caregiverInfo;
 	}
@@ -36,23 +49,4 @@ public class ParticipantUpdateFormController
 		return emergencyContactInfo;
 	}
 	
-	public void setParticipantBasicInfo(String[] participantInfo)
-	{
-		
-	}
-	
-	public void setKinInfo(String[] kinInfo)
-	{
-		
-	}
-	
-	public void setCaregiverInfo(String[] caregiverInfo)
-	{
-		
-	}
-	
-	public void setEmergencyContactInfo(String[] emergencyContactInfo)
-	{
-		
-	}
 }
