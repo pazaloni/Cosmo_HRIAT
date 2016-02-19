@@ -27,7 +27,7 @@ public class ActivityLogPopUp
     private BorderPane root;
 
     public static final int SPACING = 10;
-    public static final int WIDTH = 720;
+    public static final int WIDTH = 900;
     public static final int HEIGHT = 480;
 
     private Stage parentStage;
@@ -89,6 +89,7 @@ public class ActivityLogPopUp
         // Setting the default value to be the first one
         searchCriteriaBox.setValue(searchOptions.get(0));
 
+        
         box.setPadding(new Insets(10, 10, 10, 10));
         box.setSpacing(SPACING);
         box.getChildren().addAll(searchCriteriaBox, searchCriteria,
@@ -111,9 +112,9 @@ public class ActivityLogPopUp
 
         HBox box = new HBox();
 
-        table.setMaxWidth(WIDTH - 50);
+     //   table.setMaxWidth(WIDTH - 50);
         table.setMinWidth(WIDTH - 50);
-        table.setPrefWidth(WIDTH - 50);
+    //    table.setPrefWidth(WIDTH - 50);
 
         box.setPadding(new Insets(10, 10, 10, 10));
         box.getChildren().addAll(table);
@@ -167,7 +168,7 @@ public class ActivityLogPopUp
         // local stage configuration
         localStage.initModality(Modality.WINDOW_MODAL);
         localStage.initOwner(parentStage);
-        localStage.setResizable(false);
+        localStage.setResizable(true);
         localStage.setScene(new Scene(root));
         localStage.setWidth(WIDTH);
         localStage.setHeight(HEIGHT);

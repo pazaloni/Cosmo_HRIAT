@@ -108,22 +108,19 @@ public class ActivityLogTableViewController
     {
         whoColumn.setCellValueFactory(cellData -> cellData.getValue().getWho());
         whoColumn.setMinWidth(100);
-        whoColumn.setResizable(false);
 
         whenColumn.setCellValueFactory(cellData -> cellData.getValue()
                 .getWhen());
-        whenColumn.setMinWidth(200);
-        whenColumn.setResizable(false);
+        whenColumn.setMinWidth(125);   
 
         eventColumn.setCellValueFactory(cellData -> cellData.getValue()
                 .getEvent());
-        eventColumn.setMinWidth(100);
-        eventColumn.setResizable(false);
+        eventColumn.setMinWidth(160);
         
         detailsColumn.setCellValueFactory(cellData -> cellData.getValue()
                 .getDetails());
         detailsColumn.setMinWidth(400);
-        detailsColumn.setResizable(false);
+
 
         activityLogTable.getColumns().addListener(
                 new ListChangeListener<Object>()
@@ -143,6 +140,7 @@ public class ActivityLogTableViewController
                         }
                     }
                 });
+        activityLogTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         activityLogTable.getColumns()
                 .addAll(whoColumn, whenColumn, eventColumn, detailsColumn);
 

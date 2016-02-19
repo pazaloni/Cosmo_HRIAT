@@ -1192,7 +1192,7 @@ public class participantDetailsGUI extends Application
                     if(!firstNameTxt.getText().equals(firstNameText.getText()))
                     {                       
                         
-                        DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant",
+                        DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant (" + cosmoIDText.getText() + ")",
                         "First Name: \"" + firstNameText.getText() + "\" → \"" + firstNameTxt.getText() + "\"" );
                          firstNameText.setText(firstNameTxt.getText());
                     }
@@ -1201,7 +1201,7 @@ public class participantDetailsGUI extends Application
                     if(!lastNameTxt.getText().equals(lastNameText.getText()))
                     {
                      
-                        DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant",
+                        DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant (" + cosmoIDText.getText() + ")",
                         "Last Name: \"" + lastNameText.getText() + "\" → \"" + lastNameTxt.getText() + "\"" );
                         lastNameText.setText(lastNameTxt.getText());
                     }
@@ -1210,7 +1210,7 @@ public class participantDetailsGUI extends Application
                     if(!birthDateString.equals(dobtext.getText()))
                     {
                          
-                         DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant",
+                        DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant (" + cosmoIDText.getText() + ")",
                          "Birth Date: \"" + dobtext.getText() + "\" → \"" + birthDateString + "\"" );
                          dobtext.setText(birthDateString);
                     }
@@ -1219,7 +1219,7 @@ public class participantDetailsGUI extends Application
                     if(!healthNumTxt.getText().equals(phnText.getText()))
                     {
                         
-                        DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant",
+                        DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant (" + cosmoIDText.getText() + ")",
                         "Health Number: \"" + phnText.getText() + "\" → \"" + healthNumTxt.getText() + "\"" );
                         phnText.setText(healthNumTxt.getText());
                     }
@@ -1228,7 +1228,7 @@ public class participantDetailsGUI extends Application
                     if(!addressTxt.getText().equals(addressText.getText()))
                     {
                         
-                        DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant",
+                        DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant (" + cosmoIDText.getText() + ")",
                         "Address: \"" + addressText.getText() + "\" → \"" + addressTxt.getText() + "\"" );
                         addressText.setText(addressTxt.getText());
                     }
