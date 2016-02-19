@@ -233,7 +233,7 @@ public class TechMainPageGUI extends Application
         // display window
         stageTech.show();
         
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+        stageTech.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
                 dbObject.activtyLogEntry(loggedInAdmin.GetUsername(), "Logout", dbObject);
             }
@@ -527,6 +527,7 @@ public class TechMainPageGUI extends Application
             @Override
             public void handle(ActionEvent e)
             {
+            	stageTech.setOnCloseRequest(null);
                 stageTech.close();
                 dbObject.activtyLogEntry(loggedInAdmin.GetUsername(), "Logout", dbObject);
                 LoginGUI test5 = new LoginGUI();
@@ -553,11 +554,6 @@ public class TechMainPageGUI extends Application
 
         // return finished borderPane
         return logoAndLogout;
-    }
-
-    public static void main(String[] args)
-    {
-        launch(args);
     }
 
     /**

@@ -291,4 +291,95 @@ public class MedicalAdministrator extends BasicStaff
         }
         return result;
     }
+
+    /**
+     * 
+     * Purpose: To format and update the new participant info into the database
+     * 
+     * @param cosmoId - the cosmoID of the participant
+     * @param firstName - the first Name of the participant
+     * @param lastName - the last name of the participant
+     * @param birthDate - the birth date of the participant
+     * @param phn - the personal health number of the participant
+     * @param address - the participant address
+     * @return
+     */
+	public static String editParticipant(String cosmoId, String firstName,
+            String lastName, LocalDate birthDate,
+            String phn, String address)
+	{
+        // initialize birth date string to an empty string
+        String birthDateString = "";
+
+        // check if birthdate is set before trying to format it so we don't
+        // get a null pointer exception
+        if (birthDate != null)
+        {
+            birthDateString = birthDate.format(DateTimeFormatter
+                    .ofPattern("dd-MMM-yyyy"));
+        }
+        String result = "";
+
+        // check to see if any of the fields are empty
+        if (firstName.isEmpty() || lastName.isEmpty()
+                || birthDateString.equals("") || phn.isEmpty()
+                     || address.isEmpty())
+        {
+            result = "One of your fields is empty";
+        }
+        else
+        {
+            DatabaseHelper db = new DatabaseHelper();
+            db.connect();
+            System.out.println("Shouldnt happen");
+
+            boolean successful = false;
+            // check to see if the Health Number is a 9 digit number
+            if (!phn.matches("^[0-9]{9}$"))
+            {
+                result = "Health Number must be 9 digits";
+            }
+            else
+            {
+                successful = false;
+                    // array of field names
+                    String values[][] = new String[7][2];
+                    values[0][0] = "cosmoID";
+                    values[1][0] = "firstName";
+                    values[2][0] = "lastName";
+                    values[3][0] = "dateOfBirth";
+                    values[4][0] = "personalHealthNumber";
+                    values[5][0] = "address";
+                    values[6][0] = "dateUpdated";
+
+                 
+                    // get the current date to insert into "lastUpdated"
+                    Calendar c = Calendar.getInstance();
+                    SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                    String formattedDate = df.format(c.getTime());
+
+                    // array of values to insert
+                    values[0][1] = cosmoId;
+                    values[1][1] = firstName;
+                    values[2][1] = lastName;
+                    values[3][1] = birthDateString;
+                    values[4][1] = phn;
+                    values[5][1] = address;
+                    values[6][1] = formattedDate;         
+    
+                    Calendar ca = Calendar.getInstance();
+                    // inserting into the database
+                    successful = db.update(values, "Participant", cosmoId);
+                    
+                if (!successful)
+                {
+                    result = "The insertion was not successful";
+                }
+            }
+            db.disconnect();
+        }
+        return result;
+    
+	}
+
 }

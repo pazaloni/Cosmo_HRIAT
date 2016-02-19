@@ -17,9 +17,7 @@ import javafx.collections.ObservableList;
  */
 public class DatabaseHelper
 {
-    // the shared database
-    // private final String DB_PATH = "Z:/CIMPDatabase.accdb";
-    // Local database
+
     private final String DB_PATH = "G:/CIMPDatabase.accdb";
     private Connection conn;
 
@@ -221,10 +219,12 @@ public class DatabaseHelper
         for ( int r = 0; r < newRecord.length; r++ )
         {
             fieldList += newRecord[r][0] + ", ";
+
             if ( newRecord[r][1] != null )
             {
                 valueList += "'" + newRecord[r][1] + "', ";
             }
+           
             else
             {
                 valueList += "" + newRecord[r][1] + ", ";

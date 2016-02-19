@@ -1,6 +1,5 @@
 
 import java.sql.*;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
@@ -28,6 +27,7 @@ public class NoteTableViewController
     
     //that data for each note
     public ObservableList<Note> noteIDs = FXCollections.observableArrayList();
+
 
     //Instance of the database helper
     private DatabaseHelper db = new DatabaseHelper();
@@ -145,13 +145,14 @@ public class NoteTableViewController
         statusColumn.setSortable(false);
         statusColumn.setStyle("-fx-alignment: CENTER;");
 
+
         //add the column to the tableview
         noteTable.getColumns().addAll(idColumn, statusColumn);
         
         //set the observable list to the tableview
         noteTable.setItems(noteIDs);
     }
-    
+
     /**
      * Purpose: To take the highlighted row of the tableview and return the
      * selected rows username to use later.

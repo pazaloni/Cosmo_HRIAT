@@ -31,6 +31,8 @@ public class TestParticipant
     private String participantAddressTwo;
     private String emergencyContactNameTwo;
     private String emergencyContactPhoneTwo;
+    
+   
 
     private String descriptionOne = "This person has Autism";
     private String descriptionTwo = "This person has Cancer";
@@ -186,7 +188,8 @@ public class TestParticipant
         assertTrue(test2.getEmergencyContactPhoneProperty().getValue()
                 .equals("666911666"));
     }
-
+    
+    
     /**
      * 
      * Purpose: tear down
