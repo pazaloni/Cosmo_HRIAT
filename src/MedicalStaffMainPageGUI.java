@@ -931,7 +931,7 @@ public class MedicalStaffMainPageGUI extends Application
 
         // column 1
         noteDisplayPane.add(dateInfoLabel, 1, 0);
-
+        noteDisplayPane.add(subjectInfoLabel, 1, 3);
         noteDisplayPane.add(staffInfoLabel, 1, 2);
         noteDisplayPane.add(participantInfoLabel, 1, 1);
 
