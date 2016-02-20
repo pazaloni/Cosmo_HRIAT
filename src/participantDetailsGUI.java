@@ -121,7 +121,7 @@ public class participantDetailsGUI extends Application {
 
 		VBox root = createMainVBox();
 
-		participantMainStage.setScene(new Scene(root, 875, 580));
+		participantMainStage.setScene(new Scene(root, 1280, 720));
 		participantMainStage.initModality(Modality.APPLICATION_MODAL);
 		participantMainStage.initOwner(stage);
 		participantMainStage.resizableProperty().set(true);

@@ -7,18 +7,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 /**
  *
- * Purpose: Represents the healt status from gui, which by deafult pulls
+ * Purpose: Represents the health status form GUI, which by default pulls
  * information
  *
  * @author CIMP
@@ -28,7 +29,10 @@ public class HealthStatusFormGUI
 {
     public static final String FORM_TITLE = "Health Status Information";
     public static final int SPACING = 10;
-    private BorderPane mainBox;
+
+    private String cosmoID;
+
+    private ScrollPane mainBox;
 
     // The Control that this will be placed in
     private Tab parentTab;
@@ -48,6 +52,8 @@ public class HealthStatusFormGUI
 
     private Button btnSave = new Button("Save");
 
+    HealthStatusInformationHelper helper = new HealthStatusInformationHelper();
+
     /**
      * 
      * Constructor for the HealthStatus class.
@@ -63,39 +69,50 @@ public class HealthStatusFormGUI
     /**
      * 
      * Purpose: This method will make everything and display it.
-     * @param cosmoId: The cosmoId for the paritcipant 
+     * 
+     * @param cosmoId: The cosmoId for the paritcipant
      */
     public Tab showHealthStatusInfo( String cosmoId )
     {
+        this.cosmoID = cosmoId;
+
         Label title = new Label(FORM_TITLE);
         HBox titleBox = new HBox();
 
         title.setFont(new Font(22));
-        
-        mainBox = new BorderPane();        
-        
-        if(!(this.loggedInUser instanceof MedicalAdministrator))
+
+        mainBox = new ScrollPane();
+
+        if ( !(this.loggedInUser instanceof MedicalAdministrator) )
         {
             this.btnSave.setVisible(false);
-        }        
-        
-        titleBox.getChildren().addAll(title,btnSave);
+        }
+
+        titleBox.getChildren().addAll(title, btnSave);
         titleBox.setSpacing(300);
         VBox contentBox = new VBox();
 
         btnSave.setMinWidth(150);
 
         Label otherLbl = new Label("Other Information");
+        otherLbl.setFont(Font.font(22));
         otherInfoTxt = new TextArea();
         otherInfoTxt.setMaxWidth(700);
+        otherInfoTxt.setMaxHeight(150);
 
         contentBox.getChildren().addAll(titleBox, createDiagnosisInfo(cosmoId),
                 createMedicalConditions(cosmoId), createAllergiesInfo(cosmoId),
                 createMedicationInfo(cosmoId), otherLbl, otherInfoTxt);
+        contentBox.setSpacing(15);
 
-        mainBox.setLeft(contentBox);
+        mainBox.setContent(contentBox);
+
+        mainBox.setHbarPolicy(ScrollBarPolicy.NEVER);
+        mainBox.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+        mainBox.setHmax(contentBox.getWidth());
 
         mainBox.setPadding(new Insets(10, 10, 10, 10));
+
         assignDiagnosisInfo(cosmoId + "");
         this.parentTab.setContent(mainBox);
 
@@ -113,7 +130,7 @@ public class HealthStatusFormGUI
 
     /**
      * 
-     * Purpose: Create the diagnositc controls
+     * Purpose: Create the diagnosis controls
      * 
      * @return
      */
@@ -187,13 +204,13 @@ public class HealthStatusFormGUI
 
     /**
      * 
-     * Purpose: assign diagnosis info for particiapnts
+     * Purpose: assign diagnosis info for participants
      * 
      * @param cosmoId the participant to assign the diagnosis information for
      */
     private void assignDiagnosisInfo( String cosmoId )
     {
-        HealthStatusInformationHelper helper = new HealthStatusInformationHelper();
+
         String[] info = helper.retrieveHealthStatusInfo(cosmoId);
         familyPhysicianTxt.setText(info[0]);
         physicianPhoneTxt.setText(info[1]);
@@ -214,19 +231,55 @@ public class HealthStatusFormGUI
      */
     private VBox createMedicalConditions( String cosmoId )
     {
-        VBox mainBox = new VBox();
+        VBox box = new VBox();
+        HBox controls = new HBox();
+        HBox buttons = new HBox();
 
         Label medicalCondtionsLbl = new Label("Medical Conditions");
         medicalCondtionsLbl.setFont(Font.font(22));
 
+        Button btnAddMedicalCondition = new Button("Add");
+        Button btnEditMedicalCondition = new Button("Edit");
+        Button btnDeleteMedicalCondition = new Button("Delete");
+        Button btnFinish = new Button("Finish");
+
+        btnAddMedicalCondition.setOnMouseClicked(event -> {
+            btnFinish.setDisable(false);
+            btnEditMedicalCondition.setDisable(true);
+            btnDeleteMedicalCondition.setDisable(true);
+        });
+
+        btnEditMedicalCondition.setOnMouseClicked(event -> {
+            btnFinish.setDisable(false);
+            btnAddMedicalCondition.setDisable(true);
+            btnDeleteMedicalCondition.setDisable(true);
+        });
+
+        btnDeleteMedicalCondition.setOnMouseClicked(event -> {
+            btnFinish.setDisable(false);
+            btnAddMedicalCondition.setDisable(true);
+            btnDeleteMedicalCondition.setDisable(true);
+        });
+        btnFinish.setOnMouseClicked(event ->{
+            btnFinish.setDisable(true);
+            btnAddMedicalCondition.setDisable(false);
+            btnEditMedicalCondition.setDisable(false);
+            btnDeleteMedicalCondition.setDisable(false);
+        });
+
+        buttons.getChildren().addAll(btnAddMedicalCondition,
+                btnEditMedicalCondition, btnDeleteMedicalCondition,btnFinish);
+
+        controls.getChildren().addAll(buttons);
         TableView<MedicalCondition> table = new MedicalConditionsTableViewController(
                 cosmoId).conditionTable;
-
         table.setMaxWidth(700);
-        mainBox.getChildren().addAll(medicalCondtionsLbl, table);
-        mainBox.setPadding(new Insets(10, 10, 10, 5));
 
-        return mainBox;
+        buttons.setSpacing(5);
+        controls.setSpacing(380);
+
+        box.getChildren().addAll(medicalCondtionsLbl, table, controls);
+        return box;
     }
 
     /**
@@ -241,13 +294,29 @@ public class HealthStatusFormGUI
     private VBox createAllergiesInfo( String cosmoId )
     {
         VBox box = new VBox();
+        HBox controls = new HBox();
+        HBox buttons = new HBox();
+
         Label allergiesLbl = new Label("Allergies");
         allergiesLbl.setFont(Font.font(22));
+
+        Button btnAddAllergy = new Button("Add");
+        Button btnEditAllergy = new Button("Edit");
+        Button btnDeleteAllergy = new Button("Delete");
+
+        buttons.getChildren().addAll(btnAddAllergy, btnEditAllergy,
+                btnDeleteAllergy);
+
+        controls.getChildren().addAll(buttons);
+
         TableView<Allergies> table = new AllergiesTableViewController(cosmoId
                 + "").allergiesTable;
         table.setMaxWidth(700);
-        box.getChildren().addAll(allergiesLbl, table);
 
+        buttons.setSpacing(5);
+        controls.setSpacing(485);
+
+        box.getChildren().addAll(allergiesLbl, table, controls);
         return box;
     }
 
@@ -263,14 +332,29 @@ public class HealthStatusFormGUI
     private VBox createMedicationInfo( String cosmoId )
     {
         VBox box = new VBox();
+        HBox controls = new HBox();
+        HBox buttons = new HBox();
+
         Label medicationsLbl = new Label("Medications");
         medicationsLbl.setFont(Font.font(22));
+
+        Button btnAddMedication = new Button("Add");
+        Button btnEditMedication = new Button("Edit");
+        Button btnDeleteMedication = new Button("Delete");
+
+        buttons.getChildren().addAll(btnAddMedication, btnEditMedication,
+                btnDeleteMedication);
+
+        controls.getChildren().addAll(buttons);
+
         TableView<Medication> table = new MedicationsTableViewController(
                 cosmoId).medicationsTable;
         table.setMaxWidth(700);
-        box.getChildren().addAll(medicationsLbl, table);
 
+        buttons.setSpacing(5);
+        controls.setSpacing(450);
+
+        box.getChildren().addAll(medicationsLbl, table, controls);
         return box;
-
     }
 }

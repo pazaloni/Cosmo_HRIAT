@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -46,6 +45,7 @@ public class AllergiesTableViewController
         // from the database.
         retrieveAllergyData(cosmoID);
         this.initialize();
+        allergiesTable.setMaxHeight(150);
         allergiesTable.setItems(allergyData);
         allergiesTable.setFocusTraversable(false);
     }
