@@ -1,3 +1,5 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
@@ -10,6 +12,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
@@ -23,10 +27,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  * Purpose: Display a seizure description form tab
@@ -38,6 +45,9 @@ public class SeizureDescriptionFormGUI
 {
     public static final String FORM_TITLE = "Seizure Description Form";
 
+    Stage addEditSeizureMedicationStage;
+
+    private SeizureMedicationTableViewController smTVC;
     private ScrollPane mainContainer = new ScrollPane();
     private VBox mainBox;
 
@@ -57,7 +67,10 @@ public class SeizureDescriptionFormGUI
     private Label lastUpdatedTxt;
     private TextArea aftermathAssistanceTxt;
 
+    private Button btnClear = new Button("Clear Seizure");
     private Button btnSave = new Button("Save Information");
+
+    private String cosmoId;
 
     /**
      * purpose:constructor for the seizure gui Constructor for the
@@ -66,10 +79,12 @@ public class SeizureDescriptionFormGUI
      * @param seizureTab
      * @param loggedInUser
      */
-    public SeizureDescriptionFormGUI(Tab seizureTab, StaffAccount loggedInUser)
+    public SeizureDescriptionFormGUI(Tab seizureTab, StaffAccount loggedInUser,
+            String cosmoID)
     {
         this.parentTab = seizureTab;
         this.loggedInUser = loggedInUser;
+        this.cosmoId = cosmoID;
     }
 
     /**
@@ -78,7 +93,7 @@ public class SeizureDescriptionFormGUI
      * @param cosmoId
      * @return
      */
-    public Tab ShowSeizureForm( String cosmoId )
+    public Tab ShowSeizureForm()
     {
         Label title = new Label(FORM_TITLE);
         HBox titleBox = new HBox();
@@ -91,6 +106,15 @@ public class SeizureDescriptionFormGUI
         {
             this.btnSave.setVisible(false);
         }
+
+        btnClear.setOnAction(new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle( ActionEvent e )
+            {
+                clearSeizure();
+            }
+        });
         btnSave.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
@@ -118,21 +142,24 @@ public class SeizureDescriptionFormGUI
 
                     SeizureDescriptionFormHelper helper = new SeizureDescriptionFormHelper();
                     helper.saveSeizureInformation(values, cosmoId);
+                    lastUpdatedTxt.setText(values[7]);
                 }
             }
         });
-        titleBox.getChildren().addAll(title, btnSave);
-        titleBox.setSpacing(340);
+        HBox buttonBox = new HBox(10);
+        buttonBox.getChildren().addAll(btnClear, btnSave);
+        titleBox.getChildren().addAll(title, buttonBox);
+        titleBox.setSpacing(250);
 
-        mainBox.getChildren().addAll(titleBox, createBasicSeizureInfo(cosmoId),
-                seizureMedicationTable(cosmoId));
+        mainBox.getChildren().addAll(titleBox, createBasicSeizureInfo(),
+                seizureMedicationTable());
         mainBox.setPadding(new Insets(10, 10, 10, 10));
 
         mainContainer.setContent(mainBox);
         mainContainer.setHbarPolicy(ScrollBarPolicy.NEVER);
         mainContainer.setVbarPolicy(ScrollBarPolicy.ALWAYS);
         mainContainer.setHmax(mainBox.getWidth());
-        assignSeizureInfo(cosmoId);
+        assignSeizureInfo();
         this.parentTab.setContent(mainContainer);
         return parentTab;
     }
@@ -141,11 +168,10 @@ public class SeizureDescriptionFormGUI
      * 
      * Purpose:GUI to create the basic layout of the seizure form tab
      * 
-     * @param cosmoId
-     *            of the participant in question
+     * 
      * @return VBox that will be displayed
      */
-    private VBox createBasicSeizureInfo( String cosmoId )
+    private VBox createBasicSeizureInfo()
     {
         VBox mainBox = new VBox();
 
@@ -231,10 +257,8 @@ public class SeizureDescriptionFormGUI
      * proper fields, fields will be empty if the participant does not have
      * seizures
      * 
-     * @param cosmoId
-     *            of the participant
      */
-    private void assignSeizureInfo( String cosmoId )
+    private void assignSeizureInfo()
     {
         SeizureDescriptionFormHelper helper = new SeizureDescriptionFormHelper();
         String[] info = helper.retieveSeizureInformation(cosmoId);
@@ -254,30 +278,408 @@ public class SeizureDescriptionFormGUI
      * Purpose: to take in information from the database and product a table
      * that shows all medications the participant is taking for seizures
      * 
-     * @param cosmoId
      * @return
      */
-    private VBox seizureMedicationTable( String cosmoId )
+    private VBox seizureMedicationTable()
     {
         VBox medicationBox = new VBox();
-        HBox medicationHeader = new HBox();
+        HBox medicationHeader = new HBox(10);
         Button addBtn = new Button("Add");
         Button editBtn = new Button("Edit");
-        Button deleteBtn = new Button("Delete");                
+        Button deleteBtn = new Button("Delete");
         Label medicationLbl = new Label("Current Seizure Medication(s)");
-        medicationLbl.setPadding(new Insets(0,330,0,0));
+        medicationLbl.setPadding(new Insets(0, 290, 0, 0));
         medicationLbl.setFont(new Font(18));
-        TableView<SeizureMedication> table = new SeizureMedicationTableViewController(
-                cosmoId).seizureMedicationTable;
+        smTVC = new SeizureMedicationTableViewController(cosmoId);
 
-        table.setMaxWidth(700);
+        addBtn.setOnAction(new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle( ActionEvent e )
+            {
+                // Open addNewParticipant Window
+                addEditSeizureMedicationStage = new Stage();
+                addEditSeizureMedicationStage
+                        .setTitle("Add Seizure Medication");
+
+                addEditSeizureMedicationStage.setScene(new Scene(
+                        addSeizureMedicationPopUp(), 325, 200));
+                addEditSeizureMedicationStage
+                        .initModality(Modality.APPLICATION_MODAL);
+                addEditSeizureMedicationStage
+                        .initOwner(participantDetailsGUI.participantMainStage);
+                addEditSeizureMedicationStage.setResizable(false);
+                addEditSeizureMedicationStage.show();
+            }
+        });
+        deleteBtn.setOnAction(new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle( ActionEvent e )
+            {
+                try
+                {
+                    removeMedication(smTVC.getSelectedPK());
+                }
+                catch ( Exception e1 )
+                {
+
+                    e1.printStackTrace();
+                }
+            }
+        });
+        editBtn.setOnAction(new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle( ActionEvent e )
+            {
+                try
+                {
+                    // Open addNewParticipant Window
+                    addEditSeizureMedicationStage = new Stage();
+                    addEditSeizureMedicationStage
+                            .setTitle("Add Seizure Medication");
+
+                    addEditSeizureMedicationStage.setScene(new Scene(
+                            editSeizureMedicationPopUp(smTVC.getSelectedPK()),
+                            325, 200));
+                    addEditSeizureMedicationStage
+                            .initModality(Modality.APPLICATION_MODAL);
+                    addEditSeizureMedicationStage
+                            .initOwner(participantDetailsGUI.participantMainStage);
+                    addEditSeizureMedicationStage.setResizable(false);
+                    addEditSeizureMedicationStage.show();
+
+                }
+                catch ( Exception e1 )
+                {
+
+                    e1.printStackTrace();
+                }
+            }
+        });
+        smTVC.seizureMedicationTable.setMaxWidth(700);
         medicationHeader.getChildren().addAll(medicationLbl, addBtn, editBtn,
                 deleteBtn);
-        medicationHeader.setPadding(new Insets(0,0,10,0));
-        medicationBox.getChildren().addAll(medicationHeader, table);
+        medicationHeader.setPadding(new Insets(0, 0, 10, 0));
+        medicationBox.getChildren().addAll(medicationHeader,
+                smTVC.seizureMedicationTable);
         medicationBox.setPadding(new Insets(10, 10, 10, 5));
 
         return medicationBox;
     }
 
+    /**
+     * Methdo for updating a medication associated with a aseizure.
+     * @param medicationName: The name of the medication to be updated.
+     * @return
+     */
+    protected GridPane editSeizureMedicationPopUp( String medicationName )
+    {
+        //
+        GridPane grid = new GridPane();
+
+        // warning label
+        Label lblWarning = new Label();
+        lblWarning.setTextFill(Color.FIREBRICK);
+
+        // text field labels
+        Label medicationNameLbl = new Label("Medication Name: ");
+        Label dosageLbl = new Label("Dosage: ");
+        Label timesGivenLbl = new Label("Times Given: ");
+
+        DatabaseHelper db = new DatabaseHelper();
+        ResultSet medication = db.select("dosage, timesGiven", "medication",
+                "medicationName = '" + medicationName + "' AND cosmoID = '"
+                        + cosmoId + "'", "");
+
+        String dosage = "";
+        String timesGiven = "";
+
+        try
+        {
+            while ( medication.next() )
+            {
+
+                dosage = medication.getString(1);
+                timesGiven = medication.getString(2);
+
+            }
+        }
+        catch ( SQLException e )
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        TextField medicationNameTxt = new TextField();
+        TextField dosageTxt = new TextField();
+        TextField timesGivenTxt = new TextField();
+
+        medicationNameTxt.setText(medicationName);
+        dosageTxt.setText(dosage);
+        timesGivenTxt.setText(timesGiven);
+        grid.add(medicationNameLbl, 0, 1);
+        grid.add(dosageLbl, 0, 2);
+        grid.add(timesGivenLbl, 0, 3);
+        grid.add(lblWarning, 1, 0);
+        grid.add(medicationNameTxt, 1, 1);
+        grid.add(dosageTxt, 1, 2);
+        grid.add(timesGivenTxt, 1, 3);
+
+        grid.setPadding(new Insets(10, 10, 10, 10));
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        Button addMedicationBtn = new Button("Add");
+        addMedicationBtn.setOnAction(new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle( ActionEvent e )
+            {
+                // call create participant on medical administrator with the
+                // text passed in
+                String result = Medication.updateMedication(
+                        medicationNameTxt.getText(), dosageTxt.getText(),
+                        timesGivenTxt.getText(), "Seizure Medication", cosmoId,
+                        medicationName);
+
+                // if no error message is recieved then close this window and
+                // refresh the table
+                if ( result.equals("") )
+                {
+                    addEditSeizureMedicationStage.close();
+                    smTVC.refreshTable(cosmoId);
+                }
+                // if there is an error message, display it
+                else
+                {
+                    lblWarning.setTextFill(Color.FIREBRICK);
+                    lblWarning.setText(result);
+                }
+            }
+        });
+
+        Button resetBtn = new Button("Reset");
+        resetBtn.setOnAction(new EventHandler<ActionEvent>()
+        {
+
+            @Override
+            public void handle( ActionEvent arg0 )
+            {
+                // sets all values to default
+                medicationNameTxt.setText("");
+                dosageTxt.setText("");
+                timesGivenTxt.setText("");
+
+                lblWarning.setText("");
+
+            }
+
+        });
+        HBox addHbox = new HBox();
+        HBox resetHbox = new HBox();
+        addHbox.getChildren().add(addMedicationBtn);
+        resetHbox.getChildren().add(resetBtn);
+        grid.add(resetHbox, 0, 4);
+        grid.add(addHbox, 1, 4);
+        return grid;
+
+    }
+
+    /**
+     * Method for adding a medication associated with a seizure
+     * @return
+     */
+    private GridPane addSeizureMedicationPopUp()
+    {
+        GridPane grid = new GridPane();
+
+        // warning label
+        Label lblWarning = new Label();
+        lblWarning.setTextFill(Color.FIREBRICK);
+
+        // text field labels
+        Label medicationNameLbl = new Label("Medication Name: ");
+        Label dosageLbl = new Label("Dosage: ");
+        Label timesGivenLbl = new Label("Times Given: ");
+
+        TextField medicationNameTxt = new TextField();
+        TextField dosageTxt = new TextField();
+        TextField timesGivenTxt = new TextField();
+
+        grid.add(medicationNameLbl, 0, 1);
+        grid.add(dosageLbl, 0, 2);
+        grid.add(timesGivenLbl, 0, 3);
+        grid.add(lblWarning, 1, 0);
+        grid.add(medicationNameTxt, 1, 1);
+        grid.add(dosageTxt, 1, 2);
+        grid.add(timesGivenTxt, 1, 3);
+
+        grid.setPadding(new Insets(10, 10, 10, 10));
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        Button addMedicationBtn = new Button("Add");
+        addMedicationBtn.setOnAction(new EventHandler<ActionEvent>()
+        {
+            @Override
+            public void handle( ActionEvent e )
+            {
+                // call create participant on medical administrator with the
+                // text passed in
+                String result = Medication.createMedication(
+                        medicationNameTxt.getText(), dosageTxt.getText(),
+                        timesGivenTxt.getText(), "Seizure Medication", cosmoId);
+
+                // if no error message is recieved then close this window and
+                // refresh the table
+                if ( result.equals("") )
+                {
+                    addEditSeizureMedicationStage.close();
+                    smTVC.refreshTable(cosmoId);
+                }
+                // if there is an error message, display it
+                else
+                {
+                    lblWarning.setTextFill(Color.FIREBRICK);
+                    lblWarning.setText(result);
+                }
+            }
+        });
+
+        Button resetBtn = new Button("Reset");
+        resetBtn.setOnAction(new EventHandler<ActionEvent>()
+        {
+
+            @Override
+            public void handle( ActionEvent arg0 )
+            {
+                // sets all values to default
+                medicationNameTxt.setText("");
+                dosageTxt.setText("");
+                timesGivenTxt.setText("");
+
+                lblWarning.setText("");
+
+            }
+
+        });
+        HBox addHbox = new HBox();
+        HBox resetHbox = new HBox();
+        addHbox.getChildren().add(addMedicationBtn);
+        resetHbox.getChildren().add(resetBtn);
+        grid.add(resetHbox, 0, 4);
+        grid.add(addHbox, 1, 4);
+        return grid;
+    }
+
+    /**
+     * Purpose: This will take the selected user from the table, confirm that
+     * you wish to delete them, if so, will delete the selected user, then
+     * refresh the table of accounts
+     * 
+     * @param medicationName
+     *            The medication that you will remove
+     * @author Niklaas Neijmeijer CST207
+     */
+    public void removeMedication( String medicationName )
+    {
+        Stage stage = new Stage();
+        Scene scene;
+
+        // if the selected username is not null
+        if ( medicationName != null && medicationName != "null" )
+        {
+            // if the selected username is the same as the current username
+
+            PopUpCheck checkBox = new PopUpCheck("Are you sure you want to "
+                    + "delete " + medicationName + "?", stage);
+
+            scene = new Scene(checkBox.root, 300, 75);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(participantDetailsGUI.participantMainStage);
+            stage.showAndWait();
+
+            // when the user is removed from the database
+            if ( checkBox.result )
+            {
+                if ( Medication.removeMedication(medicationName, cosmoId) )
+                {
+                    // this.sTVCont.removeViewableUser(username);
+                    smTVC.refreshTable(cosmoId);
+                }
+
+            }
+
+        }
+        // pop up a message saying that no user has been selected to delete
+        else
+        {
+            // tell the user to select a user to delete
+            PopUpMessage messageBox = new PopUpMessage(
+                    "Please select a medication to remove.", stage);
+
+            scene = new Scene(messageBox.root, 300, 75);
+            stage.setScene(scene);
+            stage.showAndWait();
+        }
+
+    }
+
+    /**
+     * Method for clearing the seizure associated with the participant
+     */
+    protected void clearSeizure()
+    {
+        Stage stage = new Stage();
+        Scene scene;
+
+        PopUpCheck checkBox = new PopUpCheck("Are you sure you want to "
+                + "remove this individual's seizure information?", stage);
+
+        scene = new Scene(checkBox.root, 400, 75);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(participantDetailsGUI.participantMainStage);
+        stage.showAndWait();
+
+        // when the user is removed from the database
+        if ( checkBox.result )
+        {
+            DatabaseHelper db = new DatabaseHelper();
+            ResultSet seizureIDSet = db.select("seizureID", "seizures",
+                    "cosmoID = '" + cosmoId + "'", "");
+
+            String seizureID = "";
+
+            // check if there is already a seizure for that participant
+            try
+            {
+                seizureIDSet.next();
+                seizureID = seizureIDSet.getString(1);
+            }
+            catch ( SQLException e )
+            {
+                e.printStackTrace();
+            }
+
+            db.delete("seizureMedication", "seizureID = '" + seizureID + "'");
+            db.delete("seizures", "seizureID = '" + seizureID + "'");
+            smTVC.refreshTable(cosmoId);
+            seizureTypeTxt.setText("");
+            warningLbl.setText("");
+            descriptionTxt.setText("");
+            frequencyTxt.setText("");
+            durationTxt.setText("");
+            aftermathTxt.setText("");
+            aftermathAssistanceTxt.setText("");
+            emergencyTreatmentTxt.setText("");
+            lastUpdatedTxt.setText("");
+            
+        }
+    }
 }

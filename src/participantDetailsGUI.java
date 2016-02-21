@@ -178,8 +178,8 @@ public class participantDetailsGUI extends Application {
 
 		// create the seizure tab
 		SeizureDescriptionFormGUI sDescForm = new SeizureDescriptionFormGUI(
-				seizureDescription, loggedInUser);
-		seizureDescription.setContent(sDescForm.ShowSeizureForm(cosmoID + "")
+				seizureDescription, loggedInUser, cosmoID + "");
+		seizureDescription.setContent(sDescForm.ShowSeizureForm()
 				.getContent());
 
 		kinDetails.setContent(createKinDetailsTab());
