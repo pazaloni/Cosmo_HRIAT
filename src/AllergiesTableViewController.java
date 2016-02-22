@@ -143,4 +143,14 @@ public class AllergiesTableViewController
 
     }
 
+    
+    /**
+     * 
+     * Purpose:Return the selected item from the database
+     * @return
+     */
+    public Allergies getSelectedAllergy()
+    {
+        return allergiesTable.getSelectionModel().getSelectedItem();
+    }
 }

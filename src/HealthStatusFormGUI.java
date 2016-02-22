@@ -1,8 +1,11 @@
+import java.awt.Dialog.ModalExclusionType;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.collections.ModifiableObservableListBase;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
@@ -16,6 +19,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  *
@@ -46,6 +51,8 @@ public class HealthStatusFormGUI
     private TextField physicianPhoneTxt;
     private TextField dateCompletedTxt;
 
+    private Stage parentStage;
+
     private CheckBox tylenolGiven;
     private CheckBox careGiverPermission;
     private TextArea otherInfoTxt;
@@ -60,17 +67,19 @@ public class HealthStatusFormGUI
      * 
      * @param ctrl the pane, or box that this will be placed on
      */
-    public HealthStatusFormGUI(Tab healthStatusTab, StaffAccount loggedInUser)
+    public HealthStatusFormGUI(Tab healthStatusTab, StaffAccount loggedInUser,
+            Stage parentStage)
     {
         this.parentTab = healthStatusTab;
         this.loggedInUser = loggedInUser;
+        this.parentStage = parentStage;
     }
 
     /**
      * 
      * Purpose: This method will make everything and display it.
      * 
-     * @param cosmoId: The cosmoId for the paritcipant
+     * @param cosmoId: The cosmoId for the participant
      */
     public Tab showHealthStatusInfo( String cosmoId )
     {
@@ -117,15 +126,6 @@ public class HealthStatusFormGUI
         this.parentTab.setContent(mainBox);
 
         return parentTab;
-    }
-
-    /**
-     * 
-     * Purpose: this method will make everything that can be editable editable
-     */
-    public void editHealthStatusInfo()
-    {
-
     }
 
     /**
@@ -241,34 +241,21 @@ public class HealthStatusFormGUI
         Button btnAddMedicalCondition = new Button("Add");
         Button btnEditMedicalCondition = new Button("Edit");
         Button btnDeleteMedicalCondition = new Button("Delete");
-        Button btnFinish = new Button("Finish");
 
         btnAddMedicalCondition.setOnMouseClicked(event -> {
-            btnFinish.setDisable(false);
-            btnEditMedicalCondition.setDisable(true);
-            btnDeleteMedicalCondition.setDisable(true);
+
         });
 
         btnEditMedicalCondition.setOnMouseClicked(event -> {
-            btnFinish.setDisable(false);
-            btnAddMedicalCondition.setDisable(true);
-            btnDeleteMedicalCondition.setDisable(true);
+
         });
 
         btnDeleteMedicalCondition.setOnMouseClicked(event -> {
-            btnFinish.setDisable(false);
-            btnAddMedicalCondition.setDisable(true);
-            btnDeleteMedicalCondition.setDisable(true);
-        });
-        btnFinish.setOnMouseClicked(event ->{
-            btnFinish.setDisable(true);
-            btnAddMedicalCondition.setDisable(false);
-            btnEditMedicalCondition.setDisable(false);
-            btnDeleteMedicalCondition.setDisable(false);
+
         });
 
         buttons.getChildren().addAll(btnAddMedicalCondition,
-                btnEditMedicalCondition, btnDeleteMedicalCondition,btnFinish);
+                btnEditMedicalCondition, btnDeleteMedicalCondition);
 
         controls.getChildren().addAll(buttons);
         TableView<MedicalCondition> table = new MedicalConditionsTableViewController(
@@ -286,12 +273,12 @@ public class HealthStatusFormGUI
      * 
      * Purpose: Create the allergies info for the participant
      * 
-     * @param cosmoId The participant cosmoId which is used to pull the
+     * @param cosmoID The participant cosmoId which is used to pull the
      *            information from the database
      *
      * @return VBox with a label and a table view
      */
-    private VBox createAllergiesInfo( String cosmoId )
+    private VBox createAllergiesInfo( String cosmoID )
     {
         VBox box = new VBox();
         HBox controls = new HBox();
@@ -309,8 +296,45 @@ public class HealthStatusFormGUI
 
         controls.getChildren().addAll(buttons);
 
-        TableView<Allergies> table = new AllergiesTableViewController(cosmoId
-                + "").allergiesTable;
+        AllergiesTableViewController controller = new AllergiesTableViewController(
+                cosmoID + "");
+        TableView<Allergies> table = controller.allergiesTable;
+        btnEditAllergy.setOnAction(event -> {
+            Allergies allergy = controller.getSelectedAllergy();
+            // If there is no allergy selected, then display a message
+                if ( allergy == null )
+                {
+                    Stage stage = new Stage();
+                    PopUpMessage popup = new PopUpMessage(
+                            "Must select an allergy to edit", stage);
+                    Scene scene = new Scene(popup.root, 300, 75);
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.initOwner(parentStage);
+                    stage.setScene(scene);
+                    stage.showAndWait();
+                }
+                else
+                {
+                    ManageAllergyGUI manageAllergies = new ManageAllergyGUI(
+                            parentStage);
+                    manageAllergies.showUpdateAllergy(table.getSelectionModel()
+                            .getSelectedItem(), cosmoID);
+                }
+            });
+
+        btnAddAllergy
+                .setOnAction(event -> {
+                    ManageAllergyGUI manageAllergies = new ManageAllergyGUI(
+                            parentStage);
+                    manageAllergies.showAddAllergy(cosmoID);
+                });
+
+        btnDeleteAllergy.setOnAction(event -> {
+            ManageAllergyGUI manageAllergyGUI = new ManageAllergyGUI(
+                    parentStage);
+            //TODO add a pop-up check for participant deletion 
+            
+        });
         table.setMaxWidth(700);
 
         buttons.setSpacing(5);
@@ -355,6 +379,7 @@ public class HealthStatusFormGUI
         controls.setSpacing(450);
 
         box.getChildren().addAll(medicationsLbl, table, controls);
+
         return box;
     }
 }

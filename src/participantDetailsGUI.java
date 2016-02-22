@@ -172,7 +172,7 @@ public class participantDetailsGUI extends Application {
 
 		// set body for tabs
 		HealthStatusFormGUI hsf = new HealthStatusFormGUI(healthStatus,
-				loggedInUser);
+				loggedInUser, participantMainStage);
 		healthStatus.setContent(hsf.showHealthStatusInfo(cosmoID + "")
 				.getContent());		
 
