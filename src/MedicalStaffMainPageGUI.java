@@ -148,7 +148,7 @@ public class MedicalStaffMainPageGUI extends Application
         medMainStage.resizableProperty().set(true);
         medMainStage.show();
         // Event for when stage is closed
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>()
+        medMainStage.setOnCloseRequest(new EventHandler<WindowEvent>()
         {
             public void handle( WindowEvent we )
             {
@@ -179,6 +179,9 @@ public class MedicalStaffMainPageGUI extends Application
             @Override
             public void handle( ActionEvent e )
             {
+
+                medMainStage.setOnCloseRequest(null);
+
                 medMainStage.close();
                 dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout","");
                 LoginGUI test5 = new LoginGUI();
@@ -873,7 +876,9 @@ public class MedicalStaffMainPageGUI extends Application
             @Override
             public void handle( ActionEvent event )
             {
+
                 nTVCont.refreshTable();
+
             }
         });
 
@@ -912,7 +917,8 @@ public class MedicalStaffMainPageGUI extends Application
         noteDisplayPane.add(staffLabel, 0, 2);
         noteDisplayPane.add(participantLabel, 0, 1);
         noteDisplayPane.add(subjectLabel, 0, 3);
-
+        noteDisplayPane.add(resolvedCb, 0, 4);
+        
         // Initially the labes for notes will be empty because they haven't
         // selected a note yet
         dateInfoLabel = new Label();
@@ -922,10 +928,9 @@ public class MedicalStaffMainPageGUI extends Application
 
         // column 1
         noteDisplayPane.add(dateInfoLabel, 1, 0);
-        noteDisplayPane.add(staffInfoLabel, 1, 1);
-        noteDisplayPane.add(participantInfoLabel, 1, 2);
         noteDisplayPane.add(subjectInfoLabel, 1, 3);
-        noteDisplayPane.add(resolvedCb, 0, 4);
+        noteDisplayPane.add(staffInfoLabel, 1, 2);
+        noteDisplayPane.add(participantInfoLabel, 1, 1);
 
         // set minimum width
         noteDisplayPane.setMinWidth(265);
@@ -943,52 +948,65 @@ public class MedicalStaffMainPageGUI extends Application
     private void createNoteDetailLabels()
     {
 
-        Label dateInfoLabel = new Label();
-        Label staffInfoLabel = new Label();
-        Label participantInfoLabel = new Label();
-        Label subjectInfoLabel = new Label();
-
         resolvedCb = new CheckBox("Resolved");
-
-        dateInfoLabel.setMaxWidth(150);
-        dateInfoLabel.setMinWidth(150);
-
-        staffInfoLabel.setMaxWidth(150);
-        staffInfoLabel.setMinWidth(150);
-
-        participantInfoLabel.setMaxWidth(150);
-        participantInfoLabel.setMinWidth(150);
-
-        subjectInfoLabel.setMaxWidth(150);
-        subjectInfoLabel.setMinWidth(150);
-        subjectInfoLabel.setWrapText(true);
 
         nTVCont.noteTable.setOnMousePressed(event -> {
             assignNoteDetailLabels(nTVCont.getSelectedPK());
         });
     }
 
+    /**
+     * 
+     * Purpose: Assign the information pulled from the database to the various
+     * control
+     * 
+     * @param selectedPK the note selected
+     */
     private void assignNoteDetailLabels( String selectedPK )
     {
         NotePaneHelper noteHelper = new NotePaneHelper();
         Note currentNote = noteHelper.queryNote(selectedPK);
+        // Refresh table before removing
+        nTVCont.refreshTable();
+        if ( !nTVCont.noteIDs.isEmpty() )
+        {
+            dateInfoLabel.setText(currentNote.getDate());
+            participantInfoLabel.setText(noteHelper
+                    .getParticipantName(currentNote.getParticipant()));
+            staffInfoLabel.setText(noteHelper.getStaffName(currentNote
+                    .getCreatorID()));
+            subjectInfoLabel.setText(currentNote.getDescription());
+            resolvedCb.setSelected(Boolean.parseBoolean(currentNote
+                    .getResolved()));
 
-        dateInfoLabel.setText(currentNote.getDate());
-        participantInfoLabel.setText(noteHelper.getParticipantName(currentNote
-                .getParticipant()));
-        staffInfoLabel.setText(noteHelper.getStaffName(currentNote
-                .getCreatorID()));
-        subjectInfoLabel.setText(currentNote.getDescription());
-        resolvedCb.setSelected(Boolean.parseBoolean(currentNote.getResolved()));
-        resolvedCb.setOnAction(event -> {
-            if ( resolvedCb.isSelected() )
-            {
-                //TODO update to database to be resolved
-                noteHelper.setNoteAsResolved(currentNote);
-            }
-            System.out.println("Resolved");
-        });
+            resolvedCb.setOnAction(event -> {
+                if ( resolvedCb.isSelected() )
+                {
 
+                    noteHelper.setNoteAsResolved(currentNote);
+                    nTVCont.refreshTable();
+                    dateInfoLabel.setText("");
+                    staffInfoLabel.setText("");
+                    participantInfoLabel.setText("");
+                    subjectInfoLabel.setText("");
+                    resolvedCb.setSelected(false);
+
+                }
+            });
+
+            dateInfoLabel.setMaxWidth(150);
+            dateInfoLabel.setMinWidth(150);
+
+            staffInfoLabel.setMaxWidth(150);
+            staffInfoLabel.setMinWidth(150);
+
+            participantInfoLabel.setMaxWidth(150);
+            participantInfoLabel.setMinWidth(150);
+
+            subjectInfoLabel.setMaxWidth(150);
+            subjectInfoLabel.setMinWidth(150);
+            subjectInfoLabel.setWrapText(true);
+        }
     }
 
     /**
@@ -1018,6 +1036,6 @@ public class MedicalStaffMainPageGUI extends Application
                 pTVCont.participantTable);
 
         return vbox;
-    }
 
+    }
 }

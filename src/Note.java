@@ -203,18 +203,12 @@ public class Note
 	
 	public StringProperty viewedProperty()
 	{
-		String read = " ";
-		if(viewed)
+		StringProperty read = new SimpleStringProperty(" ");
+		if(!viewed)
 		{
-			read = "Read";
+			read.set("*");
 		}
-		else
-		{
-			read = "Unread";
-		}
-		StringProperty p = new SimpleStringProperty();
-		p.set(read + "");
-		return p;
+		return read;
 	}
 	
 	public StringProperty resolvedProperty()
