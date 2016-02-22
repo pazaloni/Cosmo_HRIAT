@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 
 import org.junit.After;
 import org.junit.Before;
@@ -15,15 +16,17 @@ public class testDatabase {
 	//the database object
 	private DatabaseHelper db;
 	//the participant's cosmoID
-	private String cosmoID = "123";
+	private String cosmoID = "57321";
 	//the participant's first name
 	private String firstName = "jon";
 	//the participant's last name
 	private String lastname = "froese";
 	//participants date of birth
-	private String dob = "January 12, 2016";
+	private LocalDate dob = LocalDate.of(16, 01, 11);
 	//participants personal health number
 	private String phn = "123567891";
+	//participants phone number
+	private String phoneNum = "3061231234";
 	//participants condition/diagnosis
 	private String diagnosis = "downs syndrome";
 	//the description of the condition/diagnosis
@@ -109,6 +112,8 @@ public class testDatabase {
 	private String wordID = "2";
 	//the primary key for the participants kin
 	private String kinID = "2";
+	//image path
+	private String imagePath = "/images/" + cosmoID + ".jpg";
 	
 	
 	
@@ -126,6 +131,9 @@ public class testDatabase {
 	@Test
 	public void testSelect() 
 	{
+	    MedicalAdministrator.createParticipant(cosmoID, firstName, lastname, dob, physName, physLastName, phn,
+	           phoneNum, address, imagePath);
+	    
 		//select the participants basic information from the database, as well as
 			//any foreign keys to be used to find other information in other tables
 		ResultSet rs = db.select("firstName, lastName, dateOfBirth, personalHealthNumber,"
@@ -137,18 +145,13 @@ public class testDatabase {
 			while(rs.next())
 			{
 				assertTrue(rs.getString(1).equals(firstName));
-				assertTrue(rs.getString(2).equals(lastname));
-				
-				DateFormat format = new SimpleDateFormat("MMMM d, yyyy");
-				String date = (format.format(rs.getTimestamp(3)));
-				
-				assertTrue(date.equals(dob));
+				assertTrue(rs.getString(2).equals(lastname));							
+				DateFormat format = new SimpleDateFormat("dd-MMM-YY");
+				String date = (format.format(rs.getTimestamp(3)));			
+				assertTrue(date.equals("11-Jan-16"));
 				assertTrue(rs.getString(4).equals(phn));
 				assertTrue(rs.getString(5).equals(address));
-				assertTrue(rs.getString(6).equals(physicianID));
-				assertTrue(rs.getString(7).equals(wordID));
-				assertTrue(rs.getString(8).equals(kinID));
-				assertTrue(rs.getString(9).equals(caregiverID));
+
 			}
 		}
 		catch(SQLException e)
@@ -182,9 +185,9 @@ public class testDatabase {
 			//check that it matches expected result
 			while(rs.next())
 			{
-				assertTrue(rs.getString(1).equals(careFirstName));
-				assertTrue(rs.getString(2).equals(careLastName));
-				assertTrue(rs.getString(3).equals(carePhone));
+				assertTrue(rs.getString(1).equals("N/A"));
+				assertTrue(rs.getString(2).equals("N/A"));
+				assertTrue(rs.getString(3) == null);
 			}
 		}
 		catch(SQLException e)
@@ -261,11 +264,10 @@ public class testDatabase {
 			while(rs.next())
 			{
 				assertTrue(rs.getString(1).equals(physicianID));
-				assertTrue(rs.getString(2).equals(physName));
-				assertTrue(rs.getString(3).equals(physLastName));		
-				assertTrue(rs.getString(4).equals(physPhone));				
-				
-			
+				assertTrue(rs.getString(2).equals("N/A"));
+				assertTrue(rs.getString(3).equals("N/A"));	
+				assertTrue(rs.getString(4).equals("0"));				
+
 			}
 		}
 		catch(SQLException e)
@@ -274,7 +276,7 @@ public class testDatabase {
 		}
 		
 		//select the partipants seizure information
-		rs = db.select("seizureID, seizureType, description, frequency, duration, aftermath, medicationName", "Seizures", "cosmoID = " + cosmoID, "");
+		rs = db.select("seizureID, seizureType, description, frequency, duration, aftermath", "Seizures", "cosmoID = " + cosmoID, "");
 		
 		try
 		{
@@ -287,9 +289,6 @@ public class testDatabase {
 				assertTrue(rs.getString(4).equals(frequency));
 				assertTrue(rs.getString(5).equals(duration));
 				assertTrue(rs.getString(6).equals(aftermath));
-				assertTrue(rs.getString(7).equals(seizureMeds));
-				
-			
 			}
 		}
 		catch(SQLException e)
@@ -334,32 +333,7 @@ public class testDatabase {
 	
 	}
 	
-	/**
-	 * Test that java can successfully insert into the activity log.
-	 */
-	@Test
-	public void testActivityLogInsert()
-	{
-		db.activtyLogEntry("testUser", "Login", "");
-		ResultSet rs = db.select("Who, Event", "ActivityLog", "Who = 'testUser'", "");
-		try
-		{
-			//check that it matches expected result
-			while(rs.next())
-			{
-				String test = rs.getString(2);
-				assertTrue(rs.getString(1).equals("testUser"));
-				
-				assertTrue(test.equals("Login"));		
-				
-			}
-		}
-		catch(SQLException e)
-		{
-			
-		}
-	}
-	
+
 	/**
 	 * Test that java can successfully insert into the activity log with no event.
 	 */
@@ -367,18 +341,18 @@ public class testDatabase {
 	public void testNoEventActivityLogInsert()
 	{
 		db.activtyLogEntry("testUser", "", "");
-		ResultSet rs = db.select("Who, Event", "ActivityLog", "Who = 'testUser'", "");
+		ResultSet rs = db.select("Who, Event", "ActivityLog", "Who = 'testUser' AND Event = ''", "");
 		try
 		{
 			//check that it matches expected result
 			while(rs.next())
 			{
-				String test = rs.getString(2);
-				boolean test2 = (rs.getString(2).equals("Login"));
-				assertTrue(rs.getString(1).equals("testUser"));
-			    assertTrue(rs.getString(2).equals("Login"));
-				
-				
+			    String user = rs.getString(1);
+				String event = rs.getString(2);
+
+				assertTrue(user.equals("testUser"));
+			    assertTrue(event.equals(""));
+
 			}
 		}
 		catch(SQLException e)
@@ -386,7 +360,32 @@ public class testDatabase {
 			
 		}
 	}
-	
+	   /**
+     * Test that java can successfully insert into the activity log.
+     */
+    @Test
+    public void testActivityLogInsertLoginEvent()
+    {
+        db.activtyLogEntry("testUser", "Login", "");
+        ResultSet rs = db.select("Who, Event", "ActivityLog", "Who = 'testUser' AND Event = 'Login'", "");
+        try
+        {
+            //check that it matches expected result
+            while(rs.next())
+            {
+                String user = rs.getString(1);
+                String event = rs.getString(2);
+
+                assertTrue(user.equals("testUser"));                
+                assertTrue(event.equals("Login"));                  
+            }
+        }
+        catch(SQLException e)
+        {
+            
+        }
+    }
+    
    /**
      * Test that java can successfully insert into the activity log.
      */
@@ -394,13 +393,14 @@ public class testDatabase {
     public void testActivityLogInsertEditedParticipant()
     {
         db.activtyLogEntry("testUser", "Edited Participant (" + cosmoID + ")", "Unit Test");
-        ResultSet rs = db.select("Who, Event", "ActivityLog", "Who = 'testUser'", "");
+        ResultSet rs = db.select("Who, Event", "ActivityLog", "Who = 'testUser' AND Event = 'Edited Participant (" + cosmoID + ")'", "");
         try
         {
             //check that it matches expected result
             while(rs.next())
             {
-                String test = rs.getString(1);
+                String user = rs.getString(1);
+                String event = rs.getString(2);
                 assertTrue(rs.getString(1).equals("testUser"));
                 assertTrue(rs.getString(2).equals("Edited Participant (" + cosmoID + ")"));
                 
