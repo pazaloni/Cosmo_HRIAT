@@ -1,3 +1,5 @@
+import javax.sound.midi.ControllerEventListener;
+
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -6,6 +8,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -62,6 +65,7 @@ public class ManageAllergyGUI
     {
         Stage localStage = new Stage();
         lblMessage = new Label("");
+        lblMessage.setTextFill(Color.FIREBRICK);
         mainPane.add(lblMessage, 0, 0, 2, 1);
 
         mainPane.add(lblAllergicTo, 0, 1);
@@ -90,6 +94,13 @@ public class ManageAllergyGUI
                     allergyType.getText(), allergyDescription.getText(),
                     cosmoID);
             lblMessage.setText(result);
+            if ( result.equals("Success"))
+            {
+                localStage.close();
+            }
+        });
+        btnCancel.setOnAction(event -> {
+            localStage.close();
         });
 
         Scene scene = new Scene(mainPane, 330, 300);
@@ -97,7 +108,7 @@ public class ManageAllergyGUI
         localStage.initModality(Modality.WINDOW_MODAL);
         localStage.initOwner(parentStage);
         localStage.setTitle("Add an allergy");
-        localStage.show();
+        localStage.showAndWait();
     }
 
     /**
@@ -113,6 +124,7 @@ public class ManageAllergyGUI
     {
         Stage localStage = new Stage();
         lblMessage = new Label("");
+        lblMessage.setTextFill(Color.FIREBRICK);
         mainPane.add(lblMessage, 0, 0, 2, 1);
 
         mainPane.add(lblAllergicTo, 0, 1);
@@ -138,12 +150,19 @@ public class ManageAllergyGUI
         mainPane.setHgap(10);
         mainPane.setVgap(10);
 
+        // Handles the editing of the allergy
         btnAdd.setOnAction(event -> {
-            Allergies.updateAllergy(new Allergies(allergicTo.getText(),
-                    allergyType.getText(), allergyDescription.getText()),
-                    cosmoID);
+            String result = Allergies.updateAllergy(
+                    new Allergies(allergicTo.getText(), allergyType.getText(),
+                            allergyDescription.getText()), cosmoID);
+            if(result.equals("Update successfull"))
+            {
+                localStage.close();
+            }
+
         });
 
+        // Closes the stage.
         btnCancel.setOnAction(event -> {
             localStage.close();
         });
@@ -155,6 +174,6 @@ public class ManageAllergyGUI
         localStage.initModality(Modality.WINDOW_MODAL);
         localStage.initOwner(parentStage);
         localStage.setTitle("Add an allergy");
-        localStage.show();
+        localStage.showAndWait();
     }
 }

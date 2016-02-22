@@ -289,10 +289,10 @@ public class HealthStatusFormGUI
 
         Button btnAddAllergy = new Button("Add");
         Button btnEditAllergy = new Button("Edit");
-        Button btnDeleteAllergy = new Button("Delete");
+        Button btnDelAllergy = new Button("Delete");
 
         buttons.getChildren().addAll(btnAddAllergy, btnEditAllergy,
-                btnDeleteAllergy);
+                btnDelAllergy);
 
         controls.getChildren().addAll(buttons);
 
@@ -319,6 +319,7 @@ public class HealthStatusFormGUI
                             parentStage);
                     manageAllergies.showUpdateAllergy(table.getSelectionModel()
                             .getSelectedItem(), cosmoID);
+                    controller.refreshTable(cosmoID);
                 }
             });
 
@@ -327,14 +328,41 @@ public class HealthStatusFormGUI
                     ManageAllergyGUI manageAllergies = new ManageAllergyGUI(
                             parentStage);
                     manageAllergies.showAddAllergy(cosmoID);
+                    controller.refreshTable(cosmoID);
                 });
 
-        btnDeleteAllergy.setOnAction(event -> {
-            ManageAllergyGUI manageAllergyGUI = new ManageAllergyGUI(
-                    parentStage);
-            //TODO add a pop-up check for participant deletion 
-            
-        });
+        btnDelAllergy
+                .setOnAction(event -> {
+
+                    Allergies allergy = controller.getSelectedAllergy();
+
+                    if ( allergy == null )
+                    {
+                        Stage stage = new Stage();
+                        PopUpMessage popup = new PopUpMessage(
+                                "Must select an allergy to delete", stage);
+                        Scene scene = new Scene(popup.root, 300, 75);
+                        stage.initModality(Modality.APPLICATION_MODAL);
+                        stage.initOwner(parentStage);
+                        stage.setScene(scene);
+                        stage.showAndWait();
+                    }
+                    else
+                    {
+                        Stage stage = new Stage();
+                        PopUpCheck popup = new PopUpCheck(
+                                "Are you sure you want to delete the selected allergy ?",
+                                stage);
+                        Scene scene = new Scene(popup.root, 300, 75);
+                        stage.initModality(Modality.APPLICATION_MODAL);
+                        stage.initOwner(parentStage);
+                        stage.setScene(scene);
+                        stage.showAndWait();
+                        Allergies.deleteAllergy(table.getSelectionModel().getSelectedItem(), cosmoID);
+                        controller.refreshTable(cosmoID);
+                    }
+
+                });
         table.setMaxWidth(700);
 
         buttons.setSpacing(5);

@@ -86,6 +86,10 @@ public class Allergies
             {
                 result = "The insertion was not successful";
             }
+            else
+            {
+                result = "Success";
+            }
 
             db.disconnect();
         }
@@ -103,21 +107,17 @@ public class Allergies
      *            deleted
      * @return a string containing the status of the deletion
      */
-    public static String deleteAllergy( String allergicTo, String allergyType,
-            String description, String cosmoID )
+    public static String deleteAllergy( Allergies allergy, String cosmoID )
     {
         String result = "";
-        if ( allergicTo.isEmpty() || allergyType.isEmpty()
-                || description.isEmpty() )
-        {
-            result = "You have missing required fields";
-        }
+
         DatabaseHelper db = new DatabaseHelper();
         db.connect();
         boolean success = false;
 
-        success = db.delete("Allergies", "Where allergicTo='" + allergicTo
-                + "'" + "AND cosmoID='" + cosmoID + "'");
+        success = db.delete("Allergies", "allergicTo='"
+                + allergy.allergicTo.get() + "'" + "AND cosmoID='" + cosmoID
+                + "'");
 
         if ( success )
         {
@@ -144,7 +144,7 @@ public class Allergies
 
     {
         String result = "";
-        if ( allergy == null )
+        if ( allergy.allergicTo.get().isEmpty() )
         {
 
             result = "You have missing required fields";
@@ -163,8 +163,8 @@ public class Allergies
             updateValues[1][1] = allergy.getAllergyType().get();
             updateValues[2][1] = allergy.getDescription().get();
 
-            success = db.update(updateValues, "Allergies", allergy.getAllergicTo().get()
-                    + "'AND cosmoID=" + "'" + cosmoID );
+            success = db.update(updateValues, "Allergies", allergy
+                    .getAllergicTo().get() + "'AND cosmoID=" + "'" + cosmoID);
             if ( success )
             {
                 result = "Update successfull";

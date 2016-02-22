@@ -49,6 +49,17 @@ public class AllergiesTableViewController
         allergiesTable.setItems(allergyData);
         allergiesTable.setFocusTraversable(false);
     }
+    /**
+     * 
+     * Purpose: Refresh the table on the GUI
+     */
+    public void refreshTable(String cosmoID)
+    {
+        this.allergyData.clear();
+        this.allergiesTable.getColumns().clear();
+        this.retrieveAllergyData(cosmoID);
+        this.initialize();
+    }
 
     /**
      * 
