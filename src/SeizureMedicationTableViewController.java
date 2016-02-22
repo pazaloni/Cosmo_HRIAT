@@ -99,10 +99,7 @@ public class SeizureMedicationTableViewController
                             medicationName = rs.getString(1);
                             dosage = rs.getString(2);
                             timesGiven = rs.getString(3);
-                            
-                            timesGiven = timesGiven.substring(0, 
-                                    timesGiven.length() - 7);
-                            
+                                                        
                             SeizureMedication SeizureMedication = new 
                                     SeizureMedication(medicationName, dosage, 
                                             timesGiven);
@@ -181,7 +178,32 @@ public class SeizureMedicationTableViewController
         seizureMedicationTable.getColumns().addAll(medicationNameColumn, 
                 dosageColumn, timesGivenColumn);
     }
+
+    public void refreshTable( String cosmoID)
+    {
+        this.seizureMedicationData.clear();        
+        this.seizureMedicationTable.getColumns().clear();
+        this.retrieveSeizureMedicationData(cosmoID);
+        this.initialize();
+        
+    }
     
+    public String getSelectedPK()
+    {
+        String result;
+
+        SeizureMedication seizureMedication = seizureMedicationTable.getSelectionModel().getSelectedItem();
+
+        if (seizureMedication == null)
+        {
+            result = "null";
+        }
+        else
+        {
+            result = seizureMedication.getMedicationName().get();
+        }
+        return result;
+    }
     
     
 }
