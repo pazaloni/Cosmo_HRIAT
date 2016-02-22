@@ -1,5 +1,7 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
@@ -137,7 +139,7 @@ public class SeizureDescriptionFormGUI
                     warningLbl.setText("Save successful");
                     Date now = new Date();
                     SimpleDateFormat formatter = new SimpleDateFormat();
-                    formatter.applyPattern("yyyy-MMM-dd");
+                    formatter.applyPattern("dd-MMM-yyyy");
                     values[7] = formatter.format(now);
 
                     SeizureDescriptionFormHelper helper = new SeizureDescriptionFormHelper();
@@ -268,8 +270,19 @@ public class SeizureDescriptionFormGUI
         durationTxt.setText(info[3]);
         aftermathTxt.setText(info[4]);
         aftermathAssistanceTxt.setText(info[5]);
-        emergencyTreatmentTxt.setText(info[6]);
-        lastUpdatedTxt.setText(info[7]);
+        emergencyTreatmentTxt.setText(info[6]);       
+        DateFormat format = new SimpleDateFormat("dd-MMM-yyyy");
+        Date date = new Date();
+        try
+        {
+            date = format.parse(info[7]);
+        }
+        catch ( ParseException e )
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        lastUpdatedTxt.setText(format.format(date));
 
     }
 
