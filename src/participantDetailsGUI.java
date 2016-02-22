@@ -232,14 +232,17 @@ public class participantDetailsGUI extends Application {
 		hbox.setSpacing(10);
 		hbox.setStyle("-fx-background-color: #336699;");
 
-		// create preview pane
-		BorderPane previewPane = createPreviewPane();
+		 // create preview pane
+        BorderPane previewPane = createPreviewPane();
+     
 
 		// create allergies and seizures pane
 		HBox allergiesAndSeizuresPane = createAllergiesAndSeizuresInfoPane();
 
 		// add preview pane and the allergies and seizures pane
 		hbox.getChildren().addAll(previewPane, allergiesAndSeizuresPane);
+
+        // add picture and button to picture box
 
 		return hbox;
 	}
@@ -377,7 +380,10 @@ public class participantDetailsGUI extends Application {
 				urlPic = urlPic.substring(0, urlPic.length()
 						- (urlPic.length() - urlPic.lastIndexOf("/")));
 
-				urlPic = urlPic.replace("/bin", "");
+
+                // set margins
+                VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
+	urlPic = urlPic.replace("/bin", "");
 
 				Image img = new Image(urlPic + results.getString(8));
 

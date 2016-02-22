@@ -45,7 +45,7 @@ public class SeizureDescriptionFormGUI
 {
     public static final String FORM_TITLE = "Seizure Description Form";
 
-    Stage addEditSeizureMedicationStage;
+    private Stage addEditSeizureMedicationStage;
 
     private SeizureMedicationTableViewController smTVC;
     private ScrollPane mainContainer = new ScrollPane();
@@ -370,13 +370,13 @@ public class SeizureDescriptionFormGUI
     }
 
     /**
-     * Methdo for updating a medication associated with a aseizure.
+     * Method for updating a medication associated with a aseizure.
      * 
      * @param medicationName
      *            : The name of the medication to be updated.
-     * @return
+     * @return gridpane
      */
-    protected GridPane editSeizureMedicationPopUp( String medicationName )
+    private GridPane editSeizureMedicationPopUp( String medicationName )
     {
         //
         GridPane grid = new GridPane();
@@ -410,7 +410,6 @@ public class SeizureDescriptionFormGUI
         }
         catch ( SQLException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -492,7 +491,7 @@ public class SeizureDescriptionFormGUI
     /**
      * Method for adding a medication associated with a seizure
      * 
-     * @return
+     * @return gridpane
      */
     private GridPane addSeizureMedicationPopUp()
     {
@@ -586,7 +585,7 @@ public class SeizureDescriptionFormGUI
      *            The medication that you will remove
      * @author Niklaas Neijmeijer CST207
      */
-    public void removeMedication( String medicationName )
+    private void removeMedication( String medicationName )
     {
         Stage stage = new Stage();
         Scene scene;
@@ -635,7 +634,7 @@ public class SeizureDescriptionFormGUI
     /**
      * Method for clearing the seizure associated with the participant
      */
-    protected void clearSeizure()
+    private void clearSeizure()
     {
         Stage stage = new Stage();
         Scene scene;
@@ -684,10 +683,8 @@ public class SeizureDescriptionFormGUI
             }
             catch ( SQLException e )
             {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            //db.delete("seizureMedication", "seizureID = '" + seizureID + "'");
             db.delete("seizures", "seizureID = '" + seizureID + "'");
             smTVC.refreshTable(cosmoId);
             seizureTypeTxt.setText("");

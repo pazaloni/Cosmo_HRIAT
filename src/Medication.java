@@ -81,9 +81,9 @@ public class Medication
      * @param dosage
      *            : How much of the medication needs to be taken
      * @param timesGiven
-     *            : What times the medicaiton is taken
+     *            : What times the medication is taken
      * @param reason
-     *            : Why the medicaiton is taken.
+     *            : Why the medication is taken.
      * @param cosmoID
      *            : Who the medication is being taken by.
      * @return: The result of the insertion to the database.
@@ -102,7 +102,7 @@ public class Medication
             DatabaseHelper db = new DatabaseHelper();
             db.connect();
             boolean successful = false;
-            if ( !dosage.matches("\\d+") && dosage.length() != 0)
+            if ( !dosage.matches("\\d+") && dosage.length() != 0 )
             {
                 result = "Dosage needs to be a number";
             }
@@ -225,7 +225,8 @@ public class Medication
 
                         successful = db.insert(seizureMedicationValues,
                                 "seizureMedication");
-
+                        // If the seizure was not added successfully, remove the
+                        // medication
                         if ( !successful )
                         {
                             result = "The insertion was not successful";
@@ -353,7 +354,7 @@ public class Medication
             DatabaseHelper db = new DatabaseHelper();
             db.connect();
             boolean successful = false;
-            if ( !dosage.matches("\\d+") && dosage.length() != 0)
+            if ( !dosage.matches("\\d+") && dosage.length() != 0 )
             {
                 result = "Dosage needs to be a number";
             }

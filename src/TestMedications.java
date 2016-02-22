@@ -198,7 +198,7 @@ public class TestMedications
         ResultSet medicationSeizureSet = db.select("count(*)",
                 "seizureMedication", "medicationID = " + medicationID
                         + " AND seizureID = " + seizureID, "");
-        medicationSeizureSet.next();               
+        medicationSeizureSet.next();
         int medicationSeizureCount = medicationSeizureSet.getInt(1);
 
         assertTrue(medicationSeizureCount == 1);
@@ -270,7 +270,6 @@ public class TestMedications
 
         assertTrue(medicationSeizureCount == 0);
     }
-    
 
     /**
      * 
@@ -283,8 +282,9 @@ public class TestMedications
     {
         String result = Medication.createMedication(medicationName1, dosage1,
                 timesGiven1, reason1, cosmoID1);
-        
-        result = Medication.updateMedication(medicationName2, dosage1, timesGiven1, reason1, cosmoID1, medicationName1);
+
+        result = Medication.updateMedication(medicationName2, dosage1,
+                timesGiven1, reason1, cosmoID1, medicationName1);
         ResultSet results = db.select("medicationName", "Medication",
                 "medicationName = '" + medicationName2 + "' AND cosmoID = '"
                         + cosmoID1 + "'", "");
@@ -297,7 +297,7 @@ public class TestMedications
 
         Medication.removeMedication(medicationName2, cosmoID1);
     }
-    
+
     /**
      * 
      * Purpose: checks that a medication is not updated if there is no name
@@ -307,12 +307,12 @@ public class TestMedications
     @Test
     public void testUpdateMedicationFailName() throws SQLException
     {
-        String result = Medication.createMedication(medicationName1, dosage1, timesGiven1,
-                reason1, cosmoID1);
-        
-        result =Medication.updateMedication("", dosage1, timesGiven1,
-                reason1, cosmoID1, medicationName1);
-        
+        String result = Medication.createMedication(medicationName1, dosage1,
+                timesGiven1, reason1, cosmoID1);
+
+        result = Medication.updateMedication("", dosage1, timesGiven1, reason1,
+                cosmoID1, medicationName1);
+
         assertFalse(result.length() == 0);
 
     }
@@ -332,9 +332,9 @@ public class TestMedications
 
         result = Medication.updateMedication(medicationName1, "32fszsd",
                 timesGiven1, reason1, cosmoID1, medicationName1);
-        
+
         assertFalse(result.length() == 0);
 
     }
-    
+
 }
