@@ -62,9 +62,10 @@ public class ActivityLogPopUp
     private BorderPane createActivityLog()
     {
         HBox controls = createControls();
-        HBox tableBox = createTableBox();
+        TableView table = logController.activityLogTable;
+     //   HBox tableBox = createTableBox();
         root.setTop(controls);
-        root.setCenter(tableBox);
+        root.setCenter(table);
         root.setPadding(new Insets(10, 10, 10, 10));
         return root;
     }
@@ -105,21 +106,7 @@ public class ActivityLogPopUp
      * @return
      */
 
-    private HBox createTableBox()
-    {
-        @SuppressWarnings("rawtypes")
-        TableView table = logController.activityLogTable;
 
-        HBox box = new HBox();
-
-     //   table.setMaxWidth(WIDTH - 50);
-        table.setMinWidth(WIDTH - 50);
-    //    table.setPrefWidth(WIDTH - 50);
-
-        box.setPadding(new Insets(10, 10, 10, 10));
-        box.getChildren().addAll(table);
-        return box;
-    }
 
     /**
      * 

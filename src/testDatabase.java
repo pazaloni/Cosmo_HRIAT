@@ -349,7 +349,9 @@ public class testDatabase {
 			{
 				String test = rs.getString(2);
 				assertTrue(rs.getString(1).equals("testUser"));
-				assertTrue(rs.getString(2).equals("Login"));				
+				
+				assertTrue(test.equals("Login"));		
+				
 			}
 		}
 		catch(SQLException e)

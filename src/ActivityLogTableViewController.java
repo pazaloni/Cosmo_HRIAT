@@ -140,7 +140,7 @@ public class ActivityLogTableViewController
                         }
                     }
                 });
-        activityLogTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+       // activityLogTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         activityLogTable.getColumns()
                 .addAll(whoColumn, whenColumn, eventColumn, detailsColumn);
 
