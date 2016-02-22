@@ -605,7 +605,7 @@ public class participantDetailsGUI extends Application
         // select statement responsible for fetching the required seizure
         // information
         ResultSet rs = DBObject
-                .select("seizureType, description, frequency, duration, aftermath, medicationName",
+                .select("seizureType, description, frequency, duration, aftermath",
                         "Seizures", "cosmoID = " + this.cosmoID, "");
 
         // Whether or not there are any record to be returned
@@ -875,7 +875,7 @@ public class participantDetailsGUI extends Application
         // select statement responsible for fetching the required kin
         // information
         ResultSet rs = DBObject
-                .select("firstName, lastName, address, city, prov, postalCode, phoneNumber",
+                .select("firstName, lastName, address, city, prov, postalCode, homePhoneNumber",
                         "Kin k JOIN Participant p ON k.kinID = p.kinID",
                         "cosmoID = " + this.cosmoID, "");
 
@@ -1015,7 +1015,7 @@ public class participantDetailsGUI extends Application
         // select statement responsible for fetching the required careGiver
         // information
         ResultSet rs = DBObject
-                .select("firstName, lastName, phone",
+                .select("firstName, lastName, homePhoneNumber",
                         "Caregiver c JOIN Participant p ON c.caregiverID = p.caregiverID",
                         "cosmoID = " + this.cosmoID, "");
 
