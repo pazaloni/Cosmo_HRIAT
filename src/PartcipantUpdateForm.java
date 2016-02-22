@@ -45,7 +45,8 @@ public class PartcipantUpdateForm extends ScrollPane
 	public TextField caregiverHomePhoneTxt = new TextField();
 	public TextField caregiverWorkPhoneTxt = new TextField();
 	
-	public TextField emergencyContactName = new TextField();
+	public TextField emergencyContactFirstName = new TextField();
+	public TextField emergencyContactLastName = new TextField();
 	public TextField emergencyContactPhone = new TextField();
 	
 	public PartcipantUpdateForm(int cosmoID)
@@ -78,6 +79,11 @@ public class PartcipantUpdateForm extends ScrollPane
 				createKinInfoArea(), line2, caregiverInfoAreaHeader,
 				createCaregiverInfoArea(), line3, emergencyContactInfoHeader,
 				createEmergencyContactArea());
+		
+		this.fillParticipantText();
+		this.fillKinText();
+		this.fillCaregiverText();
+		this.fillEmergencyText();
 	}
 	
 	public ScrollPane getForm()
@@ -285,21 +291,26 @@ public class PartcipantUpdateForm extends ScrollPane
 	{
 		GridPane main = new GridPane();
 		
-		Label name = new Label("Contact Name:");
+		Label name = new Label("First Name:");
+		Label lastName = new Label("Last Name");
 		Label phone = new Label("Phone Number:");
 		
 		Insets insets = new Insets(5,5,5,5);
 	
 		name.setPadding(insets);
+		lastName.setPadding(insets);
 		phone.setPadding(insets);
 		
 		main.add(name, 0, 0);
-		main.add(emergencyContactName, 1, 0);
+		main.add(emergencyContactFirstName, 1, 0);
+		main.add(lastName, 0, 1);
+		main.add(emergencyContactLastName, 1, 1);
 		main.add(phone, 2, 0);
 		main.add(emergencyContactPhone, 3, 0);
 		
-		main.setMargin(emergencyContactName, insets);
+		main.setMargin(emergencyContactFirstName, insets);
 		main.setMargin(emergencyContactPhone, insets);
+		main.setMargin(emergencyContactLastName, insets);
 		
 		main.alignmentProperty().set(Pos.CENTER);
 		
@@ -316,22 +327,44 @@ public class PartcipantUpdateForm extends ScrollPane
 		participantCityTxt.setText(participantInfo[3]);
 		participantPostalCodeTxt.setText(participantInfo[4]);
 		participantPhoneNumberTxt.setText(participantInfo[5]);
+		participantBirthdateTxt.setText(participantInfo[6]);
+		participantSinTxt.setText(participantInfo[7]);
 		
 	}
 	
 	private void fillKinText()
 	{
+		String[] kinInfo = this.controller.fetchKinInfo();
 		
+		kinFirstNameTxt.setText(kinInfo[0]);
+		kinLastNameTxt.setText(kinInfo[1]);
+		kinAddressTxt.setText(kinInfo[2]);
+		kinCityTxt.setText(kinInfo[3]);
+		kinPostalCodeTxt.setText(kinInfo[4]);
+		kinHomePhoneTxt.setText(kinInfo[5]);
+		kinWorkPhoneTxt.setText(kinInfo[6]);
 	}
 	
 	private void fillCaregiverText()
 	{
+		String[] cgInfo = this.controller.fetchCaregiverInfo();
 		
+		caregiverFirstNameTxt.setText(cgInfo[0]);
+		caregiverLastNameTxt.setText(cgInfo[1]);
+		caregiverAddressTxt.setText(cgInfo[2]);
+		caregiverCityTxt.setText(cgInfo[3]);
+		caregiverPostalCodeTxt.setText(cgInfo[4]);
+		caregiverHomePhoneTxt.setText(cgInfo[5]);
+		caregiverWorkPhoneTxt.setText(cgInfo[6]);
 	}
 	
 	private void fillEmergencyText()
 	{
+		String[] eInfo = this.controller.fetchEmergencyContactInfo();
 		
+		emergencyContactFirstName.setText(eInfo[0]);
+		emergencyContactLastName.setText(eInfo[1]);
+		emergencyContactPhone.setText(eInfo[2]);
 	}
 	
 	private void saveInfo()
