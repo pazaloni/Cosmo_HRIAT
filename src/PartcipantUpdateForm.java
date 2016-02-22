@@ -12,14 +12,24 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-
+/**
+ * Purpose: This class will display the editable participant update form with 
+ *          data from the database
+ * 
+ * @author Breanna Wilson cst215 Steven Palchinski cst209
+ */
 public class PartcipantUpdateForm extends ScrollPane
 {
-	private int cosmoID;
+	//int to hold the cosmoId
+    private int cosmoID;
+    //the main vbox
 	private VBox mainBox;
+	//the save button for the form
 	public Button saveBtn;
+	//the controller instance
 	private ParticipantUpdateFormController controller;
 	
+	//The TextFields for the participant information
 	public TextField participantFirstNameTxt = new TextField();
 	public TextField participantLastNameTxt = new TextField();
 	public TextField participantAddressTxt = new TextField();
@@ -29,6 +39,7 @@ public class PartcipantUpdateForm extends ScrollPane
 	public TextField participantBirthdateTxt = new TextField();
 	public TextField participantSinTxt = new TextField();
 	
+	//The TextFields for the Kin Information
 	public TextField kinFirstNameTxt = new TextField();
 	public TextField kinLastNameTxt = new TextField();
 	public TextField kinAddressTxt = new TextField();
@@ -37,6 +48,7 @@ public class PartcipantUpdateForm extends ScrollPane
 	public TextField kinHomePhoneTxt = new TextField();
 	public TextField kinWorkPhoneTxt = new TextField();
 	
+	//The TextFields for the Caregiver Information
 	public TextField caregiverFirstNameTxt = new TextField();
 	public TextField caregiverLastNameTxt = new TextField();
 	public TextField caregiverAddressTxt = new TextField();
@@ -45,10 +57,15 @@ public class PartcipantUpdateForm extends ScrollPane
 	public TextField caregiverHomePhoneTxt = new TextField();
 	public TextField caregiverWorkPhoneTxt = new TextField();
 	
+	//The TextFields for the Emergency Contact Information
 	public TextField emergencyContactFirstName = new TextField();
 	public TextField emergencyContactLastName = new TextField();
 	public TextField emergencyContactPhone = new TextField();
 	
+	/**
+	 * Purpose: 
+	 * @param cosmoID
+	 */
 	public PartcipantUpdateForm(int cosmoID)
 	{
 		this.cosmoID = cosmoID;
