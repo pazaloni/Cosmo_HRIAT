@@ -102,7 +102,7 @@ public class Medication
             DatabaseHelper db = new DatabaseHelper();
             db.connect();
             boolean successful = false;
-            if ( !dosage.matches("\\d+") )
+            if ( !dosage.matches("\\d+") && dosage.length() != 0)
             {
                 result = "Dosage needs to be a number";
             }
@@ -353,7 +353,7 @@ public class Medication
             DatabaseHelper db = new DatabaseHelper();
             db.connect();
             boolean successful = false;
-            if ( !dosage.matches("\\d+") )
+            if ( !dosage.matches("\\d+") && dosage.length() != 0)
             {
                 result = "Dosage needs to be a number";
             }

@@ -137,7 +137,7 @@ public class SeizureDescriptionFormGUI
                     warningLbl.setText("Save successful");
                     Date now = new Date();
                     SimpleDateFormat formatter = new SimpleDateFormat();
-                    formatter.applyPattern("dd-MMM-yyyy");
+                    formatter.applyPattern("yyyy-MMM-dd");
                     values[7] = formatter.format(now);
 
                     SeizureDescriptionFormHelper helper = new SeizureDescriptionFormHelper();
@@ -338,7 +338,7 @@ public class SeizureDescriptionFormGUI
                     // Open addNewParticipant Window
                     addEditSeizureMedicationStage = new Stage();
                     addEditSeizureMedicationStage
-                            .setTitle("Add Seizure Medication");
+                            .setTitle("Edit Seizure Medication");
 
                     addEditSeizureMedicationStage.setScene(new Scene(
                             editSeizureMedicationPopUp(smTVC.getSelectedPK()),
@@ -371,7 +371,9 @@ public class SeizureDescriptionFormGUI
 
     /**
      * Methdo for updating a medication associated with a aseizure.
-     * @param medicationName: The name of the medication to be updated.
+     * 
+     * @param medicationName
+     *            : The name of the medication to be updated.
      * @return
      */
     protected GridPane editSeizureMedicationPopUp( String medicationName )
@@ -431,8 +433,8 @@ public class SeizureDescriptionFormGUI
         grid.setHgap(10);
         grid.setVgap(10);
 
-        Button addMedicationBtn = new Button("Add");
-        addMedicationBtn.setOnAction(new EventHandler<ActionEvent>()
+        Button editMedicationBtn = new Button("Edit");
+        editMedicationBtn.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
             public void handle( ActionEvent e )
@@ -479,7 +481,7 @@ public class SeizureDescriptionFormGUI
         });
         HBox addHbox = new HBox();
         HBox resetHbox = new HBox();
-        addHbox.getChildren().add(addMedicationBtn);
+        addHbox.getChildren().add(editMedicationBtn);
         resetHbox.getChildren().add(resetBtn);
         grid.add(resetHbox, 0, 4);
         grid.add(addHbox, 1, 4);
@@ -489,6 +491,7 @@ public class SeizureDescriptionFormGUI
 
     /**
      * Method for adding a medication associated with a seizure
+     * 
      * @return
      */
     private GridPane addSeizureMedicationPopUp()
@@ -667,7 +670,24 @@ public class SeizureDescriptionFormGUI
                 e.printStackTrace();
             }
 
-            db.delete("seizureMedication", "seizureID = '" + seizureID + "'");
+            ResultSet medicationIDSet = db.select("medicationID",
+                    "seizureMedication", "seizureID = '" + seizureID + "'","");
+            String medicationID = "";
+            try
+            {
+                while(medicationIDSet.next())
+                {
+                    medicationID = medicationIDSet.getString(1);
+                    db.delete("seizureMedication", "medicationID = '" + medicationID + "'");
+                    db.delete("medication", "medicationID = '" + medicationID + "'");
+                }
+            }
+            catch ( SQLException e )
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            //db.delete("seizureMedication", "seizureID = '" + seizureID + "'");
             db.delete("seizures", "seizureID = '" + seizureID + "'");
             smTVC.refreshTable(cosmoId);
             seizureTypeTxt.setText("");
@@ -679,7 +699,7 @@ public class SeizureDescriptionFormGUI
             aftermathAssistanceTxt.setText("");
             emergencyTreatmentTxt.setText("");
             lastUpdatedTxt.setText("");
-            
+
         }
     }
 }
