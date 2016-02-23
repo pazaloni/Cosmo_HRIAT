@@ -517,8 +517,20 @@ public class PartcipantUpdateForm extends ScrollPane
 	
 	private void saveInfo()
 	{
-		//TODO have this save the information entered into
-			// the database
+		controller.saveBasicParticipantInformation(participantFirstNameTxt.getText(),
+				participantLastNameTxt.getText(), participantAddressTxt.getText(),
+				participantCityTxt.getText(), participantPostalCodeTxt.getText(), 
+				participantPhoneNumberTxt.getText(), participantBirthdateTxt.getText(), 
+				participantSinTxt.getText());
+		
+		controller.saveKinInformation(kinFirstNameTxt.getText(), kinLastNameTxt.getText(),
+				kinAddressTxt.getText(), kinCityTxt.getText(), kinPostalCodeTxt.getText(),
+				kinHomePhoneTxt.getText(), kinWorkPhoneTxt.getText());
+		
+		controller.saveCaregiverInformation(caregiverFirstNameTxt.getText(),
+				caregiverLastNameTxt.getText(), caregiverAddressTxt.getText(),
+				caregiverCityTxt.getText(), caregiverPostalCodeTxt.getText(),
+				caregiverHomePhoneTxt.getText(), caregiverWorkPhoneTxt.getText());
 		
 	}
 	

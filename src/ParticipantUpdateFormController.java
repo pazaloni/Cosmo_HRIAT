@@ -261,4 +261,262 @@ public class ParticipantUpdateFormController
 		return emergencyContactInfo;
 	}
 	
+	public void saveBasicParticipantInformation(String firstName, String lastName,
+			String address, String city, String postalCode, String phoneNumber,
+			String birthDate, String sin)
+	{
+		
+		db.connect();
+		
+		String[][] values = new String[9][2];
+		values[0][0] = "cosmoID";
+		values[0][1] = "" + cosmoID;
+		values[1][0] = "firstName";
+		values[1][1] = firstName;
+		values[2][0] = "lastName";
+		values[2][1] = lastName;
+		values[3][0] = "address";
+		values[3][1] = address;
+		values[4][0] = "city";
+		values[4][1] = city;
+		values[5][0] = "postalCode";
+		values[5][1] = postalCode;
+		values[6][0] = "phoneNum";
+		values[6][1] = phoneNumber;
+		values[7][0] = "dateOfBirth";
+		values[7][1] = birthDate;
+		values[8][0] = "socialInsuranceNumber";
+		values[8][1] = sin;
+		
+		db.update(values, "Participant", values[0][1]);
+		
+		db.disconnect();
+		
+	}
+	
+	public void saveKinInformation(String firstName, String lastName, String address,
+			String city, String postalCode, String homePhone, String workPhone)
+	{
+		db.connect();
+		
+		String[][] values = new String[7][2];
+
+		values[0][0] = "firstName";
+		values[0][1] = firstName;
+		values[1][0] = "lastName";
+		values[1][1] = lastName;
+		values[2][0] = "address";
+		values[2][1] = address;
+		values[3][0] = "city";
+		values[3][1] = city;
+		values[4][0] = "postalCode";
+		values[4][1] = postalCode;
+		values[5][0] = "homePhoneNumber";
+		values[5][1] = homePhone;
+		values[6][0] = "workPhoneNumber";
+		values[6][1] = workPhone;
+		//db.insert(values, "Kin");
+
+		String whereStmt = this.createWhereStatement(values);
+		
+		ResultSet rs = db.select("kinID", "Kin", whereStmt, "");
+		
+		String[][] kinInfo = new String[2][2];
+		kinInfo[0][0] = "cosmoID";
+		kinInfo[0][1] = "" + cosmoID;
+		kinInfo[1][0] = "kinID";
+		kinInfo[1][1] = "";
+		try {
+			rs.next();
+			
+			kinInfo[1][1] = rs.getString(1);
+			System.out.println("KIN ID = " + kinInfo[1][1]);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if(!(kinInfo[1][1].equals("") || kinInfo[1][1].equals(null)))
+		{
+			db.update(kinInfo, "Participant", kinInfo[0][1]);
+		}
+		else
+		{
+			db.insert(values, "Kin");
+			
+			whereStmt = this.createWhereStatement(values);
+			
+			rs = db.select("kinID", "Kin", whereStmt, "");
+			
+			kinInfo = new String[2][2];
+			kinInfo[0][0] = "cosmoID";
+			kinInfo[0][1] = "" + cosmoID;
+			kinInfo[1][0] = "kinID";
+			kinInfo[1][1] = "";
+			try {
+				
+				
+				kinInfo[1][1] = rs.getString(1);
+				
+				
+				System.out.println("KIN ID = " + kinInfo[1][1]);
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			if(!(kinInfo[1][1].equals("") || kinInfo[1][1].equals(null)))
+			{
+				db.update(kinInfo, "Participant", kinInfo[0][1]);
+			}
+		}
+		
+		db.disconnect();
+	}
+	
+	public void saveCaregiverInformation(String firstName, String lastName,
+			String address, String city, String postalCode, String homePhone, 
+			String workPhone)
+	{
+		db.connect();
+		
+		String[][] values = new String[7][2];
+		
+		values[0][0] = "firstName";
+		values[0][1] = firstName;
+		values[1][0] = "lastName";
+		values[1][1] = lastName;
+		values[2][0] = "address";
+		values[2][1] = address;
+		values[3][0] = "city";
+		values[3][1] = city;
+		values[4][0] = "postalCode";
+		values[4][1] = postalCode;
+		values[5][0] = "homePhoneNumber";
+		values[5][1] = homePhone;
+		values[6][0] = "workPhoneNumber";
+		values[6][1] = workPhone;
+		
+		String whereStmt = this.createWhereStatement(values);
+		
+		ResultSet rs = db.select("caregiverID", "Caregiver", whereStmt, "");
+		
+		String caregiverID = "";
+		
+		try {
+			rs.next();
+			if(rs.next())
+			{
+				caregiverID = rs.getString(1);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(caregiverID.equals("") || caregiverID.equals(null))
+		{
+			db.insert(values, "Caregiver");
+		}
+		else
+		{
+			rs = db.select("caregiverID", "Participant", whereStmt, "");
+			
+			try {
+				System.out.println("Inside try block...");
+				if(rs.next())
+				{
+					caregiverID = rs.getString(1);
+				}
+				
+				System.out.println("CAREGIVERID = " + caregiverID);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			
+			String[][] caregiverInfo = new String[2][2];
+			caregiverInfo[0][0] = "cosmoID";
+			caregiverInfo[0][1] = "" + cosmoID;
+			caregiverInfo[1][0] = "caregiverID";
+			caregiverInfo[1][1] = caregiverID;
+			
+			db.update(caregiverInfo, "Participant", caregiverInfo[0][1]);
+		}
+		
+		db.disconnect();
+	}
+	
+	public void saveEmergencyContactInformation(String firstName, String lastName,
+			String phone)
+	{
+		db.connect();
+		
+		String[][] values = new String[3][2];
+		
+		values[0][0] = "firstName";
+		values[0][1] = firstName;
+		values[1][0] = "lastName";
+		values[1][1] = lastName;
+		values[2][0] = "phoneNumber";
+		values[2][1] = phone;
+		
+		String whereStmt = this.createWhereStatement(values);
+		
+		ResultSet rs = db.select("emergencyContactID", "EmergencyContact", whereStmt, "");
+		
+		String ecID = "";
+		
+		try {
+			rs.next();
+			ecID = rs.getString(1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(ecID.equals("") || ecID.equals(null))
+		{
+			db.insert(values, "EmergencyContact");
+		}
+		else
+		{
+			values = new String[4][2];
+			
+			values[0][0] = "emergencyContactID";
+			values[0][1] = ecID;
+			values[1][0] = "firstName";
+			values[1][1] = firstName;
+			values[2][0] = "lastName";
+			values[2][1] = lastName;
+			values[3][0] = "phoneNumber";
+			values[3][1] = phone;
+			
+			db.update(values, "EmergencyContact", ecID);
+		}
+		
+		
+		db.disconnect();
+	}
+	
+	
+	private String createWhereStatement(String[][] values)
+	{
+		
+		String whereStmt = "";
+		
+		for(int i = 0; i < 7; i++)
+		{
+			whereStmt += values[i][0];
+			whereStmt += "=";
+			whereStmt += "\"" + values[i][1] + "\"";
+			if(i < 6)
+			{
+				whereStmt += " and ";
+			}
+		}
+		
+		return whereStmt;
+	}
+	
 }
