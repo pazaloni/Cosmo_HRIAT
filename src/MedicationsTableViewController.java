@@ -54,6 +54,18 @@ public class MedicationsTableViewController
 
     /**
      * 
+     * Purpose: Refresh the medications tableview
+     */
+    public void refreshTable( String cosmoID )
+    {
+        this.medicationNameData.clear();
+        this.medicationsTable.getItems().clear();
+        this.retrieveMedicationData(cosmoID);
+        this.initialize();     
+    }
+
+    /**
+     * 
      * Purpose: Query the database for all the activity-log information
      */
     private void retrieveMedicationData( String cosmoID )
@@ -80,9 +92,6 @@ public class MedicationsTableViewController
                 dosage = medicationResults.getString(2);
                 timesGiven = medicationResults.getString(3);
                 reason = medicationResults.getString(4);
-
-                // Remove extra 0's at the end of the timestamp
-                timesGiven = timesGiven.substring(0, timesGiven.length() - 7);
 
                 Medication medication = new Medication(medicationName, dosage,
                         timesGiven, reason);
@@ -149,5 +158,16 @@ public class MedicationsTableViewController
                 });
         medicationsTable.getColumns().addAll(medicationNameColumn,
                 dosageColumn, timesGivenColumn, reasonColumn);
+    }
+
+    /**
+     * 
+     * Purpose: Return the selected medication from the table
+     * 
+     * @return
+     */
+    public Medication getSelectedMedication()
+    {
+        return medicationsTable.getSelectionModel().getSelectedItem();
     }
 }

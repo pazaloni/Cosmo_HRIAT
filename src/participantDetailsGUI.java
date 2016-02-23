@@ -178,8 +178,8 @@ public class participantDetailsGUI extends Application {
 
 		// create the seizure tab
 		SeizureDescriptionFormGUI sDescForm = new SeizureDescriptionFormGUI(
-				seizureDescription, loggedInUser);
-		seizureDescription.setContent(sDescForm.ShowSeizureForm(cosmoID + "")
+				seizureDescription, loggedInUser, cosmoID + "");
+		seizureDescription.setContent(sDescForm.ShowSeizureForm()
 				.getContent());
 
 		kinDetails.setContent(createKinDetailsTab());
@@ -288,7 +288,7 @@ public class participantDetailsGUI extends Application {
 			public void handle(ActionEvent arg0) {
 				// search handler
 				createNoteStage = new Stage();
-				createNoteStage.setTitle("Create Participant");
+				createNoteStage.setTitle("Create Note");
 
 				createNoteStage.setScene(new Scene(NotePopUp.createNotePopUp(
 						cosmoID, loggedInUser.GetUsername(), createNoteStage),

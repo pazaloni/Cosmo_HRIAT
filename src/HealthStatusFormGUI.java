@@ -242,24 +242,32 @@ public class HealthStatusFormGUI
         Button btnEditMedicalCondition = new Button("Edit");
         Button btnDeleteMedicalCondition = new Button("Delete");
 
-        btnAddMedicalCondition.setOnMouseClicked(event -> {
+        MedicalConditionsTableViewController controller = new MedicalConditionsTableViewController(
+                cosmoId);
+        TableView<MedicalCondition> table = controller.conditionTable;
 
-        });
+        btnAddMedicalCondition
+                .setOnMouseClicked(event -> {
+                    ManageMedicalConditionGUI manageMedicalCondition = new ManageMedicalConditionGUI(
+                            parentStage);
+                    manageMedicalCondition.showAddMedicalCondition(cosmoId);
+                });
 
         btnEditMedicalCondition.setOnMouseClicked(event -> {
-
+            ManageMedicalConditionGUI manageMedicalCondition = new ManageMedicalConditionGUI(
+                    parentStage);
+            //TODO show edit check that they selected something first 
         });
 
         btnDeleteMedicalCondition.setOnMouseClicked(event -> {
-
+            //TODO show a popup check to make sure they want to delete it 
         });
 
         buttons.getChildren().addAll(btnAddMedicalCondition,
                 btnEditMedicalCondition, btnDeleteMedicalCondition);
 
         controls.getChildren().addAll(buttons);
-        TableView<MedicalCondition> table = new MedicalConditionsTableViewController(
-                cosmoId).conditionTable;
+
         table.setMaxWidth(700);
 
         buttons.setSpacing(5);
@@ -358,7 +366,8 @@ public class HealthStatusFormGUI
                         stage.initOwner(parentStage);
                         stage.setScene(scene);
                         stage.showAndWait();
-                        Allergies.deleteAllergy(table.getSelectionModel().getSelectedItem(), cosmoID);
+                        Allergies.deleteAllergy(table.getSelectionModel()
+                                .getSelectedItem(), cosmoID);
                         controller.refreshTable(cosmoID);
                     }
 
@@ -393,20 +402,53 @@ public class HealthStatusFormGUI
         Button btnAddMedication = new Button("Add");
         Button btnEditMedication = new Button("Edit");
         Button btnDeleteMedication = new Button("Delete");
+        MedicationsTableViewController controller = new MedicationsTableViewController(
+                cosmoId);
+        TableView<Medication> table = controller.medicationsTable;
 
+        btnAddMedication.setOnAction(event -> {
+
+            ManageMedicationGUI manageMedicaiton = new ManageMedicationGUI(
+                    parentStage);
+            manageMedicaiton.showAddMedication(cosmoId);
+            controller.refreshTable(cosmoId);
+        });
+
+        btnEditMedication
+                .setOnAction(event -> {
+                    // TODO check if there is an empty medication or not
+                    Medication med = controller.getSelectedMedication();
+                    if ( med == null )
+                    {
+                        Stage stage = new Stage();
+                        PopUpMessage popup = new PopUpMessage(
+                                "Must select an entry to edit", stage);
+                        Scene scene = new Scene(popup.root, 300, 75);
+                        stage.initModality(Modality.APPLICATION_MODAL);
+                        stage.initOwner(parentStage);
+                        stage.setScene(scene);
+                        stage.showAndWait();
+                    }
+                    else
+                    {
+                        ManageMedicationGUI manageMedication = new ManageMedicationGUI(
+                                parentStage);
+                        manageMedication.showUpdateMedication(cosmoId, med);
+                        controller.refreshTable(cosmoId);
+                    }
+
+                });
         buttons.getChildren().addAll(btnAddMedication, btnEditMedication,
                 btnDeleteMedication);
 
         controls.getChildren().addAll(buttons);
 
-        TableView<Medication> table = new MedicationsTableViewController(
-                cosmoId).medicationsTable;
         table.setMaxWidth(700);
 
         buttons.setSpacing(5);
         controls.setSpacing(450);
 
-        box.getChildren().addAll(medicationsLbl, table, controls);
+        box.getChildren().addAll(medicationsLbl,table ,controls);
 
         return box;
     }

@@ -239,7 +239,7 @@ public class DatabaseHelper
 
         String insertStatement = "INSERT INTO " + tableName + " " + fieldList
                 + " VALUES " + valueList;
-        // System.out.println(insertStatement);
+        System.out.println(insertStatement);
 
         int rows = 0;
         try

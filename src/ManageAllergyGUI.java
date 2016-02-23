@@ -1,5 +1,3 @@
-import javax.sound.midi.ControllerEventListener;
-
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -57,9 +55,9 @@ public class ManageAllergyGUI
     }
 
     /**
-     * @param cosmoID: the participant that will be receiving the allergy
+     * Purpose: show the window for new allergy
      * 
-     *            Purpose: show the window for new allergy
+     * @param cosmoID: the participant that will be receiving the allergy     * 
      */
     public void showAddAllergy( String cosmoID )
     {
@@ -94,7 +92,7 @@ public class ManageAllergyGUI
                     allergyType.getText(), allergyDescription.getText(),
                     cosmoID);
             lblMessage.setText(result);
-            if ( result.equals("Success"))
+            if ( result.equals("Success") )
             {
                 localStage.close();
             }
@@ -155,7 +153,7 @@ public class ManageAllergyGUI
             String result = Allergies.updateAllergy(
                     new Allergies(allergicTo.getText(), allergyType.getText(),
                             allergyDescription.getText()), cosmoID);
-            if(result.equals("Update successfull"))
+            if ( result.equals("Update successfull") )
             {
                 localStage.close();
             }
