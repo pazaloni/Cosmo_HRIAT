@@ -63,15 +63,22 @@ public class PartcipantUpdateForm extends ScrollPane
 	private TextField emergencyContactPhone = new TextField();
 	
 	/**
-	 * Purpose: 
-	 * @param cosmoID
+	 * Purpose: Creates the form, populated with information 
+	 * related to the participant.
+	 * 
+	 * @param cosmoID The primary key for the participant
+	 * to get information for.
+	 *@author Breanna Wilson cst215 Steven Palchinski cst209
 	 */
 	public PartcipantUpdateForm(int cosmoID)
 	{
 		this.cosmoID = cosmoID;
+		//the VBox containing all other viewable nodes
 		mainBox = new VBox();
+		//the controller used to get information from the database
 		controller = new ParticipantUpdateFormController(cosmoID);
 		
+		//the line separators to separate the sections of the form visually
 		Separator line1 = new Separator();
 		line1.minWidth(1500);
 		Separator line2 = new Separator();
@@ -79,37 +86,56 @@ public class PartcipantUpdateForm extends ScrollPane
 		Separator line3 = new Separator();
 		line3.minWidth(1500);
 		
+		//label for the Participant Information Area of the form
 		Label participantInfoAreaHeader = new Label("Participant Information:");
 		participantInfoAreaHeader.setFont(new Font("Arial", 16));
 		
+		//label for the Kin Information Area of the form
 		Label kinInfoAreaHeader = new Label("Kin Information:");
 		kinInfoAreaHeader.setFont(new Font("Arial", 16));
 		
+		//label for the Caregiver Information Area of the form
 		Label caregiverInfoAreaHeader = new Label("Caregiver Information:");
 		caregiverInfoAreaHeader.setFont(new Font("Arial", 16));
 		
+		//label for the Emergency Contact Information Area of the form
 		Label emergencyContactInfoHeader = new Label("Emergency Contact Information:");
 		emergencyContactInfoHeader.setFont(new Font("Arial", 16));
 		
+		//add all viewable nodes to the main VBox
 		mainBox.getChildren().addAll(createHeader(), participantInfoAreaHeader,
 				createParticipantInfoArea(), line1, kinInfoAreaHeader,
 				createKinInfoArea(), line2, caregiverInfoAreaHeader,
 				createCaregiverInfoArea(), line3, emergencyContactInfoHeader,
 				createEmergencyContactArea());
 		
+		//populate the textboxes with all relevant information from the database
 		this.fillParticipantText();
 		this.fillKinText();
 		this.fillCaregiverText();
 		this.fillEmergencyText();
 	}
 	
+	/**
+	 * Purpose: Returns the form to be viewed
+	 * @return the ScrollPane containing the main VBox
+	 * @author Breanna Wilson cst215 Steven Palchinski cst209
+	 */
 	public ScrollPane getForm()
 	{
 		ScrollPane main = new ScrollPane();
+		//put main VBox inside ScrollPane so there will be a 
+		//scrollbar available for the form
 		main.setContent(mainBox);
 		return main;
 	}
 	
+	/**
+	 * Purpose: Create the header for the form.
+	 * @return the HBox containing the heading label and
+	 * the save button.
+	 * @author Breanna Wilson cst215 Steven Palchinski cst209
+	 */
 	private HBox createHeader()
 	{
 		HBox hbox = new HBox();
@@ -119,6 +145,7 @@ public class PartcipantUpdateForm extends ScrollPane
 		
 		saveBtn = new Button("Save");
 		
+		//does not currently do anything, for later story
 		saveBtn.setOnAction(event -> {
 			saveInfo();
 		});
@@ -127,15 +154,25 @@ public class PartcipantUpdateForm extends ScrollPane
 		
 		hbox.getChildren().addAll(heading, saveBtn);
 		
+		//set spacing between save button and heading
 		hbox.setMargin(heading, new Insets(5, 170,5,280));
 		
 		return hbox;
 	}
 	
+	/**
+	 * Purpose: Create the area on the form for the 
+	 * participant's basic information
+	 * @return the GridPane containing the labels and textfield's
+	 * for the participant's basic information.
+	 * @author Breanna Wilson cst215 Steven Palchinski cst209
+	 */
 	private GridPane createParticipantInfoArea()
 	{
+		//GridPane containing participant nodes
 		GridPane mainPane = new GridPane();
 		
+		//labels for all fields
 		Label firstNameLbl = new Label("First Name:");
 		Label lastNameLbl = new Label("Last Name:");
 		Label addressLbl = new Label("Address:");
@@ -145,8 +182,10 @@ public class PartcipantUpdateForm extends ScrollPane
 		Label birthdateLbl = new Label("Birth Date:");
 		Label sinLbl = new Label("SIN:");
 		
+		//insets for padding and margins
 		Insets insets = new Insets(5,5,5,5);
 		
+		//set padding for all labels
 		firstNameLbl.setPadding(insets);
 		lastNameLbl.setPadding(insets);
 		addressLbl.setPadding(insets);
@@ -156,8 +195,10 @@ public class PartcipantUpdateForm extends ScrollPane
 		birthdateLbl.setPadding(insets);
 		sinLbl.setPadding(insets);
 		
+		//add all labels and textfield for the participant's
+		//information to the GridPane
 		
-		
+		//first column
 		mainPane.add(firstNameLbl, 0, 0);
 		mainPane.add(participantFirstNameTxt, 1, 0);
 		mainPane.add(lastNameLbl, 0, 1);
@@ -168,6 +209,7 @@ public class PartcipantUpdateForm extends ScrollPane
 		mainPane.add(participantCityTxt, 1, 3);
 		mainPane.add(postalCodeLbl, 0, 4);
 		mainPane.add(participantPostalCodeTxt, 1, 4);
+		//second column
 		mainPane.add(phoneNumberLbl, 3, 0);
 		mainPane.add(participantPhoneNumberTxt, 4, 0);
 		mainPane.add(birthdateLbl, 3, 1);
@@ -175,6 +217,7 @@ public class PartcipantUpdateForm extends ScrollPane
 		mainPane.add(sinLbl, 3, 2);
 		mainPane.add(participantSinTxt, 4, 2);
 		
+		//set margins for all textfields
 		mainPane.setMargin(participantFirstNameTxt, insets);
 		mainPane.setMargin(participantLastNameTxt, insets);
 		mainPane.setMargin(participantAddressTxt, insets);
@@ -184,18 +227,29 @@ public class PartcipantUpdateForm extends ScrollPane
 		mainPane.setMargin(participantSinTxt, insets);
 		mainPane.setMargin(participantPhoneNumberTxt, insets);
 		
+		//set padding for the gridpane
 		mainPane.setPadding(new Insets(5,5,5,5));
 		
+		//center the gridpane
 		mainPane.alignmentProperty().set(Pos.CENTER);
 		
 		return mainPane;
 	}
 
-	
+	/**
+	 * Purpose: Create the area on the form containing
+	 * the kin information.
+	 * @return the GridPane containing the labels and 
+	 * textfields to be populated with the kin's 
+	 * information.
+	 * @author Breanna Wilson cst215 Steven Palchinski cst209
+	 */
 	private GridPane createKinInfoArea()
 	{
+		//GridPane containing the kin labels and textfields
 		GridPane main = new GridPane();
 		
+		//all labels for kin information
 		Label firstNameLbl = new Label("First Name:");
 		Label lastNameLbl = new Label("Last Name:");
 		Label addressLbl = new Label("Address:");
@@ -205,8 +259,10 @@ public class PartcipantUpdateForm extends ScrollPane
 		Label homePhoneLbl = new Label("Home:");
 		Label workPhoneLbl = new Label("Work:");
 		
+		//insets for the padding and margins
 		Insets insets = new Insets(5,5,5,5);
 		
+		//set padding for all labels
 		firstNameLbl.setPadding(insets);
 		lastNameLbl.setPadding(insets);
 		addressLbl.setPadding(insets);
@@ -216,6 +272,10 @@ public class PartcipantUpdateForm extends ScrollPane
 		homePhoneLbl.setPadding(insets);
 		workPhoneLbl.setPadding(insets);
 		
+		//add all the labels and textfields for the kin
+		//into the gridpane
+		
+		//first column
 		main.add(firstNameLbl, 0, 0);
 		main.add(kinFirstNameTxt, 1, 0);
 		main.add(lastNameLbl, 0, 1);
@@ -226,12 +286,14 @@ public class PartcipantUpdateForm extends ScrollPane
 		main.add(kinCityTxt, 1, 3);
 		main.add(postalCodeLbl, 0, 4);
 		main.add(kinPostalCodeTxt, 1, 4);
+		//second column
 		main.add(phoneLbl, 2, 0);
 		main.add(homePhoneLbl, 2, 1);
 		main.add(kinHomePhoneTxt, 3, 1);
 		main.add(workPhoneLbl, 2, 2);
 		main.add(kinWorkPhoneTxt, 3, 2);
 		
+		//set margins for all the textfields
 		main.setMargin(kinFirstNameTxt, insets);
 		main.setMargin(kinLastNameTxt, insets);
 		main.setMargin(kinAddressTxt, insets);
@@ -240,16 +302,27 @@ public class PartcipantUpdateForm extends ScrollPane
 		main.setMargin(kinWorkPhoneTxt, insets);
 		main.setMargin(kinCityTxt, insets);
 		
+		//center the gridpane
 		main.alignmentProperty().set(Pos.CENTER);
 		
 		return main;
 		
 	}
 	
+	/**
+	 * Purpose: Create the area on the form for caregiver
+	 * information.
+	 * @return the GridPane containing the labels and textfields
+	 * for the caregivers information
+	 * @author Breanna Wilson cst215 Steven Palchinski cst209
+	 */
 	private GridPane createCaregiverInfoArea()
 	{
+		//the GridPane containing the labels and textfields for
+		//the caregivers information
 		GridPane main = new GridPane();
 		
+		//all labels for caregiver information
 		Label firstNameLbl = new Label("First Name:");
 		Label lastNameLbl = new Label("Last Name");
 		Label addressLbl = new Label("Address:");
@@ -259,8 +332,10 @@ public class PartcipantUpdateForm extends ScrollPane
 		Label homePhoneLbl = new Label("Home:");
 		Label workPhoneLbl = new Label("Work:"); 
 		
+		//the insets for padding and margins
 		Insets insets = new Insets(5,5,5,5);
 		
+		//set the padding for all labels
 		firstNameLbl.setPadding(insets);
 		lastNameLbl.setPadding(insets);
 		addressLbl.setPadding(insets);
@@ -270,6 +345,10 @@ public class PartcipantUpdateForm extends ScrollPane
 		homePhoneLbl.setPadding(insets);
 		workPhoneLbl.setPadding(insets);
 		
+		//add all of the labels and textfields to 
+		//the gridpane
+		
+		//first column
 		main.add(firstNameLbl, 0, 0);
 		main.add(caregiverFirstNameTxt, 1, 0);
 		main.add(lastNameLbl, 0, 1);
@@ -280,12 +359,14 @@ public class PartcipantUpdateForm extends ScrollPane
 		main.add(caregiverCityTxt, 1, 3);
 		main.add(postalCodeLbl, 0, 4);
 		main.add(caregiverPostalCodeTxt, 1, 4);
+		//second column
 		main.add(phoneLbl, 2, 0);
 		main.add(homePhoneLbl, 2, 1);
 		main.add(caregiverHomePhoneTxt, 3, 1);
 		main.add(workPhoneLbl, 2, 2);
 		main.add(caregiverWorkPhoneTxt, 3, 2);
 		
+		//set margins for all of the textfields
 		main.setMargin(caregiverFirstNameTxt, insets);
 		main.setMargin(caregiverLastNameTxt, insets);
 		main.setMargin(caregiverAddressTxt, insets);
@@ -294,45 +375,73 @@ public class PartcipantUpdateForm extends ScrollPane
 		main.setMargin(caregiverHomePhoneTxt, insets);
 		main.setMargin(caregiverWorkPhoneTxt, insets);
 		
+		//center the main gridpane
 		main.alignmentProperty().set(Pos.CENTER);
 		
 		return main;
 	}
 	
+	/**
+	 * Purpose: Creates the area of the form containing
+	 * the Emergency Contact Information.
+	 * @return the GridPane containing the labels
+	 * and textfields for the emergency contact information
+	 * @author Breanna Wilson cst215 Steven Palchinski cst209
+	 */
 	private GridPane createEmergencyContactArea()
 	{
+		//the gridpane containing the labels and 
+		//textfields for emergency contact information
 		GridPane main = new GridPane();
 		
+		//the labels for emergency contact information
 		Label name = new Label("First Name:");
 		Label lastName = new Label("Last Name");
 		Label phone = new Label("Phone Number:");
 		
+		//insets for padding and margins
 		Insets insets = new Insets(5,5,5,5);
 	
+		//set padding for all labels
 		name.setPadding(insets);
 		lastName.setPadding(insets);
 		phone.setPadding(insets);
 		
+		//add labels and textfields to the main gridpane
+		
+		//first column
 		main.add(name, 0, 0);
 		main.add(emergencyContactFirstName, 1, 0);
 		main.add(lastName, 0, 1);
 		main.add(emergencyContactLastName, 1, 1);
+		//second column
 		main.add(phone, 2, 0);
 		main.add(emergencyContactPhone, 3, 0);
 		
+		//set margins for the textfields
 		main.setMargin(emergencyContactFirstName, insets);
 		main.setMargin(emergencyContactPhone, insets);
 		main.setMargin(emergencyContactLastName, insets);
 		
+		//center the gridpane
 		main.alignmentProperty().set(Pos.CENTER);
 		
 		return main;
 	}
 	
+	/**
+	 * Purpose: Calls the ParticipantUpdateFormController
+	 * to get all basic participant information required for
+	 * this form form the database, and puts the information into
+	 * the correlating textfields.
+	 * @author Breanna Wilson cst215 Steven Palchinski cst209
+	 */
 	private void fillParticipantText()
 	{
+		//get the participants basic information
 		String[] participantInfo = this.controller.fetchParticipantBasicInfo();
 		
+		//enter the information into the textfields
 		participantFirstNameTxt.setText(participantInfo[0]);
 		participantLastNameTxt.setText(participantInfo[1]);
 		participantAddressTxt.setText(participantInfo[2]);
@@ -344,10 +453,19 @@ public class PartcipantUpdateForm extends ScrollPane
 		
 	}
 	
+	/**
+	 * Purpose: Calls the ParticipantUpdateFormController
+	 * to get all of the kin's information from the database
+	 * as required for this form, and puts the information into
+	 * the correlating textfields.
+	 * @author Breanna Wilson cst215 Steven Palchinski cst209
+	 */
 	private void fillKinText()
 	{
+		//get the kin's information
 		String[] kinInfo = this.controller.fetchKinInfo();
 		
+		//put the information into the textfields
 		kinFirstNameTxt.setText(kinInfo[0]);
 		kinLastNameTxt.setText(kinInfo[1]);
 		kinAddressTxt.setText(kinInfo[2]);
@@ -357,10 +475,19 @@ public class PartcipantUpdateForm extends ScrollPane
 		kinWorkPhoneTxt.setText(kinInfo[6]);
 	}
 	
+	/**
+	 * Purpose: Calls the ParticipantUpdateFormController
+	 * to get all of the caregiver's information from the
+	 * databse as required for this form, and puts the information
+	 * into the correlating textfields.
+	 * @author Breanna Wilson cst215 Steven Palchinski cst209
+	 */
 	private void fillCaregiverText()
 	{
+		//get the caregivers information
 		String[] cgInfo = this.controller.fetchCaregiverInfo();
 		
+		//puts information into the textfields
 		caregiverFirstNameTxt.setText(cgInfo[0]);
 		caregiverLastNameTxt.setText(cgInfo[1]);
 		caregiverAddressTxt.setText(cgInfo[2]);
@@ -370,10 +497,19 @@ public class PartcipantUpdateForm extends ScrollPane
 		caregiverWorkPhoneTxt.setText(cgInfo[6]);
 	}
 	
+	/**
+	 * Purpose: Calls the ParticipantUdpateFormController
+	 * to get all of the Emergency Contact's information from
+	 * the database as required for the form, and puts the 
+	 * information into the correlating textfields.
+	 * @author Breanna Wilson cst215 Steven Palchinski cst209
+	 */
 	private void fillEmergencyText()
 	{
+		//gets the Emergency Contact's information
 		String[] eInfo = this.controller.fetchEmergencyContactInfo();
 		
+		//puts information into the textfields
 		emergencyContactFirstName.setText(eInfo[0]);
 		emergencyContactLastName.setText(eInfo[1]);
 		emergencyContactPhone.setText(eInfo[2]);
