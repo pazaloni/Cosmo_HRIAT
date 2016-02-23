@@ -473,7 +473,7 @@ public class MedicalStaffMainPageGUI extends Application
         allergyLbl.setAlignment(Pos.TOP_LEFT);
 
         pTVCont.participantTable.setOnMousePressed(event -> {
-            assignParitipantPreviewLabels(pTVCont.getSelectedPK());
+            assignParticipantPreviewLabels(pTVCont.getSelectedPK());
         });
     }
 
@@ -482,7 +482,7 @@ public class MedicalStaffMainPageGUI extends Application
      * Purpose: Set the text of all the preview pane labels to the currently
      * selected user
      */
-    private void assignParitipantPreviewLabels( String participantID )
+    private void assignParticipantPreviewLabels( String participantID )
     {
         PreviewPaneHelper paneHelper = new PreviewPaneHelper();
         String[] currentParticipant = paneHelper
