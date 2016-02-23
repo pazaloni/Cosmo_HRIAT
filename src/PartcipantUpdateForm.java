@@ -30,37 +30,37 @@ public class PartcipantUpdateForm extends ScrollPane
 	private ParticipantUpdateFormController controller;
 	
 	//The TextFields for the participant information
-	public TextField participantFirstNameTxt = new TextField();
-	public TextField participantLastNameTxt = new TextField();
-	public TextField participantAddressTxt = new TextField();
-	public TextField participantCityTxt = new TextField();
-	public TextField participantPostalCodeTxt = new TextField();
-	public TextField participantPhoneNumberTxt = new TextField();
-	public TextField participantBirthdateTxt = new TextField();
-	public TextField participantSinTxt = new TextField();
+	private TextField participantFirstNameTxt = new TextField();
+	private TextField participantLastNameTxt = new TextField();
+	private TextField participantAddressTxt = new TextField();
+	private TextField participantCityTxt = new TextField();
+	private TextField participantPostalCodeTxt = new TextField();
+	private TextField participantPhoneNumberTxt = new TextField();
+	private TextField participantBirthdateTxt = new TextField();
+	private TextField participantSinTxt = new TextField();
 	
 	//The TextFields for the Kin Information
-	public TextField kinFirstNameTxt = new TextField();
-	public TextField kinLastNameTxt = new TextField();
-	public TextField kinAddressTxt = new TextField();
-	public TextField kinCityTxt = new TextField();
-	public TextField kinPostalCodeTxt = new TextField();
-	public TextField kinHomePhoneTxt = new TextField();
-	public TextField kinWorkPhoneTxt = new TextField();
+	private TextField kinFirstNameTxt = new TextField();
+	private TextField kinLastNameTxt = new TextField();
+	private TextField kinAddressTxt = new TextField();
+	private TextField kinCityTxt = new TextField();
+	private TextField kinPostalCodeTxt = new TextField();
+	private TextField kinHomePhoneTxt = new TextField();
+	private TextField kinWorkPhoneTxt = new TextField();
 	
 	//The TextFields for the Caregiver Information
-	public TextField caregiverFirstNameTxt = new TextField();
-	public TextField caregiverLastNameTxt = new TextField();
-	public TextField caregiverAddressTxt = new TextField();
-	public TextField caregiverCityTxt = new TextField();
-	public TextField caregiverPostalCodeTxt = new TextField();
-	public TextField caregiverHomePhoneTxt = new TextField();
-	public TextField caregiverWorkPhoneTxt = new TextField();
+	private TextField caregiverFirstNameTxt = new TextField();
+	private TextField caregiverLastNameTxt = new TextField();
+	private TextField caregiverAddressTxt = new TextField();
+	private TextField caregiverCityTxt = new TextField();
+	private TextField caregiverPostalCodeTxt = new TextField();
+	private TextField caregiverHomePhoneTxt = new TextField();
+	private TextField caregiverWorkPhoneTxt = new TextField();
 	
 	//The TextFields for the Emergency Contact Information
-	public TextField emergencyContactFirstName = new TextField();
-	public TextField emergencyContactLastName = new TextField();
-	public TextField emergencyContactPhone = new TextField();
+	private TextField emergencyContactFirstName = new TextField();
+	private TextField emergencyContactLastName = new TextField();
+	private TextField emergencyContactPhone = new TextField();
 	
 	/**
 	 * Purpose: 
