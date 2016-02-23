@@ -792,6 +792,10 @@ public class MedicalStaffMainPageGUI extends Application
                 {
                     createParticipantStage.close();
                     pTVCont.refreshTable("", "Participant");
+                    
+                    dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Created Participant (" + cosmoIdTxt.getText() + ")",
+                    "Name: \"" + firstNameTxt.getText() + " " + lastNameTxt.getText() + "\"" );
+
                 }
                 // if there is an error message, display it
                 else
