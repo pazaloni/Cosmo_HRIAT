@@ -136,11 +136,6 @@ public class PartcipantUpdateForm extends ScrollPane
 	{
 		GridPane mainPane = new GridPane();
 		
-		/*
-		 * ADD PHN FIELD HERE
-		 * 
-		 */
-		
 		Label firstNameLbl = new Label("First Name:");
 		Label lastNameLbl = new Label("Last Name:");
 		Label addressLbl = new Label("Address:");
