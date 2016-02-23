@@ -532,6 +532,9 @@ public class PartcipantUpdateForm extends ScrollPane
 				caregiverCityTxt.getText(), caregiverPostalCodeTxt.getText(),
 				caregiverHomePhoneTxt.getText(), caregiverWorkPhoneTxt.getText());
 		
+		controller.saveEmergencyContactInformation(emergencyContactFirstName.getText(),
+				emergencyContactLastName.getText(), emergencyContactPhone.getText());
+		
 	}
 	
 }

@@ -317,7 +317,7 @@ public class ParticipantUpdateFormController
 		values[6][1] = workPhone;
 		//db.insert(values, "Kin");
 
-		String whereStmt = this.createWhereStatement(values);
+		String whereStmt = this.createWhereStatement(values, 7);
 		
 		ResultSet rs = db.select("kinID", "Kin", whereStmt, "");
 		
@@ -344,7 +344,7 @@ public class ParticipantUpdateFormController
 		{
 			db.insert(values, "Kin");
 			
-			whereStmt = this.createWhereStatement(values);
+			whereStmt = this.createWhereStatement(values, 2);
 			
 			rs = db.select("kinID", "Kin", whereStmt, "");
 			
@@ -396,17 +396,21 @@ public class ParticipantUpdateFormController
 		values[6][0] = "workPhoneNumber";
 		values[6][1] = workPhone;
 		
-		String whereStmt = this.createWhereStatement(values);
+		String whereStmt = this.createWhereStatement(values, 7);
 		
 		ResultSet rs = db.select("caregiverID", "Caregiver", whereStmt, "");
 		
 		String caregiverID = "";
-		
+		System.out.println("Before try...");
 		try {
-			rs.next();
 			if(rs.next())
 			{
 				caregiverID = rs.getString(1);
+				
+			}
+			else
+			{
+				caregiverID = "";
 			}
 			
 		} catch (SQLException e) {
@@ -414,35 +418,40 @@ public class ParticipantUpdateFormController
 			e.printStackTrace();
 		}
 		
-		if(caregiverID.equals("") || caregiverID.equals(null))
+		System.out.println("caregierID" + caregiverID + "end");
+		
+		if(caregiverID.equals("") || caregiverID.equals(null) || caregiverID.equals(" "))
 		{
+			System.out.println("attempting to insert...");
 			db.insert(values, "Caregiver");
-		}
-		else
-		{
-			rs = db.select("caregiverID", "Participant", whereStmt, "");
+			
+			rs = db.select("caregiverID", "Caregiver", whereStmt, "");
 			
 			try {
-				System.out.println("Inside try block...");
 				if(rs.next())
 				{
 					caregiverID = rs.getString(1);
+					
+					String[][] caregiverInfo = new String[2][2];
+					caregiverInfo[0][0] = "cosmoID";
+					caregiverInfo[0][1] = "" + cosmoID;
+					caregiverInfo[1][0] = "caregiverID";
+					caregiverInfo[1][1] = caregiverID;
+					
+					db.update(caregiverInfo, "Participant", caregiverInfo[0][1]);
+				}
+				else
+				{
+					System.out.println("ERROR COULD NOT UPDATE");
 				}
 				
-				System.out.println("CAREGIVERID = " + caregiverID);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 			
 			
-			String[][] caregiverInfo = new String[2][2];
-			caregiverInfo[0][0] = "cosmoID";
-			caregiverInfo[0][1] = "" + cosmoID;
-			caregiverInfo[1][0] = "caregiverID";
-			caregiverInfo[1][1] = caregiverID;
-			
-			db.update(caregiverInfo, "Participant", caregiverInfo[0][1]);
 		}
+		
 		
 		db.disconnect();
 	}
@@ -461,15 +470,18 @@ public class ParticipantUpdateFormController
 		values[2][0] = "phoneNumber";
 		values[2][1] = phone;
 		
-		String whereStmt = this.createWhereStatement(values);
+		String whereStmt = this.createWhereStatement(values, 3);
 		
 		ResultSet rs = db.select("emergencyContactID", "EmergencyContact", whereStmt, "");
 		
 		String ecID = "";
 		
 		try {
-			rs.next();
-			ecID = rs.getString(1);
+			if(rs.next())
+			{
+				ecID = rs.getString(1);
+			}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -478,39 +490,54 @@ public class ParticipantUpdateFormController
 		if(ecID.equals("") || ecID.equals(null))
 		{
 			db.insert(values, "EmergencyContact");
-		}
-		else
-		{
-			values = new String[4][2];
-			
-			values[0][0] = "emergencyContactID";
-			values[0][1] = ecID;
-			values[1][0] = "firstName";
-			values[1][1] = firstName;
-			values[2][0] = "lastName";
-			values[2][1] = lastName;
-			values[3][0] = "phoneNumber";
-			values[3][1] = phone;
-			
-			db.update(values, "EmergencyContact", ecID);
-		}
 		
+			rs = db.select("emergencyContactID", "EmergencyContact", whereStmt, "");
+			
+			try {
+				if(rs.next())
+				{
+					ecID = rs.getString(1);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			values = new String[2][2];
+			
+			values[0][0] = "cosmoID";
+			values[0][1] = "" + cosmoID;
+			values[1][0] = "emergencyContactID";
+			values[1][1] = ecID;
+			
+			db.update(values, "Participant", values[0][1]);
+		
+		}
 		
 		db.disconnect();
 	}
 	
 	
-	private String createWhereStatement(String[][] values)
+	private String createWhereStatement(String[][] values, int length)
 	{
 		
 		String whereStmt = "";
 		
-		for(int i = 0; i < 7; i++)
+		for(int i = 0; i < length; i++)
 		{
 			whereStmt += values[i][0];
-			whereStmt += "=";
-			whereStmt += "\"" + values[i][1] + "\"";
-			if(i < 6)
+			
+			if(values[i][1] == null || values[i][1].equals(null))
+			{
+				whereStmt += " IS NULL";
+			}
+			else
+			{
+				whereStmt += "=";
+				whereStmt += "\"" + values[i][1] + "\"";
+			}
+			
+			if(i < length - 1)
 			{
 				whereStmt += " and ";
 			}
