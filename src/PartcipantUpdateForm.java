@@ -517,9 +517,7 @@ public class PartcipantUpdateForm extends ScrollPane
 	
 	private void saveInfo()
 	{
-		//TODO have this save the information entered into
-			// the database
-		
+
 	}
 	
 }
