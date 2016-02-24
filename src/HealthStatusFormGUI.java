@@ -310,7 +310,7 @@ public class HealthStatusFormGUI
                 PopUpCheck popup = new PopUpCheck(
                         "Are you sure you want to delete the selected medical condition ?",
                         stage);
-                Scene scene = new Scene(popup.root, 400, 75);
+                Scene scene = new Scene(popup.root, 450, 75);
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.initOwner(parentStage);
                 stage.setScene(scene);
@@ -324,6 +324,13 @@ public class HealthStatusFormGUI
             }
         });
 
+        if(!(this.loggedInUser instanceof MedicalAdministrator))
+        {
+            btnAddMedicalCondition.setVisible(false);
+            btnEditMedicalCondition.setVisible(false);
+            btnDeleteMedicalCondition.setVisible(false);
+        }
+        
         buttons.getChildren().addAll(btnAddMedicalCondition,
                 btnEditMedicalCondition, btnDeleteMedicalCondition);
 
@@ -441,6 +448,12 @@ public class HealthStatusFormGUI
         buttons.setSpacing(5);
         controls.setSpacing(485);
 
+        if(!(this.loggedInUser instanceof MedicalAdministrator))
+        {
+            btnAddAllergy.setVisible(false);
+            btnEditAllergy.setVisible(false);
+            btnDelAllergy.setVisible(false);
+        }
         box.getChildren().addAll(allergiesLbl, table, controls);
         return box;
     }
@@ -522,7 +535,7 @@ public class HealthStatusFormGUI
                 PopUpCheck popup = new PopUpCheck(
                         "Are you sure you want to delete the selected medication entry ?",
                         stage);
-                Scene scene = new Scene(popup.root, 300, 75);
+                Scene scene = new Scene(popup.root, 450, 75);
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.initOwner(parentStage);
                 stage.setScene(scene);
@@ -542,6 +555,12 @@ public class HealthStatusFormGUI
 
         buttons.setSpacing(5);
         controls.setSpacing(450);
+        if(!(this.loggedInUser instanceof MedicalAdministrator))
+        {
+            btnAddMedication.setVisible(false);
+            btnDeleteMedication.setVisible(false);
+            btnEditMedication.setVisible(false);
+        }
 
         box.getChildren().addAll(medicationsLbl,table ,controls);
 

@@ -107,6 +107,7 @@ public class SeizureDescriptionFormGUI
         if ( !(this.loggedInUser instanceof MedicalAdministrator) )
         {
             this.btnSave.setVisible(false);
+            this.btnClear.setVisible(false);
         }
 
         btnClear.setOnAction(new EventHandler<ActionEvent>()
@@ -349,26 +350,27 @@ public class SeizureDescriptionFormGUI
             @Override
             public void handle( ActionEvent e )
             {
-                try                
+                try
                 {
-                    if( smTVC.getSelectedPK() != null && !smTVC.getSelectedPK().equals("null") )
+                    if ( smTVC.getSelectedPK() != null
+                            && !smTVC.getSelectedPK().equals("null") )
                     {
-                    // Open addNewParticipant Window
-                    addEditSeizureMedicationStage = new Stage();
-                    addEditSeizureMedicationStage
-                            .setTitle("Edit Seizure Medication");
+                        // Open addNewParticipant Window
+                        addEditSeizureMedicationStage = new Stage();
+                        addEditSeizureMedicationStage
+                                .setTitle("Edit Seizure Medication");
 
-                    addEditSeizureMedicationStage.setScene(new Scene(
-                            editSeizureMedicationPopUp(smTVC.getSelectedPK()),
-                            325, 200));
-                    addEditSeizureMedicationStage
-                            .initModality(Modality.APPLICATION_MODAL);
-                    addEditSeizureMedicationStage
-                            .initOwner(participantDetailsGUI.participantMainStage);
-                    addEditSeizureMedicationStage.setResizable(false);
-                    addEditSeizureMedicationStage.show();
+                        addEditSeizureMedicationStage.setScene(new Scene(
+                                editSeizureMedicationPopUp(smTVC
+                                        .getSelectedPK()), 325, 200));
+                        addEditSeizureMedicationStage
+                                .initModality(Modality.APPLICATION_MODAL);
+                        addEditSeizureMedicationStage
+                                .initOwner(participantDetailsGUI.participantMainStage);
+                        addEditSeizureMedicationStage.setResizable(false);
+                        addEditSeizureMedicationStage.show();
                     }
-                    
+
                     else
                     {
                         Stage stage = new Stage();
@@ -397,6 +399,13 @@ public class SeizureDescriptionFormGUI
                 smTVC.seizureMedicationTable);
         medicationBox.setPadding(new Insets(10, 10, 10, 5));
 
+        if ( !(this.loggedInUser instanceof MedicalAdministrator) )
+        {
+            addBtn.setVisible(false);
+            editBtn.setVisible(false);
+            deleteBtn.setVisible(false);
+        }
+
         return medicationBox;
     }
 
@@ -408,7 +417,7 @@ public class SeizureDescriptionFormGUI
      */
     private GridPane editSeizureMedicationPopUp( String medicationName )
     {
-        
+
         //
         GridPane grid = new GridPane();
 
