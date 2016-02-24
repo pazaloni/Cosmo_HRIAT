@@ -437,6 +437,7 @@ public class TechMainPageGUI extends Application
         newUserForm.add(lblEmail, 0, 4);
         newUserForm.add(email, 1, 4);
         newUserForm.add(lblPassword, 0, 5);
+        
         newUserForm.add(password, 1, 5);
         newUserForm.add(passwordText, 1, 5);
         newUserForm.add(lblRepeatPassword, 0, 6);

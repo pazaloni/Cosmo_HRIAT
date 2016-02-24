@@ -45,7 +45,7 @@ public class ParticipantUpdateFormController
 		
 		//query the database
 		ResultSet rs = db.select("firstName, lastName, address, city,"
-				+ " postalCode, phoneNum, dateOfBirth, socialInsuranceNumber"
+				+ " postalCode, phoneNumber, dateOfBirth, socialInsuranceNumber"
 				, "Participant", "cosmoID = " + cosmoID, "");
 		
 		try
@@ -258,7 +258,7 @@ public class ParticipantUpdateFormController
 		//return the string array of emergency contact information
 		return emergencyContactInfo;
 	}
-	
+
 
 
 	/**
@@ -642,6 +642,7 @@ public class ParticipantUpdateFormController
 	}
 	
 }
+
 
 
 

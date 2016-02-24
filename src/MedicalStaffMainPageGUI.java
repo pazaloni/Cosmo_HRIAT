@@ -145,7 +145,7 @@ public class MedicalStaffMainPageGUI extends Application
 
         VBox root = createMainVBox();
 
-        medMainStage.setScene(new Scene(root, 875, 580));
+        medMainStage.setScene(new Scene(root, 1280, 720));
         medMainStage.resizableProperty().set(true);
         medMainStage.show();
         // Event for when stage is closed

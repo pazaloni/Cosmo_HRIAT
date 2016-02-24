@@ -527,6 +527,7 @@ public class PartcipantUpdateForm extends ScrollPane
 	{
 
 
+
 		controller.saveBasicParticipantInformation(participantFirstNameTxt.getText(),
 				participantLastNameTxt.getText(), participantAddressTxt.getText(),
 				participantCityTxt.getText(), participantPostalCodeTxt.getText(), 
@@ -545,6 +546,7 @@ public class PartcipantUpdateForm extends ScrollPane
 		controller.saveEmergencyContactInformation(emergencyContactFirstName.getText(),
 				emergencyContactLastName.getText(), emergencyContactPhone.getText());
 		
+
 
 	}
 	

@@ -107,6 +107,7 @@ public class SeizureDescriptionFormGUI
         if ( !(this.loggedInUser instanceof MedicalAdministrator) )
         {
             this.btnSave.setVisible(false);
+            this.btnClear.setVisible(false);
         }
 
         btnClear.setOnAction(new EventHandler<ActionEvent>()
@@ -270,20 +271,25 @@ public class SeizureDescriptionFormGUI
         durationTxt.setText(info[3]);
         aftermathTxt.setText(info[4]);
         aftermathAssistanceTxt.setText(info[5]);
-        emergencyTreatmentTxt.setText(info[6]);       
-        DateFormat format = new SimpleDateFormat("dd-MMM-yyyy");
+        emergencyTreatmentTxt.setText(info[6]);
+        DateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
-        try
+        if ( info[7].length() > 5 )
         {
-            date = format.parse(info[7]);
-        }
-        catch ( ParseException e )
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        lastUpdatedTxt.setText(format.format(date));
+            try
+            {
+                date = inputFormatter.parse(info[7]);
+            }
+            catch ( ParseException e )
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            SimpleDateFormat outputFormatter = new SimpleDateFormat();
+            outputFormatter.applyPattern("dd-MMM-yyyy");
 
+            lastUpdatedTxt.setText(outputFormatter.format(date));
+        }
     }
 
     /**
@@ -348,21 +354,37 @@ public class SeizureDescriptionFormGUI
             {
                 try
                 {
-                    // Open addNewParticipant Window
-                    addEditSeizureMedicationStage = new Stage();
-                    addEditSeizureMedicationStage
-                            .setTitle("Edit Seizure Medication");
+                    if ( smTVC.getSelectedPK() != null
+                            && !smTVC.getSelectedPK().equals("null") )
+                    {
+                        // Open addNewParticipant Window
+                        addEditSeizureMedicationStage = new Stage();
+                        addEditSeizureMedicationStage
+                                .setTitle("Edit Seizure Medication");
 
-                    addEditSeizureMedicationStage.setScene(new Scene(
-                            editSeizureMedicationPopUp(smTVC.getSelectedPK()),
-                            325, 200));
-                    addEditSeizureMedicationStage
-                            .initModality(Modality.APPLICATION_MODAL);
-                    addEditSeizureMedicationStage
-                            .initOwner(participantDetailsGUI.participantMainStage);
-                    addEditSeizureMedicationStage.setResizable(false);
-                    addEditSeizureMedicationStage.show();
+                        addEditSeizureMedicationStage.setScene(new Scene(
+                                editSeizureMedicationPopUp(smTVC
+                                        .getSelectedPK()), 325, 200));
+                        addEditSeizureMedicationStage
+                                .initModality(Modality.APPLICATION_MODAL);
+                        addEditSeizureMedicationStage
+                                .initOwner(participantDetailsGUI.participantMainStage);
+                        addEditSeizureMedicationStage.setResizable(false);
+                        addEditSeizureMedicationStage.show();
+                    }
 
+                    else
+                    {
+                        Stage stage = new Stage();
+                        Scene scene;
+                        // tell the user to select a user to delete
+                        PopUpMessage messageBox = new PopUpMessage(
+                                "Please select a medication to remove.", stage);
+
+                        scene = new Scene(messageBox.root, 300, 75);
+                        stage.setScene(scene);
+                        stage.showAndWait();
+                    }
                 }
                 catch ( Exception e1 )
                 {
@@ -379,18 +401,25 @@ public class SeizureDescriptionFormGUI
                 smTVC.seizureMedicationTable);
         medicationBox.setPadding(new Insets(10, 10, 10, 5));
 
+        if ( !(this.loggedInUser instanceof MedicalAdministrator) )
+        {
+            addBtn.setVisible(false);
+            editBtn.setVisible(false);
+            deleteBtn.setVisible(false);
+        }
+
         return medicationBox;
     }
 
     /**
      * Method for updating a medication associated with a aseizure.
      * 
-     * @param medicationName
-     *            : The name of the medication to be updated.
+     * @param medicationName : The name of the medication to be updated.
      * @return gridpane
      */
     private GridPane editSeizureMedicationPopUp( String medicationName )
     {
+
         //
         GridPane grid = new GridPane();
 
@@ -594,8 +623,7 @@ public class SeizureDescriptionFormGUI
      * you wish to delete them, if so, will delete the selected user, then
      * refresh the table of accounts
      * 
-     * @param medicationName
-     *            The medication that you will remove
+     * @param medicationName The medication that you will remove
      * @author Niklaas Neijmeijer CST207
      */
     private void removeMedication( String medicationName )
@@ -681,35 +709,40 @@ public class SeizureDescriptionFormGUI
             {
                 e.printStackTrace();
             }
-
-            ResultSet medicationIDSet = db.select("medicationID",
-                    "seizureMedication", "seizureID = '" + seizureID + "'","");
-            String medicationID = "";
-            try
+            if ( seizureID.length() != 0 )
             {
-                while(medicationIDSet.next())
+                ResultSet medicationIDSet = db.select("medicationID",
+                        "seizureMedication", "seizureID = '" + seizureID + "'",
+                        "");
+                String medicationID = "";
+                try
                 {
-                    medicationID = medicationIDSet.getString(1);
-                    db.delete("seizureMedication", "medicationID = '" + medicationID + "'");
-                    db.delete("medication", "medicationID = '" + medicationID + "'");
+                    while ( medicationIDSet.next() )
+                    {
+                        medicationID = medicationIDSet.getString(1);
+                        db.delete("seizureMedication", "medicationID = '"
+                                + medicationID + "'");
+                        db.delete("medication", "medicationID = '"
+                                + medicationID + "'");
+                    }
                 }
-            }
-            catch ( SQLException e )
-            {
-                e.printStackTrace();
-            }
-            db.delete("seizures", "seizureID = '" + seizureID + "'");
-            smTVC.refreshTable(cosmoId);
-            seizureTypeTxt.setText("");
-            warningLbl.setText("");
-            descriptionTxt.setText("");
-            frequencyTxt.setText("");
-            durationTxt.setText("");
-            aftermathTxt.setText("");
-            aftermathAssistanceTxt.setText("");
-            emergencyTreatmentTxt.setText("");
-            lastUpdatedTxt.setText("");
+                catch ( SQLException e )
+                {
+                    e.printStackTrace();
+                }
+                db.delete("seizures", "seizureID = '" + seizureID + "'");
+                smTVC.refreshTable(cosmoId);
+                seizureTypeTxt.setText("");
+                warningLbl.setText("");
+                descriptionTxt.setText("");
+                frequencyTxt.setText("");
+                durationTxt.setText("");
+                aftermathTxt.setText("");
+                aftermathAssistanceTxt.setText("");
+                emergencyTreatmentTxt.setText("");
+                lastUpdatedTxt.setText("");
 
+            }
         }
     }
 }

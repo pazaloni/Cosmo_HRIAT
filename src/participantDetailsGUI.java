@@ -152,28 +152,31 @@ public class participantDetailsGUI extends Application
         return logoAndLogin;
     }
 
-    /**
-     * 
-     * Purpose: Create the Tabs Pane for display
-     * 
-     * @return a TabPane object
-     */
-    private TabPane createTabs()
-    {
-        TabPane tabPane = new TabPane();
-				
-        Tab participantUpdate = new Tab();
-        Tab healthStatus = new Tab();
-        Tab seizureDescription = new Tab();
-        Tab vaccinationDetails = new Tab();
-        Tab kinDetails = new Tab();
-        Tab workDetails = new Tab();
-        Tab physicianInfo = new Tab();
-        Tab caregiver = new Tab();
-        Tab other = new Tab();
+	/**
+	 * 
+	 * Purpose: Create the Tabs Pane for display
+	 * 
+	 * @return a TabPane object
+	 */
+	private TabPane createTabs() {
+		TabPane tabPane = new TabPane();
+
+		
+		// Create tabs names
+		Tab participantUpdate = new Tab();
+		Tab healthStatus = new Tab();
+		Tab seizureDescription = new Tab();
+		Tab vaccinationDetails = new Tab();
+		Tab kinDetails = new Tab();
+		Tab workDetails = new Tab();
+		Tab physicianInfo = new Tab();
+		Tab caregiver = new Tab();
+		Tab other = new Tab();
+
+		// create the seizure tab
 
         // set body for tabs
-        HealthStatusFormGUI hsf = new HealthStatusFormGUI(healthStatus, loggedInUser);
+        HealthStatusFormGUI hsf = new HealthStatusFormGUI(healthStatus, loggedInUser, participantMainStage);
         healthStatus.setContent(hsf.showHealthStatusInfo(cosmoID + "").getContent());
         
         		// create the seizure tab
@@ -375,6 +378,7 @@ public class participantDetailsGUI extends Application
                 lastNameText.setText(results.getString(2));
 
                 DateFormat format = new SimpleDateFormat("dd-MM-YYYY");
+
 
                 dobtext.setText(format.format(results.getTimestamp(3)));
                 phnText.setText(results.getString(4));
@@ -989,6 +993,7 @@ public class participantDetailsGUI extends Application
         Label physicianName = new Label();
         Label physicianPhone = new Label();
 
+
         // select statement responsible for fetching the required physician
         // information
         ResultSet rs = DBObject
@@ -1033,6 +1038,7 @@ public class participantDetailsGUI extends Application
 
         Label careGiverName = new Label();
         Label careGivenerPhone = new Label();
+
 
         careGiverBox.getChildren().add(new Label("Caregiver:"));
         // select statement responsible for fetching the required careGiver
