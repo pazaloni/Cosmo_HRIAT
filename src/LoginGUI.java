@@ -40,7 +40,7 @@ public class LoginGUI extends Application
     public static final String USERNAME_PROMPT_TEXT = "Username";
     public static final String PASSWORD_PROMPT_TEXT = "Password";
     public static final String STAGE_TITLE = "Cosmopolitan Industries";
-    public static final String IMAGE_PATH = "images/CosmoIconLong.png";
+    public static final String IMAGE_PATH = "file:images/CosmoIconLong.png";
     public static final String BUTTON_LABEL = "Login";
 
     public static void main( String[] args )

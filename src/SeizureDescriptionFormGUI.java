@@ -287,7 +287,7 @@ public class SeizureDescriptionFormGUI
             }
             SimpleDateFormat outputFormatter = new SimpleDateFormat();
             outputFormatter.applyPattern("dd-MMM-yyyy");
-            
+
             lastUpdatedTxt.setText(outputFormatter.format(date));
         }
     }
@@ -709,37 +709,40 @@ public class SeizureDescriptionFormGUI
             {
                 e.printStackTrace();
             }
-
-            ResultSet medicationIDSet = db.select("medicationID",
-                    "seizureMedication", "seizureID = '" + seizureID + "'", "");
-            String medicationID = "";
-            try
+            if ( seizureID.length() != 0 )
             {
-                while ( medicationIDSet.next() )
+                ResultSet medicationIDSet = db.select("medicationID",
+                        "seizureMedication", "seizureID = '" + seizureID + "'",
+                        "");
+                String medicationID = "";
+                try
                 {
-                    medicationID = medicationIDSet.getString(1);
-                    db.delete("seizureMedication", "medicationID = '"
-                            + medicationID + "'");
-                    db.delete("medication", "medicationID = '" + medicationID
-                            + "'");
+                    while ( medicationIDSet.next() )
+                    {
+                        medicationID = medicationIDSet.getString(1);
+                        db.delete("seizureMedication", "medicationID = '"
+                                + medicationID + "'");
+                        db.delete("medication", "medicationID = '"
+                                + medicationID + "'");
+                    }
                 }
-            }
-            catch ( SQLException e )
-            {
-                e.printStackTrace();
-            }
-            db.delete("seizures", "seizureID = '" + seizureID + "'");
-            smTVC.refreshTable(cosmoId);
-            seizureTypeTxt.setText("");
-            warningLbl.setText("");
-            descriptionTxt.setText("");
-            frequencyTxt.setText("");
-            durationTxt.setText("");
-            aftermathTxt.setText("");
-            aftermathAssistanceTxt.setText("");
-            emergencyTreatmentTxt.setText("");
-            lastUpdatedTxt.setText("");
+                catch ( SQLException e )
+                {
+                    e.printStackTrace();
+                }
+                db.delete("seizures", "seizureID = '" + seizureID + "'");
+                smTVC.refreshTable(cosmoId);
+                seizureTypeTxt.setText("");
+                warningLbl.setText("");
+                descriptionTxt.setText("");
+                frequencyTxt.setText("");
+                durationTxt.setText("");
+                aftermathTxt.setText("");
+                aftermathAssistanceTxt.setText("");
+                emergencyTreatmentTxt.setText("");
+                lastUpdatedTxt.setText("");
 
+            }
         }
     }
 }
