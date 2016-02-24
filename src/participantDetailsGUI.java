@@ -666,16 +666,10 @@ public class participantDetailsGUI extends Application
                 seizureAfter.setWrapText(true);
                 seizureAfter.setMinWidth(ALLERGY_AND_SEIZURE_MIN_WITH);
                 seizureAfter.setMaxWidth(vbox.getWidth());
-                Label medicationName = new Label("Medication Name: "
-                        + rs.getString(6));
-                medicationName.setWrapText(true);
-                medicationName.setMinWidth(ALLERGY_AND_SEIZURE_MIN_WITH);
-                medicationName.setMaxWidth(vbox.getWidth());
 
                 // add the labels to the parent container
                 vbox.getChildren().addAll(seizureType, seizureDesc,
-                        seizureFreq, seizureDuration, seizureAfter,
-                        medicationName);
+                        seizureFreq, seizureDuration, seizureAfter);
             }
         }
         catch ( SQLException e )

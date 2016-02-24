@@ -294,7 +294,7 @@ public class ParticipantUpdateFormController
 		values[4][1] = city;
 		values[5][0] = "postalCode";
 		values[5][1] = postalCode;
-		values[6][0] = "phoneNum";
+		values[6][0] = "phoneNumber";
 		values[6][1] = phoneNumber;
 		values[7][0] = "dateOfBirth";
 		values[7][1] = birthDate;
