@@ -1,5 +1,9 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -31,6 +35,7 @@ public class HealthStatusInformationHelper
      */
     public String[] retrieveHealthStatusInfo( String cosmoId )
     {
+        db.connect();
         String[] healthStatusInfo = new String[7];
 
         String physicianId = null;
@@ -90,7 +95,26 @@ public class HealthStatusInformationHelper
         {
             lastUpdated = " ";
         }
-        healthStatusInfo[5] = lastUpdated;
+        DateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        if ( lastUpdated.length() > 5 )
+        {
+            try
+            {
+                date = inputFormatter.parse(lastUpdated);
+            }
+            catch ( ParseException e )
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            SimpleDateFormat outputFormatter = new SimpleDateFormat();
+            outputFormatter.applyPattern("dd-MMM-yyyy");
+            
+            healthStatusInfo[5] = outputFormatter.format(date);
+        }
+
+        //healthStatusInfo[5] = lastUpdated.substring(0, lastUpdated.length()-9);
         if ( otherInfo == null )
         {
             otherInfo = " ";
@@ -111,17 +135,24 @@ public class HealthStatusInformationHelper
     {
     	db.connect();
     	
-    	String updateValues[][] = new String[4][2];
+    	String updateValues[][] = new String[6][2];
     	
     	updateValues[0][0] = "cosmoID";
         updateValues[1][0] = "diagnosis";
         updateValues[2][0] = "tylenolPermission";
         updateValues[3][0] = "careGiverPermissionGive";
+        updateValues[4][0] = "healthStatusUpdated";
+        updateValues[5][0] = "otherInfo";
         
         updateValues[0][1] = cosmoID;
         updateValues[1][1] = info[0];
         updateValues[2][1] = info[1];
-        updateValues[3][1] = info[2];
+        updateValues[3][1] = info[2];        
+        Date now = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat();
+        formatter.applyPattern("dd-MMM-yyyy");
+        updateValues[4][1] = formatter.format(now);         
+        updateValues[5][1] = info[3];
         
         boolean success = db.update(updateValues, "Participant", cosmoID);
 

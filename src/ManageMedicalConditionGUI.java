@@ -104,7 +104,7 @@ public class ManageMedicalConditionGUI
         localStage.setResizable(false);
         localStage.initModality(Modality.WINDOW_MODAL);
         localStage.initOwner(parentStage);
-        localStage.setTitle("Add a medicalCondition entry");
+        localStage.setTitle("Add a medical condition entry");
         localStage.showAndWait();
         
     }

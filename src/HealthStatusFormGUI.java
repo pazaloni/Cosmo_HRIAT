@@ -48,10 +48,10 @@ public class HealthStatusFormGUI
 
     private List<Control> editableItems = new ArrayList<Control>();
 
-    private TextField familyPhysicianTxt;
+    private Label familyPhysicianTxt;
     private TextField participantDiagnosisTxt;
-    private TextField physicianPhoneTxt;
-    private TextField dateCompletedTxt;
+    private Label physicianPhoneTxt;
+    private Label dateCompletedTxt;    
     
     private Label lblMessage; 
     
@@ -157,10 +157,10 @@ public class HealthStatusFormGUI
         Label physicianPhoneLbl = new Label("Phyisician Phone Number: ");
         Label dateCompletedLbl = new Label("Date Completed: ");
 
-        familyPhysicianTxt = new TextField();
+        familyPhysicianTxt = new Label();
         participantDiagnosisTxt = new TextField();
-        physicianPhoneTxt = new TextField();
-        dateCompletedTxt = new TextField();
+        physicianPhoneTxt = new Label();
+        dateCompletedTxt = new Label();
 
         tylenolGiven = new CheckBox();
         tylenolGiven.setText("Tylenol Given");
@@ -175,27 +175,44 @@ public class HealthStatusFormGUI
         editableItems.add(familyPhysicianTxt);
         btnSave.setOnAction(event ->{
         	lblMessage.setText("");
-        	String[] info = new String[3];
+        	String[] info = new String[4];
         	info[0] = participantDiagnosisTxt.getText();
         	info[1] = tylenolGiven.isSelected()+"";
         	info[2] = careGiverPermission.isSelected()+"";
+        	info[3] = otherInfoTxt.getText();
         	
         	boolean success = helper.saveHealthStatusInfo(info,cosmoID);
-
+        	
+        	if(success)
+        	{
+        	            	    
+        	    assignDiagnosisInfo(cosmoId);
+        	    lblMessage.setTextFill(Color.BLUE);
+        	    lblMessage.setText("Save successful");
+        	    
+        	}
+        	else
+        	{
+        	    lblMessage.setTextFill(Color.RED);
+                lblMessage.setText("The save was unsuccesful.");
+        	}
+       
         	
         });
         // Following is just adding stuff to their boxes and setting some
         // spacing and alignment
         familyPhysicianHBox.getChildren().addAll(familyPhysicianLbl,
                 familyPhysicianTxt);
-        familyPhysicianHBox.setSpacing(SPACING);
+        familyPhysicianHBox.setSpacing(125);
         familyPhysicianHBox.setAlignment(Pos.CENTER_RIGHT);
+        
         participantDiagnosisHBox.getChildren().addAll(participantDiagnosisLbl,
                 participantDiagnosisTxt);
         participantDiagnosisHBox.setSpacing(SPACING);
         participantDiagnosisHBox.setAlignment(Pos.CENTER_RIGHT);
         physicianPhoneNumberHBox.getChildren().addAll(physicianPhoneLbl,
                 physicianPhoneTxt);
+
         physicianPhoneNumberHBox.setSpacing(SPACING);
         physicianPhoneNumberHBox.setAlignment(Pos.CENTER_RIGHT);
         dateCompletedHBox.getChildren().addAll(dateCompletedLbl,
@@ -232,7 +249,7 @@ public class HealthStatusFormGUI
         participantDiagnosisTxt.setText(info[2]);
         tylenolGiven.setSelected(Boolean.parseBoolean(info[3]));
         careGiverPermission.setSelected(Boolean.parseBoolean(info[4]));
-        info[5] = info[5].substring(0, info[5].length() - 7);
+
         dateCompletedTxt.setText(info[5]);
         otherInfoTxt.setText(info[6]);
 

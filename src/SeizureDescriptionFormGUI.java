@@ -272,21 +272,23 @@ public class SeizureDescriptionFormGUI
         aftermathTxt.setText(info[4]);
         aftermathAssistanceTxt.setText(info[5]);
         emergencyTreatmentTxt.setText(info[6]);
-        DateFormat format = new SimpleDateFormat("dd-MMM-yyyy");
+        DateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         if ( info[7].length() > 5 )
         {
             try
             {
-                date = format.parse(info[7]);
+                date = inputFormatter.parse(info[7]);
             }
             catch ( ParseException e )
             {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-
-            lastUpdatedTxt.setText(format.format(date));
+            SimpleDateFormat outputFormatter = new SimpleDateFormat();
+            outputFormatter.applyPattern("dd-MMM-yyyy");
+            
+            lastUpdatedTxt.setText(outputFormatter.format(date));
         }
     }
 
