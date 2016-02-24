@@ -192,7 +192,6 @@ public class ParticipantUpdateFormController
         }
         catch ( SQLException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         //disconnect from the database
@@ -252,7 +251,6 @@ public class ParticipantUpdateFormController
         }
         catch ( SQLException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         //disconnect from database
@@ -261,6 +259,7 @@ public class ParticipantUpdateFormController
 		return emergencyContactInfo;
 	}
 	
+
 	/**
 	 * Purpose: Saves the participants basic information to the database,
 	 * updating the current record
@@ -642,3 +641,6 @@ public class ParticipantUpdateFormController
 	}
 	
 }
+
+
+

@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
@@ -50,6 +51,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 /**
  * 
@@ -62,6 +64,9 @@ public class participantDetailsGUI extends Application
 {
     // the main stage for the GUI
     public static Stage participantMainStage;
+    
+    // window used for editing main frame
+    private Stage mainEditWindow;
 
     // the picture of the participant
     private ImageView previewPicture;
@@ -76,6 +81,13 @@ public class participantDetailsGUI extends Application
 
     private static final int PREVIEW_TEXT_WIDTH = 150;
     private static final int ALLERGY_AND_SEIZURE_MIN_WITH = 410;
+    
+    private Label cosmoIDText = new Label();
+    private Label firstNameText = new Label();
+    private Label lastNameText = new Label();
+    private Label dobtext = new Label();
+    private Label phnText = new Label();
+    private Label addressText = new Label();
 
     private Stage createNoteStage;
 
@@ -264,6 +276,8 @@ public class participantDetailsGUI extends Application
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
+        
 
         // set margins
         VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
@@ -275,7 +289,7 @@ public class participantDetailsGUI extends Application
         pictureBox.setAlignment(Pos.TOP_CENTER);
 
         // create buttons
-        Button editBtn = new Button("Edit");
+        Button editBtn = new Button();
         Button viewDocumentsBtn = new Button("View \nAttached \nDocuments");
         Button generateFormsBtn = new Button("Generate Forms");
         Button createNoteBtn = new Button("Create Note");
@@ -301,8 +315,11 @@ public class participantDetailsGUI extends Application
 
         });
         // set sizes and padding
-        editBtn.setMaxWidth(100);
-        editBtn.setMinWidth(100);
+        editBtn.setMaxWidth(30);
+        editBtn.setMinWidth(30);
+        editBtn.setMaxHeight(25);
+        editBtn.setMaxHeight(25);
+        editBtn.setGraphic(new ImageView("images/edit.png"));
 
         viewDocumentsBtn.setMaxWidth(100);
         viewDocumentsBtn.setMinWidth(100);
@@ -326,7 +343,6 @@ public class participantDetailsGUI extends Application
         Label lastNameLabel = new Label("Last Name: ");
         Label dobLabel = new Label("Date of Birth: ");
         Label phnLabel = new Label("PHN: ");
-        Label diagnosislabel = new Label("Diagnosis: ");
         Label addressLabel = new Label("Address: ");
 
         // use width to made container large enough
@@ -338,7 +354,6 @@ public class participantDetailsGUI extends Application
         lastNameLabel.setPadding(new Insets(5, 5, 5, 5));
         phnLabel.setPadding(new Insets(5, 5, 5, 5));
         dobLabel.setPadding(new Insets(5, 5, 5, 5));
-        diagnosislabel.setPadding(new Insets(5, 5, 5, 5));
         addressLabel.setPadding(new Insets(5, 5, 5, 5));
 
         // get participant name, phn, diagnosis, and address from database
@@ -348,43 +363,28 @@ public class participantDetailsGUI extends Application
                         "Participant p LEFT OUTER JOIN Conditions c ON p.cosmoID = c.cosmoID",
                         "cosmoID =" + this.cosmoID, "");
 
-        // set the participant Labels
-        Label cosmoIDText = new Label();
-        Label firstNameText = new Label();
-        Label lastNameText = new Label();
-        Label dobtext = new Label();
-        Label phnText = new Label();
-        Label diagnosisText = new Label();
-        Label addressText = new Label();
-
         try
         {
-            // while there are more results
+         // while there are more results
 
-            while ( results.next() )
-            {
+            while (results.next()) {
                 // get the participants basic information from the databases
                 System.out.println("Results: " + results.getString(1));
                 cosmoIDText.setText(this.cosmoID + "");
                 firstNameText.setText(results.getString(1));
                 lastNameText.setText(results.getString(2));
 
-                DateFormat format = new SimpleDateFormat("MMMM d, yyyy");
+                DateFormat format = new SimpleDateFormat("dd-MM-YYYY");
 
                 dobtext.setText(format.format(results.getTimestamp(3)));
                 phnText.setText(results.getString(4));
-                diagnosisText.setText(results.getString(5) + ", "
-                        + results.getString(6));
                 addressText.setText(results.getString(7));
 
                 URL u = null;
-                try
-                {
+                try {
                     u = (this.getClass().getProtectionDomain().getCodeSource()
                             .getLocation().toURI().toURL());
-                }
-                catch ( URISyntaxException | MalformedURLException e )
-                {
+                } catch (URISyntaxException | MalformedURLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
@@ -394,9 +394,14 @@ public class participantDetailsGUI extends Application
                 urlPic = urlPic.substring(0, urlPic.length()
                         - (urlPic.length() - urlPic.lastIndexOf("/")));
 
-                urlPic = urlPic.replace("/bin", "");
+
+                // set margins
+                VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
+    urlPic = urlPic.replace("/bin", "");
 
                 Image img = new Image(urlPic + results.getString(8));
+
+                System.out.println(urlPic + results.getString(8));
 
                 previewPicture = new ImageView(img);
                 previewPicture.setFitWidth(122);
@@ -405,17 +410,10 @@ public class participantDetailsGUI extends Application
                 pictureBox.getChildren().addAll(previewPicture);
 
             }
-        }
-        catch ( SQLException e )
-        {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        // add buttons to the previewPane
-        if ( loggedInUser instanceof MedicalAdministrator )
-        {
-            pictureBox.getChildren().add(editBtn);
-        }
         pictureBox.getChildren().addAll(viewDocumentsBtn, generateFormsBtn,
                 createNoteBtn);
 
@@ -434,9 +432,6 @@ public class participantDetailsGUI extends Application
         phnText.setMaxWidth(PREVIEW_TEXT_WIDTH);
         phnText.setMinWidth(PREVIEW_TEXT_WIDTH);
 
-        diagnosisText.setMaxWidth(PREVIEW_TEXT_WIDTH);
-        diagnosisText.setMinWidth(PREVIEW_TEXT_WIDTH);
-
         addressText.setMaxWidth(PREVIEW_TEXT_WIDTH);
         addressText.setMinWidth(PREVIEW_TEXT_WIDTH);
 
@@ -446,7 +441,6 @@ public class participantDetailsGUI extends Application
         basicInfoPane.add(lastNameLabel, 0, 2);
         basicInfoPane.add(dobLabel, 0, 3);
         basicInfoPane.add(phnLabel, 0, 4);
-        basicInfoPane.add(diagnosislabel, 0, 5);
         basicInfoPane.add(addressLabel, 0, 6);
 
         basicInfoPane.add(cosmoIDText, 1, 0);
@@ -454,14 +448,36 @@ public class participantDetailsGUI extends Application
         basicInfoPane.add(lastNameText, 1, 2);
         basicInfoPane.add(dobtext, 1, 3);
         basicInfoPane.add(phnText, 1, 4);
-        basicInfoPane.add(diagnosisText, 1, 5);
         basicInfoPane.add(addressText, 1, 6);
+
+        // add buttons to the previewPane
+        if (loggedInUser instanceof MedicalAdministrator) {
+            basicInfoPane.add(editBtn, 2, 0);
+            // pictureBox.getChildren().add(editBtn);
+        }
 
         // set margins
         BorderPane.setMargin(pictureBox, new Insets(10, 0, 0, 10));
         BorderPane.setMargin(basicInfoPane, new Insets(10, 0, 0, 0));
         previewPane.setLeft(pictureBox);
         previewPane.setCenter(basicInfoPane);
+        
+        editBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                // Open addNewParticipant Window
+                mainEditWindow = new Stage();
+                mainEditWindow.setTitle("Edit Participant");
+
+                mainEditWindow.setScene(new Scene(editParticipantPopUp(), 290,
+                        300));
+                mainEditWindow.initModality(Modality.APPLICATION_MODAL);
+                mainEditWindow.initOwner(participantMainStage);
+                mainEditWindow.setResizable(false);
+                mainEditWindow.show();
+            }
+
+        });
 
         return previewPane;
     }
@@ -1047,5 +1063,168 @@ public class participantDetailsGUI extends Application
 
         return careGiverBox;
     }
+    
+    /**
+     * Purpose: To create a pop up window that allows the user to edit a
+     * participants basic information
+     * 
+     * @return GridPane
+     */
+    private GridPane editParticipantPopUp() {
+
+        GridPane grid = new GridPane();
+
+        // warning label
+        Label lblWarning = new Label();
+        lblWarning.setTextFill(Color.FIREBRICK);
+
+        // text field labels
+        Label firstNameLbl = new Label("First Name");
+        Label lastNameLbl = new Label("Last Name");
+        Label birthdateLbl = new Label("Date Of Birth");
+        Label healthNumLbl = new Label("PHN");
+        Label addressLbl = new Label("Address");
+
+        // the text fields
+        TextField firstNameTxt = new TextField(firstNameText.getText());
+
+        TextField lastNameTxt = new TextField(lastNameText.getText());
+        DatePicker birthDatePicker = new DatePicker();
+
+        // convert the dobtext into a localdate
+        int day = Integer.parseInt(dobtext.getText().substring(0, 2));
+        System.out.println(day);
+        int month = Integer.parseInt(dobtext.getText().substring(3, 5));
+        System.out.println(month);
+        int year = Integer.parseInt(dobtext.getText().substring(6));
+        System.out.println(year);
+        LocalDate ld = LocalDate.of(year, month, day);
+
+        // change the pattern of the birthDatePicker to dd-MM-yyyy
+        String pattern = "dd-MM-yyyy";
+        StringConverter converter = new StringConverter<LocalDate>() {
+            DateTimeFormatter dateFormatter = DateTimeFormatter
+                    .ofPattern(pattern);
+
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return dateFormatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, dateFormatter);
+                } else {
+                    return null;
+                }
+            }
+        };
+        birthDatePicker.setConverter(converter);
+        birthDatePicker.setPromptText(pattern.toLowerCase());
+
+        // set the value of the birth date picker
+        birthDatePicker.setValue(ld);
+
+        // set the health num
+        TextField healthNumTxt = new TextField(phnText.getText());
+
+        // address text
+        TextField addressTxt = new TextField(addressText.getText());
+
+        // add the form to the grid
+        grid.add(firstNameLbl, 0, 1);
+        grid.add(lastNameLbl, 0, 2);
+        grid.add(birthdateLbl, 0, 3);
+        grid.add(healthNumLbl, 0, 4);
+        grid.add(addressLbl, 0, 5);
+        grid.add(lblWarning, 1, 0);
+        grid.add(firstNameTxt, 1, 1);
+        grid.add(lastNameTxt, 1, 2);
+        grid.add(birthDatePicker, 1, 3);
+        grid.add(healthNumTxt, 1, 4);
+        grid.add(addressTxt, 1, 5);
+
+        // setPadding of the grid
+        grid.setPadding(new Insets(10, 10, 0, 10));
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        // Adding participant event handler
+        Button createParticipantBtn = new Button("Save");
+        createParticipantBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                // call create participant on medical administrator with the
+                // text passed in
+                String result = MedicalAdministrator.editParticipant(
+                        cosmoIDText.getText(), firstNameTxt.getText(),
+                        lastNameTxt.getText(), birthDatePicker.getValue(),
+                        healthNumTxt.getText(), addressTxt.getText());
+
+                // if no error message is recieved then close this window and
+                // refresh the table
+                if (result.equals("")) {
+                    mainEditWindow.close();
+
+                    // set the pattern of the date coming in
+                    LocalDate date = birthDatePicker.getValue();
+                    String birthDateString = date.format(DateTimeFormatter
+                            .ofPattern("dd-MM-yyyy"));
+
+                    firstNameText.setText(firstNameTxt.getText());
+                    lastNameText.setText(lastNameTxt.getText());
+                    dobtext.setText(birthDateString);
+                    phnText.setText(healthNumTxt.getText());
+                    addressText.setText(addressTxt.getText());
+                }
+                // if there is an error message, display it
+                else {
+                    lblWarning.setTextFill(Color.FIREBRICK);
+                    lblWarning.setText(result);
+                    if (result.equals("Phone Number must be 10 digits")) {
+
+                    }
+                }
+
+            }
+        });
+
+        // reset the form event handler
+        Button resetBtn = new Button("Reset");
+        resetBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent arg0) {
+                // sets all values to default
+
+                firstNameTxt.setText("");
+                lastNameTxt.setText("");
+                birthDatePicker.setValue(null);
+                healthNumTxt.setText("");
+                addressTxt.setText("");
+                lblWarning.setText("");
+            }
+
+        });
+
+        // Add the buttons to the grid
+        HBox buttonsHbox = new HBox();
+        HBox resetHbox = new HBox();
+        buttonsHbox.getChildren().addAll(createParticipantBtn);
+        buttonsHbox.setAlignment(Pos.CENTER);
+        resetHbox.getChildren().addAll(resetBtn);
+        resetHbox.setAlignment(Pos.CENTER_RIGHT);
+        grid.add(buttonsHbox, 1, 10);
+        grid.add(resetHbox, 0, 10);
+
+        return grid;
+    }
 
 }
+
+
