@@ -557,9 +557,11 @@ public class HealthStatusFormGUI
                 stage.initOwner(parentStage);
                 stage.setScene(scene);
                 stage.showAndWait();
+                if(popup.runCheck())
+                {
                 Medication.removeMedication(med.getMedicationName().get(),cosmoID);
                 controller.refreshTable(cosmoID);
-
+                }
         		
         	}
         });

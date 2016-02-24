@@ -161,7 +161,7 @@ public class ManageMedicationGUI
         mainPane.setVgap(10);
 
         mainPane.setPadding(new Insets(10, 10, 10, 10));
-
+        btnAdd.setText("Update");
         btnAdd.setOnAction(event -> {
             String result = Medication.updateMedication(
                     medicationName.getText(), medicationDosage.getText(),

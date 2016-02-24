@@ -148,7 +148,7 @@ public class ManageAllergyGUI
 
         mainPane.setHgap(10);
         mainPane.setVgap(10);
-
+        btnAdd.setText("Update");
         // Handles the editing of the allergy
         btnAdd.setOnAction(event -> {
         	Allergies newAllergy = new Allergies(allergicTo.getText(), allergyType.getText(),

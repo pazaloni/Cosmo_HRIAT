@@ -1,6 +1,15 @@
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * 
+ * Purpose: Represent a medical condition in the database, also have the ability
+ * to add, update, delete medical conditions
+ * 
+ * 
+ * @author CIMP
+ * @version 1.0
+ */
 public class MedicalCondition
 {
 
@@ -87,13 +96,13 @@ public class MedicalCondition
      * 
      * Purpose: Update a medical condition for a participant
      * 
-     * @param newCondition the condition that will be new in the database 
-     * @param oldCondition the condition that will be changed 
+     * @param newCondition the condition that will be new in the database
+     * @param oldCondition the condition that will be changed
      * @param cosmoID the participant that will have the condition changed
      * @return a string containing the status of the update
      */
-    public static String updateMedicalCondition( MedicalCondition newCondition,MedicalCondition oldCondition,
-            String cosmoID )
+    public static String updateMedicalCondition( MedicalCondition newCondition,
+            MedicalCondition oldCondition, String cosmoID )
     {
         String result = "";
 

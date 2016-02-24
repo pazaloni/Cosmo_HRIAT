@@ -1,8 +1,13 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
 /**
  * 
- * Purpose: represent an allergy object and also have helper methods to create, delete, and update allergies
+ * Purpose: represent an allergy object and also have helper methods to create,
+ * delete, and update allergies
  * 
  * @author Team CIMP
  * @version 1.0
@@ -78,26 +83,48 @@ public class Allergies
         {
             DatabaseHelper db = new DatabaseHelper();
             db.connect();
-            boolean success = false;
+            ResultSet rs = db.select("count(*)", "Allergies", "cosmoID = "
+                    + cosmoID + " AND allergicTo = '" + allergicTo + "'", "");
 
-            String allergyValues[] = new String[4];
+            int recordExists = 0;
 
-            allergyValues[0] = allergicTo;
-            allergyValues[1] = cosmoID;
-            allergyValues[2] = allergyType;
-            allergyValues[3] = description;
-
-            success = db.insert(allergyValues, "Allergies");
-
-            if ( !success )
+            // check if there is already a physician with that name
+            try
             {
-                result = "The insertion was not successful";
+                rs.next();
+                recordExists = rs.getInt(1);
+            }
+            catch ( SQLException e )
+            {
+                e.printStackTrace();
+            }
+
+            if ( recordExists == 0 )
+            {
+                boolean success = false;
+
+                String allergyValues[] = new String[4];
+
+                allergyValues[0] = allergicTo;
+                allergyValues[1] = cosmoID;
+                allergyValues[2] = allergyType;
+                allergyValues[3] = description;
+
+                success = db.insert(allergyValues, "Allergies");
+
+                if ( !success )
+                {
+                    result = "The insertion was not successful";
+                }
+                else
+                {
+                    result = "Success";
+                }
             }
             else
             {
-                result = "Success";
+                result = "That person already has that allergy.";
             }
-
             db.disconnect();
         }
         return result;
@@ -122,9 +149,9 @@ public class Allergies
         db.connect();
         boolean success = false;
 
-        success = db.delete("Allergies", "allergicTo='"
-                + allergy.allergicTo.get() + "'" + "AND cosmoID='" + cosmoID
-                + "'");
+        success = db.delete("Allergies",
+                "allergicTo='" + allergy.allergicTo.get() + "'"
+                        + "AND cosmoID='" + cosmoID + "'");
 
         if ( success )
         {
@@ -142,13 +169,14 @@ public class Allergies
      * 
      * Purpose: update an allergy for a participant
      * 
-     * @param newAllergy the changed allergy 
-     * @param oldAllergy the allergy that will be changed 
+     * @param newAllergy the changed allergy
+     * @param oldAllergy the allergy that will be changed
      * @param cosmoID the comsmoID of the participant that will have the allergy
      *            updated
      * @return a string containing the status of the update
      */
-    public static String updateAllergy( Allergies newAllergy, Allergies oldAllergy,String cosmoID )
+    public static String updateAllergy( Allergies newAllergy,
+            Allergies oldAllergy, String cosmoID )
 
     {
         String result = "";

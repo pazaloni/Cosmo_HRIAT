@@ -27,10 +27,10 @@ public class TestMedicalConditions
     public void setUp() throws Exception
     {
         condition1 = "ADHD";
-        description1 = "Low functioning";
+        description1 = "Mild";
 
         condition2 = "OCD";
-        description2 = "Has to wash hands 5 times after washing the door know";
+        description2 = "Severe";
 
         test1 = new MedicalCondition(condition1, description1);
         test2 = new MedicalCondition(condition2, description2);
@@ -67,6 +67,10 @@ public class TestMedicalConditions
     {
     	String result = MedicalCondition.createMedicalCondition(test1, cosmoID);
     	assertTrue(result.isEmpty());
+    	
+    	MedicalCondition empty = new MedicalCondition("", "");
+    	String result2 = MedicalCondition.createMedicalCondition(empty, cosmoID);
+    	assertTrue(result2.equals("You have missing required fields"));
     }
 
     /**
@@ -78,6 +82,10 @@ public class TestMedicalConditions
     {
     	String result = MedicalCondition.updateMedicalCondition(test2, test1, cosmoID);
     	assertTrue(result.isEmpty());
+    	MedicalCondition empty = new MedicalCondition("", "");
+    	String result2 = MedicalCondition.updateMedicalCondition(test2, empty, cosmoID);
+    	System.out.println(result2);
+    	assertTrue(result2.equals("Update not successful"));
     }
     
     /**
@@ -88,6 +96,6 @@ public class TestMedicalConditions
     public void testDeleteMedicalCondition()
     {
     	String result = MedicalCondition.deleteCondition(test2, cosmoID);
-    	assertTrue(result.equals("Deleted successfully"));
+    	assertTrue(result.equals("Deleted successfully"));   	
     }
 }

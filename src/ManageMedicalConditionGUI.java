@@ -147,7 +147,7 @@ public class ManageMedicalConditionGUI
         mainPane.setVgap(15);
 
         mainPane.setPadding(new Insets(10, 10, 10, 10));
-
+        btnAdd.setText("Update");
         btnAdd.setOnAction(event -> {
         	MedicalCondition newCondition = new MedicalCondition
         			(conditionName.getText(), conditionDescription.getText());
