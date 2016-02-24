@@ -152,9 +152,9 @@ public class HealthStatusFormGUI
         HBox dateCompletedHBox = new HBox();
         HBox checkBoxesHBox = new HBox();
 
-        Label familyPhysicianLbl = new Label("Family Phyisician: ");
+        Label familyPhysicianLbl = new Label("Family Physician: ");
         Label participantDiagnosisLbl = new Label("Participant Diagnosis: ");
-        Label physicianPhoneLbl = new Label("Phyisician Phone Number: ");
+        Label physicianPhoneLbl = new Label("Physician Phone Number: ");
         Label dateCompletedLbl = new Label("Date Completed: ");
 
         familyPhysicianTxt = new Label();
