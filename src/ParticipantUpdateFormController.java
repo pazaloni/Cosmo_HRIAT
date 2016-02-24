@@ -395,7 +395,7 @@ public class ParticipantUpdateFormController
 			kinInfo[1][0] = "kinID";
 			kinInfo[1][1] = "";
 			try {
-				
+				rs.next();
 				//get the kinID
 				kinInfo[1][1] = rs.getString(1);
 				
