@@ -260,6 +260,7 @@ public class ParticipantUpdateFormController
 	}
 	
 
+
 	/**
 	 * Purpose: Saves the participants basic information to the database,
 	 * updating the current record

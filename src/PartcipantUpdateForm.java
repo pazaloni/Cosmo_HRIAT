@@ -62,6 +62,8 @@ public class PartcipantUpdateForm extends ScrollPane
 	private TextField emergencyContactLastName = new TextField();
 	private TextField emergencyContactPhone = new TextField();
 	
+	private StaffAccount loggedInUser;
+	
 	/**
 	 * Purpose: Creates the form, populated with information 
 	 * related to the participant.
@@ -70,9 +72,10 @@ public class PartcipantUpdateForm extends ScrollPane
 	 * to get information for.
 	 *@author Breanna Wilson cst215 Steven Palchinski cst209
 	 */
-	public PartcipantUpdateForm(int cosmoID)
+	public PartcipantUpdateForm(int cosmoID, StaffAccount loggedInUser)
 	{
 		this.cosmoID = cosmoID;
+		this.loggedInUser = loggedInUser;
 		//the VBox containing all other viewable nodes
 		mainBox = new VBox();
 		//the controller used to get information from the database
@@ -152,7 +155,12 @@ public class PartcipantUpdateForm extends ScrollPane
 		
 		
 		
-		hbox.getChildren().addAll(heading, saveBtn);
+		hbox.getChildren().add(heading);
+		
+		if(loggedInUser instanceof MedicalAdministrator)
+		{
+		    hbox.getChildren().add(saveBtn);
+		}
 		
 		//set spacing between save button and heading
 		hbox.setMargin(heading, new Insets(5, 170,5,280));
@@ -517,6 +525,7 @@ public class PartcipantUpdateForm extends ScrollPane
 	
 	private void saveInfo()
 	{
+
 
 		controller.saveBasicParticipantInformation(participantFirstNameTxt.getText(),
 				participantLastNameTxt.getText(), participantAddressTxt.getText(),

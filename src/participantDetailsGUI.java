@@ -182,7 +182,7 @@ public class participantDetailsGUI extends Application
 		seizureDescription.setContent(sDescForm.ShowSeizureForm()
 				.getContent());
         
-        PartcipantUpdateForm puf = new PartcipantUpdateForm(cosmoID);
+        PartcipantUpdateForm puf = new PartcipantUpdateForm(cosmoID, loggedInUser);
         participantUpdate.setContent(puf.getForm());
         
         vaccinationDetails.setContent(createVaccinationDetailsTab());
