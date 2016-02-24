@@ -67,7 +67,7 @@ public class MedicalCondition
             medicalConditionValues[1] = cosmoID;
             medicalConditionValues[2] = condition.getDescripion().get();
 
-            success = db.insert(medicalConditionValues, "Condition");
+            success = db.insert(medicalConditionValues, "Conditions");
 
             if ( !success )
             {
@@ -75,7 +75,7 @@ public class MedicalCondition
             }
             else
             {
-                result = "Success";
+                result = "";
             }
 
             db.disconnect();
@@ -87,17 +87,18 @@ public class MedicalCondition
      * 
      * Purpose: Update a medical condition for a participant
      * 
-     * @param condition the condition that will be changed
+     * @param newCondition the condition that will be new in the database 
+     * @param oldCondition the condition that will be changed 
      * @param cosmoID the participant that will have the condition changed
      * @return a string containing the status of the update
      */
-    public static String updateMedicalCondition( MedicalCondition condition,
+    public static String updateMedicalCondition( MedicalCondition newCondition,MedicalCondition oldCondition,
             String cosmoID )
     {
         String result = "";
 
-        if ( condition.condition.get().isEmpty()
-                || condition.descripion.get().isEmpty() )
+        if ( newCondition.condition.get().isEmpty()
+                || newCondition.descripion.get().isEmpty() )
         {
             result = "You have missing required fields";
         }
@@ -111,19 +112,19 @@ public class MedicalCondition
             updateValues[0][0] = "conditionName";
             updateValues[1][0] = "description";
 
-            updateValues[0][1] = condition.getCondition().get();
-            updateValues[1][1] = condition.getDescripion().get();
+            updateValues[0][1] = newCondition.getCondition().get();
+            updateValues[1][1] = newCondition.getDescripion().get();
 
-            success = db.update(updateValues, "Condition", condition
+            success = db.update(updateValues, "Conditions", oldCondition
                     .getCondition().get() + "'AND cosmoID=" + "'" + cosmoID);
 
             if ( !success )
             {
-                result = "Update successfull";
+                result = "Update not successful";
             }
             else
             {
-                result = "Success";
+                result = "";
             }
             db.disconnect();
         }
@@ -147,7 +148,7 @@ public class MedicalCondition
 
         db.connect();
         boolean success = false;
-        success = db.delete("Condition", "conditionName='"
+        success = db.delete("Conditions", "conditionName='"
                 + condition.getCondition().get() + "'" + "AND cosmoID='"
                 + cosmoID + "'");
         if ( success )

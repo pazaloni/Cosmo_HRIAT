@@ -43,7 +43,7 @@ public class MedicalConditionsTableViewController
         db.connect();
 
         // Select statemtn for the
-        ResultSet rs = db.select("conditionName, description", "Condition",
+        ResultSet rs = db.select("conditionName, description", "Conditions",
                 "cosmoID=" + cosmoId, "");
 
         String conditionName;
@@ -71,6 +71,25 @@ public class MedicalConditionsTableViewController
     }
 
     /**
+     * Purpose: Refresh the medical condition table 
+     * 
+     */
+    public void refreshTable(String cosmoId)
+    {
+    	this.conditionData.clear();
+    	this.conditionTable.getColumns().clear();
+    	this.retrieveConditionData(cosmoId);
+    	this.initialize();
+    }
+    /**
+     * 
+     * @return The selected medical condition 
+     */
+    public MedicalCondition getSelectedMedicalCondition()
+    {
+    	return this.conditionTable.getSelectionModel().getSelectedItem();
+    }
+    /**
      * 
      * Purpose: initialize the columns in the table and configure them
      */
@@ -83,7 +102,7 @@ public class MedicalConditionsTableViewController
         conditionColumn.setResizable(false);
 
         descriptionColumn.setCellValueFactory(cellData -> cellData.getValue()
-                .getCondition());
+                .getDescripion());
         descriptionColumn.setMinWidth(420);
         descriptionColumn.setResizable(false);
 

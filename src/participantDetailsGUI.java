@@ -347,7 +347,7 @@ public class participantDetailsGUI extends Application {
 		ResultSet results = DBObject
 				.select("firstName, lastName, dateOfBirth, personalHealthNumber, conditionName,"
 						+ "description, address, imagePath",
-						"Participant p LEFT OUTER JOIN Condition c ON p.cosmoID = c.cosmoID",
+						"Participant p LEFT OUTER JOIN Conditions c ON p.cosmoID = c.cosmoID",
 						"cosmoID =" + this.cosmoID, "");
 
 		try {
@@ -896,7 +896,7 @@ public class participantDetailsGUI extends Application {
 		// select statement responsible for fetching the required careGiver
 		// information
 		ResultSet rs = DBObject
-				.select("firstName, lastName, phone",
+				.select("firstName, lastName, phoneNum",
 						"Caregiver c JOIN Participant p ON c.caregiverID = p.caregiverID",
 						"cosmoID = " + this.cosmoID, "");
 

@@ -42,10 +42,7 @@ public class TestAllergies
         test2 = new Allergies(allergicTo2, allergyType2, allergyDescription2);
     }
 
-    @After
-    public void tearDown() throws Exception
-    {
-    }
+
     
     /**
      * 
@@ -78,6 +75,41 @@ public class TestAllergies
         assertTrue(test1.getDescription().get().equals(allergyDescription1));
         assertTrue(test2.getDescription().get().equals(allergyDescription2));
     }
+
+    
+    /**
+     * Purpose: Test the ability to create an allergy in the database 
+     * 
+     */
+    @Test
+    public void testCreateAllergy()
+    {
+    	String result =  Allergies.createAllergy(allergicTo1, allergyType1, allergyDescription1, "123");
+    	assertTrue(result.equals("Success"));
+    	
+    }
+    
+    /**
+     * Purpose: Test the ability to update an allergy in the database
+     * 
+     */
+    @Test
+    public void testUpdateAllergy()
+    {
+   
+    	String result = Allergies.updateAllergy(test2, test1, "123");
+    	assertTrue(result.equals("Update successfull"));
+    }
     
 
+    /**
+     * Purpose: Test the ability to remove an allergy from the database
+     * 
+     */
+    @Test
+    public void testDeleteAllergy()
+    {
+    	String result = Allergies.deleteAllergy(test2, "123");
+    	assertTrue(result.equals("Deleted successfully"));
+    }
 }

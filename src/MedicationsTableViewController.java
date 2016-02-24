@@ -59,7 +59,7 @@ public class MedicationsTableViewController
     public void refreshTable( String cosmoID )
     {
         this.medicationNameData.clear();
-        this.medicationsTable.getItems().clear();
+        this.medicationsTable.getColumns().clear();
         this.retrieveMedicationData(cosmoID);
         this.initialize();     
     }

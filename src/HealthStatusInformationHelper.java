@@ -96,168 +96,38 @@ public class HealthStatusInformationHelper
             otherInfo = " ";
         }
         healthStatusInfo[6] = otherInfo + " ";
-
+        db.disconnect();
         return healthStatusInfo;
     }
 
     /**
+     * Purpose: Save the health status info
      * 
-     * Purpose: Add a medical condition for the specified participant.
-     * 
-     * @param cosmoID the participant will have the condition added.
-     * @param md the medical condition for the participant.
-     * @return true if the new medical condition was added, false otherwise.
+     * @param info the info to save
+     * @param cosmoID the participant to save the health status info to 
+     * @return String containing the saved information
      */
-    public boolean addMedicalCondition( String cosmoID, MedicalCondition md )
+    public boolean saveHealthStatusInfo(String[] info,String cosmoID)
     {
-        String[] newMedicalCondition = new String[3];
-        newMedicalCondition[0] = md.getCondition().get();
-        newMedicalCondition[1] = cosmoID;
-        newMedicalCondition[2] = md.getDescripion().get();
-        boolean result = db.insert(newMedicalCondition, "Condition");
-        if ( result )
-        {
-            System.err.println("Added medical condition");
-        }
-        else
-        {
-            System.err.println("Made an oopsie");
-        }
-        return result;
+    	db.connect();
+    	
+    	String updateValues[][] = new String[4][2];
+    	
+    	updateValues[0][0] = "cosmoID";
+        updateValues[1][0] = "diagnosis";
+        updateValues[2][0] = "tylenolPermission";
+        updateValues[3][0] = "careGiverPermissionGive";
+        
+        updateValues[0][1] = cosmoID;
+        updateValues[1][1] = info[0];
+        updateValues[2][1] = info[1];
+        updateValues[3][1] = info[2];
+        
+        boolean success = db.update(updateValues, "Participant", cosmoID);
+
+    	db.disconnect();    	
+    	return success;
     }
-
-    /**
-     * 
-     * Purpose: delete a medical condition for the specified participant.
-     * 
-     * @param cosmoID the participant that will have the condition removed.
-     * @param md the medical condition that will be removed.
-     * @return true if the medical condition was deleted, false otherwise.
-     */
-    public boolean deleteMedicalCondition( String cosmoID, MedicalCondition md )
-    {
-        String[] deleteMedicalCondition = new String[3];
-        deleteMedicalCondition[0] = md.getCondition().get();
-        deleteMedicalCondition[1] = cosmoID;
-        deleteMedicalCondition[2] = md.getDescripion().get();
-        boolean result = db.delete("Condition", "((Condition.conditionName)='"
-                + md.getCondition() + "') AND ((Condition.cosmoID)='" + cosmoID
-                + "'));");
-        if ( result )
-        {
-            System.err.println("Added medical condition");
-        }
-        else
-        {
-            System.err.println("Made an oopsie");
-        }
-        return result;
-    }
-
-    /**
-     * 
-     * Purpose: Update a medical condition for the specified participant.
-     * 
-     * @param cosmoID the participant that will have the condition updated.
-     * @param md the medical condition to change.
-     * @return true if the medical condition was updated, false otherwise.
-     */
-    public boolean updateMedicalConditions( String cosmoID, MedicalCondition md )
-    {
-        boolean result = false;
-        // TODO change database to be able to change the medical conditions
-
-        return result;
-    }
-
-    /**
-     * 
-     * Purpose: Add an allergy for the specified participant.
-     * 
-     * @param cosmoID the participant will have the allergy added.
-     * @param allergy the allergy for the participant.
-     * @return true if the new allergy was added, false otherwise.
-     */
-    public boolean addAllergy( String cosmoID, Allergies allergy )
-    {
-        boolean result = false;
-
-        return result;
-    }
-
-    /**
-     * 
-     * Purpose: Delete an allergy for the specified participant.
-     * 
-     * @param cosmoID the participant that will have the allergy removed.
-     * @param allergy the allergy that will be removed.
-     * @return true if the allergy was deleted, false otherwise.
-     */
-    public boolean deleteAllergy( String cosmoID, Allergies allergy )
-    {
-        boolean result = false;
-
-        return result;
-    }
-
-    /**
-     * 
-     * Purpose: Update an allergy for the specified participant.
-     * 
-     * @param cosmoID the participant that will have the allergy updated.
-     * @param allergy the allergy to change
-     * @return true if the allergy was updated, false otherwise.
-     */
-    public boolean updateAllergy( String cosmoID, Allergies allergy )
-    {
-        boolean result = false;
-
-        return result;
-    }
-
-    /**
-     * 
-     * Purpose: Add a medication entry for the specified participant.
-     * 
-     * @param cosmoID the participant that will have the medication added.
-     * @param medicaiton the medication for the participant.
-     * @return true if the new medication was added, false otherwise.
-     */
-    public boolean addMedication( String cosmoID, Medication medicaiton )
-    {
-        boolean result = false;
-
-        return result;
-    }
-
-    /**
-     * 
-     * Purpose: Delete a medication entry for the specified participant.
-     * 
-     * @param cosmoID the participant that will have the medication removed.
-     * @param medicaiton the medication that will be removed.
-     * @return true if the medication was deleted, false otherwise
-     */
-    public boolean deleteMedication( String cosmoID, Medication medicaiton )
-    {
-        boolean result = false;
-
-        return result;
-    }
-
-    /**
-     * 
-     * Purpose: Updated a medication entry for the specified participant.
-     * 
-     * @param cosmoID the participant that will have the medication updated.
-     * @param medication the medication to change
-     * @return true if the medication was updated, false otherwise.
-     */
-    public boolean updateMedication( String cosmoID, Medication medicaiton )
-    {
-        boolean result = false;
-
-        return result;
-    }
-
+    
+    
 }

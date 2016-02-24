@@ -110,6 +110,7 @@ public class ManageMedicationGUI
 
         Scene scene = new Scene(mainPane, 600, 450);
         localStage.setScene(scene);
+        localStage.setResizable(false);
         localStage.initModality(Modality.WINDOW_MODAL);
         localStage.initOwner(parentStage);
         localStage.setTitle("Add a medication entry");
@@ -142,6 +143,12 @@ public class ManageMedicationGUI
         mainPane.add(timesGiven, 1, 3);
         mainPane.add(reason, 1, 4);
 
+        //Set the values to 
+        medicationName.setText(med.getMedicationName().get());
+        medicationDosage.setText(med.getDosage().get());
+        timesGiven.setText(med.getTimesGiven().get());
+        reason.setText(med.getReason().get());
+        
         HBox controls = new HBox();
 
         controls.getChildren().addAll(btnCancel, btnAdd);
@@ -176,6 +183,7 @@ public class ManageMedicationGUI
 
         Scene scene = new Scene(mainPane, 600, 450);
         localStage.setScene(scene);
+        localStage.setResizable(false);
         localStage.initModality(Modality.WINDOW_MODAL);
         localStage.initOwner(parentStage);
         localStage.setTitle("Update a medication entry");

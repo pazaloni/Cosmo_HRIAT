@@ -1,6 +1,13 @@
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
+/**
+ * 
+ * Purpose: represent an allergy object and also have helper methods to create, delete, and update allergies
+ * 
+ * @author Team CIMP
+ * @version 1.0
+ *
+ */
 public class Allergies
 {
     private StringProperty allergicTo;
@@ -135,16 +142,17 @@ public class Allergies
      * 
      * Purpose: update an allergy for a participant
      * 
-     * @param allergy the allergy object for that participant
+     * @param newAllergy the changed allergy 
+     * @param oldAllergy the allergy that will be changed 
      * @param cosmoID the comsmoID of the participant that will have the allergy
      *            updated
      * @return a string containing the status of the update
      */
-    public static String updateAllergy( Allergies allergy, String cosmoID )
+    public static String updateAllergy( Allergies newAllergy, Allergies oldAllergy,String cosmoID )
 
     {
         String result = "";
-        if ( allergy.allergicTo.get().isEmpty() )
+        if ( newAllergy.allergicTo.get().isEmpty() )
         {
 
             result = "You have missing required fields";
@@ -159,11 +167,11 @@ public class Allergies
             updateValues[1][0] = "allergyType";
             updateValues[2][0] = "description";
 
-            updateValues[0][1] = allergy.getAllergicTo().get();
-            updateValues[1][1] = allergy.getAllergyType().get();
-            updateValues[2][1] = allergy.getDescription().get();
+            updateValues[0][1] = newAllergy.getAllergicTo().get();
+            updateValues[1][1] = newAllergy.getAllergyType().get();
+            updateValues[2][1] = newAllergy.getDescription().get();
 
-            success = db.update(updateValues, "Allergies", allergy
+            success = db.update(updateValues, "Allergies", oldAllergy
                     .getAllergicTo().get() + "'AND cosmoID=" + "'" + cosmoID);
             if ( success )
             {
