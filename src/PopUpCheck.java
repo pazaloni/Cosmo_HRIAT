@@ -58,7 +58,10 @@ public class PopUpCheck
         // the yes and no buttons are set
         yesBtn = new Button("Yes");
         noBtn = new Button("No");
-
+        this.stage.setOnCloseRequest(event->{
+        	result = false;
+        });
+        this.stage.setResizable(false);
         // set the action for the yes button
         yesBtn.setOnAction(new EventHandler<ActionEvent>()
         {

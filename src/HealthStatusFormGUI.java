@@ -310,13 +310,16 @@ public class HealthStatusFormGUI
                 PopUpCheck popup = new PopUpCheck(
                         "Are you sure you want to delete the selected medical condition ?",
                         stage);
-                Scene scene = new Scene(popup.root, 300, 75);
+                Scene scene = new Scene(popup.root, 400, 75);
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.initOwner(parentStage);
                 stage.setScene(scene);
                 stage.showAndWait();
+                if(popup.runCheck())
+                {
                 MedicalCondition.deleteCondition(table.getSelectionModel()
                         .getSelectedItem(), cosmoID);
+                }
                 controller.refreshTable(cosmoID);
             }
         });
@@ -424,8 +427,11 @@ public class HealthStatusFormGUI
                         stage.initOwner(parentStage);
                         stage.setScene(scene);
                         stage.showAndWait();
+                        if(popup.runCheck())
+                        {
                         Allergies.deleteAllergy(table.getSelectionModel()
                                 .getSelectedItem(), cosmoID);
+                        }
                         controller.refreshTable(cosmoID);
                     }
 
