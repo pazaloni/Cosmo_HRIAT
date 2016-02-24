@@ -855,7 +855,7 @@ public class participantDetailsGUI extends Application {
 		// select statement responsible for fetching the required physician
 		// information
 		ResultSet rs = DBObject
-				.select("firstName, lastName, phone",
+				.select("firstName, lastName, phoneNumber",
 						"Physician ph JOIN Participant pa ON ph.physicianID = pa.physicianID",
 						"pa.cosmoID = " + this.cosmoID, "");
 
@@ -896,7 +896,7 @@ public class participantDetailsGUI extends Application {
 		// select statement responsible for fetching the required careGiver
 		// information
 		ResultSet rs = DBObject
-				.select("firstName, lastName, phoneNum",
+				.select("firstName, lastName, phoneNumber",
 						"Caregiver c JOIN Participant p ON c.caregiverID = p.caregiverID",
 						"cosmoID = " + this.cosmoID, "");
 
