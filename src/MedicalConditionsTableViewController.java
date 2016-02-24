@@ -42,7 +42,7 @@ public class MedicalConditionsTableViewController
         db.connect();
         
         // Select statemtn for the
-        ResultSet rs = db.select("conditionName, description", "Condition",
+        ResultSet rs = db.select("conditionName, description", "Conditions",
                 "cosmoID=" + cosmoId, "");
 
         String conditionName;

@@ -345,7 +345,7 @@ public class participantDetailsGUI extends Application
         ResultSet results = DBObject
                 .select("firstName, lastName, dateOfBirth, personalHealthNumber, conditionName,"
                         + "description, address, imagePath",
-                        "Participant p LEFT OUTER JOIN Condition c ON p.cosmoID = c.cosmoID",
+                        "Participant p LEFT OUTER JOIN Conditions c ON p.cosmoID = c.cosmoID",
                         "cosmoID =" + this.cosmoID, "");
 
         // set the participant Labels
