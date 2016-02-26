@@ -641,6 +641,227 @@ public class ParticipantUpdateFormController
 		return whereStmt;
 	}
 	
+	private boolean validateName(String name)
+	{
+		return name.matches("^[a-zA-Z \\-\\.\\']*$");
+	}
+	
+	private boolean validatePhoneNumber(String phone)
+	{
+		return phone.matches( "(\\d-)?(\\d{3}-)?\\d{3}-\\d{4}");
+	}
+	
+	private boolean validatePostalCode(String postalCode)
+	{
+		return postalCode.matches("^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$");
+	}
+	
+	private boolean validateAddress(String address)
+	{
+		return address.matches("\\d+\\s+(([a-zA-Z])+|([a-zA-Z]+\\s+[a-zA-Z]+))\\s+[a-zA-Z]*");
+	}
+	
+	private boolean validateCity(String city)
+	{
+		return city.matches( "([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z]+)" );
+	}
+	
+	private boolean validateDate(String date)
+	{
+		return date.matches("^(([1-9])|([0][1-9])|([1-2][0-9])|"
+				+ "([3][0-1]))\\-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep"
+				+ "|Oct|Nov|Dec)\\-\\d{4}$");
+	}
+	
+	
+	private boolean validateSin(String sin)
+	{
+		return sin.matches("(\\d{9}");
+	}
+	
+	private String validateParticipantInformation(String firstName, String lastName,
+			String address, String city, String postalCode, String phoneNumber,
+			String birthDate, String sin)
+	{
+		String message = "";
+		
+		if(!validateName(firstName))
+		{
+			message += "Participant first name is invalid.\n";
+		}
+		
+		if(!validateName(lastName))
+		{
+			message += "Participant last name is invalid.\n";
+		}
+		
+		if(!validateAddress(address))
+		{
+			message += "Participant address is invalid.\n";
+		}
+		
+		if(!validateCity(city))
+		{
+			message += "Participant city is invalid.\n";
+		}
+		
+		if(!validatePostalCode(postalCode))
+		{
+			message += "Participant postal code is invalid.\n";
+		}
+		
+		if(!validatePhoneNumber(phoneNumber))
+		{
+			message += "Participant phone number is invalid.\n";
+		}
+		
+		if(!validateDate(birthDate))
+		{
+			message += "Participant birthdate must be in format: DD-MMM-YYYY.\n";
+		}
+		
+		if(!validateSin(sin))
+		{
+			message += "Participant SIN must be 9 digits.\n";
+		}
+		
+		return message;
+	}
+	
+	
+	private String validateKinInformation(String firstName, String lastName, String address,
+			String city, String postalCode, String homePhone, String workPhone)
+	{
+		String message = "";
+		
+		//if there is no first or last name, kin information is invalid.
+		if(((firstName.equals("") || firstName.equals(null)) ||
+				(lastName.equals("") || lastName.equals(null)))
+				&& !(address.equals("") || address.equals(null) ||
+						city.equals("") || city.equals(null) ||
+						postalCode.equals("") || postalCode.equals(null) ||
+						homePhone.equals("") || homePhone.equals(null) ||
+						workPhone.equals("") || workPhone.equals(null)))
+		{
+			message += "Kin must have first and last name.\n";
+		}
+		else if(!firstName.isEmpty() && !lastName.isEmpty() &&
+				!address.isEmpty() && !city.isEmpty() &&
+				!postalCode.isEmpty() && !homePhone.isEmpty() &&
+				!workPhone.isEmpty())
+		{
+			if(!validateName(firstName))
+			{
+				message += "Kin first name is invalid.\n";
+			}
+			
+			if(!validateName(lastName))
+			{
+				message += "Kin last name is invalid.\n";
+			}
+			
+			if(!validateAddress(address))
+			{
+				message += "Kin address is invalid.\n";
+			}
+			
+			if(!validateCity(city))
+			{
+				message += "Kin city in invalid.\n";
+			}
+			
+			if(!validatePostalCode(postalCode))
+			{
+				message += "Kin postal code is invalid.\n";
+			}
+			
+			if(!validatePhoneNumber(homePhone))
+			{
+				message += "Kin home phone number is invalid.\n";
+			}
+			
+			if(!validatePhoneNumber(workPhone))
+			{
+				message += "Kin work phone number is invalid.\n";
+			}
+		}
+		
+		
+		return message;
+	}
+	
+	
+	private String validateCaregiverInformation(String firstName, String lastName,
+			String address, String city, String postalCode, String homePhone, 
+			String workPhone)
+	{
+		String message = "";
+		
+		//if the first or last name fields are empty, entire caregiver area
+		//is invalid. 
+		
+		if((firstName.equals("") || firstName.equals(null) ||
+				lastName.equals("") || lastName.equals(null)) &&
+				!(address.isEmpty() && city.isEmpty() && postalCode.isEmpty()
+						&& homePhone.isEmpty() && workPhone.isEmpty()))
+		{
+			message += "Caregiver first and last name must be provided.\n";
+		}
+		else if(!firstName.isEmpty() && !lastName.isEmpty() &&
+				!address.isEmpty() && !city.isEmpty() &&
+				!postalCode.isEmpty() && !homePhone.isEmpty() &&
+				!workPhone.isEmpty())
+		{
+			if(! validateName(firstName))
+			{
+				message += "Caregiver first name is invalid.\n";
+			}
+			
+			if(!validateName(lastName))
+			{
+				message += "Caregiver last name is invalid.\n";
+			}
+			
+			if(!validateAddress(address))
+			{
+				message += "Caregiver address is invalid.\n";
+			}
+			
+			if(!validateCity(city))
+			{
+				message += "Caregiver city is invalid.\n";
+			}
+			
+			if(!validatePostalCode(postalCode))
+			{
+				message += "Caregiver postal code is invalid.\n";
+			}
+			
+			if(!validatePhoneNumber(homePhone))
+			{
+				message += "Caregiver home phone number is invalid.\n";
+			}
+			
+			if(!validatePhoneNumber(workPhone))
+			{
+				message += "Caregiver work phone number is invalid.\n";
+			}
+		}
+		
+		return message;
+	}
+	
+	
+	private String validateEmergencyContactInforamtion(String firstName, String lastName,
+			String phone)
+	{
+		String message = "";
+		
+		
+		
+		
+		return message;
+	}
 }
 
 
