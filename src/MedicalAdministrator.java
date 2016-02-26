@@ -170,7 +170,7 @@ public class MedicalAdministrator extends BasicStaff
                     values[2][0] = "lastName";
                     values[3][0] = "dateOfBirth";
                     values[4][0] = "personalHealthNumber";
-                    values[5][0] = "phoneNum";
+                    values[5][0] = "phoneNumber";
                     values[6][0] = "address";
                     values[7][0] = "dateUpdated";
                     values[8][0] = "agencyID";

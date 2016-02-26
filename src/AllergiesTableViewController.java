@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -46,8 +45,20 @@ public class AllergiesTableViewController
         // from the database.
         retrieveAllergyData(cosmoID);
         this.initialize();
+        allergiesTable.setMaxHeight(150);
         allergiesTable.setItems(allergyData);
         allergiesTable.setFocusTraversable(false);
+    }
+    /**
+     * 
+     * Purpose: Refresh the table on the GUI
+     */
+    public void refreshTable(String cosmoID)
+    {
+        this.allergyData.clear();
+        this.allergiesTable.getColumns().clear();
+        this.retrieveAllergyData(cosmoID);
+        this.initialize();
     }
 
     /**
@@ -143,4 +154,14 @@ public class AllergiesTableViewController
 
     }
 
+    
+    /**
+     * 
+     * Purpose:Return the selected item from the database
+     * @return
+     */
+    public Allergies getSelectedAllergy()
+    {
+        return allergiesTable.getSelectionModel().getSelectedItem();
+    }
 }

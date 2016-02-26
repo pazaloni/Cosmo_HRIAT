@@ -17,8 +17,7 @@ import javafx.collections.ObservableList;
  */
 public class DatabaseHelper
 {
-   // private final String DB_PATH = "G:/CIMPDatabase.accdb";
-    private final String DB_PATH = "Z:/CIMPDatabaseTest.accdb";
+    private final String DB_PATH = "G:/CIMPDatabase.accdb";
 
     private Connection conn;
 
@@ -135,7 +134,7 @@ public class DatabaseHelper
                 query += " ORDER BY " + sort;
             }
 
-            System.out.println(query);
+            //System.out.println(query);
             // execute the query
             rs = s.executeQuery(query);
         }
@@ -240,7 +239,7 @@ public class DatabaseHelper
 
         String insertStatement = "INSERT INTO " + tableName + " " + fieldList
                 + " VALUES " + valueList;
-        // System.out.println(insertStatement);
+        System.out.println(insertStatement);
 
         int rows = 0;
         try
@@ -332,7 +331,7 @@ public class DatabaseHelper
         String updateStatement = "Update " + tableName + " SET ";
 
         // add each field and value to their strings
-        for ( int r = 1; r < values.length; r++ )
+        for ( int r = 0; r < values.length; r++ )
         {
             String fieldName = "" + values[r][0];
             String value = "" + values[r][1];

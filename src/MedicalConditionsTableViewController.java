@@ -27,6 +27,7 @@ public class MedicalConditionsTableViewController
         initialize();
         conditionTable.setItems(conditionData);
         conditionTable.setFocusTraversable(false);
+        conditionTable.setMaxHeight(150);
     }
 
     // TODO finish next method
@@ -40,9 +41,9 @@ public class MedicalConditionsTableViewController
         DatabaseHelper db = new DatabaseHelper();
 
         db.connect();
-        
+
         // Select statemtn for the
-        ResultSet rs = db.select("conditionName, description", "Condition",
+        ResultSet rs = db.select("conditionName, description", "Conditions",
                 "cosmoID=" + cosmoId, "");
 
         String conditionName;
@@ -62,11 +63,31 @@ public class MedicalConditionsTableViewController
             }
         }
         catch ( SQLException e )
-        {           
+        {
             e.printStackTrace();
             System.out.println("Failed to populate conditions table");
         }
         db.disconnect();
+    }
+
+    /**
+     * Purpose: Refresh the medical condition table 
+     * 
+     */
+    public void refreshTable(String cosmoId)
+    {
+    	this.conditionData.clear();
+    	this.conditionTable.getColumns().clear();
+    	this.retrieveConditionData(cosmoId);
+    	this.initialize();
+    }
+    /**
+     * 
+     * @return The selected medical condition 
+     */
+    public MedicalCondition getSelectedMedicalCondition()
+    {
+    	return this.conditionTable.getSelectionModel().getSelectedItem();
     }
     /**
      * 
@@ -75,41 +96,34 @@ public class MedicalConditionsTableViewController
     @SuppressWarnings("unchecked")
     private void initialize()
     {
-        conditionColumn.setCellValueFactory(cellData->cellData.getValue().getCondition());
-        conditionColumn.setMinWidth(230);
+        conditionColumn.setCellValueFactory(cellData -> cellData.getValue()
+                .getCondition());
+        conditionColumn.setMinWidth(280);
         conditionColumn.setResizable(false);
-        
-        descriptionColumn.setCellValueFactory(cellData->cellData.getValue().getCondition());
-        descriptionColumn.setMinWidth(370);
+
+        descriptionColumn.setCellValueFactory(cellData -> cellData.getValue()
+                .getDescripion());
+        descriptionColumn.setMinWidth(420);
         descriptionColumn.setResizable(false);
-        
+
         conditionTable.getColumns().addListener(
-            new ListChangeListener<Object>()
-            {
-                @Override
-                public void onChanged( Change change )
+                new ListChangeListener<Object>()
                 {
-                    change.next();
-                    // if the column was changed
-                    if ( change.wasReplaced() )
+                    @Override
+                    public void onChanged( Change change )
                     {
-                        // clear all columns
-                        conditionTable.getColumns().clear();
-                        // re-add the columns in order
-                        conditionTable.getColumns().addAll(conditionColumn, descriptionColumn);
+                        change.next();
+                        // if the column was changed
+                        if ( change.wasReplaced() )
+                        {
+                            // clear all columns
+                            conditionTable.getColumns().clear();
+                            // re-add the columns in order
+                            conditionTable.getColumns().addAll(conditionColumn,
+                                    descriptionColumn);
+                        }
                     }
-                }
-        });
+                });
         conditionTable.getColumns().addAll(conditionColumn, descriptionColumn);
     }
-    
-    
-    
 }
-
-
-
-
-
-
-

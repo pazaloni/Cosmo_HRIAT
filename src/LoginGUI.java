@@ -31,8 +31,8 @@ public class LoginGUI extends Application
     public static Stage stageLogin;
 
     /* Static final variables */
-    public static final int WIDTH = 875;
-    public static final int HEIGHT = 580;
+    public static final int WIDTH = 1280;
+    public static final int HEIGHT = 720;
     public static final int IMAGE_WIDTH = 606;
     public static final int IMAGE_HEIGHT = 75;
     public static final int TEXTFIELD_WIDTH = 190;
@@ -40,7 +40,7 @@ public class LoginGUI extends Application
     public static final String USERNAME_PROMPT_TEXT = "Username";
     public static final String PASSWORD_PROMPT_TEXT = "Password";
     public static final String STAGE_TITLE = "Cosmopolitan Industries";
-    public static final String IMAGE_PATH = "images/CosmoIconLong.png";
+    public static final String IMAGE_PATH = "file:images/CosmoIconLong.png";
     public static final String BUTTON_LABEL = "Login";
 
     public static void main( String[] args )

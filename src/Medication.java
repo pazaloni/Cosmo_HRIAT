@@ -6,7 +6,7 @@ import javafx.beans.property.StringProperty;
 
 /**
  *
- * Purpose: represents the medication that one pariticipant can be getting
+ * Purpose: represents the medication that one participant can be getting
  * 
  *
  * @author CIMP
