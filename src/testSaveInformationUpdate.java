@@ -71,8 +71,8 @@ public class testSaveInformationUpdate {
 	public void test() 
 	{
 		//save the participant basic information
-		pudc.saveBasicParticipantInformation(pFirstName, pLastName, pAddress,
-				pCity, pPostalCode, pPhone, pBirthDate, pSin);
+		//pudc.saveBasicParticipantInformation(pFirstName, pLastName, pAddress,
+				//pCity, pPostalCode, pPhone, pBirthDate, pSin);
 		
 		//save the caregiver information
 		pudc.saveCaregiverInformation(cFirstName, cLastName, cAddress, cCity,

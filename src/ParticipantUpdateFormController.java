@@ -379,6 +379,7 @@ public class ParticipantUpdateFormController
 		return msg;
 	}
 	
+
 	/**
 	 * Purpose: Saves caregiver information if it has been updated,
 	 * and creates a new record. Else, it will stay the same.
