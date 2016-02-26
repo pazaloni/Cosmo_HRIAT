@@ -793,6 +793,7 @@ public class MedicalStaffMainPageGUI extends Application
                     createParticipantStage.close();
                     pTVCont.refreshTable("", "Participant");
                     
+                    //create activity log entry for creating this user
                     dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Created Participant (" + cosmoIdTxt.getText() + ")",
                     "Name: \"" + firstNameTxt.getText() + " " + lastNameTxt.getText() + "\"" );
 

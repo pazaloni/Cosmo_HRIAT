@@ -399,10 +399,32 @@ public class testDatabase {
             //check that it matches expected result
             while(rs.next())
             {
-                String user = rs.getString(1);
-                String event = rs.getString(2);
                 assertTrue(rs.getString(1).equals("testUser"));
                 assertTrue(rs.getString(2).equals("Edited Participant (" + cosmoID + ")"));
+                
+            }
+        }
+        catch(SQLException e)
+        {
+            
+        }
+    }
+    
+    /**
+     * Test that java can successfully insert into the activity log.
+     */
+    @Test
+    public void testActivityLogInsertCreatedParticipant()
+    {
+        db.activtyLogEntry("testUser", "Created Participant (" + cosmoID + ")", "Unit Test");
+        ResultSet rs = db.select("Who, Event", "ActivityLog", "Who = 'testUser' AND Event = 'Created Participant (" + cosmoID + ")'", "");
+        try
+        {
+            //check that it matches expected result
+            while(rs.next())
+            {
+                assertTrue(rs.getString(1).equals("testUser"));
+                assertTrue(rs.getString(2).equals("Created Participant (" + cosmoID + ")"));
                 
             }
         }
