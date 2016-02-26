@@ -183,12 +183,15 @@ public class testDatabase {
 		try
 		{
 			//check that it matches expected result
-			while(rs.next())
-			{
-				assertTrue(rs.getString(1).equals("N/A"));
-				assertTrue(rs.getString(2).equals("N/A"));
-				assertTrue(rs.getString(3) == null);
-			}
+		    if(rs != null)
+		    {		       	
+   			    while(rs.next())
+    			{
+    				assertTrue(rs.getString(1).equals("N/A"));
+    				assertTrue(rs.getString(2).equals("N/A"));
+    				assertTrue(rs.getString(3) == null);
+    			}
+		    }
 		}
 		catch(SQLException e)
 		{
@@ -201,11 +204,14 @@ public class testDatabase {
 		try
 		{
 			//check that the information matches the expected result
-			while(rs.next())
-			{
-				assertTrue(rs.getString(1).equals(diagnosis));
-				assertTrue(rs.getString(2).equals(diagnosisDesc));
-			}
+	          if(rs != null)
+	            {   
+        			while(rs.next())
+        			{
+        				assertTrue(rs.getString(1).equals(diagnosis));
+        				assertTrue(rs.getString(2).equals(diagnosisDesc));
+        			}
+	            }
 		}
 		catch(SQLException e)
 		{
@@ -218,17 +224,20 @@ public class testDatabase {
 		try
 		{
 			//check that it matches expected result
-			while(rs.next())
-			{
-				assertTrue(rs.getString(1).equals(kinID));
-				assertTrue(rs.getString(2).equals(kinFirstName));
-				assertTrue(rs.getString(3).equals(kinLastName));				
-				assertTrue(rs.getString(4).equals(kinAddress));
-				assertTrue(rs.getString(5).equals(kinCity));
-				assertTrue(rs.getString(6).equals(kinProv));
-				assertTrue(rs.getString(7).equals(kinPostalCode));
-				assertTrue(rs.getString(8).equals(kinPhone));
-			}
+		    if(rs != null)
+		    {
+    			while(rs.next())
+    			{
+    				assertTrue(rs.getString(1).equals(kinID));
+    				assertTrue(rs.getString(2).equals(kinFirstName));
+    				assertTrue(rs.getString(3).equals(kinLastName));				
+    				assertTrue(rs.getString(4).equals(kinAddress));
+    				assertTrue(rs.getString(5).equals(kinCity));
+    				assertTrue(rs.getString(6).equals(kinProv));
+    				assertTrue(rs.getString(7).equals(kinPostalCode));
+    				assertTrue(rs.getString(8).equals(kinPhone));
+    			}
+		    }
 		}
 		catch(SQLException e)
 		{
