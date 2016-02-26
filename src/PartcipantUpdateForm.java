@@ -77,12 +77,7 @@ public class PartcipantUpdateForm extends ScrollPane
 		line1.minWidth(1500);
 		Separator line2 = new Separator();
 		line2.minWidth(1500);
-		Separator line3 = new Separator();
-		line3.minWidth(1500);
 		
-		//label for the Participant Information Area of the form
-		Label participantInfoAreaHeader = new Label("Participant Information:");
-		participantInfoAreaHeader.setFont(new Font("Arial", 16));
 		
 		//label for the Kin Information Area of the form
 		Label kinInfoAreaHeader = new Label("Kin Information:");
@@ -97,10 +92,10 @@ public class PartcipantUpdateForm extends ScrollPane
 		emergencyContactInfoHeader.setFont(new Font("Arial", 16));
 		
 		//add all viewable nodes to the main VBox
-		mainBox.getChildren().addAll(createHeader(), participantInfoAreaHeader,
-				line1, kinInfoAreaHeader, createKinInfoArea(), line2, 
+		mainBox.getChildren().addAll(createHeader(),kinInfoAreaHeader,
+				createKinInfoArea(), line1, 
 				caregiverInfoAreaHeader, createCaregiverInfoArea(), 
-				line3, emergencyContactInfoHeader,
+				line2, emergencyContactInfoHeader,
 				createEmergencyContactArea());
 		
 		//populate the textboxes with all relevant information from the database

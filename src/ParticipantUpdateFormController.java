@@ -621,98 +621,140 @@ public class ParticipantUpdateFormController
 		return whereStmt;
 	}
 	
+	/**
+	 * Purpose: Will validate that a name only contains
+	 * letters, dashes, and periods.
+	 * @param name - The name to be validated
+	 * @return - True if valid, else false
+	 */
 	private boolean validateName(String name)
 	{
 		return name.matches("^[a-zA-Z \\-\\.\\']*$");
 	}
 	
+	/**
+	 * Purpose: Will validate that a phone number
+	 * is in the format(s):
+	 * XXX-XXX-XXXX
+	 * XXX-XXXX
+	 * X-XXX-XXX-XXXX
+	 * @param phone - the phone number to be validated
+	 * @return - true if valid, else false
+	 */
 	private boolean validatePhoneNumber(String phone)
 	{
 		return phone.matches( "(\\d-)?(\\d{3}-)?\\d{3}-\\d{4}");
 	}
 	
+	/**
+	 * Purpose: Will validate that a postal code
+	 * is in the proper format A1A 1A1.
+	 * @param postalCode - the postal code to be validated
+	 * @return - true if valid, else false
+	 */
 	private boolean validatePostalCode(String postalCode)
 	{
 		return postalCode.matches("^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$");
 	}
 	
+	/**
+	 * Purpose: Will validate that an address is in the format:
+	 * 111 Fake St
+	 * @param address - the address to be validated
+	 * @return - true if valid, else false.
+	 */
 	private boolean validateAddress(String address)
 	{
 		return address.matches("\\d+\\s+(([a-zA-Z])+|([a-zA-Z]+\\s+[a-zA-Z]+))\\s+[a-zA-Z]*");
 	}
 	
+	/**
+	 * Purpose: Will validate that a city name contains
+	 * only letters and whitespace characters.
+	 * @param city - City name to be validated
+	 * @return - true if valid, else false
+	 */
 	private boolean validateCity(String city)
 	{
 		return city.matches( "([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z]+)" );
 	}
 	
-	private boolean validateDate(String date)
-	{
-		return date.matches("^(([1-9])|([0][1-9])|([1-2][0-9])|"
-				+ "([3][0-1]))\\-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep"
-				+ "|Oct|Nov|Dec)\\-\\d{4}$");
-	}
 	
 	
-	private boolean validateSin(String sin)
-	{
-		return sin.matches("(\\d{9}");
-	}
-	
-	
-	
-	
+	/**
+	 * Purpose: Validate all fields for kin information
+	 * that they are in the correct format.
+	 * @param firstName - Kins first name
+	 * @param lastName - Kins last name
+	 * @param address - Kins address
+	 * @param city - Kins city
+	 * @param postalCode - Kins postal code
+	 * @param homePhone - Kins home phone number
+	 * @param workPhone - Kins work phone number
+	 * @return - String with all error messages. If the string
+	 * is empty, all fields are valid.
+	 */
 	private String validateKinInformation(String firstName, String lastName, String address,
 			String city, String postalCode, String homePhone, String workPhone)
 	{
 		String message = "";
 		
 		//if there is no first or last name, kin information is invalid.
-		if(((firstName.equals("") || firstName.equals(null)) ||
-				(lastName.equals("") || lastName.equals(null)))
-				&& !(address.equals("") || address.equals(null) ||
-						city.equals("") || city.equals(null) ||
-						postalCode.equals("") || postalCode.equals(null) ||
-						homePhone.equals("") || homePhone.equals(null) ||
-						workPhone.equals("") || workPhone.equals(null)))
+		if(((firstName == null || firstName.equals("")) ||
+				(lastName == null || lastName.equals("")))
+				&& !(address == null || address.equals("") ||
+						city == null || city.equals("") ||
+						postalCode == null || postalCode.equals("") ||
+						homePhone == null || homePhone.equals("") ||
+						workPhone == null || workPhone.equals("")))
 		{
 			message += "Kin must have first and last name.\n";
 		}
-		else if(!firstName.isEmpty() && !lastName.isEmpty() &&
-				!address.isEmpty() && !city.isEmpty() &&
-				!postalCode.isEmpty() && !homePhone.isEmpty() &&
-				!workPhone.isEmpty())
+		else if(!(firstName == null || firstName.equals("")) &&
+				!(lastName == null || lastName.equals("")) &&
+				!(address == null || address.equals("")) &&
+				!(city == null || city.equals("")) &&
+				!(postalCode == null || postalCode.equals("")) &&
+				!(homePhone == null || homePhone.equals("")) &&
+				!(workPhone == null || workPhone.equals("")))
 		{
+			//check first name is valid
 			if(!validateName(firstName))
 			{
 				message += "Kin first name is invalid.\n";
 			}
 			
+			//check last name is valid
 			if(!validateName(lastName))
 			{
 				message += "Kin last name is invalid.\n";
 			}
 			
+			//check address is valid
 			if(!validateAddress(address))
 			{
 				message += "Kin address is invalid.\n";
 			}
 			
+			//check city is valid
 			if(!validateCity(city))
 			{
 				message += "Kin city in invalid.\n";
 			}
 			
+			//check postal code is valid
 			if(!validatePostalCode(postalCode))
 			{
 				message += "Kin postal code is invalid.\n";
 			}
 			
+			//check home phone number is valid
 			if(!validatePhoneNumber(homePhone))
 			{
 				message += "Kin home phone number is invalid.\n";
 			}
 			
+			//check work phone number is valid
 			if(!validatePhoneNumber(workPhone))
 			{
 				message += "Kin work phone number is invalid.\n";
@@ -723,7 +765,19 @@ public class ParticipantUpdateFormController
 		return message;
 	}
 	
-	
+	/**
+	 * Purpose: Validate that all caregiver information 
+	 * is in the correct format.
+	 * @param firstName - the first name of the caregiver
+	 * @param lastName - the last name of the caregiver
+	 * @param address - the address of the caregiver
+	 * @param city - the city for the caregiver
+	 * @param postalCode - the caregivers postal code
+	 * @param homePhone - the caregivers home phone number
+	 * @param workPhone - the caregivers work phone number
+	 * @return - Any error messages. Will be empty if there
+	 * are no errors.
+	 */
 	private String validateCaregiverInformation(String firstName, String lastName,
 			String address, String city, String postalCode, String homePhone, 
 			String workPhone)
@@ -733,17 +787,23 @@ public class ParticipantUpdateFormController
 		//if the first or last name fields are empty, entire caregiver area
 		//is invalid. 
 		
-		if((firstName.equals("") || firstName.equals(null) ||
-				lastName.equals("") || lastName.equals(null)) &&
-				!(address.isEmpty() && city.isEmpty() && postalCode.isEmpty()
-						&& homePhone.isEmpty() && workPhone.isEmpty()))
+		if((firstName == null || firstName.equals("") ||
+				lastName == null || lastName.equals("")) &&
+				!((address == null || address.equals("")) &&
+					(city == null || city.equals("")) &&
+					(postalCode == null || postalCode.equals("")) &&
+					(homePhone == null || homePhone.equals("")) &&
+					(workPhone == null || workPhone.equals(""))))
 		{
 			message += "Caregiver first and last name must be provided.\n";
 		}
-		else if(!firstName.isEmpty() && !lastName.isEmpty() &&
-				!address.isEmpty() && !city.isEmpty() &&
-				!postalCode.isEmpty() && !homePhone.isEmpty() &&
-				!workPhone.isEmpty())
+		else if(!(firstName == null || firstName.equals("")) &&
+				!(lastName == null || lastName.equals("")) &&
+				!(address == null || address.equals("")) &&
+				!(city == null || address.equals("")) &&
+				!(postalCode == null || postalCode.equals("")) &&
+				!(homePhone == null || homePhone.equals("")) &&
+				!(workPhone == null || workPhone.equals("")))
 		{
 			if(! validateName(firstName))
 			{
@@ -784,13 +844,21 @@ public class ParticipantUpdateFormController
 		return message;
 	}
 	
-	
+	/**
+	 * Purpose: Validates the emergency contact information, and that
+	 * it is in the correct format.
+	 * @param firstName - the first name of the emergency contact
+	 * @param lastName - the last name of the emergency contact
+	 * @param phone - phone number for the emergency contact
+	 * @return - 
+	 */
 	private String validateEmergencyContactInforamtion(String firstName, String lastName,
 			String phone)
 	{
 		String message = "";
 		
-		if(firstName.isEmpty() || lastName.isEmpty() || phone.isEmpty())
+		if(firstName == null || firstName.equals("") || lastName == null
+				|| lastName.equals("")|| phone == null || phone.equals(""))
 		{
 			message += "All fields for Emergency Contact information must be filled in.\n";
 		}
