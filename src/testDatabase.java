@@ -178,7 +178,7 @@ public class testDatabase {
 		}
 		
 		//select the participant's caregivers information
-		rs = db.select("firstName, lastName, phone", "Caregiver", "caregiverID = " + caregiverID, "");
+		rs = db.select("firstName, lastName, homePhone", "Caregiver", "caregiverID = " + caregiverID, "");
 		
 		try
 		{
@@ -199,7 +199,7 @@ public class testDatabase {
 		}
 		
 		//select the condition information for the participant
-		rs = db.select("conditionName, description", "Condition", "cosmoID = " + cosmoID, "");
+		rs = db.select("conditionName, description", "Conditions", "cosmoID = " + cosmoID, "");
 		
 		try
 		{
@@ -219,7 +219,7 @@ public class testDatabase {
 		}
 		
 		//select the participants kin's information
-		rs = db.select("kinID, firstName, lastName, address, city, prov, postalCode, phoneNumber", "Kin", "kinID = " + kinID, "");
+		rs = db.select("kinID, firstName, lastName, address, city, prov, postalCode, homePhone", "Kin", "kinID = " + kinID, "");
 		
 		try
 		{
