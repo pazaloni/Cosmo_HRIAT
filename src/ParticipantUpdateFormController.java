@@ -261,53 +261,6 @@ public class ParticipantUpdateFormController
 
 
 
-	/**
-	 * Purpose: Saves the participants basic information to the database,
-	 * updating the current record
-	 * @param firstName - participants first name
-	 * @param lastName - participants last name
-	 * @param address - participants address
-	 * @param city - participants city
-	 * @param postalCode - participants postal code
-	 * @param phoneNumber - participants phone number
-	 * @param birthDate - participants birth date
-	 * @param sin - participants social insurance number
-	 */
-	public void saveBasicParticipantInformation(String firstName, String lastName,
-			String address, String city, String postalCode, String phoneNumber,
-			String birthDate, String sin)
-	{
-		//connect the database
-		db.connect();
-		
-		//the values to update in the database
-		String[][] values = new String[9][2];
-		values[0][0] = "cosmoID";
-		values[0][1] = "" + cosmoID;
-		values[1][0] = "firstName";
-		values[1][1] = firstName;
-		values[2][0] = "lastName";
-		values[2][1] = lastName;
-		values[3][0] = "address";
-		values[3][1] = address;
-		values[4][0] = "city";
-		values[4][1] = city;
-		values[5][0] = "postalCode";
-		values[5][1] = postalCode;
-		values[6][0] = "phoneNumber";
-		values[6][1] = phoneNumber;
-		values[7][0] = "dateOfBirth";
-		values[7][1] = birthDate;
-		values[8][0] = "socialInsuranceNumber";
-		values[8][1] = sin;
-		
-		//update participant's record
-		db.update(values, "Participant", values[0][1]);
-		
-		//free up database resources
-		db.disconnect();
-		
-	}
 	
 	/**
 	 * Purpose: Save the information for a kin record. If the
@@ -321,99 +274,109 @@ public class ParticipantUpdateFormController
 	 * @param homePhone - the kins home phone number
 	 * @param workPhone - the kins work phone number
 	 */
-	public void saveKinInformation(String firstName, String lastName, String address,
+	public String saveKinInformation(String firstName, String lastName, String address,
 			String city, String postalCode, String homePhone, String workPhone)
 	{
-		//connect to the database
-		db.connect();
 		
-		//the array of values to compare against
-		String[][] values = new String[7][2];
+		String msg = validateKinInformation(firstName, lastName, address, 
+				city, postalCode, homePhone, workPhone);
+		
+		
+		if(msg.isEmpty())
+		{
+			//connect to the database
+			db.connect();
+			
+			//the array of values to compare against
+			String[][] values = new String[7][2];
 
-		values[0][0] = "firstName";
-		values[0][1] = firstName;
-		values[1][0] = "lastName";
-		values[1][1] = lastName;
-		values[2][0] = "address";
-		values[2][1] = address;
-		values[3][0] = "city";
-		values[3][1] = city;
-		values[4][0] = "postalCode";
-		values[4][1] = postalCode;
-		values[5][0] = "homePhoneNumber";
-		values[5][1] = homePhone;
-		values[6][0] = "workPhoneNumber";
-		values[6][1] = workPhone;
-		
-		//create the string to put into the WHERE statement for the
-			//query
-		String whereStmt = this.createWhereStatement(values, 7);
-		
-		//query the database for the kinID, if the information is
-		//already there for a record in the database
-		ResultSet rs = db.select("kinID", "Kin", whereStmt, "");
-		
-		//the information to use to update the participant record
-		String[][] kinInfo = new String[2][2];
-		kinInfo[0][0] = "cosmoID";
-		kinInfo[0][1] = "" + cosmoID;
-		kinInfo[1][0] = "kinID";
-		kinInfo[1][1] = "";
-		try {
-			//get the kinID
-			rs.next();
+			values[0][0] = "firstName";
+			values[0][1] = firstName;
+			values[1][0] = "lastName";
+			values[1][1] = lastName;
+			values[2][0] = "address";
+			values[2][1] = address;
+			values[3][0] = "city";
+			values[3][1] = city;
+			values[4][0] = "postalCode";
+			values[4][1] = postalCode;
+			values[5][0] = "homePhoneNumber";
+			values[5][1] = homePhone;
+			values[6][0] = "workPhoneNumber";
+			values[6][1] = workPhone;
 			
-			kinInfo[1][1] = rs.getString(1);
-			System.out.println("KIN ID = " + kinInfo[1][1]);
+			//create the string to put into the WHERE statement for the
+				//query
+			String whereStmt = this.createWhereStatement(values, 7);
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		//if there is a matching record
-		if(!(kinInfo[1][1].equals("") || kinInfo[1][1].equals(null)))
-		{
-			//make sure the participant record is using it 
-			db.update(kinInfo, "Participant", kinInfo[0][1]);
-		}
-		//else, there is no matching record
-		else
-		{
-			//insert the new record into the database
-			db.insert(values, "Kin");
+			//query the database for the kinID, if the information is
+			//already there for a record in the database
+			ResultSet rs = db.select("kinID", "Kin", whereStmt, "");
 			
-			//create the string to put into the WHERE clause
-			whereStmt = this.createWhereStatement(values, 2);
-			
-			//check for the kinID of the new record
-			rs = db.select("kinID", "Kin", whereStmt, "");
-			
-			//the information to update the participant table with
-			kinInfo = new String[2][2];
+			//the information to use to update the participant record
+			String[][] kinInfo = new String[2][2];
 			kinInfo[0][0] = "cosmoID";
 			kinInfo[0][1] = "" + cosmoID;
 			kinInfo[1][0] = "kinID";
 			kinInfo[1][1] = "";
 			try {
-				
 				//get the kinID
+				rs.next();
+				
 				kinInfo[1][1] = rs.getString(1);
-				
-				
 				System.out.println("KIN ID = " + kinInfo[1][1]);
 				
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			
+			//if there is a matching record
 			if(!(kinInfo[1][1].equals("") || kinInfo[1][1].equals(null)))
 			{
-				//update the participant record
+				//make sure the participant record is using it 
 				db.update(kinInfo, "Participant", kinInfo[0][1]);
 			}
+			//else, there is no matching record
+			else
+			{
+				//insert the new record into the database
+				db.insert(values, "Kin");
+				
+				//create the string to put into the WHERE clause
+				whereStmt = this.createWhereStatement(values, 2);
+				
+				//check for the kinID of the new record
+				rs = db.select("kinID", "Kin", whereStmt, "");
+				
+				//the information to update the participant table with
+				kinInfo = new String[2][2];
+				kinInfo[0][0] = "cosmoID";
+				kinInfo[0][1] = "" + cosmoID;
+				kinInfo[1][0] = "kinID";
+				kinInfo[1][1] = "";
+				try {
+					
+					//get the kinID
+					kinInfo[1][1] = rs.getString(1);
+					
+					
+					System.out.println("KIN ID = " + kinInfo[1][1]);
+					
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				if(!(kinInfo[1][1].equals("") || kinInfo[1][1].equals(null)))
+				{
+					//update the participant record
+					db.update(kinInfo, "Participant", kinInfo[0][1]);
+				}
+			}
+			
+			//disconnect from the database
+			db.disconnect();
 		}
 		
-		//disconnect from the database
-		db.disconnect();
+		return msg;
 	}
 	
 	/**
@@ -426,96 +389,105 @@ public class ParticipantUpdateFormController
 	 * @param postalCode - caregivers postal code
 	 * @param homePhone - caregivers home phone number
 	 * @param workPhone - caregivers work phone number
+	 * @return 
 	 */
-	public void saveCaregiverInformation(String firstName, String lastName,
+	public String saveCaregiverInformation(String firstName, String lastName,
 			String address, String city, String postalCode, String homePhone, 
 			String workPhone)
 	{
-		//connect to the database
-		db.connect();
+		String msg = validateCaregiverInformation(firstName, lastName,
+				address, city, postalCode, homePhone, workPhone);
 		
-		//the array of values to check against in the database
-		String[][] values = new String[7][2];
-		
-		values[0][0] = "firstName";
-		values[0][1] = firstName;
-		values[1][0] = "lastName";
-		values[1][1] = lastName;
-		values[2][0] = "address";
-		values[2][1] = address;
-		values[3][0] = "city";
-		values[3][1] = city;
-		values[4][0] = "postalCode";
-		values[4][1] = postalCode;
-		values[5][0] = "homePhoneNumber";
-		values[5][1] = homePhone;
-		values[6][0] = "workPhoneNumber";
-		values[6][1] = workPhone;
-		
-		//create the string to put into the WHERE clause
-		String whereStmt = this.createWhereStatement(values, 7);
-		
-		//query the database for the values given, to see if it exists
-		ResultSet rs = db.select("caregiverID", "Caregiver", whereStmt, "");
-		
-		String caregiverID = "";
-		System.out.println("Before try...");
-		try {
-			if(rs.next())
-			{
-				//get the caregiverID if it is there
-				caregiverID = rs.getString(1);
-				
-			}
-			else
-			{
-				caregiverID = "";
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		//if the caregiverID is empty/null
-		if(caregiverID.equals("") || caregiverID.equals(null) || caregiverID.equals(" "))
+		if(msg.isEmpty())
 		{
-			//insert the caregiver into the database
-			db.insert(values, "Caregiver");
+			//connect to the database
+			db.connect();
 			
-			//query the database for the new caregiver's ID
-			rs = db.select("caregiverID", "Caregiver", whereStmt, "");
+			//the array of values to check against in the database
+			String[][] values = new String[7][2];
 			
+			values[0][0] = "firstName";
+			values[0][1] = firstName;
+			values[1][0] = "lastName";
+			values[1][1] = lastName;
+			values[2][0] = "address";
+			values[2][1] = address;
+			values[3][0] = "city";
+			values[3][1] = city;
+			values[4][0] = "postalCode";
+			values[4][1] = postalCode;
+			values[5][0] = "homePhoneNumber";
+			values[5][1] = homePhone;
+			values[6][0] = "workPhoneNumber";
+			values[6][1] = workPhone;
+			
+			//create the string to put into the WHERE clause
+			String whereStmt = this.createWhereStatement(values, 7);
+			
+			//query the database for the values given, to see if it exists
+			ResultSet rs = db.select("caregiverID", "Caregiver", whereStmt, "");
+			
+			String caregiverID = "";
+			System.out.println("Before try...");
 			try {
 				if(rs.next())
 				{
-					//get the caregiverID
+					//get the caregiverID if it is there
 					caregiverID = rs.getString(1);
 					
-					//the information to update the participant record
-					String[][] caregiverInfo = new String[2][2];
-					caregiverInfo[0][0] = "cosmoID";
-					caregiverInfo[0][1] = "" + cosmoID;
-					caregiverInfo[1][0] = "caregiverID";
-					caregiverInfo[1][1] = caregiverID;
-					
-					//update the participant record
-					db.update(caregiverInfo, "Participant", caregiverInfo[0][1]);
 				}
 				else
 				{
-					//something went wrong
-					System.out.println("ERROR COULD NOT UPDATE");
+					caregiverID = "";
 				}
 				
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 			
+			//if the caregiverID is empty/null
+			if(caregiverID.equals("") || caregiverID.equals(null) || caregiverID.equals(" "))
+			{
+				//insert the caregiver into the database
+				db.insert(values, "Caregiver");
+				
+				//query the database for the new caregiver's ID
+				rs = db.select("caregiverID", "Caregiver", whereStmt, "");
+				
+				try {
+					if(rs.next())
+					{
+						//get the caregiverID
+						caregiverID = rs.getString(1);
+						
+						//the information to update the participant record
+						String[][] caregiverInfo = new String[2][2];
+						caregiverInfo[0][0] = "cosmoID";
+						caregiverInfo[0][1] = "" + cosmoID;
+						caregiverInfo[1][0] = "caregiverID";
+						caregiverInfo[1][1] = caregiverID;
+						
+						//update the participant record
+						db.update(caregiverInfo, "Participant", caregiverInfo[0][1]);
+					}
+					else
+					{
+						//something went wrong
+						System.out.println("ERROR COULD NOT UPDATE");
+					}
+					
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				
+				
+			}
 			
+			//disconnect from the database
+			db.disconnect();
 		}
 		
-		//disconnect from the database
-		db.disconnect();
+		return msg;
 	}
 	
 	/**
@@ -526,75 +498,82 @@ public class ParticipantUpdateFormController
 	 * @param lastName - emergency contacts last name
 	 * @param phone - emergency contacts phone number
 	 */
-	public void saveEmergencyContactInformation(String firstName, String lastName,
+	public String saveEmergencyContactInformation(String firstName, String lastName,
 			String phone)
 	{
-		//connect to the database
-		db.connect();
+		String msg = validateEmergencyContactInforamtion(firstName, lastName, phone);
 		
-		//the array of values to be checked against
-		String[][] values = new String[3][2];
-		
-		values[0][0] = "firstName";
-		values[0][1] = firstName;
-		values[1][0] = "lastName";
-		values[1][1] = lastName;
-		values[2][0] = "phoneNumber";
-		values[2][1] = phone;
-		
-		//the string to be put into the WHERE clause
-		String whereStmt = this.createWhereStatement(values, 3);
-		
-		//query the database for the current emergency contact
-		ResultSet rs = db.select("emergencyContactID", "EmergencyContact", whereStmt, "");
-		
-		String ecID = "";
-		
-		try {
-			if(rs.next())
-			{
-				//get the contactID
-				ecID = rs.getString(1);
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		//if the emergency contact record does not currently exist
-		if(ecID.equals("") || ecID.equals(null))
+		if(msg.isEmpty())
 		{
-			//insert the new emergency contact record into the database
-			db.insert(values, "EmergencyContact");
-		
-			rs = db.select("emergencyContactID", "EmergencyContact", whereStmt, "");
+			//connect to the database
+			db.connect();
+			
+			//the array of values to be checked against
+			String[][] values = new String[3][2];
+			
+			values[0][0] = "firstName";
+			values[0][1] = firstName;
+			values[1][0] = "lastName";
+			values[1][1] = lastName;
+			values[2][0] = "phoneNumber";
+			values[2][1] = phone;
+			
+			//the string to be put into the WHERE clause
+			String whereStmt = this.createWhereStatement(values, 3);
+			
+			//query the database for the current emergency contact
+			ResultSet rs = db.select("emergencyContactID", "EmergencyContact", whereStmt, "");
+			
+			String ecID = "";
 			
 			try {
 				if(rs.next())
 				{
-					//get the emergencyContactID
+					//get the contactID
 					ecID = rs.getString(1);
 				}
+				
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 			
-			//the array of values to be updated in the
-			//participant record
-			values = new String[2][2];
+			//if the emergency contact record does not currently exist
+			if(ecID.equals("") || ecID.equals(null))
+			{
+				//insert the new emergency contact record into the database
+				db.insert(values, "EmergencyContact");
 			
-			values[0][0] = "cosmoID";
-			values[0][1] = "" + cosmoID;
-			values[1][0] = "emergencyContactID";
-			values[1][1] = ecID;
+				rs = db.select("emergencyContactID", "EmergencyContact", whereStmt, "");
+				
+				try {
+					if(rs.next())
+					{
+						//get the emergencyContactID
+						ecID = rs.getString(1);
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				
+				//the array of values to be updated in the
+				//participant record
+				values = new String[2][2];
+				
+				values[0][0] = "cosmoID";
+				values[0][1] = "" + cosmoID;
+				values[1][0] = "emergencyContactID";
+				values[1][1] = ecID;
+				
+				//update the participant record
+				db.update(values, "Participant", values[0][1]);
 			
-			//update the participant record
-			db.update(values, "Participant", values[0][1]);
-		
+			}
+			
+			//disconnect from the database
+			db.disconnect();
 		}
 		
-		//disconnect from the database
-		db.disconnect();
+		return msg;
 	}
 	
 	/**
@@ -679,54 +658,7 @@ public class ParticipantUpdateFormController
 		return sin.matches("(\\d{9}");
 	}
 	
-	private String validateParticipantInformation(String firstName, String lastName,
-			String address, String city, String postalCode, String phoneNumber,
-			String birthDate, String sin)
-	{
-		String message = "";
-		
-		if(!validateName(firstName))
-		{
-			message += "Participant first name is invalid.\n";
-		}
-		
-		if(!validateName(lastName))
-		{
-			message += "Participant last name is invalid.\n";
-		}
-		
-		if(!validateAddress(address))
-		{
-			message += "Participant address is invalid.\n";
-		}
-		
-		if(!validateCity(city))
-		{
-			message += "Participant city is invalid.\n";
-		}
-		
-		if(!validatePostalCode(postalCode))
-		{
-			message += "Participant postal code is invalid.\n";
-		}
-		
-		if(!validatePhoneNumber(phoneNumber))
-		{
-			message += "Participant phone number is invalid.\n";
-		}
-		
-		if(!validateDate(birthDate))
-		{
-			message += "Participant birthdate must be in format: DD-MMM-YYYY.\n";
-		}
-		
-		if(!validateSin(sin))
-		{
-			message += "Participant SIN must be 9 digits.\n";
-		}
-		
-		return message;
-	}
+	
 	
 	
 	private String validateKinInformation(String firstName, String lastName, String address,
@@ -857,8 +789,10 @@ public class ParticipantUpdateFormController
 	{
 		String message = "";
 		
-		
-		
+		if(firstName.isEmpty() || lastName.isEmpty() || phone.isEmpty())
+		{
+			message += "All fields for Emergency Contact information must be filled in.\n";
+		}
 		
 		return message;
 	}
