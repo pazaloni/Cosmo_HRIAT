@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 import org.junit.After;
 import org.junit.Before;
@@ -406,7 +408,7 @@ public class testDatabase {
     public void testActivityLogInsertEditedParticipant()
     {
         db.activtyLogEntry("testUser", "Edited Participant (" + cosmoID + ")", "Unit Test");
-        ResultSet rs = db.select("Who, Event", "ActivityLog", "Who = 'testUser' AND Event = 'Edited Participant (" + cosmoID + ")'", "");
+        ResultSet rs = db.select("Who, Event, Timestamp", "ActivityLog", "Who = 'testUser' AND Event = 'Edited Participant (" + cosmoID + ")'", "");
         try
         {
             //check that it matches expected result
@@ -414,7 +416,7 @@ public class testDatabase {
             {
                 assertTrue(rs.getString(1).equals("testUser"));
                 assertTrue(rs.getString(2).equals("Edited Participant (" + cosmoID + ")"));
-                
+              
             }
         }
         catch(SQLException e)
