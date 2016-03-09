@@ -1,6 +1,7 @@
 package core;
 import helpers.DatabaseHelper;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.sql.Time;
@@ -163,7 +164,8 @@ public class Note
 	
 	public String getDate()
 	{
-		return dateCreated + "";
+	    DateFormat format = new SimpleDateFormat("dd-MMM-YYYY");
+		return format.format(dateCreated);
 	}
 	
 	public String getViewed()
