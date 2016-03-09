@@ -258,7 +258,7 @@ public class HealthStatusFormGUI
 
         String[] info = helper.retrieveHealthStatusInfo(cosmoId);
         familyPhysicianTxt.setText(info[0]);
-        if(info[1].length() >=11)
+        if(info[1].length() >=10)
         {
         info[1]= "(" + info[1].substring(0, 3) + ") "
                 + info[1].substring(3, 6) + "-"

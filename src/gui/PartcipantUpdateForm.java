@@ -1,5 +1,12 @@
-package core;
+package gui;
+import java.awt.Color;
+
+
+
 import controllers.ParticipantUpdateFormController;
+import core.MedicalAdministrator;
+import core.PopUpMessage;
+import core.StaffAccount;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -12,7 +19,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextAlignment;import javafx.stage.Stage;
+
 
 /**
  * Purpose: This class will display the editable participant update form with 
@@ -30,16 +38,6 @@ public class PartcipantUpdateForm extends ScrollPane
 	public Button saveBtn;
 	//the controller instance
 	private ParticipantUpdateFormController controller;
-	
-	//The TextFields for the participant information
-	private TextField participantFirstNameTxt = new TextField();
-	private TextField participantLastNameTxt = new TextField();
-	private TextField participantAddressTxt = new TextField();
-	private TextField participantCityTxt = new TextField();
-	private TextField participantPostalCodeTxt = new TextField();
-	private TextField participantPhoneNumberTxt = new TextField();
-	private TextField participantBirthdateTxt = new TextField();
-	private TextField participantSinTxt = new TextField();
 	
 	//The TextFields for the Kin Information
 	private TextField kinFirstNameTxt = new TextField();
@@ -66,6 +64,8 @@ public class PartcipantUpdateForm extends ScrollPane
 	
 	private StaffAccount loggedInUser;
 	
+	private Label saveMessage;
+	
 	/**
 	 * Purpose: Creates the form, populated with information 
 	 * related to the participant.
@@ -84,16 +84,10 @@ public class PartcipantUpdateForm extends ScrollPane
 		controller = new ParticipantUpdateFormController(cosmoID);
 		
 		//the line separators to separate the sections of the form visually
-		Separator line1 = new Separator();
-		line1.minWidth(1500);
 		Separator line2 = new Separator();
 		line2.minWidth(1500);
 		Separator line3 = new Separator();
 		line3.minWidth(1500);
-		
-		//label for the Participant Information Area of the form
-		Label participantInfoAreaHeader = new Label("Participant Information:");
-		participantInfoAreaHeader.setFont(new Font("Arial", 16));
 		
 		//label for the Kin Information Area of the form
 		Label kinInfoAreaHeader = new Label("Kin Information:");
@@ -108,14 +102,12 @@ public class PartcipantUpdateForm extends ScrollPane
 		emergencyContactInfoHeader.setFont(new Font("Arial", 16));
 		
 		//add all viewable nodes to the main VBox
-		mainBox.getChildren().addAll(createHeader(), participantInfoAreaHeader,
-				createParticipantInfoArea(), line1, kinInfoAreaHeader,
+		mainBox.getChildren().addAll(createHeader(), kinInfoAreaHeader,
 				createKinInfoArea(), line2, caregiverInfoAreaHeader,
 				createCaregiverInfoArea(), line3, emergencyContactInfoHeader,
 				createEmergencyContactArea());
 		
 		//populate the textboxes with all relevant information from the database
-		this.fillParticipantText();
 		this.fillKinText();
 		this.fillCaregiverText();
 		this.fillEmergencyText();
@@ -148,9 +140,10 @@ public class PartcipantUpdateForm extends ScrollPane
 		Label heading = new Label("Participant Information Update Form");
 		heading.setFont(new Font("Arial", 22));
 		
+		saveMessage = new Label();
+		
 		saveBtn = new Button("Save");
 		
-		//does not currently do anything, for later story
 		saveBtn.setOnAction(event -> {
 			saveInfo();
 		});
@@ -161,7 +154,7 @@ public class PartcipantUpdateForm extends ScrollPane
 		
 		if(loggedInUser instanceof MedicalAdministrator)
 		{
-		    hbox.getChildren().add(saveBtn);
+		    hbox.getChildren().addAll(saveMessage, saveBtn);
 		}
 		
 		//set spacing between save button and heading
@@ -170,81 +163,7 @@ public class PartcipantUpdateForm extends ScrollPane
 		return hbox;
 	}
 	
-	/**
-	 * Purpose: Create the area on the form for the 
-	 * participant's basic information
-	 * @return the GridPane containing the labels and textfield's
-	 * for the participant's basic information.
-	 * @author Breanna Wilson cst215 Steven Palchinski cst209
-	 */
-	private GridPane createParticipantInfoArea()
-	{
-		//GridPane containing participant nodes
-		GridPane mainPane = new GridPane();
-		
-		//labels for all fields
-		Label firstNameLbl = new Label("First Name:");
-		Label lastNameLbl = new Label("Last Name:");
-		Label addressLbl = new Label("Address:");
-		Label cityLbl = new Label("City:");
-		Label postalCodeLbl = new Label("Postal Code:");
-		Label phoneNumberLbl = new Label("Phone Number:");
-		Label birthdateLbl = new Label("Birth Date:");
-		Label sinLbl = new Label("SIN:");
-		
-		//insets for padding and margins
-		Insets insets = new Insets(5,5,5,5);
-		
-		//set padding for all labels
-		firstNameLbl.setPadding(insets);
-		lastNameLbl.setPadding(insets);
-		addressLbl.setPadding(insets);
-		cityLbl.setPadding(insets);
-		postalCodeLbl.setPadding(insets);
-		phoneNumberLbl.setPadding(insets);
-		birthdateLbl.setPadding(insets);
-		sinLbl.setPadding(insets);
-		
-		//add all labels and textfield for the participant's
-		//information to the GridPane
-		
-		//first column
-		mainPane.add(firstNameLbl, 0, 0);
-		mainPane.add(participantFirstNameTxt, 1, 0);
-		mainPane.add(lastNameLbl, 0, 1);
-		mainPane.add(participantLastNameTxt, 1, 1);
-		mainPane.add(addressLbl, 0, 2);
-		mainPane.add(participantAddressTxt, 1, 2);
-		mainPane.add(cityLbl, 0, 3);
-		mainPane.add(participantCityTxt, 1, 3);
-		mainPane.add(postalCodeLbl, 0, 4);
-		mainPane.add(participantPostalCodeTxt, 1, 4);
-		//second column
-		mainPane.add(phoneNumberLbl, 3, 0);
-		mainPane.add(participantPhoneNumberTxt, 4, 0);
-		mainPane.add(birthdateLbl, 3, 1);
-		mainPane.add(participantBirthdateTxt, 4, 1);
-		mainPane.add(sinLbl, 3, 2);
-		mainPane.add(participantSinTxt, 4, 2);
-		
-		//set margins for all textfields
-		mainPane.setMargin(participantFirstNameTxt, insets);
-		mainPane.setMargin(participantLastNameTxt, insets);
-		mainPane.setMargin(participantAddressTxt, insets);
-		mainPane.setMargin(participantCityTxt, insets);
-		mainPane.setMargin(participantPostalCodeTxt, insets);
-		mainPane.setMargin(participantBirthdateTxt, insets);
-		mainPane.setMargin(participantSinTxt, insets);
-		mainPane.setMargin(participantPhoneNumberTxt, insets);
-		
-		//set padding for the gridpane
-		mainPane.setPadding(new Insets(5,5,5,5));
-		
-		//center the gridpane
-		mainPane.alignmentProperty().set(Pos.CENTER);
-		
-		return mainPane;
-	}
+	
 
 	/**
 	 * Purpose: Create the area on the form containing
@@ -438,30 +357,7 @@ public class PartcipantUpdateForm extends ScrollPane
 		
 		return main;
 	}
-	
-	/**
-	 * Purpose: Calls the ParticipantUpdateFormController
-	 * to get all basic participant information required for
-	 * this form form the database, and puts the information into
-	 * the correlating textfields.
-	 * @author Breanna Wilson cst215 Steven Palchinski cst209
-	 */
-	private void fillParticipantText()
-	{
-		//get the participants basic information
-		String[] participantInfo = this.controller.fetchParticipantBasicInfo();
-		
-		//enter the information into the textfields
-		participantFirstNameTxt.setText(participantInfo[0]);
-		participantLastNameTxt.setText(participantInfo[1]);
-		participantAddressTxt.setText(participantInfo[2]);
-		participantCityTxt.setText(participantInfo[3]);
-		participantPostalCodeTxt.setText(participantInfo[4]);
-		participantPhoneNumberTxt.setText(participantInfo[5]);
-		participantBirthdateTxt.setText(participantInfo[6]);
-		participantSinTxt.setText(participantInfo[7]);
-		
-	}
+
 	
 	/**
 	 * Purpose: Calls the ParticipantUpdateFormController
@@ -522,33 +418,56 @@ public class PartcipantUpdateForm extends ScrollPane
 		//puts information into the textfields
 		emergencyContactFirstName.setText(eInfo[0]);
 		emergencyContactLastName.setText(eInfo[1]);
+        if(eInfo[2].length() >=10)
+        {
+        eInfo[2]= "(" + eInfo[2].substring(0, 3) + ") "
+                + eInfo[2].substring(3, 6) + "-"
+                + eInfo[2].substring(6, 10);
+        }
 		emergencyContactPhone.setText(eInfo[2]);
 	}
 	
+	
+	/**
+	 * Purpose: Saves the information in the form to the database. If the information
+	 * 	given is invalid, the information will not be saved. A message will display 
+	 * 	for both success and failure.
+	 * @author Breanna Wilson CST215
+	 */
 	private void saveInfo()
 	{
-
-
-
-		controller.saveBasicParticipantInformation(participantFirstNameTxt.getText(),
-				participantLastNameTxt.getText(), participantAddressTxt.getText(),
-				participantCityTxt.getText(), participantPostalCodeTxt.getText(), 
-				participantPhoneNumberTxt.getText(), participantBirthdateTxt.getText(), 
-				participantSinTxt.getText());
+		String errorMsg = "";
 		
-		controller.saveKinInformation(kinFirstNameTxt.getText(), kinLastNameTxt.getText(),
+		errorMsg += controller.saveKinInformation(kinFirstNameTxt.getText(), kinLastNameTxt.getText(),
 				kinAddressTxt.getText(), kinCityTxt.getText(), kinPostalCodeTxt.getText(),
 				kinHomePhoneTxt.getText(), kinWorkPhoneTxt.getText());
 		
-		controller.saveCaregiverInformation(caregiverFirstNameTxt.getText(),
+		errorMsg += controller.saveCaregiverInformation(caregiverFirstNameTxt.getText(),
 				caregiverLastNameTxt.getText(), caregiverAddressTxt.getText(),
 				caregiverCityTxt.getText(), caregiverPostalCodeTxt.getText(),
 				caregiverHomePhoneTxt.getText(), caregiverWorkPhoneTxt.getText());
 		
-		controller.saveEmergencyContactInformation(emergencyContactFirstName.getText(),
+		errorMsg += controller.saveEmergencyContactInformation(emergencyContactFirstName.getText(),
 				emergencyContactLastName.getText(), emergencyContactPhone.getText());
 		
-
+		//if there were no errors, display success
+		if(errorMsg.equals(null) || errorMsg.isEmpty())
+		{
+			saveMessage.setStyle("-fx-text-fill: blue");
+			saveMessage.setText("Save successful.");
+		}
+		//else, display error message(s)
+		else
+		{
+			saveMessage.setStyle("-fx-text-fill: blue");
+			saveMessage.setText("Save unsuccessful. Click for details.");
+			Stage stage = new Stage();
+			PopUpMessage popUp = new PopUpMessage(errorMsg, stage);
+			
+			saveMessage.setOnMouseClicked(event -> {
+				popUp.stage.showAndWait();
+			});
+		}
 
 	}
 	
