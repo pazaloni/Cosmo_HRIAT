@@ -20,6 +20,7 @@ public class TestActivityLog
     ActivityLog test2;
     ActivityLog test3;
     ActivityLog test4;
+    ActivityLog test5;
 
     private String who1;
     private String who2;
@@ -60,10 +61,12 @@ public class TestActivityLog
         details = "First Name: \"Jimmy\" -> \"Bobby\"";
         details2 = "Name: Steven Hawking";
 
+        
         test1 = new ActivityLog(who1, timeStamp1, event1, "");
         test2 = new ActivityLog(who2, timeStamp2, event2, "");
         test3 = new ActivityLog(who3, timeStamp3, event3, details);
         test4 = new ActivityLog(who4, timeStamp4, event4, details2);
+        test5 = new ActivityLog("", "", "", "");
 
     }
 
@@ -83,6 +86,7 @@ public class TestActivityLog
         assertTrue(test2.getWho().get().equals(who2));
         assertTrue(test3.getWho().get().equals(who3));
         assertTrue(test4.getWho().get().equals(who4));
+        assertTrue(test5.getWho().get().equals(""));
     }
 
     /**
@@ -96,6 +100,7 @@ public class TestActivityLog
         assertTrue(test2.getWhen().get().equals(timeStamp2));
         assertTrue(test3.getWhen().get().equals(timeStamp3));
         assertTrue(test4.getWhen().get().equals(timeStamp4));
+        assertTrue(test5.getWhen().get().equals(""));
     }
 
     /**
@@ -110,6 +115,7 @@ public class TestActivityLog
         assertTrue(test2.getEvent().get().equals(event2));
         assertTrue(test3.getEvent().get().equals(event3));
         assertTrue(test4.getEvent().get().equals(event4));
+        assertTrue(test5.getEvent().get().equals(""));
     }
     
     /**
@@ -123,5 +129,6 @@ public class TestActivityLog
         assertTrue(test2.getDetails().get().equals(""));
         assertTrue(test3.getDetails().get().equals(details));
         assertTrue(test4.getDetails().get().equals(details2));
+        assertTrue(test5.getDetails().get().equals(""));
     }
 }
