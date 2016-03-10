@@ -310,7 +310,8 @@ public class MedicalAdministrator extends BasicStaff
      */
 	public static String editParticipant(String cosmoId, String firstName,
             String lastName, LocalDate birthDate,
-            String phn, String address)
+            String phn, String address, String phoneNum, String city, String postalCode,
+            String sin)
 	{
         // initialize birth date string to an empty string
         String birthDateString = "";
@@ -327,7 +328,9 @@ public class MedicalAdministrator extends BasicStaff
         // check to see if any of the fields are empty
         if (firstName.isEmpty() || lastName.isEmpty()
                 || birthDateString.equals("") || phn.isEmpty()
-                     || address.isEmpty())
+                     || address.isEmpty() || phoneNum.isEmpty() || 
+                     city.isEmpty() || postalCode.isEmpty()
+                     || sin.isEmpty())
         {
             result = "One of your fields is empty";
         }
@@ -342,6 +345,11 @@ public class MedicalAdministrator extends BasicStaff
             if (!phn.matches("^[0-9]{9}$"))
             {
                 result = "Health Number must be 9 digits";
+            }
+            //ensure SIN is a 9 digit number
+            else if(!sin.matches("^[0-9]{9}"))
+            {
+                
             }
             else
             {

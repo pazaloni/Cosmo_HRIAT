@@ -519,7 +519,7 @@ public class participantDetailsGUI extends Application
                 mainEditWindow.setTitle("Edit Participant");
 
                 mainEditWindow.setScene(new Scene(editParticipantPopUp(), 290,
-                        300));
+                        400));
                 mainEditWindow.initModality(Modality.APPLICATION_MODAL);
                 mainEditWindow.initOwner(participantMainStage);
                 mainEditWindow.setResizable(false);
@@ -1128,6 +1128,10 @@ public class participantDetailsGUI extends Application
         Label birthdateLbl = new Label("Date Of Birth");
         Label healthNumLbl = new Label("PHN");
         Label addressLbl = new Label("Address");
+        Label phoneNumLbl = new Label("Phone Number");
+        Label cityLbl = new Label("City");
+        Label postalCodeLbl = new Label("Postal Code");
+        Label sinLbl = new Label("SIN");
 
         // the text fields
         TextField firstNameTxt = new TextField(firstNameText.getText());
@@ -1164,7 +1168,7 @@ public class participantDetailsGUI extends Application
 
         // change the pattern of the birthDatePicker to dd-MMM-yyyy
         String pattern = "dd-MMM-yyyy";
-        StringConverter converter = new StringConverter<LocalDate>()
+        StringConverter<LocalDate> converter = new StringConverter<LocalDate>()
         {
             DateTimeFormatter dateFormatter = DateTimeFormatter
                     .ofPattern(pattern);
@@ -1206,6 +1210,18 @@ public class participantDetailsGUI extends Application
 
         // address text
         TextField addressTxt = new TextField(addressText.getText());
+        
+        //Phone Number text
+        TextField phoneNumTxt = new TextField(phoneNumberText.getText());
+        
+        //City text
+        TextField cityTxt = new TextField(cityText.getText());
+        
+        //Postal Text
+        TextField postalTxt = new TextField(postalText.getText());
+        
+        //SIN Text
+        TextField sinTxt = new TextField(sinText.getText());
 
         // add the form to the grid
         grid.add(firstNameLbl, 0, 1);
@@ -1213,12 +1229,23 @@ public class participantDetailsGUI extends Application
         grid.add(birthdateLbl, 0, 3);
         grid.add(healthNumLbl, 0, 4);
         grid.add(addressLbl, 0, 5);
+        grid.add(phoneNumLbl, 0, 6);
+        grid.add(cityLbl, 0, 7);
+        grid.add(postalCodeLbl, 0, 8);
+        grid.add(sinLbl, 0, 9);
+        
         grid.add(lblWarning, 1, 0);
+        
         grid.add(firstNameTxt, 1, 1);
         grid.add(lastNameTxt, 1, 2);
         grid.add(birthDatePicker, 1, 3);
         grid.add(healthNumTxt, 1, 4);
         grid.add(addressTxt, 1, 5);
+        grid.add(phoneNumTxt, 1, 6);
+        grid.add(cityTxt, 1,7);
+        grid.add(postalTxt, 1, 8);
+        grid.add(sinTxt, 1, 9);
+
 
         // setPadding of the grid
         grid.setPadding(new Insets(10, 10, 0, 10));
@@ -1226,8 +1253,8 @@ public class participantDetailsGUI extends Application
         grid.setVgap(10);
 
         // Adding participant event handler
-        Button createParticipantBtn = new Button("Save");
-        createParticipantBtn.setOnAction(new EventHandler<ActionEvent>()
+        Button editParticipantBtn = new Button("Save");
+        editParticipantBtn.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
             public void handle( ActionEvent e )
@@ -1237,7 +1264,8 @@ public class participantDetailsGUI extends Application
                 String result = MedicalAdministrator.editParticipant(
                         cosmoIDText.getText(), firstNameTxt.getText(),
                         lastNameTxt.getText(), birthDatePicker.getValue(),
-                        healthNumTxt.getText(), addressTxt.getText());
+                        healthNumTxt.getText(), addressTxt.getText(), phoneNumTxt.getText(),
+                        cityTxt.getText(), postalTxt.getText(), sinTxt.getText());
 
                 // if no error message is recieved then close this window and
                 // refresh the table
@@ -1349,7 +1377,7 @@ public class participantDetailsGUI extends Application
         // Add the buttons to the grid
         HBox buttonsHbox = new HBox();
         HBox resetHbox = new HBox();
-        buttonsHbox.getChildren().addAll(createParticipantBtn);
+        buttonsHbox.getChildren().addAll(editParticipantBtn);
         buttonsHbox.setAlignment(Pos.CENTER);
         resetHbox.getChildren().addAll(resetBtn);
         resetHbox.setAlignment(Pos.CENTER_RIGHT);
