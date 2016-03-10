@@ -1343,6 +1343,53 @@ public class participantDetailsGUI extends Application
                                         + "\"");
                         addressText.setText(addressTxt.getText());
                     }
+                    //check phone number
+                    if ( !phoneNumTxt.getText().equals(phoneNumberText.getText()) )
+                    {
+
+                        DBObject.activtyLogEntry(loggedInUser.GetUsername(),
+                                "Edited Participant (" + cosmoIDText.getText()
+                                        + ")",
+                                "Phone Number: \"" + phoneNumberText.getText()
+                                        + "\" → \"" + phoneNumTxt.getText()
+                                        + "\"");
+                        phoneNumberText.setText(phoneNumTxt.getText());
+                    }
+                    //check city 
+                    if ( !cityTxt.getText().equals(cityText.getText()) )
+                    {
+
+                        DBObject.activtyLogEntry(loggedInUser.GetUsername(),
+                                "Edited Participant (" + cosmoIDText.getText()
+                                        + ")",
+                                "City: \"" + cityText.getText()
+                                        + "\" → \"" + cityTxt.getText()
+                                        + "\"");
+                        cityText.setText(cityTxt.getText());
+                    }
+                    //check
+                    if ( !cityTxt.getText().equals(cityText.getText()) )
+                    {
+
+                        DBObject.activtyLogEntry(loggedInUser.GetUsername(),
+                                "Edited Participant (" + cosmoIDText.getText()
+                                        + ")",
+                                "City: \"" + cityText.getText()
+                                        + "\" → \"" + cityTxt.getText()
+                                        + "\"");
+                        cityText.setText(cityTxt.getText());
+                    }
+                    if ( !sinTxt.getText().equals(sinText.getText()) )
+                    {
+
+                        DBObject.activtyLogEntry(loggedInUser.GetUsername(),
+                                "Edited Participant (" + cosmoIDText.getText()
+                                        + ")",
+                                "SIN: \"" + sinText.getText()
+                                        + "\" → \"" + sinTxt.getText()
+                                        + "\"");
+                        sinText.setText(sinTxt.getText());
+                    }
                 }
                 // if there is an error message, display it
                 else

@@ -346,23 +346,32 @@ public class MedicalAdministrator extends BasicStaff
             {
                 result = "Health Number must be 9 digits";
             }
-            //ensure SIN is a 9 digit number
-            else if(!sin.matches("^[0-9]{9}"))
+            //check if postal code is valid
+            else if(!postalCode.matches("^[A-Za-z]\\d[A-Za-z][ ]?\\d[A-Za-z]\\d$"))
             {
-                
+                result = "Invalid Postal Code";
+            }
+            //ensure SIN is a 9 digit number
+            else if(!sin.matches("^[0-9]{9}$"))
+            {
+                result = "SIN must be 9 digits";
             }
             else
             {
                 successful = false;
                     // array of field names
-                    String values[][] = new String[7][2];
+                    String values[][] = new String[11][2];
                     values[0][0] = "cosmoID";
                     values[1][0] = "firstName";
                     values[2][0] = "lastName";
                     values[3][0] = "dateOfBirth";
                     values[4][0] = "personalHealthNumber";
                     values[5][0] = "address";
-                    values[6][0] = "dateUpdated";
+                    values[6][0] = "phoneNumber";
+                    values[7][0] = "city";
+                    values[8][0] = "postalCode";
+                    values[9][0] = "socialInsuranceNumber";
+                    values[10][0] = "dateUpdated";
 
                  
                     // get the current date to insert into "lastUpdated"
@@ -377,7 +386,11 @@ public class MedicalAdministrator extends BasicStaff
                     values[3][1] = birthDateString;
                     values[4][1] = phn;
                     values[5][1] = address;
-                    values[6][1] = formattedDate;         
+                    values[6][1] = phoneNum;
+                    values[7][1] = city;
+                    values[8][1] = postalCode;
+                    values[9][1] = sin;
+                    values[10][1] = formattedDate;         
     
                     Calendar ca = Calendar.getInstance();
                     // inserting into the database
