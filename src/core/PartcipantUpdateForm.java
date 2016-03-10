@@ -2,9 +2,11 @@ package core;
 import java.awt.Color;
 
 
+
 import controllers.ParticipantUpdateFormController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -452,8 +454,11 @@ public class PartcipantUpdateForm extends ScrollPane
 			saveMessage.setStyle("-fx-text-fill: blue");
 			saveMessage.setText("Save unsuccessful. Click for details.");
 			Stage stage = new Stage();
-			PopUpMessage popUp = new PopUpMessage(errorMsg, stage);
 			
+			
+			PopUpMessage popUp = new PopUpMessage(errorMsg, stage);
+			popUp.stage.setScene(new Scene(popUp.root));
+			System.out.println(errorMsg);
 			saveMessage.setOnMouseClicked(event -> {
 				popUp.stage.showAndWait();
 			});
