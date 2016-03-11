@@ -893,8 +893,11 @@ public class ParticipantUpdateFormController
 		{
 			message += "All fields for Emergency Contact information must be filled in.\n";
 		}
+		//else all fields are filled out
 		else
 		{
+			//check each individual field
+			
 			if(!validateName(firstName))
 			{
 				message += "Emergency contact first name cannot"
