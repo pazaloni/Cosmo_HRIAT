@@ -367,10 +367,10 @@ public class TestMedicalAdministrator
         assertTrue(result.equals(""));
         
         //edit the participant
-        String editResult = MedicalAdministrator.editParticipant(cosmoIDFour,
-                "Bob", participantLastNameFour,
-                participantBirthdateFour, healthNumberFour, addressFour);
-        
+       // String editResult = MedicalAdministrator.editParticipant(cosmoIDFour,
+     //           "Bob", participantLastNameFour,
+      //         participantBirthdateFour, healthNumberFour, addressFour);
+       
         ResultSet editedResultSet = db.select("firstName" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  
         
         //get the new name
