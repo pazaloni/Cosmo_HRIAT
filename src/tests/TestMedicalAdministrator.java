@@ -42,6 +42,9 @@ public class TestMedicalAdministrator
     private String healthNumberOne;
     private String phoneOne;
     private String addressOne;
+    private String cityOne;
+    private String postalCodeOne;
+    private String sinOne;
 
     private String cosmoIDTwo;
     private String participantFirstNameTwo;
@@ -49,10 +52,12 @@ public class TestMedicalAdministrator
     private LocalDate participantBirthdateTwo;
     private String physicianFNameTwo;
     private String physicianLNameTwo;
-    
     private String healthNumberTwo;
     private String phoneTwo;
     private String addressTwo;
+    private String cityTwo;
+    private String postalCodeTwo;
+    private String sinTwo;
 
     private String cosmoIDThree;
     private String participantFirstNameThree;
@@ -63,6 +68,9 @@ public class TestMedicalAdministrator
     private String healthNumberThree;
     private String phoneThree;
     private String addressThree;
+    private String cityThree;
+    private String postalCodeThree;
+    private String sinThree;
     
     private String cosmoIDFour;
     private String participantFirstNameFour;
@@ -73,6 +81,10 @@ public class TestMedicalAdministrator
     private String healthNumberFour;
     private String phoneFour;
     private String addressFour;
+    private String cityFour;
+    private String postalCodeFour;
+    private String sinFour;
+    
     private String imageThree;
 
     private String failEmailWithoutBoth;
@@ -367,9 +379,10 @@ public class TestMedicalAdministrator
         assertTrue(result.equals(""));
         
         //edit the participant
-       // String editResult = MedicalAdministrator.editParticipant(cosmoIDFour,
-     //           "Bob", participantLastNameFour,
-      //         participantBirthdateFour, healthNumberFour, addressFour);
+       String editResult = MedicalAdministrator.editParticipant(cosmoIDFour,
+                "Bob", participantLastNameFour,
+               participantBirthdateFour, healthNumberFour, addressFour, phoneFour, cityFour, postalCodeFour,
+               sinFour);
        
         ResultSet editedResultSet = db.select("firstName" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  
         
@@ -419,7 +432,8 @@ public class TestMedicalAdministrator
         //edit the participant
         String editResult = MedicalAdministrator.editParticipant(cosmoIDFour,
                 participantFirstNameFour, "Smith",
-                participantBirthdateFour, healthNumberFour, addressFour);
+                participantBirthdateFour, healthNumberFour, addressFour, phoneFour, cityFour,
+                postalCodeFour, sinFour);
         
         ResultSet editedResultSet = db.select("lastName" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  
         
@@ -471,7 +485,8 @@ public class TestMedicalAdministrator
         //edit the participant with a different birthdate
         String editResult = MedicalAdministrator.editParticipant(cosmoIDFour,
                 participantFirstNameFour, participantLastNameFour,
-                participantBirthdateOne, healthNumberFour, addressFour);
+                participantBirthdateOne, healthNumberFour, addressFour, phoneFour, cityFour,
+                postalCodeFour, sinFour);
         
         //get edited result set
         ResultSet editedResultSet = db.select("dateOfBirth" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  
@@ -523,7 +538,8 @@ public class TestMedicalAdministrator
         //edit the participant with a different birthdate
         String editResult = MedicalAdministrator.editParticipant(cosmoIDFour,
                 participantFirstNameFour, participantLastNameFour,
-                participantBirthdateOne, "123412341", addressFour);
+                participantBirthdateOne, "123412341", addressFour, phoneFour, cityFour,
+                postalCodeFour, sinFour);
         
         //get edited result set
         ResultSet editedResultSet = db.select("personalHealthNumber" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  
@@ -575,7 +591,8 @@ public class TestMedicalAdministrator
         //edit the participant with a different birthdate
         String editResult = MedicalAdministrator.editParticipant(cosmoIDFour,
                 participantFirstNameFour, participantLastNameFour,
-                participantBirthdateOne, healthNumberFour, "19595 Testing Avenue");
+                participantBirthdateOne, healthNumberFour, "19595 Testing Avenue", phoneFour,
+                cityFour, postalCodeFour, sinFour);
         
         //get edited result set
         ResultSet editedResultSet = db.select("address" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  

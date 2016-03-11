@@ -1367,17 +1367,17 @@ public class participantDetailsGUI extends Application
                                         + "\"");
                         cityText.setText(cityTxt.getText());
                     }
-                    //check
-                    if ( !cityTxt.getText().equals(cityText.getText()) )
+                    //check postal code
+                    if ( !postalTxt.getText().equals(postalText.getText()) )
                     {
 
                         DBObject.activtyLogEntry(loggedInUser.GetUsername(),
                                 "Edited Participant (" + cosmoIDText.getText()
                                         + ")",
-                                "City: \"" + cityText.getText()
-                                        + "\" → \"" + cityTxt.getText()
+                                "Postal Code: \"" + postalText.getText()
+                                        + "\" → \"" + postalTxt.getText()
                                         + "\"");
-                        cityText.setText(cityTxt.getText());
+                        postalText.setText(postalTxt.getText());
                     }
                     if ( !sinTxt.getText().equals(sinText.getText()) )
                     {
@@ -1433,4 +1433,16 @@ public class participantDetailsGUI extends Application
 
         return grid;
     }
+//    
+//    private void checkForChanges(String original, String changed, String label, String cosmoID)
+//    {
+//        if ( !changed.equals(original))
+//        {
+//
+//            DBObject.activtyLogEntry(loggedInUser.GetUsername(),
+//            "Edited Participant (" + cosmoID + ")" + label + ": \"" + original   + "\" → \"" + changed + "\"");
+//             sinText.setText(changed);
+//        }
+//    }
+    
 }
