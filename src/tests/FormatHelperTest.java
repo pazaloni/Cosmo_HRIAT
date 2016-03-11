@@ -5,7 +5,11 @@ import helpers.FormatHelper;
 
 import org.junit.Before;
 import org.junit.Test;
-
+/**
+ * Test the FormatHelper Object
+ * @author cst209
+ *
+ */
 public class FormatHelperTest
 {
     FormatHelper testHelper;
@@ -26,7 +30,7 @@ public class FormatHelperTest
     }
 
     /**
-     * Method f
+     * Method for testing phone number format
      */
     @Test
     public void testFormatPhoneNum()
