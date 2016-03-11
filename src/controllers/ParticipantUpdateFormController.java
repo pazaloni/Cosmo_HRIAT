@@ -330,18 +330,25 @@ public class ParticipantUpdateFormController
 			e.printStackTrace();
 		}
 		
+		//check if the info given is valid
+		msg = validateKinInformation(firstName,
+				lastName, address, city, postalCode, homePhone, workPhone);
+		
 		//if there is a matching record
 		if(!(kinInfo[1][1].equals("") || kinInfo[1][1].equals(null)))
 		{
-			//make sure the participant record is using it 
-			db.update(kinInfo, "Participant", kinInfo[0][1]);
+			
+			//make sure the participant record is using it if the data is valid
+			if(msg.equals(null) || msg.equals(""))
+			{
+				db.update(kinInfo, "Participant", kinInfo[0][1]);
+			}
+			
 		}
 		//else, there is no matching record
 		else
 		{
-			//check if the info given is valid
-			msg = validateKinInformation(firstName,
-					lastName, address, city, postalCode, homePhone, workPhone);
+			
 			//if the information given is valid
 			if(msg.equals(null) || msg.equals(""))
 			{
@@ -547,7 +554,7 @@ public class ParticipantUpdateFormController
 		}
 		
 		//if the emergency contact record does not currently exist
-		if(ecID.equals("") || ecID.equals(null))
+		if(ecID.equals(null) || ecID.equals(""))
 		{
 			msg = validateEmergencyContactInforamtion(firstName, lastName, phone);
 			
@@ -742,13 +749,13 @@ public class ParticipantUpdateFormController
 			//check first name is valid
 			if(!validateName(firstName))
 			{
-				message += "Kin first name is invalid.\n";
+				message += "Kin first name cannot contain numbers or special characters.\n";
 			}
 			
 			//check last name is valid
 			if(!validateName(lastName))
 			{
-				message += "Kin last name is invalid.\n";
+				message += "Kin last name cannot contain numbers or special characters.\n";
 			}
 			
 			//check address is valid
@@ -766,19 +773,19 @@ public class ParticipantUpdateFormController
 			//check postal code is valid
 			if(!validatePostalCode(postalCode))
 			{
-				message += "Kin postal code is invalid.\n";
+				message += "Kin postal code must be in format \"A1A 1A1\".\n";
 			}
 			
 			//check home phone number is valid
 			if(!validatePhoneNumber(homePhone))
 			{
-				message += "Kin home phone number is invalid.\n";
+				message += "Kin home phone number must be in format \"###-###-####\".\n";
 			}
 			
 			//check work phone number is valid
 			if(!validatePhoneNumber(workPhone))
 			{
-				message += "Kin work phone number is invalid.\n";
+				message += "Kin work phone number must be in format \"###-###-####\".\n";
 			}
 		}
 		
@@ -885,6 +892,25 @@ public class ParticipantUpdateFormController
 				|| lastName.equals("")|| phone == null || phone.equals(""))
 		{
 			message += "All fields for Emergency Contact information must be filled in.\n";
+		}
+		else
+		{
+			if(!validateName(firstName))
+			{
+				message += "Emergency contact first name cannot"
+						+ " contain numbers or special characters.\n";
+			}
+			
+			if(!validateName(lastName))
+			{
+				message += "Emergency contact last name cannot" +
+						" contain numbers or special characters.\n";
+			}
+			
+			if(!validatePhoneNumber(phone))
+			{
+				message += "Emergency contact phone number is invalid.\n";
+			}
 		}
 		
 		return message;

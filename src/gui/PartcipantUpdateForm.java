@@ -418,12 +418,6 @@ public class PartcipantUpdateForm extends ScrollPane
 		//puts information into the textfields
 		emergencyContactFirstName.setText(eInfo[0]);
 		emergencyContactLastName.setText(eInfo[1]);
-        if(eInfo[2].length() >=10)
-        {
-        eInfo[2]= "(" + eInfo[2].substring(0, 3) + ") "
-                + eInfo[2].substring(3, 6) + "-"
-                + eInfo[2].substring(6, 10);
-        }
 		emergencyContactPhone.setText(eInfo[2]);
 	}
 	
