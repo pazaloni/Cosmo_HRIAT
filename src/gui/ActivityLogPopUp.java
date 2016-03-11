@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 
 /**
  * 
- * Purpose: Displayable popup with all the activity log information
+ * Purpose: Displayable Pop Up with all the activity log information
  *
  * @author Team CIMP
  * @version 1.0
