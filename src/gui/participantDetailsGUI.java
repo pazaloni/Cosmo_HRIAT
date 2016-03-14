@@ -102,6 +102,7 @@ public class participantDetailsGUI extends Application
     private Label cityText = new Label();
     private Label postalText = new Label();
     private Label sinText = new Label();
+    ///new label to represent the participant's status within the system
     private Label statusText = new Label();
     
 
@@ -360,6 +361,7 @@ public class participantDetailsGUI extends Application
 
         // set basic labels
         Label cosmoIDLabel = new Label("CosmoID:");
+        ///Label for the new status field
         Label statusLabel = new Label("Status:");
         Label firstNameLabel = new Label("First Name:");
         Label lastNameLabel = new Label("Last Name: ");
@@ -376,6 +378,7 @@ public class participantDetailsGUI extends Application
 
         // set label margins
         cosmoIDLabel.setPadding(new Insets(5, 5, 5, 5));
+        ///margins for the new status label
         statusLabel.setPadding(new Insets(5, 5, 5, 5));
         firstNameLabel.setPadding(new Insets(5, 5, 5, 5));
         lastNameLabel.setPadding(new Insets(5, 5, 5, 5));
@@ -386,7 +389,7 @@ public class participantDetailsGUI extends Application
         postalLabel.setPadding(new Insets(5, 5, 5, 5));
         phoneLabel.setPadding(new Insets(5, 5, 5, 5));
         sinLabel.setPadding(new Insets(5, 5, 5, 5));
-        // get participant name, phn, diagnosis, and address from database
+        /// get participant name, phn, diagnosis, and address from database
         ResultSet results = DBObject
                 .select("firstName, lastName, dateOfBirth, personalHealthNumber, conditionName,"
                         + "description, address, imagePath, phoneNumber, city, postalCode, socialInsuranceNumber, participantStatus",
@@ -402,6 +405,7 @@ public class participantDetailsGUI extends Application
                 // get the participants basic information from the databases
                 System.out.println("Results: " + results.getString(1));
                 cosmoIDText.setText(this.cosmoID + "");
+                ///set the text for the new status field
                 statusText.setText(results.getString(13));
                 firstNameText.setText(results.getString(1));
                 lastNameText.setText(results.getString(2));
@@ -423,7 +427,6 @@ public class participantDetailsGUI extends Application
                 }
                 catch ( URISyntaxException | MalformedURLException e )
                 {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
 
@@ -476,6 +479,7 @@ public class participantDetailsGUI extends Application
 
         // add all labels to the gridpane
         basicInfoPane.add(cosmoIDLabel, 0, 0);
+        ///add the status label to the basic info pane
         basicInfoPane.add(statusLabel, 0, 1);
         basicInfoPane.add(firstNameLabel, 0, 2);
         basicInfoPane.add(lastNameLabel, 0, 3);
@@ -488,6 +492,7 @@ public class participantDetailsGUI extends Application
         basicInfoPane.add(sinLabel, 0, 11);
 
         basicInfoPane.add(cosmoIDText, 1, 0);
+        ///add the status text to the basic info pane
         basicInfoPane.add(statusText, 1, 1);
         basicInfoPane.add(firstNameText, 1, 2);
         basicInfoPane.add(lastNameText, 1, 3);
