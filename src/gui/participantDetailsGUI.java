@@ -1279,117 +1279,33 @@ public class participantDetailsGUI extends Application
                             .ofPattern("dd-MM-yyyy"));
 
                     // check for changed data
-                    // check first name
-                    if ( !firstNameTxt.getText()
-                            .equals(firstNameText.getText()) )
-                    {
-
-                        DBObject.activtyLogEntry(loggedInUser.GetUsername(),
-                                "Edited Participant (" + cosmoIDText.getText()
-                                        + ")",
-                                "First Name: \"" + firstNameText.getText()
-                                        + "\" → \"" + firstNameTxt.getText()
-                                        + "\"");
-                        firstNameText.setText(firstNameTxt.getText());
-                    }
-
-                    // check last name
-                    if ( !lastNameTxt.getText().equals(lastNameText.getText()) )
-                    {
-
-                        DBObject.activtyLogEntry(loggedInUser.GetUsername(),
-                                "Edited Participant (" + cosmoIDText.getText()
-                                        + ")",
-                                "Last Name: \"" + lastNameText.getText()
-                                        + "\" → \"" + lastNameTxt.getText()
-                                        + "\"");
-                        lastNameText.setText(lastNameTxt.getText());
-                    }
-
-                    // check birth date string
-                    if ( !birthDateString.equals(dayOfBirthText.getText()) )
-                    {
-
-                        DBObject.activtyLogEntry(loggedInUser.GetUsername(),
-                                "Edited Participant (" + cosmoIDText.getText()
-                                        + ")", "Birth Date: \""
-                                        + dayOfBirthText.getText() + "\" → \""
-                                        + birthDateString + "\"");
-                        dayOfBirthText.setText(birthDateString);
-                    }
-
-                    // check health number
-                    if ( !healthNumTxt.getText()
-                            .equals(healthNumText.getText()) )
-                    {
-
-                        DBObject.activtyLogEntry(loggedInUser.GetUsername(),
-                                "Edited Participant (" + cosmoIDText.getText()
-                                        + ")", "Health Number: \""
-                                        + healthNumText.getText() + "\" → \""
-                                        + healthNumTxt.getText() + "\"");
-                        healthNumText.setText(healthNumTxt.getText());
-                    }
-
-                    // check address
-                    if ( !addressTxt.getText().equals(addressText.getText()) )
-                    {
-
-                        DBObject.activtyLogEntry(loggedInUser.GetUsername(),
-                                "Edited Participant (" + cosmoIDText.getText()
-                                        + ")",
-                                "Address: \"" + addressText.getText()
-                                        + "\" → \"" + addressTxt.getText()
-                                        + "\"");
-                        addressText.setText(addressTxt.getText());
-                    }
-                    //check phone number
-                    if ( !phoneNumTxt.getText().equals(phoneNumberText.getText()) )
-                    {
-
-                        DBObject.activtyLogEntry(loggedInUser.GetUsername(),
-                                "Edited Participant (" + cosmoIDText.getText()
-                                        + ")",
-                                "Phone Number: \"" + phoneNumberText.getText()
-                                        + "\" → \"" + phoneNumTxt.getText()
-                                        + "\"");
-                        phoneNumberText.setText(phoneNumTxt.getText());
-                    }
-                    //check city 
-                    if ( !cityTxt.getText().equals(cityText.getText()) )
-                    {
-
-                        DBObject.activtyLogEntry(loggedInUser.GetUsername(),
-                                "Edited Participant (" + cosmoIDText.getText()
-                                        + ")",
-                                "City: \"" + cityText.getText()
-                                        + "\" → \"" + cityTxt.getText()
-                                        + "\"");
-                        cityText.setText(cityTxt.getText());
-                    }
-                    //check postal code
-                    if ( !postalTxt.getText().equals(postalText.getText()) )
-                    {
-
-                        DBObject.activtyLogEntry(loggedInUser.GetUsername(),
-                                "Edited Participant (" + cosmoIDText.getText()
-                                        + ")",
-                                "Postal Code: \"" + postalText.getText()
-                                        + "\" → \"" + postalTxt.getText()
-                                        + "\"");
-                        postalText.setText(postalTxt.getText());
-                    }
-                    if ( !sinTxt.getText().equals(sinText.getText()) )
-                    {
-
-                        DBObject.activtyLogEntry(loggedInUser.GetUsername(),
-                                "Edited Participant (" + cosmoIDText.getText()
-                                        + ")",
-                                "SIN: \"" + sinText.getText()
-                                        + "\" → \"" + sinTxt.getText()
-                                        + "\"");
-                        sinText.setText(sinTxt.getText());
-                    }
+                   checkForChanges(firstNameText, firstNameTxt.getText(),
+                            "First Name", cosmoIDText.getText());
+                   
+                   checkForChanges(lastNameText, lastNameTxt.getText(),
+                           "Last Name", cosmoIDText.getText());
+                   
+                   checkForChanges(dayOfBirthText, birthDateString,
+                           "Birth Date", cosmoIDText.getText());
+                   
+                   checkForChanges(healthNumText, healthNumTxt.getText(),
+                           "Health Number", cosmoIDText.getText());
+                   
+                   checkForChanges(addressText, addressTxt.getText(),
+                           "Address", cosmoIDText.getText());
+                   
+                   checkForChanges(phoneNumberText, phoneNumTxt.getText(),
+                           "Phone Number", cosmoIDText.getText());
+                   
+                   checkForChanges(cityText, cityTxt.getText(),
+                           "City", cosmoIDText.getText());
+                   
+                   checkForChanges(postalText, postalTxt.getText(),
+                           "Postal Code", cosmoIDText.getText());
+                   
+                   checkForChanges(sinText, sinTxt.getText(),
+                           "SIN", cosmoIDText.getText());
+                   
                 }
                 // if there is an error message, display it
                 else
@@ -1433,16 +1349,25 @@ public class participantDetailsGUI extends Application
 
         return grid;
     }
-//    
-//    private void checkForChanges(String original, String changed, String label, String cosmoID)
-//    {
-//        if ( !changed.equals(original))
-//        {
-//
-//            DBObject.activtyLogEntry(loggedInUser.GetUsername(),
-//            "Edited Participant (" + cosmoID + ")" + label + ": \"" + original   + "\" → \"" + changed + "\"");
-//             sinText.setText(changed);
-//        }
-//    }
+    
+    /**
+     * 
+     * Purpose: To check if two values have changed and if so, update relevant label on GUI and insert activity
+     * log entry into database
+     * @param original - the original label that is to be checked against
+     * @param changed - the submitted information
+     * @param label - the label for the activity log entry if required
+     * @param cosmoID - the cosmo ID of the participant being edited
+     * 
+     */
+    private void checkForChanges(Label original, String changed, String label, String cosmoID)
+    {
+        String originalString = original.getText();
+        if ( !changed.equals(originalString))
+        {
+            DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant (" + cosmoID + ")",  label + ": \"" + originalString + "\" → \"" + changed + "\"");
+            original.setText(changed);
+        }
+    }
     
 }

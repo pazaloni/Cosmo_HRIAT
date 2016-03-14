@@ -120,6 +120,9 @@ public class TestMedicalAdministrator
         healthNumberOne = "111111111";
         phoneOne = "1111111111";
         addressOne = "123 Fake Street";
+        cityOne = "Saskatoon";
+        postalCodeOne = "S7H 8B3";
+        sinOne = "123456789";
         
         db.delete("Participant", "cosmoID = " + cosmoIDOne);
         
@@ -134,6 +137,9 @@ public class TestMedicalAdministrator
         healthNumberTwo = "999999999";
         phoneTwo = "6669116666";
         addressTwo = "123 Cookie Blvd";
+        cityTwo = "Regina";
+        postalCodeTwo = "S7H 5B3";
+        sinTwo = "123416789";
 
         db.delete("Participant", "cosmoID = " + cosmoIDTwo);
         
@@ -146,6 +152,9 @@ public class TestMedicalAdministrator
         healthNumberThree = "999999999";
         phoneThree = "6669116666";
         addressThree = "123 Yummy yum";
+        cityThree = "Yumville";
+        postalCodeThree = "Y0M 0M0";
+        sinThree = "123123123";
         
         db.delete("Participant", "cosmoID = " + cosmoIDThree);
         
@@ -158,6 +167,9 @@ public class TestMedicalAdministrator
         healthNumberFour = "123123132";
         phoneFour = "1231231231";
         addressFour = "123 Crescent Street";
+        cityFour = "Villageville";
+        postalCodeFour = "V0T 3P0";
+        sinFour = "143436719";
         
         db.delete("Participant", "cosmoID = " + cosmoIDFour);
     
@@ -609,6 +621,65 @@ public class TestMedicalAdministrator
         
         assertTrue(!address.equals(editedAddress));
         assertTrue(editedAddress.equals("19595 Testing Avenue"));
+        
+        db.delete("Participant", "cosmoID = " + cosmoIDFour);
+    }
+    
+    /**
+     * 
+     * Purpose: to test if the City is changed
+     * @throws SQLException 
+     */
+    @Test 
+    public void testChangeCity() throws SQLException
+    {
+        
+        //create the original participant
+        String result = MedicalAdministrator.createParticipant(cosmoIDFour,
+                participantFirstNameFour, participantFirstNameFour,
+                participantBirthdateFour, physicianFNameFour, physicianLNameFour,
+                healthNumberFour, phoneFour, addressFour, path);
+        
+        //edit the participant with an initial city
+        String originalEdit = MedicalAdministrator.editParticipant(cosmoIDFour,
+                participantFirstNameFour, participantLastNameFour,
+                participantBirthdateOne, healthNumberFour, "19595 Testing Avenue", phoneFour,
+                cityOne, postalCodeFour, sinFour);
+        
+        //get it from the database
+        ResultSet results = db.select("city" , "Participant", "cosmoID = " + this.cosmoIDFour, "");      
+        
+        //get the city of the participant
+        String originalCity = "";
+        
+        while (results.next())
+        {
+            originalCity = results.getString(1);
+        }
+        //make sure the insertion was successful
+        assertTrue(result.equals(""));
+        
+        //edit the participant with a different birthdate
+        String secondEdit = MedicalAdministrator.editParticipant(cosmoIDFour,
+                participantFirstNameFour, participantLastNameFour,
+                participantBirthdateOne, healthNumberFour, "19595 Testing Avenue", phoneFour,
+                cityFour, postalCodeFour, sinFour);
+        
+        //get edited result set
+        ResultSet editedResultSet = db.select("city" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  
+        
+        //get the new name
+        String editedCity= "";
+        while (editedResultSet.next())
+        {
+            editedCity = editedResultSet.getString(1);
+        }
+
+        //make sure the insertion was successful
+        assertTrue(secondEdit.equals(""));
+        
+        assertTrue(!originalCity.equals(editedCity));
+        assertTrue(editedCity.equals(cityFour));
         
         db.delete("Participant", "cosmoID = " + cosmoIDFour);
     }
