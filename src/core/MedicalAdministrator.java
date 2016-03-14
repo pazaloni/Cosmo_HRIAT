@@ -339,7 +339,7 @@ public class MedicalAdministrator extends BasicStaff
             DatabaseHelper db = new DatabaseHelper();
             db.connect();
             System.out.println("Shouldnt happen");
-
+            FormatHelper fh = new FormatHelper();
             boolean successful = false;
             // check to see if the Health Number is a 9 digit number
             if (!phn.matches("^[0-9]{9}$"))
@@ -355,6 +355,10 @@ public class MedicalAdministrator extends BasicStaff
             else if(!sin.matches("^[0-9]{9}$"))
             {
                 result = "SIN must be 9 digits";
+            }
+            else if((phoneNum = fh.formatPhoneNum(phoneNum)) == "A phone number must have 10 digits.")
+            {
+                result = phoneNum;
             }
             else
             {
@@ -377,8 +381,7 @@ public class MedicalAdministrator extends BasicStaff
                     // get the current date to insert into "lastUpdated"
                     Calendar c = Calendar.getInstance();
                     SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-                    String formattedDate = df.format(c.getTime());
-
+                    String formattedDate = df.format(c.getTime());                   
                     // array of values to insert
                     values[0][1] = cosmoId;
                     values[1][1] = firstName;

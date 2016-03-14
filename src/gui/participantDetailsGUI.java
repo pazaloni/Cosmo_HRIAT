@@ -1,6 +1,7 @@
 package gui;
 
 import helpers.DatabaseHelper;
+import helpers.FormatHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -404,12 +405,12 @@ public class participantDetailsGUI extends Application
                 DateFormat format = new SimpleDateFormat("dd-MMM-YYYY");
 
                 dayOfBirthText.setText(format.format(results.getTimestamp(3)));
-                healthNumText.setText(results.getString(4));
-                addressText.setText(results.getString(7));
-                phoneNumberText.setText(results.getString(9));
-                cityText.setText(results.getString(10));
-                postalText.setText(results.getString(11));
-                sinText.setText(results.getString(12));
+                healthNumText.setText(results.getString(4)+"");
+                addressText.setText(results.getString(7)+"");
+                phoneNumberText.setText(results.getString(9)+"");
+                cityText.setText(results.getString(10)+"");
+                postalText.setText(results.getString(11)+"");
+                sinText.setText(results.getString(12)+"");
                 URL u = null;
                 try
                 {
@@ -1288,10 +1289,13 @@ public class participantDetailsGUI extends Application
                            "Health Number", cosmoIDText.getText());
                    
                    checkForChanges(addressText, addressTxt.getText(),
-                           "Address", cosmoIDText.getText());
+                           "Address", cosmoIDText.getText());                                      
                    
                    checkForChanges(phoneNumberText, phoneNumTxt.getText(),
                            "Phone Number", cosmoIDText.getText());
+                   
+                   FormatHelper fh = new FormatHelper();
+                   phoneNumTxt.setText(fh.formatPhoneNum(phoneNumberText.getText()));
                    
                    checkForChanges(cityText, cityTxt.getText(),
                            "City", cosmoIDText.getText());
@@ -1328,6 +1332,10 @@ public class participantDetailsGUI extends Application
                 birthDatePicker.setValue(null);
                 healthNumTxt.setText("");
                 addressTxt.setText("");
+                phoneNumTxt.setText("");
+                cityTxt.setText("");
+                postalTxt.setText("");
+                sinTxt.setText("");
                 lblWarning.setText("");
             }
 
