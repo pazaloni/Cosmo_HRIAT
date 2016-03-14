@@ -258,12 +258,6 @@ public class HealthStatusFormGUI
 
         String[] info = helper.retrieveHealthStatusInfo(cosmoId);
         familyPhysicianTxt.setText(info[0]);
-        if(info[1].length() >=10)
-        {
-        info[1]= "(" + info[1].substring(0, 3) + ") "
-                + info[1].substring(3, 6) + "-"
-                + info[1].substring(6, 10);
-        }
         physicianPhoneTxt.setText(info[1]);
         participantDiagnosisTxt.setText(info[2]);
         tylenolGiven.setSelected(Boolean.parseBoolean(info[3]));

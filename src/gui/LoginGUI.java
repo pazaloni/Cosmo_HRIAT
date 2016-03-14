@@ -29,7 +29,7 @@ public class LoginGUI extends Application
     private TextField txtUserName;
     private PasswordField pfUserPassword;
     private Button btnLogin;
-    private Image imgLogo;
+    private Image imgLogo; 
 
     public static Stage stageLogin;
 

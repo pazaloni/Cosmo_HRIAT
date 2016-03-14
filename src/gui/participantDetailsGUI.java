@@ -406,11 +406,7 @@ public class participantDetailsGUI extends Application
                 dayOfBirthText.setText(format.format(results.getTimestamp(3)));
                 healthNumText.setText(results.getString(4));
                 addressText.setText(results.getString(7));
-                String formatPhone = results.getString(9);
-                formatPhone = "(" + formatPhone.substring(0, 3) + ") "
-                        + formatPhone.substring(3, 6) + "-"
-                        + formatPhone.substring(6, 10);
-                phoneNumberText.setText(formatPhone);
+                phoneNumberText.setText(results.getString(9));
                 cityText.setText(results.getString(10));
                 postalText.setText(results.getString(11));
                 sinText.setText(results.getString(12));
