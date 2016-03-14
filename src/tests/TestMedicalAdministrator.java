@@ -659,7 +659,7 @@ public class TestMedicalAdministrator
         //make sure the insertion was successful
         assertTrue(result.equals(""));
         
-        //edit the participant with a different birthdate
+        //edit the participant with a different city
         String secondEdit = MedicalAdministrator.editParticipant(cosmoIDFour,
                 participantFirstNameFour, participantLastNameFour,
                 participantBirthdateOne, healthNumberFour, "19595 Testing Avenue", phoneFour,
@@ -685,6 +685,125 @@ public class TestMedicalAdministrator
     }
 
 
+    /**
+     * 
+     * Purpose: to test if the postalCode is changed
+     * @throws SQLException 
+     */
+    @Test 
+    public void testChangePostalCode() throws SQLException
+    {
+        
+        //create the original participant
+        String result = MedicalAdministrator.createParticipant(cosmoIDFour,
+                participantFirstNameFour, participantFirstNameFour,
+                participantBirthdateFour, physicianFNameFour, physicianLNameFour,
+                healthNumberFour, phoneFour, addressFour, path);
+        
+        //edit the participant with an initial postal code
+        String originalEdit = MedicalAdministrator.editParticipant(cosmoIDFour,
+                participantFirstNameFour, participantLastNameFour,
+                participantBirthdateOne, healthNumberFour, "19595 Testing Avenue", phoneFour,
+                cityOne, postalCodeTwo, sinFour);
+        
+        //get it from the database
+        ResultSet results = db.select("postalCode" , "Participant", "cosmoID = " + this.cosmoIDFour, "");      
+        
+        //get the postal code of the participant
+        String originalPostalCode = "";
+        
+        while (results.next())
+        {
+            originalPostalCode = results.getString(1);
+        }
+        //make sure the insertion was successful
+        assertTrue(result.equals(""));
+        
+        //edit the participant with a different postal code
+        String secondEdit = MedicalAdministrator.editParticipant(cosmoIDFour,
+                participantFirstNameFour, participantLastNameFour,
+                participantBirthdateOne, healthNumberFour, "19595 Testing Avenue", phoneFour,
+                cityFour, postalCodeFour, sinFour);
+        
+        //get edited result set
+        ResultSet editedResultSet = db.select("postalCode" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  
+        
+        //get the new name
+        String editedPostalCode= "";
+        while (editedResultSet.next())
+        {
+            editedPostalCode = editedResultSet.getString(1);
+        }
+
+        //make sure the insertion was successful
+        assertTrue(secondEdit.equals(""));
+        
+        assertTrue(!originalPostalCode.equals(editedPostalCode));
+        assertTrue(editedPostalCode.equals(postalCodeFour));
+        
+        db.delete("Participant", "cosmoID = " + cosmoIDFour);
+    }
+
+
+    /**
+     * 
+     * Purpose: to test if the Social Insurance Number is changed
+     * @throws SQLException 
+     */
+    @Test 
+    public void testChangeSIN() throws SQLException
+    {
+        
+        //create the original participant
+        String result = MedicalAdministrator.createParticipant(cosmoIDFour,
+                participantFirstNameFour, participantFirstNameFour,
+                participantBirthdateFour, physicianFNameFour, physicianLNameFour,
+                healthNumberFour, phoneFour, addressFour, path);
+        
+        //edit the participant with an initial sin
+        String originalEdit = MedicalAdministrator.editParticipant(cosmoIDFour,
+                participantFirstNameFour, participantLastNameFour,
+                participantBirthdateOne, healthNumberFour, "19595 Testing Avenue", phoneFour,
+                cityOne, postalCodeFour, sinTwo);
+        
+        //get it from the database
+        ResultSet results = db.select("socialInsuranceNumber" , "Participant", "cosmoID = " + this.cosmoIDFour, "");      
+        
+        //get the sin of the participant
+        String originalSin = "";
+        
+        while (results.next())
+        {
+            originalSin = results.getString(1);
+        }
+        //make sure the insertion was successful
+        assertTrue(result.equals(""));
+        
+        //edit the participant with a different sin
+        String secondEdit = MedicalAdministrator.editParticipant(cosmoIDFour,
+                participantFirstNameFour, participantLastNameFour,
+                participantBirthdateOne, healthNumberFour, "19595 Testing Avenue", phoneFour,
+                cityFour, postalCodeFour, sinFour);
+        
+        //get edited result set
+        ResultSet editedResultSet = db.select("socialInsuranceNumber" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  
+        
+        //get the new name
+        String editedSin= "";
+        while (editedResultSet.next())
+        {
+            editedSin = editedResultSet.getString(1);
+        }
+
+        //make sure the insertion was successful
+        assertTrue(secondEdit.equals(""));
+        
+        assertTrue(!originalSin.equals(editedSin));
+        assertTrue(editedSin.equals(sinFour));
+        
+        db.delete("Participant", "cosmoID = " + cosmoIDFour);
+    }
+    
     /**
      * Purpose: Test that the image is written in the right place when the
      * medical adminstrator adds a new participant

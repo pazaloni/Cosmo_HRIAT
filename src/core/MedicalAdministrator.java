@@ -329,8 +329,7 @@ public class MedicalAdministrator extends BasicStaff
         if (firstName.isEmpty() || lastName.isEmpty()
                 || birthDateString.equals("") || phn.isEmpty()
                      || address.isEmpty() || phoneNum.isEmpty() || 
-                     city.isEmpty() || postalCode.isEmpty()
-                     || sin.isEmpty())
+                     city.isEmpty())
         {
             result = "One of your fields is empty";
         }
