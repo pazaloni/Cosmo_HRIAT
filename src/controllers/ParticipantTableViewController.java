@@ -76,6 +76,7 @@ public class ParticipantTableViewController
 				"participantStatus = 'Deceased', participantStatus = 'Inactive',"
 				+ " participantStatus = 'Active'");
 
+
 		// Strings to represent the data to be displayed.
 		String cosmoID;
 		String firstName;
