@@ -72,7 +72,9 @@ public class ParticipantTableViewController
 			table = "Participant";
 		}
 		ResultSet rs = db.select("cosmoID, firstName, lastName, address, "
-				+ "dateUpdated, participantStatus", table, condition, "");
+				+ "dateUpdated, participantStatus", table, condition, 
+				"participantStatus = 'Deceased', participantStatus = 'Inactive',"
+				+ " participantStatus = 'Active'");
 
 		// Strings to represent the data to be displayed.
 		String cosmoID;
@@ -107,7 +109,8 @@ public class ParticipantTableViewController
 				/// create the participant object
 				Participant participant = new Participant(cosmoID,
 						participantName, address, emergencyContactName,
-						emergencyContactPhone, informationLastUpdated);
+						emergencyContactPhone, informationLastUpdated, 
+						participantStatus);
 
 				// add the participant into the tableview
 				participantData.add(participant);
@@ -157,7 +160,7 @@ public class ParticipantTableViewController
         ///Set the properties of the new status column
         statusColumn.setCellValueFactory(cellData ->
                 cellData.getValue().getStatusProperty());
-        statusColumn.setMinWidth(100);
+        statusColumn.setMinWidth(75);
         statusColumn.setResizable(false);
 
 
