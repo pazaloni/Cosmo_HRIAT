@@ -267,7 +267,9 @@ public class MedicalStaffMainPageGUI extends Application
                     {
                         if ( mostRecentlySelectedTab.equals(forms) )
                         {
-                            // switch to forms GUI
+                            IncidentReportFormGUI irf = new IncidentReportFormGUI(
+                                    medMainStage, loggedInUser);
+                            irf.showIncidentReportForm();
                         }
                         else if ( mostRecentlySelectedTab.equals(stats) )
                         {
