@@ -39,6 +39,7 @@ public class IncidentReportFormGUI
     chkRElbow, chkLElbow, chkRWrist, chkLWrist, chkLHand, chkRHand, chkLUpperLeg, chkRUpperLeg, chkLLowerLeg,chkRLowerLeg,
     chkLKnee, chkRKnee, chkAbdomen, chkNone, chkOther;
 
+    private TextField txtOther;
     private List<CheckBox> typesOfInjuries;
 
     public IncidentReportFormGUI(Stage parentStage, StaffAccount loggedInUser)
@@ -53,7 +54,7 @@ public class IncidentReportFormGUI
         formTitle.setFont(new Font(22));
         mainBox = new VBox();
         mainBox.getChildren().addAll(formTitle, createHeader(),
-                createRegisteredWorkArea());
+                createRegisteredWorkArea(), createBodyAreaInjured());
         mainPane = new ScrollPane();
         mainPane.setContent(mainBox);
 
@@ -175,25 +176,26 @@ public class IncidentReportFormGUI
         gridPane.add(chkLEar = new CheckBox("Left Ear"), 0, 10); 
         gridPane.add(chkREar = new CheckBox("Right ear"), 0, 11);
         gridPane.add(chkToes = new CheckBox("Toe(s)"), 0, 12); 
+        gridPane.add(chkOther = new CheckBox("Other (Specify):"), 0, 14);
         gridPane.add(chkLEye = new CheckBox("Left Eye"), 0, 13);
-        gridPane.add(chkREye = new CheckBox("Right Eye"), 0, 14); 
-        gridPane.add(chkLUpperback = new CheckBox("left Upper Back"), 1, 0);
-        gridPane.add(chkRUpperBack = new CheckBox("Right Upper Back"), 1, 1);
-        gridPane.add(chkLLowerBack = new CheckBox("Left Lower Back"), 1, 2);
-        gridPane.add(chkRLowerBack = new CheckBox("Right Lower Back"), 1, 3);
-        gridPane.add(chkLFoot = new CheckBox("Left Foot"), 1, 4);
-        gridPane.add(chkRFoot = new CheckBox("Right Foot"), 1, 5);
-        gridPane.add(chkRUpperArm = new CheckBox("Right Upper Arm"), 1, 6);
-        gridPane.add(chkLUpperArm = new CheckBox("Left upper Arm"), 1, 7); 
-        gridPane.add(chkRLowerArm = new CheckBox("Right Lower Arm"), 1, 8);
-        gridPane.add(chkLLowerArm = new CheckBox("Left Lower Arm"), 1, 9); 
-        gridPane.add(chkNose = new CheckBox("Nose"), 1, 10); 
-        gridPane.add(chkFingers = new CheckBox("Finger(s)"), 1, 11);
+        gridPane.add(chkREye = new CheckBox("Right Eye"), 1, 1); 
+        gridPane.add(chkLUpperback = new CheckBox("left Upper Back"), 1, 2);
+        gridPane.add(chkRUpperBack = new CheckBox("Right Upper Back"), 1, 3);
+        gridPane.add(chkLLowerBack = new CheckBox("Left Lower Back"), 1, 4);
+        gridPane.add(chkRLowerBack = new CheckBox("Right Lower Back"), 1, 5);
+        gridPane.add(chkLFoot = new CheckBox("Left Foot"), 1, 6);
+        gridPane.add(chkRFoot = new CheckBox("Right Foot"), 1, 7);
+        gridPane.add(chkRUpperArm = new CheckBox("Right Upper Arm"), 1, 8);
+        gridPane.add(chkLUpperArm = new CheckBox("Left upper Arm"), 1, 9); 
+        gridPane.add(chkRLowerArm = new CheckBox("Right Lower Arm"), 1, 10);
+        gridPane.add(chkLLowerArm = new CheckBox("Left Lower Arm"), 1, 11); 
+        gridPane.add(chkNose = new CheckBox("Nose"), 1, 0); 
+        gridPane.add(chkFingers = new CheckBox("Finger(s)"), 2, 1);
         gridPane.add(chkRElbow = new CheckBox("Right Elbow"), 1,12);
-        gridPane.add(chkLElbow = new CheckBox("Left Elbow"), 1, 13);
-        gridPane.add(chkRWrist = new CheckBox("Right Wrist"), 1, 14);
-        gridPane.add(chkLWrist = new CheckBox("Left Wrist"), 2, 0);
-        gridPane.add(chkLHand = new CheckBox("Left Hand"), 2, 1);
+        gridPane.add(chkLElbow = new CheckBox("Left Elbow"), 2, 0);
+        gridPane.add(chkRWrist = new CheckBox("Right Wrist"), 1, 13);
+        gridPane.add(chkLWrist = new CheckBox("Left Wrist"), 2, 11);
+        gridPane.add(chkLHand = new CheckBox("Left Hand"), 2, 12);
         gridPane.add(chkRHand = new CheckBox("Right Hand"), 2, 2);
         gridPane.add(chkLUpperLeg = new CheckBox("Left Upper Leg"), 2, 3);
         gridPane.add(chkRUpperLeg = new CheckBox("Right Upper Leg"), 2, 4); 
@@ -203,8 +205,12 @@ public class IncidentReportFormGUI
         gridPane.add(chkRKnee = new CheckBox("Right Knee"), 2, 8); 
         gridPane.add(chkAbdomen = new CheckBox("Abdomen/Stomach"), 2, 9); 
         gridPane.add(chkNone = new CheckBox("None"), 2, 10);
-        gridPane.add(chkOther = new CheckBox("Other (Specify)"), 2, 11);
+        gridPane.add(txtOther = new TextField(), 1,14);
+       
+        gridPane.setColumnSpan(txtOther, 2);
         
+        gridPane.setHgap(12);
+        gridPane.setVgap(3);
 
         return gridPane;
         
