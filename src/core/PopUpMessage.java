@@ -17,7 +17,7 @@ public class PopUpMessage
     private Button confirmBtn;
     public BorderPane root = new BorderPane();
     // Scene scene = new Scene(root);
-    Stage stage;
+    public Stage stage;
 
     /**
      * This will create the PopUpMessage. This is a pop-up box that just

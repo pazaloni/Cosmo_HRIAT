@@ -613,7 +613,7 @@ public class MedicalStaffMainPageGUI extends Application
                     createParticipantStage.setTitle("Create Participant");
 
                     createParticipantStage.setScene(new Scene(
-                            createParticipantPopUp(), 325, 400));
+                            createParticipantPopUp(), 325, 425));
                     createParticipantStage
                             .initModality(Modality.APPLICATION_MODAL);
                     createParticipantStage.initOwner(medMainStage);

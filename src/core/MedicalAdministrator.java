@@ -1,6 +1,7 @@
 package core;
 import gui.MedicalStaffMainPageGUI;
 import helpers.DatabaseHelper;
+import helpers.FormatHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -192,14 +193,14 @@ public class MedicalAdministrator extends BasicStaff
                     String formattedDate = df.format(c.getTime());
 
                     String dbPath = saveImage(imagePath, cosmoID);
-
+                    FormatHelper fh = new FormatHelper();
                     // array of values to insert
                     values[0][1] = cosmoID;
                     values[1][1] = firstName;
                     values[2][1] = lastName;
                     values[3][1] = birthDateString;
                     values[4][1] = healthNumber;
-                    values[5][1] = phone;
+                    values[5][1] = fh.formatPhoneNum(phone);
                     values[6][1] = address;
                     values[7][1] = formattedDate;
                     values[8][1] = "1";
@@ -310,7 +311,8 @@ public class MedicalAdministrator extends BasicStaff
      */
 	public static String editParticipant(String cosmoId, String firstName,
             String lastName, LocalDate birthDate,
-            String phn, String address)
+            String phn, String address, String phoneNum, String city, String postalCode,
+            String sin)
 	{
         // initialize birth date string to an empty string
         String birthDateString = "";
@@ -327,7 +329,8 @@ public class MedicalAdministrator extends BasicStaff
         // check to see if any of the fields are empty
         if (firstName.isEmpty() || lastName.isEmpty()
                 || birthDateString.equals("") || phn.isEmpty()
-                     || address.isEmpty())
+                     || address.isEmpty() || phoneNum.isEmpty() || 
+                     city.isEmpty())
         {
             result = "One of your fields is empty";
         }
@@ -336,32 +339,49 @@ public class MedicalAdministrator extends BasicStaff
             DatabaseHelper db = new DatabaseHelper();
             db.connect();
             System.out.println("Shouldnt happen");
-
+            FormatHelper fh = new FormatHelper();
             boolean successful = false;
             // check to see if the Health Number is a 9 digit number
             if (!phn.matches("^[0-9]{9}$"))
             {
                 result = "Health Number must be 9 digits";
             }
+            //check if postal code is valid
+            else if(!postalCode.matches("^[A-Za-z]\\d[A-Za-z][ ]?\\d[A-Za-z]\\d$"))
+            {
+                result = "Invalid Postal Code";
+            }
+            //ensure SIN is a 9 digit number
+            else if(!sin.matches("^[0-9]{9}$"))
+            {
+                result = "SIN must be 9 digits";
+            }
+            else if((phoneNum = fh.formatPhoneNum(phoneNum)) == "A phone number must have 10 digits.")
+            {
+                result = phoneNum;
+            }
             else
             {
                 successful = false;
                     // array of field names
-                    String values[][] = new String[7][2];
+                    String values[][] = new String[11][2];
                     values[0][0] = "cosmoID";
                     values[1][0] = "firstName";
                     values[2][0] = "lastName";
                     values[3][0] = "dateOfBirth";
                     values[4][0] = "personalHealthNumber";
                     values[5][0] = "address";
-                    values[6][0] = "dateUpdated";
+                    values[6][0] = "phoneNumber";
+                    values[7][0] = "city";
+                    values[8][0] = "postalCode";
+                    values[9][0] = "socialInsuranceNumber";
+                    values[10][0] = "dateUpdated";
 
                  
                     // get the current date to insert into "lastUpdated"
                     Calendar c = Calendar.getInstance();
                     SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-                    String formattedDate = df.format(c.getTime());
-
+                    String formattedDate = df.format(c.getTime());                   
                     // array of values to insert
                     values[0][1] = cosmoId;
                     values[1][1] = firstName;
@@ -369,7 +389,11 @@ public class MedicalAdministrator extends BasicStaff
                     values[3][1] = birthDateString;
                     values[4][1] = phn;
                     values[5][1] = address;
-                    values[6][1] = formattedDate;         
+                    values[6][1] = phoneNum;
+                    values[7][1] = city;
+                    values[8][1] = postalCode;
+                    values[9][1] = sin;
+                    values[10][1] = formattedDate;         
     
                     Calendar ca = Calendar.getInstance();
                     // inserting into the database

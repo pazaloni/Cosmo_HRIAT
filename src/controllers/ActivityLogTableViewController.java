@@ -3,6 +3,9 @@ import helpers.DatabaseHelper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import core.ActivityLog;
 import javafx.collections.FXCollections;
@@ -71,6 +74,8 @@ public class ActivityLogTableViewController
                 "Timestamp DESC");
 
         String who;
+        Date whenDate;
+        Date whenTime;
         String when;
         String event;
         String details;
@@ -80,12 +85,16 @@ public class ActivityLogTableViewController
             while ( activityLogResults.next() )
             {
                 who = activityLogResults.getString(2);
-                when = activityLogResults.getString(3);
+                whenDate = activityLogResults.getDate(3);
+                whenTime = activityLogResults.getTime(3);
                 event = activityLogResults.getString(4);
                 details = activityLogResults.getString(5);
-
-                // Remove extra 0's at the end of the timestamp
-                when = when.substring(0, when.length() - 7);
+                System.out.println(whenDate.toString());
+                DateFormat format = new SimpleDateFormat("dd-MMM-YYYY");
+                // Remove extra 0's at the end of the timestamp                
+                when = format.format(whenDate);
+                format = new SimpleDateFormat("kk:mm:ss");
+                when += " " +format.format(whenTime);
 
                 ActivityLog currentLog = new ActivityLog(who, when, event, details);
 
