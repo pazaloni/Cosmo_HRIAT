@@ -232,7 +232,7 @@ public class MedicalAdministrator extends BasicStaff
      Purpose:save the image into the image folder using the correct image path
      * 
      * @param imagePath path of the image chosen by the user
-     * @param cosmoID the cosmo id of the particiant corresponding to the image
+     * @param cosmoID the cosmo id of the participant corresponding to the image
      * @return the path stored in the database
      */
     private static String saveImage( String imagePath, String cosmoID )
@@ -312,7 +312,7 @@ public class MedicalAdministrator extends BasicStaff
 	public static String editParticipant(String cosmoId, String firstName,
             String lastName, LocalDate birthDate,
             String phn, String address, String phoneNum, String city, String postalCode,
-            String sin)
+            String sin, String status)
 	{
         // initialize birth date string to an empty string
         String birthDateString = "";
@@ -364,7 +364,7 @@ public class MedicalAdministrator extends BasicStaff
             {
                 successful = false;
                     // array of field names
-                    String values[][] = new String[11][2];
+                    String values[][] = new String[12][2];
                     values[0][0] = "cosmoID";
                     values[1][0] = "firstName";
                     values[2][0] = "lastName";
@@ -375,7 +375,8 @@ public class MedicalAdministrator extends BasicStaff
                     values[7][0] = "city";
                     values[8][0] = "postalCode";
                     values[9][0] = "socialInsuranceNumber";
-                    values[10][0] = "dateUpdated";
+                    values[10][0] = "participantStatus";
+                    values[11][0] = "dateUpdated";
 
                  
                     // get the current date to insert into "lastUpdated"
@@ -393,7 +394,8 @@ public class MedicalAdministrator extends BasicStaff
                     values[7][1] = city;
                     values[8][1] = postalCode;
                     values[9][1] = sin;
-                    values[10][1] = formattedDate;         
+                    values[10][1] = status;
+                    values[11][1] = formattedDate;         
     
                     Calendar ca = Calendar.getInstance();
                     // inserting into the database

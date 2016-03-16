@@ -310,23 +310,27 @@ public class participantDetailsGUI extends Application
         pictureBox.setStyle("-fx-background-color: #FFFFFF;");
         pictureBox.setAlignment(Pos.TOP_CENTER);
 
-        // /Add the status to the picture box
+        ///Add the status to the picture box
+        HBox statusBox = new HBox();
         ResultSet statusResults = DBObject.select("participantStatus",
                 "Participant", "cosmoID =" + this.cosmoID, "");
-        String statusString = "Status: ";
+        ///Label for the new status field
+        Label statusLabel = new Label("Status:");
+        String statusString = "";
         try
         {
             while ( statusResults.next() )
             {
-                statusString += statusResults.getString(1);
+                statusString = statusResults.getString(1);
             }
         }
         catch ( SQLException e1 )
         {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         statusText.setText(statusString);
+        
+        statusBox.getChildren().addAll(statusLabel, statusText);
 
         // create buttons
         Button editBtn = new Button();
@@ -379,8 +383,6 @@ public class participantDetailsGUI extends Application
 
         // set basic labels
         Label cosmoIDLabel = new Label("CosmoID:");
-        // /Label for the new status field
-        Label statusLabel = new Label("Status:");
         Label firstNameLabel = new Label("First Name:");
         Label lastNameLabel = new Label("Last Name: ");
         Label dayOfBirthLabel = new Label("Date of Birth: ");
@@ -407,7 +409,7 @@ public class participantDetailsGUI extends Application
         postalLabel.setPadding(new Insets(5, 5, 5, 5));
         phoneLabel.setPadding(new Insets(5, 5, 5, 5));
         sinLabel.setPadding(new Insets(5, 5, 5, 5));
-        // / get participant name, phn, diagnosis, and address from database
+        /// get participant name, phn, diagnosis, and address from database
         ResultSet results = DBObject
                 .select("firstName, lastName, dateOfBirth, personalHealthNumber, conditionName,"
                         + "description, address, imagePath, phoneNumber, city, postalCode, socialInsuranceNumber",
@@ -472,7 +474,7 @@ public class participantDetailsGUI extends Application
             e.printStackTrace();
         }
 
-        pictureBox.getChildren().addAll(statusText, viewDocumentsBtn, generateFormsBtn,
+        pictureBox.getChildren().addAll(statusBox, viewDocumentsBtn, generateFormsBtn,
                 createNoteBtn);
 
         cosmoIDText.setMaxWidth(PREVIEW_TEXT_WIDTH);
@@ -543,7 +545,7 @@ public class participantDetailsGUI extends Application
                 mainEditWindow.setTitle("Edit Participant");
 
                 mainEditWindow.setScene(new Scene(editParticipantPopUp(), 290,
-                        400));
+                        420));
                 mainEditWindow.initModality(Modality.APPLICATION_MODAL);
                 mainEditWindow.initOwner(participantMainStage);
                 mainEditWindow.setResizable(false);
@@ -1156,6 +1158,8 @@ public class participantDetailsGUI extends Application
         Label cityLbl = new Label("City");
         Label postalCodeLbl = new Label("Postal Code");
         Label sinLbl = new Label("SIN");
+        ///Label to display the participant status
+        Label statusLabel = new Label("Status:");
 
         // the text fields
         TextField firstNameTxt = new TextField(firstNameText.getText());
@@ -1228,7 +1232,14 @@ public class participantDetailsGUI extends Application
 
         // set the value of the birth date picker
         birthDatePicker.setValue(ld);
-
+        
+        ///The combo box to select the participant status.(Active, Inactive, Deceased)
+        ObservableList<String> status = FXCollections.observableArrayList
+        (
+                "Active", "Inactive", "Deceased"
+        );
+        final ComboBox statusCombo = new ComboBox(status);
+        
         // set the health num
         TextField healthNumTxt = new TextField(healthNumText.getText());
 
@@ -1246,6 +1257,9 @@ public class participantDetailsGUI extends Application
         
         //SIN Text
         TextField sinTxt = new TextField(sinText.getText());
+        
+        ///set the combobox value to the current status
+        statusCombo.setValue(statusText.getText());
 
         // add the form to the grid
         grid.add(firstNameLbl, 0, 1);
@@ -1257,6 +1271,8 @@ public class participantDetailsGUI extends Application
         grid.add(cityLbl, 0, 7);
         grid.add(postalCodeLbl, 0, 8);
         grid.add(sinLbl, 0, 9);
+        ///Add the status label to the gui
+        grid.add(statusLabel, 0, 10);
         
         grid.add(lblWarning, 1, 0);
         
@@ -1269,6 +1285,8 @@ public class participantDetailsGUI extends Application
         grid.add(cityTxt, 1,7);
         grid.add(postalTxt, 1, 8);
         grid.add(sinTxt, 1, 9);
+        ///add the combobox to the GUI
+        grid.add(statusCombo, 1, 10);
 
 
         // setPadding of the grid
@@ -1289,7 +1307,7 @@ public class participantDetailsGUI extends Application
                         cosmoIDText.getText(), firstNameTxt.getText(),
                         lastNameTxt.getText(), birthDatePicker.getValue(),
                         healthNumTxt.getText(), addressTxt.getText(), phoneNumTxt.getText(),
-                        cityTxt.getText(), postalTxt.getText(), sinTxt.getText());
+                        cityTxt.getText(), postalTxt.getText(), sinTxt.getText(), statusCombo.getValue().toString());
 
                 // if no error message is recieved then close this window and
                 // refresh the table
@@ -1332,6 +1350,7 @@ public class participantDetailsGUI extends Application
                    
                    checkForChanges(sinText, sinTxt.getText(),
                            "SIN", cosmoIDText.getText());
+
                    
                 }
                 // if there is an error message, display it
@@ -1375,8 +1394,8 @@ public class participantDetailsGUI extends Application
         buttonsHbox.setAlignment(Pos.CENTER);
         resetHbox.getChildren().addAll(resetBtn);
         resetHbox.setAlignment(Pos.CENTER_RIGHT);
-        grid.add(buttonsHbox, 1, 10);
-        grid.add(resetHbox, 0, 10);
+        grid.add(buttonsHbox, 1, 11);
+        grid.add(resetHbox, 0, 11);
 
         return grid;
     }
