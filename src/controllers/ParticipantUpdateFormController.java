@@ -69,7 +69,6 @@ public class ParticipantUpdateFormController
         }
         catch ( SQLException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 		//disconnect from the database		
@@ -107,7 +106,6 @@ public class ParticipantUpdateFormController
         }
         catch ( SQLException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 	    
@@ -131,7 +129,6 @@ public class ParticipantUpdateFormController
         }
         catch ( SQLException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 	    //disconnect from the database
@@ -170,7 +167,6 @@ public class ParticipantUpdateFormController
         }
         catch ( SQLException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         
@@ -234,7 +230,6 @@ public class ParticipantUpdateFormController
         }
         catch ( SQLException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         
