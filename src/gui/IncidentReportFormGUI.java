@@ -42,25 +42,28 @@ public class IncidentReportFormGUI
     private TextField txtOther;
     private List<CheckBox> typesOfInjuries;
 
-    public IncidentReportFormGUI(Stage parentStage, StaffAccount loggedInUser)
-    {
-        
-        this.parentStage = parentStage;
-    }
+    private StaffAccount loggedInStaff;
 
-    public void showIncidentReportForm()
+    public IncidentReportFormGUI(Stage stage, StaffAccount loggedInStaff)
+    {
+        this.parentStage = stage;
+        this.loggedInStaff = loggedInStaff;
+    }
+    
+
+    public ScrollPane showIncidentReportForm()
     {
         Label formTitle = new Label(FORM_TITLE);
         formTitle.setFont(new Font(22));
         mainBox = new VBox();
+        mainBox.setSpacing(10);
+        
         mainBox.getChildren().addAll(formTitle, createHeader(),
                 createRegisteredWorkArea(), createBodyAreaInjured());
         mainPane = new ScrollPane();
         mainPane.setContent(mainBox);
 
-        parentStage.setScene(new Scene(mainPane));
-        parentStage.initOwner(parentStage);
-        parentStage.initModality(Modality.APPLICATION_MODAL);
+       return mainPane;
 
     }
 
@@ -145,7 +148,7 @@ public class IncidentReportFormGUI
         });
         return grid;
     }
-    
+  
     /**
      * Purpose: creates the section of the form where the user can select multiple checkboxes outlining the area
      * of the injured body.

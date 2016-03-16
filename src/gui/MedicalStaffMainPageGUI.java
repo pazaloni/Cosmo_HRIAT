@@ -235,6 +235,7 @@ public class MedicalStaffMainPageGUI extends Application
 
         // set text for tabs
         participants.setText("Participants");
+        participants.setContent(createHBoxPreviewNotes());
         forms.setText("Forms");
         stats.setText("Stats");
 
@@ -242,7 +243,8 @@ public class MedicalStaffMainPageGUI extends Application
         forms.closableProperty().set(false);
         participants.closableProperty().set(false);
         stats.closableProperty().set(false);
-
+        IncidentReportFormGUI irf = new IncidentReportFormGUI(medMainStage, loggedInUser);
+        forms.setContent(irf.showIncidentReportForm());
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(175);
         tabPane.getTabs().addAll(participants, forms);
@@ -257,7 +259,7 @@ public class MedicalStaffMainPageGUI extends Application
         tabPane.getSelectionModel().select(participants);
 
         // set the changed property
-        tabPane.getSelectionModel().selectedItemProperty()
+        /*tabPane.getSelectionModel().selectedItemProperty()
                 .addListener(new ChangeListener<Tab>()
                 {
 
@@ -281,7 +283,7 @@ public class MedicalStaffMainPageGUI extends Application
                     }
 
                 });
-
+*/
         tabPane.setMinHeight(29);
         tabPane.setFocusTraversable(false);
         return tabPane;
@@ -1042,14 +1044,15 @@ public class MedicalStaffMainPageGUI extends Application
         BorderPane header = createHBoxHeader();
         // tab pane
         TabPane tabs = createTabs();
+        
         // Search bar
         HBox searchBar = createSearchBar();
         VBox.setMargin(searchBar, new Insets(5, 0, 5, 0));
         // preview notes
-        HBox previewNotes = createHBoxPreviewNotes();
+        //HBox previewNotes = createHBoxPreviewNotes();
 
         // add everything to vbox
-        vbox.getChildren().addAll(header, tabs, searchBar, previewNotes,
+        vbox.getChildren().addAll(header, tabs, searchBar,
                 pTVCont.participantTable);
 
         return vbox;
