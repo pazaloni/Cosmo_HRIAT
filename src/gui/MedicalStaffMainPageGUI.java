@@ -50,9 +50,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -244,9 +247,11 @@ public class MedicalStaffMainPageGUI extends Application
         participants.closableProperty().set(false);
         stats.closableProperty().set(false);
         IncidentReportFormGUI irf = new IncidentReportFormGUI(medMainStage, loggedInUser);
+        
         forms.setContent(irf.showIncidentReportForm());
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(175);
+       
         tabPane.getTabs().addAll(participants, forms);
 
         // if they are an administrator, add the stats tab
