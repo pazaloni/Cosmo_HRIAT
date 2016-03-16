@@ -321,9 +321,16 @@ public class ParticipantUpdateFormController
 		kinInfo[1][1] = "";
 		try {
 			//get the kinID
-			rs.next();
+			if(rs.next())
+			{
+				kinInfo[1][1] = rs.getString(1);
+			}
+			else
+			{
+				kinInfo[1][1] = "";
+			}
 			
-			kinInfo[1][1] = rs.getString(1);
+			
 			System.out.println("KIN ID = " + kinInfo[1][1]);
 			
 		} catch (SQLException e) {
@@ -356,7 +363,7 @@ public class ParticipantUpdateFormController
 				db.insert(values, "Kin");
 				
 				//create the string to put into the WHERE clause
-				whereStmt = this.createWhereStatement(values, 2);
+				whereStmt = this.createWhereStatement(values, 7);
 				
 				//check for the kinID of the new record
 				rs = db.select("kinID", "Kin", whereStmt, "");
@@ -653,8 +660,7 @@ public class ParticipantUpdateFormController
 	 */
 	private boolean validatePhoneNumber(String phone)
 	{
-		return phone.matches( "(\\d-)?(\\d{3}-)?\\d{3}-\\d{4}") ||
-				phone.equals(null) || phone.isEmpty();
+		return phone == null || phone.isEmpty() || phone.matches( "(\\d-)?(\\d{3}-)?\\d{3}-\\d{4}");
 	}
 	
 	/**
@@ -666,8 +672,8 @@ public class ParticipantUpdateFormController
 	 */
 	private boolean validatePostalCode(String postalCode)
 	{
-		return postalCode.matches("^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$") ||
-				postalCode.equals(null) || postalCode.isEmpty();
+		return postalCode == null || postalCode.isEmpty() ||
+				postalCode.matches("^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$");
 	}
 	
 	/**
@@ -679,8 +685,8 @@ public class ParticipantUpdateFormController
 	 */
 	private boolean validateAddress(String address)
 	{
-		return address.matches("\\d+\\s+(([a-zA-Z])+|([a-zA-Z]+\\s+[a-zA-Z]+))\\s+[a-zA-Z]*") ||
-				address.equals(null) || address.isEmpty();
+		return address == null || address.isEmpty() || 
+				address.matches("\\d+\\s+([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z]+)");
 	}
 	
 	/**
@@ -692,8 +698,8 @@ public class ParticipantUpdateFormController
 	 */
 	private boolean validateCity(String city)
 	{
-		return city.matches( "([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z]+)" ) ||
-				city.equals(null) || city.isEmpty();
+		return city == null || city.isEmpty() ||
+				city.matches( "([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z]+)" );
 	}
 	
 	/**
@@ -705,7 +711,10 @@ public class ParticipantUpdateFormController
 	 */
 	private boolean validateName(String name)
 	{
-		return name.matches("^[a-zA-Z \\-\\.\\']*$");
+		System.out.println("Name check result: " + (name.matches("^[a-zA-Z \\-\\.\\']*$") && 
+				!(name.equals(""))));
+		return !(name == null) && name.matches("^[a-zA-Z \\-\\.\\']*$") && 
+				!(name.equals(""));
 	}
 	
 	/**
@@ -729,21 +738,16 @@ public class ParticipantUpdateFormController
 		
 		//if there is no first or last name, kin information is invalid.
 		if(((firstName == null || firstName.equals("")) ||
-				(lastName == null || lastName.equals("")))
-				&& !(address == null || address.equals("") ||
-						city == null || city.equals("") ||
-						postalCode == null || postalCode.equals("") ||
-						homePhone == null || homePhone.equals("") ||
-						workPhone == null || workPhone.equals("")))
+				(lastName == null || lastName.equals(""))))
 		{
 			message += "Kin must have first and last name.\n";
 		}
 		else if(!(firstName == null || firstName.equals("")) &&
-				!(lastName == null || lastName.equals("")) &&
-				!(address == null || address.equals("")) &&
-				!(city == null || city.equals("")) &&
-				!(postalCode == null || postalCode.equals("")) &&
-				!(homePhone == null || homePhone.equals("")) &&
+				!(lastName == null || lastName.equals("")) ||
+				!(address == null || address.equals("")) ||
+				!(city == null || city.equals("")) ||
+				!(postalCode == null || postalCode.equals("")) ||
+				!(homePhone == null || homePhone.equals("")) ||
 				!(workPhone == null || workPhone.equals("")))
 		{
 			//check first name is valid
@@ -816,22 +820,17 @@ public class ParticipantUpdateFormController
 		//if the first or last name fields are empty, entire caregiver area
 		//is invalid. 
 		
-		if((firstName == null || firstName.equals("") ||
-				lastName == null || lastName.equals("")) &&
-				!((address == null || address.equals("")) &&
-					(city == null || city.equals("")) &&
-					(postalCode == null || postalCode.equals("")) &&
-					(homePhone == null || homePhone.equals("")) &&
-					(workPhone == null || workPhone.equals(""))))
+		if((firstName == null || firstName.equals("")) || lastName.equals(null) ||
+				lastName.equals(""))
 		{
 			message += "Caregiver first and last name must be provided.\n";
 		}
 		else if(!(firstName == null || firstName.equals("")) &&
-				!(lastName == null || lastName.equals("")) &&
-				!(address == null || address.equals("")) &&
-				!(city == null || address.equals("")) &&
-				!(postalCode == null || postalCode.equals("")) &&
-				!(homePhone == null || homePhone.equals("")) &&
+				!(lastName == null || lastName.equals("")) ||
+				!(address == null || address.equals("")) ||
+				!(city == null || address.equals("")) ||
+				!(postalCode == null || postalCode.equals("")) ||
+				!(homePhone == null || homePhone.equals("")) ||
 				!(workPhone == null || workPhone.equals("")))
 		{
 			if(! validateName(firstName))

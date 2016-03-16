@@ -177,8 +177,8 @@ public class PartcipantUpdateForm extends ScrollPane
 		GridPane main = new GridPane();
 		
 		//all labels for kin information
-		Label firstNameLbl = new Label("First Name:");
-		Label lastNameLbl = new Label("Last Name:");
+		Label firstNameLbl = new Label("First Name*:");
+		Label lastNameLbl = new Label("Last Name*:");
 		Label addressLbl = new Label("Address:");
 		Label cityLbl = new Label("City:");
 		Label postalCodeLbl = new Label("Postal Code:");
@@ -250,8 +250,8 @@ public class PartcipantUpdateForm extends ScrollPane
 		GridPane main = new GridPane();
 		
 		//all labels for caregiver information
-		Label firstNameLbl = new Label("First Name:");
-		Label lastNameLbl = new Label("Last Name");
+		Label firstNameLbl = new Label("First Name*:");
+		Label lastNameLbl = new Label("Last Name*");
 		Label addressLbl = new Label("Address:");
 		Label cityLbl = new Label("City:");
 		Label postalCodeLbl = new Label("Postal Code:");
@@ -322,9 +322,9 @@ public class PartcipantUpdateForm extends ScrollPane
 		GridPane main = new GridPane();
 		
 		//the labels for emergency contact information
-		Label name = new Label("First Name:");
-		Label lastName = new Label("Last Name");
-		Label phone = new Label("Phone Number:");
+		Label name = new Label("First Name*:");
+		Label lastName = new Label("Last Name*:");
+		Label phone = new Label("Phone Number*:");
 		
 		//insets for padding and margins
 		Insets insets = new Insets(5,5,5,5);
