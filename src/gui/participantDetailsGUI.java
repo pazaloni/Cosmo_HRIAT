@@ -3,54 +3,36 @@ package gui;
 import helpers.DatabaseHelper;
 import helpers.FormatHelper;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.WatchEvent.Kind;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
 import core.MedicalAdministrator;
 import core.NotePopUp;
 import core.StaffAccount;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -58,8 +40,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -103,7 +83,7 @@ public class participantDetailsGUI extends Application
     private Label cityText = new Label();
     private Label postalText = new Label();
     private Label sinText = new Label();
-    // /new label to represent the participant's status within the system
+    ///new label to represent the participant's status within the system
     private Label statusText = new Label();
 
     private Stage createNoteStage;
@@ -310,11 +290,14 @@ public class participantDetailsGUI extends Application
         pictureBox.setAlignment(Pos.TOP_CENTER);
 
         ///Add the status to the picture box
+        ///create the hbox to store status information
         HBox statusBox = new HBox();
+        ///get the current status for the current participant
         ResultSet statusResults = DBObject.select("participantStatus",
                 "Participant", "cosmoID =" + this.cosmoID, "");
         ///Label for the new status field
         Label statusLabel = new Label("Status:");
+        ///set the text to the current status
         String statusString = "";
         try
         {
@@ -329,13 +312,15 @@ public class participantDetailsGUI extends Application
         }
         statusText.setText(statusString);
         
+        ///set the padding for the status label and text
         statusText.setPadding(new Insets(5, 5, 5, 5));
         statusLabel.setPadding(new Insets(5, 5, 5, 5));
         
+        ///add the label and text to the status box
         statusBox.getChildren().addAll(statusLabel, statusText);
         statusBox.setPadding(new Insets(0, 0, 0, 15));
 
-        // create buttons
+        //create buttons
         Button editBtn = new Button();
         Button viewDocumentsBtn = new Button("View \nAttached \nDocuments");
         Button generateFormsBtn = new Button("Generate Forms");
@@ -500,8 +485,6 @@ public class participantDetailsGUI extends Application
 
         // add all labels to the gridpane
         basicInfoPane.add(cosmoIDLabel, 0, 0);
-        // /add the status label to the basic info pane
-        // /basicInfoPane.add(statusLabel, 0, 1);
         basicInfoPane.add(firstNameLabel, 0, 2);
         basicInfoPane.add(lastNameLabel, 0, 3);
         basicInfoPane.add(dayOfBirthLabel, 0, 4);
@@ -513,8 +496,6 @@ public class participantDetailsGUI extends Application
         basicInfoPane.add(sinLabel, 0, 10);
 
         basicInfoPane.add(cosmoIDText, 1, 0);
-        // /add the status text to the basic info pane
-        // /basicInfoPane.add(statusText, 1, 1);
         basicInfoPane.add(firstNameText, 1, 2);
         basicInfoPane.add(lastNameText, 1, 3);
         basicInfoPane.add(dayOfBirthText, 1, 4);
@@ -1241,7 +1222,7 @@ public class participantDetailsGUI extends Application
         (
                 "Active", "Inactive", "Deceased"
         );
-        final ComboBox statusCombo = new ComboBox(status);
+        final ComboBox<String> statusCombo = new ComboBox<String>(status);
         
         // set the health num
         TextField healthNumTxt = new TextField(healthNumText.getText());
