@@ -46,6 +46,8 @@ public class TestMedicalAdministrator
     private String postalCodeOne;
     private String sinOne;
     private String activeStatus;
+    private String inactiveStatus;
+    private String deceasedStatus;
 
     private String cosmoIDTwo;
     private String participantFirstNameTwo;
@@ -109,7 +111,10 @@ public class TestMedicalAdministrator
         
         db.connect();
         
+        ///Instantiate the strings for the status options 
         activeStatus = "Active";
+        inactiveStatus = "Inactive";
+        deceasedStatus = "Deceased";
         
         String date1 = "07-07-2007";
         String date2 = "20-12-2012";
@@ -854,6 +859,83 @@ public class TestMedicalAdministrator
 
 
     }
+    
+    /**
+     * Purpose: To test if the participant status is changed 
+     * @throws SQLException 
+     */
+    @Test
+    public void testStatusIsChanged() throws SQLException
+    {
+        //create the original participant with the default status of Active
+        String result = MedicalAdministrator.createParticipant(cosmoIDOne,
+                participantFirstNameOne, participantFirstNameOne,
+                participantBirthdateOne, physicianFNameOne, physicianLNameOne,
+                healthNumberOne, phoneOne, addressOne, path);
+        
+        //get it from the database
+        ResultSet results = db.select("participantStatus" , "Participant", 
+                "cosmoID = " + this.cosmoIDOne, "");      
+        
+        //get the status of the participant
+        String originalStatus = "";
+        
+        while (results.next())
+        {
+            originalStatus = results.getString(1);
+        }
+        //make sure the insertion was successful
+        assertTrue(result.equals(""));
+        
+        //edit the participant with an inactive Status
+        String inactiveEdit = MedicalAdministrator.editParticipant(cosmoIDOne,
+                participantFirstNameOne, participantLastNameOne,
+                participantBirthdateOne, healthNumberOne, "19595 Testing Avenue", phoneOne,
+                cityOne, postalCodeOne, sinOne, inactiveStatus);
+        
+        //get edited result set
+        ResultSet editedResultSet = db.select("participantStatus" , "Participant",
+                "cosmoID = " + this.cosmoIDOne, "");  
+        
+        //get the new name
+        String editedStatus = "";
+        while (editedResultSet.next())
+        {
+            editedStatus = editedResultSet.getString(1);
+        }
+
+        //make sure the insertion was successful
+        assertTrue(inactiveEdit.equals(""));
+        
+        assertTrue(!originalStatus.equals(editedStatus));
+        assertTrue(editedStatus.equals(inactiveStatus));
+        
+        //edit the participant with an deceased Status
+        String deceasedEdit = MedicalAdministrator.editParticipant(cosmoIDOne,
+                participantFirstNameOne, participantLastNameOne,
+                participantBirthdateOne, healthNumberOne, "19595 Testing Avenue", phoneOne,
+                cityOne, postalCodeOne, sinOne, deceasedStatus);
+        
+        //get edited result set
+        ResultSet secondEditResultSet = db.select("participantStatus" , "Participant",
+                "cosmoID = " + this.cosmoIDOne, "");  
+        
+        //get the new name
+        String secondEditStatus = "";
+        while (secondEditResultSet.next())
+        {
+            secondEditStatus = secondEditResultSet.getString(1);
+        }
+
+        //make sure the insertion was successful
+        assertTrue(deceasedEdit.equals(""));
+        
+        assertTrue(!originalStatus.equals(deceasedStatus));
+        assertTrue(secondEditStatus.equals(deceasedStatus));
+        
+        db.delete("Participant", "cosmoID = " + cosmoIDOne);        
+    }
+    
     @After
     public void tearDown()
     {
