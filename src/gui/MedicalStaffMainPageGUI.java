@@ -238,7 +238,9 @@ public class MedicalStaffMainPageGUI extends Application
 
         // set text for tabs
         participants.setText("Participants");
-        participants.setContent(createHBoxPreviewNotes());
+        VBox vbox = new VBox();
+        vbox.getChildren().addAll(createHBoxPreviewNotes(),pTVCont.participantTable);
+        participants.setContent(vbox);
         forms.setText("Forms");
         stats.setText("Stats");
 
@@ -1057,8 +1059,8 @@ public class MedicalStaffMainPageGUI extends Application
         //HBox previewNotes = createHBoxPreviewNotes();
 
         // add everything to vbox
-        vbox.getChildren().addAll(header, tabs, searchBar,
-                pTVCont.participantTable);
+        vbox.getChildren().addAll(header, searchBar, tabs 
+                );
 
         return vbox;
 

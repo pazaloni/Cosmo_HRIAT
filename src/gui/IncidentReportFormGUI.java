@@ -2,6 +2,7 @@ package gui;
 
 import java.util.List;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
@@ -9,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Background;
@@ -36,7 +38,9 @@ public class IncidentReportFormGUI
     private TextField month, day, year, time, location;
 
     private TextField personInjured;
-    private TextField otherWorkArea;
+    private TextField otherWorkArea, locationOfPain;
+
+    private TextArea incidentDescription, incidentFactors, txtAProtEquip;
 
     private RadioButton staffInjured, participantInjured, otherInjured, am, pm;
     private RadioButton LSTD, programs, pathWays, frontOffice, WRD, contracts,
@@ -51,7 +55,13 @@ public class IncidentReportFormGUI
             chkRHand, chkLUpperLeg, chkRUpperLeg, chkLLowerLeg, chkRLowerLeg,
             chkLKnee, chkRKnee, chkAbdomen, chkNone, chkOther;
 
+    private CheckBox chkBruise, chkScrape, chkSwelling, chkBurn, chkCut,
+            chkSprain, chkInsectbite, chkImbedded, chkFall, chkFoundOnFloor,
+            chkSelfAggro, chkP2PAggro, chkP2SAggro, chkVehichleIncident,
+            chkPropertyDmg, chkOtherType;
+
     private TextField txtOther;
+    private TextField txtOtherType;
     private List<CheckBox> typesOfInjuries;
 
     private StaffAccount loggedInStaff;
@@ -68,29 +78,42 @@ public class IncidentReportFormGUI
         formTitle.setFont(new Font(22));
 
         Separator sep = new Separator(Orientation.HORIZONTAL);
-        sep.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+        sep.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
+                null)));
         Separator sep1 = new Separator(Orientation.HORIZONTAL);
-        sep1.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+        sep1.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
+                null)));
         Separator sep2 = new Separator(Orientation.HORIZONTAL);
-        sep2.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+        sep2.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
+                null)));
         Separator sep3 = new Separator(Orientation.HORIZONTAL);
-        sep3.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+        sep3.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
+                null)));
         Separator sep4 = new Separator(Orientation.HORIZONTAL);
-        sep4.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
-        
-        
+        sep4.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
+                null)));
+        Separator sep5 = new Separator(Orientation.HORIZONTAL);
+        sep5.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
+                null)));
+
         Label lblBodyArea = new Label(
-                "Body Area Injured: (check ALL that apply)");
+                "Body Area Injured: (Check ALL that apply)");
+        Label lblTypeofInjury = new Label(
+                "Type of Injury: (Check ALL That Apply");
+
         lblBodyArea.setFont(new Font(16));
+        lblTypeofInjury.setFont(new Font(16));
         mainBox = new VBox();
         mainBox.setSpacing(10);
         mainBox.setMinWidth(700);
-        mainBox.getChildren().addAll(formTitle, createHeader(),sep1,
-                createRegisteredWorkArea(),sep2, createIncidentInfo(),sep3, lblBodyArea,
-                createBodyAreaInjured(),sep4);
+        mainBox.getChildren().addAll(formTitle, createHeader(), sep1,
+                createRegisteredWorkArea(), sep2, createIncidentInfo(), sep3,
+                lblBodyArea, createBodyAreaInjured(), sep4, lblTypeofInjury,
+                createTypeOfInjury(), sep5, createMidSecion());
         mainPane = new ScrollPane();
         mainPane.setContent(mainBox);
         mainPane.setMinWidth(700);
+        mainPane.setPadding(new Insets(5, 5, 5, 385));
 
         return mainPane;
 
@@ -291,4 +314,117 @@ public class IncidentReportFormGUI
         return gridPane;
 
     }
+
+    /**
+     * Purpose: Create the area for the type of injury
+     * 
+     * @return an hbox containg all the required elements
+     */
+    private HBox createTypeOfInjury()
+    {
+
+        HBox finalHbox = new HBox();
+
+        GridPane gridPaneType = new GridPane();
+        HBox otherHBox = new HBox();
+        otherHBox.getChildren().addAll(
+                chkOtherType = new CheckBox("Other (Specify) :"),
+                txtOtherType = new TextField());
+        gridPaneType.add(chkBruise = new CheckBox("Bruise/Contution"), 0, 0);
+        gridPaneType.add(chkScrape = new CheckBox("Scrape/Abrasion"), 0, 1);
+        gridPaneType.add(chkSwelling = new CheckBox("Swelling"), 0, 2);
+        gridPaneType.add(chkBurn = new CheckBox("Burn"), 0, 3);
+        gridPaneType.add(chkCut = new CheckBox("Cut/Laceration"), 0, 4);
+        gridPaneType.add(chkSprain = new CheckBox("Sprain/Strain (Suspected)"),
+                0, 5);
+        gridPaneType.add(chkInsectbite = new CheckBox("Insect Bite/Sting"), 0,
+                6);
+        gridPaneType.add(chkImbedded = new CheckBox("Imbedded object"), 0, 7);
+        gridPaneType.add(chkFall = new CheckBox("Fall"), 1, 0);
+        gridPaneType
+                .add(chkFoundOnFloor = new CheckBox("Found on floor"), 1, 1);
+        gridPaneType.add(chkSelfAggro = new CheckBox("Self aggression"), 1, 2);
+        gridPaneType.add(chkP2PAggro = new CheckBox(
+                "Participant to participant agression"), 1, 3);
+        gridPaneType.add(chkP2SAggro = new CheckBox(
+                "Participant to staff agression"), 1, 4);
+        gridPaneType.add(
+                chkVehichleIncident = new CheckBox("Vehicle accident"), 1, 5);
+        gridPaneType
+                .add(chkPropertyDmg = new CheckBox("Property damage"), 1, 6);
+        gridPaneType.add(otherHBox, 0, 8);
+
+        Label lblProtEquipment = new Label(
+                "Protective Equipment Used at Time of Incident?");
+        lblProtEquipment.setFont(new Font(16));
+        txtAProtEquip = new TextArea();
+        txtAProtEquip.setWrapText(true);
+
+        VBox vbox = new VBox();
+        vbox.getChildren().addAll(lblProtEquipment, txtAProtEquip);
+
+        finalHbox.getChildren().addAll(gridPaneType, vbox);
+        gridPaneType.setHgap(40);
+        gridPaneType.setVgap(3);
+        finalHbox.setSpacing(15);
+        GridPane.setColumnSpan(otherHBox, 2);
+        return finalHbox;
+    }
+
+    /**
+     * Purpose: Create the section for location of pain, description of how
+     * incident occurred, and factors contributing to incident
+     * 
+     * @return a VBox containing all the required elements
+     */
+    private VBox createMidSecion()
+    {
+        VBox mainBox = new VBox();
+        HBox topBox = new HBox();
+        Font font = new Font(15);
+
+        int maxHeight = 55;
+
+        Label lblLocationOfPain = new Label("Location of Pain:");
+        lblLocationOfPain.setFont(font);
+        Label lblIncidentDescription = new Label(
+                "Description of exactly how incident occured");
+        lblIncidentDescription.setFont(font);
+        Label lblIncidentFactors = new Label(
+                "Factors contributing to the incident");
+        lblIncidentFactors.setFont(font);
+
+        locationOfPain = new TextField();
+        locationOfPain.setMinWidth(250);
+        incidentDescription = new TextArea();
+        incidentDescription.setMaxHeight(maxHeight);
+        incidentDescription.setWrapText(true);
+
+        incidentFactors = new TextArea();
+        incidentFactors.setMaxHeight(maxHeight);
+        incidentFactors.setWrapText(true);
+
+        topBox.getChildren().addAll(lblLocationOfPain, locationOfPain);
+        topBox.setSpacing(15);
+
+        mainBox.getChildren().addAll(topBox, lblIncidentDescription,
+                incidentDescription, lblIncidentFactors, incidentFactors);
+
+        mainBox.setSpacing(15);
+        return mainBox;
+
+    }
+
+    /**
+     * Purpose :Create the bottom part of the form
+     * 
+     * @return a vbox containing all the required elements
+     */
+    private VBox createBottomBox()
+    {
+        VBox mainBox = new VBox();
+
+        return mainBox;
+    }
+
 }
