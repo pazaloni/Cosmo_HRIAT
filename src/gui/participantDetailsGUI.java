@@ -297,7 +297,6 @@ public class participantDetailsGUI extends Application
         }
         catch ( IOException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -330,7 +329,11 @@ public class participantDetailsGUI extends Application
         }
         statusText.setText(statusString);
         
+        statusText.setPadding(new Insets(5, 5, 5, 5));
+        statusLabel.setPadding(new Insets(5, 5, 5, 5));
+        
         statusBox.getChildren().addAll(statusLabel, statusText);
+        statusBox.setPadding(new Insets(0, 0, 0, 15));
 
         // create buttons
         Button editBtn = new Button();
@@ -1350,7 +1353,9 @@ public class participantDetailsGUI extends Application
                    
                    checkForChanges(sinText, sinTxt.getText(),
                            "SIN", cosmoIDText.getText());
-
+                   
+                   checkForChanges(statusText, statusCombo.getValue().toString(),
+                           "Status", cosmoIDText.getText());    
                    
                 }
                 // if there is an error message, display it

@@ -45,6 +45,7 @@ public class TestMedicalAdministrator
     private String cityOne;
     private String postalCodeOne;
     private String sinOne;
+    private String activeStatus;
 
     private String cosmoIDTwo;
     private String participantFirstNameTwo;
@@ -107,6 +108,8 @@ public class TestMedicalAdministrator
     {
         
         db.connect();
+        
+        activeStatus = "Active";
         
         String date1 = "07-07-2007";
         String date2 = "20-12-2012";
@@ -394,7 +397,7 @@ public class TestMedicalAdministrator
        String editResult = MedicalAdministrator.editParticipant(cosmoIDFour,
                 "Bob", participantLastNameFour,
                participantBirthdateFour, healthNumberFour, addressFour, phoneFour, cityFour, postalCodeFour,
-               sinFour);
+               sinFour, activeStatus);
        
         ResultSet editedResultSet = db.select("firstName" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  
         
@@ -445,7 +448,7 @@ public class TestMedicalAdministrator
         String editResult = MedicalAdministrator.editParticipant(cosmoIDFour,
                 participantFirstNameFour, "Smith",
                 participantBirthdateFour, healthNumberFour, addressFour, phoneFour, cityFour,
-                postalCodeFour, sinFour);
+                postalCodeFour, sinFour, activeStatus);
         
         ResultSet editedResultSet = db.select("lastName" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  
         
@@ -498,7 +501,7 @@ public class TestMedicalAdministrator
         String editResult = MedicalAdministrator.editParticipant(cosmoIDFour,
                 participantFirstNameFour, participantLastNameFour,
                 participantBirthdateOne, healthNumberFour, addressFour, phoneFour, cityFour,
-                postalCodeFour, sinFour);
+                postalCodeFour, sinFour, activeStatus);
         
         //get edited result set
         ResultSet editedResultSet = db.select("dateOfBirth" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  
@@ -551,7 +554,7 @@ public class TestMedicalAdministrator
         String editResult = MedicalAdministrator.editParticipant(cosmoIDFour,
                 participantFirstNameFour, participantLastNameFour,
                 participantBirthdateOne, "123412341", addressFour, phoneFour, cityFour,
-                postalCodeFour, sinFour);
+                postalCodeFour, sinFour, activeStatus);
         
         //get edited result set
         ResultSet editedResultSet = db.select("personalHealthNumber" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  
@@ -604,7 +607,7 @@ public class TestMedicalAdministrator
         String editResult = MedicalAdministrator.editParticipant(cosmoIDFour,
                 participantFirstNameFour, participantLastNameFour,
                 participantBirthdateOne, healthNumberFour, "19595 Testing Avenue", phoneFour,
-                cityFour, postalCodeFour, sinFour);
+                cityFour, postalCodeFour, sinFour, activeStatus);
         
         //get edited result set
         ResultSet editedResultSet = db.select("address" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  
@@ -644,7 +647,7 @@ public class TestMedicalAdministrator
         String originalEdit = MedicalAdministrator.editParticipant(cosmoIDFour,
                 participantFirstNameFour, participantLastNameFour,
                 participantBirthdateOne, healthNumberFour, "19595 Testing Avenue", phoneFour,
-                cityOne, postalCodeFour, sinFour);
+                cityOne, postalCodeFour, sinFour, activeStatus);
         
         //get it from the database
         ResultSet results = db.select("city" , "Participant", "cosmoID = " + this.cosmoIDFour, "");      
@@ -663,7 +666,7 @@ public class TestMedicalAdministrator
         String secondEdit = MedicalAdministrator.editParticipant(cosmoIDFour,
                 participantFirstNameFour, participantLastNameFour,
                 participantBirthdateOne, healthNumberFour, "19595 Testing Avenue", phoneFour,
-                cityFour, postalCodeFour, sinFour);
+                cityFour, postalCodeFour, sinFour, activeStatus);
         
         //get edited result set
         ResultSet editedResultSet = db.select("city" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  
@@ -704,7 +707,7 @@ public class TestMedicalAdministrator
         String originalEdit = MedicalAdministrator.editParticipant(cosmoIDFour,
                 participantFirstNameFour, participantLastNameFour,
                 participantBirthdateOne, healthNumberFour, "19595 Testing Avenue", phoneFour,
-                cityOne, postalCodeTwo, sinFour);
+                cityOne, postalCodeTwo, sinFour, activeStatus);
         
         //get it from the database
         ResultSet results = db.select("postalCode" , "Participant", "cosmoID = " + this.cosmoIDFour, "");      
@@ -723,7 +726,7 @@ public class TestMedicalAdministrator
         String secondEdit = MedicalAdministrator.editParticipant(cosmoIDFour,
                 participantFirstNameFour, participantLastNameFour,
                 participantBirthdateOne, healthNumberFour, "19595 Testing Avenue", phoneFour,
-                cityFour, postalCodeFour, sinFour);
+                cityFour, postalCodeFour, sinFour, activeStatus);
         
         //get edited result set
         ResultSet editedResultSet = db.select("postalCode" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  
@@ -764,7 +767,7 @@ public class TestMedicalAdministrator
         String originalEdit = MedicalAdministrator.editParticipant(cosmoIDFour,
                 participantFirstNameFour, participantLastNameFour,
                 participantBirthdateOne, healthNumberFour, "19595 Testing Avenue", phoneFour,
-                cityOne, postalCodeFour, sinTwo);
+                cityOne, postalCodeFour, sinTwo, activeStatus);
         
         //get it from the database
         ResultSet results = db.select("socialInsuranceNumber" , "Participant", "cosmoID = " + this.cosmoIDFour, "");      
@@ -783,7 +786,7 @@ public class TestMedicalAdministrator
         String secondEdit = MedicalAdministrator.editParticipant(cosmoIDFour,
                 participantFirstNameFour, participantLastNameFour,
                 participantBirthdateOne, healthNumberFour, "19595 Testing Avenue", phoneFour,
-                cityFour, postalCodeFour, sinFour);
+                cityFour, postalCodeFour, sinFour, activeStatus);
         
         //get edited result set
         ResultSet editedResultSet = db.select("socialInsuranceNumber" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  
