@@ -307,6 +307,11 @@ public class MedicalAdministrator extends BasicStaff
      * @param birthDate - the birth date of the participant
      * @param phn - the personal health number of the participant
      * @param address - the participant address
+     * @param phoneNum - the participant phone number
+     * @param city - the participant city
+     * @param postal code - the participant postal code
+     * @param sin - the participant social insurance number
+     * @param status - the participant status
      * @return
      */
 	public static String editParticipant(String cosmoId, String firstName,
