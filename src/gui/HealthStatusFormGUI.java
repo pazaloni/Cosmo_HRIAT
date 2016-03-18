@@ -7,6 +7,7 @@ import java.util.List;
 
 import controllers.AllergiesTableViewController;
 import controllers.MedicalConditionsTableViewController;
+import controllers.ProgressNotesTableViewController;
 import controllers.MedicationsTableViewController;
 import core.Allergies;
 import core.MedicalAdministrator;

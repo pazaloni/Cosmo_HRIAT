@@ -182,14 +182,14 @@ public class participantDetailsGUI extends Application
         Tab participantUpdate = new Tab();
         Tab healthStatus = new Tab();
         Tab seizureDescription = new Tab();
-        Tab vaccinationDetails = new Tab();
+        Tab progressNotes = new Tab();
         Tab kinDetails = new Tab();
         Tab workDetails = new Tab();
         Tab physicianInfo = new Tab();
         Tab caregiver = new Tab();
         Tab other = new Tab();
 
-        // create the seizure tab
+
 
         // set body for tabs
         HealthStatusFormGUI hsf = new HealthStatusFormGUI(healthStatus,
@@ -202,11 +202,17 @@ public class participantDetailsGUI extends Application
                 seizureDescription, loggedInUser, cosmoID + "");
         seizureDescription.setContent(sDescForm.ShowSeizureForm().getContent());
 
+        //create the Participant Update Tab
         PartcipantUpdateForm puf = new PartcipantUpdateForm(cosmoID,
                 loggedInUser);
         participantUpdate.setContent(puf.getForm());
 
-        vaccinationDetails.setContent(createVaccinationDetailsTab());
+        //Create the Progress Notes Tab
+        ProgressNotesFormGUI pnf = new ProgressNotesFormGUI(progressNotes, loggedInUser,
+                participantMainStage);
+        progressNotes.setContent(pnf.showProgressNotes(cosmoID + "")
+                .getContent());
+                
         kinDetails.setContent(createKinDetailsTab());
         workDetails.setContent(createWorkDetailsTab());
         physicianInfo.setContent(createPhysicianInfoTab());
@@ -217,7 +223,7 @@ public class participantDetailsGUI extends Application
         healthStatus.setText("Health Status");
         participantUpdate.setText("Participant Update");
         seizureDescription.setText("Seizure Description");
-        vaccinationDetails.setText("Vaccination");
+        progressNotes.setText("Progress Notes");
         kinDetails.setText("Kin");
         workDetails.setText("Work");
         physicianInfo.setText("Physician");
@@ -228,7 +234,7 @@ public class participantDetailsGUI extends Application
         healthStatus.closableProperty().set(false);
         participantUpdate.closableProperty().set(false);
         seizureDescription.closableProperty().set(false);
-        vaccinationDetails.closableProperty().set(false);
+        progressNotes.closableProperty().set(false);
         kinDetails.closableProperty().set(false);
         workDetails.closableProperty().set(false);
         physicianInfo.closableProperty().set(false);
@@ -238,7 +244,7 @@ public class participantDetailsGUI extends Application
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(100);
         tabPane.getTabs().addAll(healthStatus, participantUpdate,
-                seizureDescription, kinDetails, physicianInfo, workDetails,
+                seizureDescription, progressNotes, kinDetails, physicianInfo, workDetails,
                 caregiver, other);
         tabPane.setMinHeight(29);
 

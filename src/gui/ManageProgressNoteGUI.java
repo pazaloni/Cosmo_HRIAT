@@ -1,5 +1,6 @@
 package gui;
 import core.MedicalCondition;
+import core.ProgressNotes;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,13 +14,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * Purpose: Display the window to add and manage medical conditions for
+ * Purpose: Display the window to add and manage progress notes for
  * participants
  *
  * @author CIMP
  * @version 1.0
  */
-public class ManageMedicalConditionGUI
+public class ManageProgressNoteGUI
 {
 
     private Stage parentStage;
@@ -28,22 +29,27 @@ public class ManageMedicalConditionGUI
 
     private GridPane mainPane;
 
-    private TextField conditionName;
-    private TextArea conditionDescription;
+    private TextField dateTime;
+    private TextField participantName;
+    private TextField num;
 
-    private Label lblConditionName;
-    private Label lblConditionDescription;
+    private Label lblDateTime;
+    private Label lblParticipantName;
+    private Label lblNum;
 
     private Button btnAdd, btnCancel;
 
-    public ManageMedicalConditionGUI(Stage parentStage)
+    public ManageProgressNoteGUI(Stage parentStage)
     {
         this.parentStage = parentStage;
 
-        this.conditionName = new TextField();
-        this.conditionDescription = new TextArea();
-        this.lblConditionDescription = new Label("Description");
-        this.lblConditionName = new Label("Name");
+        this.dateTime = new TextField();
+        this.participantName = new TextField();
+        this.num = new TextField();
+        
+        this.lblDateTime = new Label("Date/Time: ");
+        this.lblParticipantName = new Label("Name: ");
+        this.lblNum = new Label("No.: ");
 
         this.btnAdd = new Button("Add");
         this.btnCancel = new Button("Cancel");
@@ -52,11 +58,11 @@ public class ManageMedicalConditionGUI
     }
 
     /**
-     * Purpose: show the window for the addition of new medical condition 
+     * Purpose: show the window for the addition of a new progressNote 
      *  
-     * @param cosmoID the participant that will be getting the new medical condition 
+     * @param cosmoID the participant that will be getting the new progresNote 
      */
-    public void showAddMedicalCondition( String cosmoID )
+    public void showAddProgressNote( String cosmoID )
 
     {
         Stage localStage = new Stage();
@@ -65,14 +71,17 @@ public class ManageMedicalConditionGUI
 
         mainPane.add(lblMessage, 0, 0, 2, 1);
 
-        mainPane.add(lblConditionName, 0, 1);
-        mainPane.add(lblConditionDescription, 0, 2);
+        mainPane.add(lblDateTime, 0, 1);
+        mainPane.add(lblParticipantName, 0, 2);
+        mainPane.add(lblNum, 0, 3);
 
-        mainPane.add(conditionName, 1, 1);
-        mainPane.add(conditionDescription, 1, 2);
+        mainPane.add(dateTime, 1, 1);
+        mainPane.add(participantName, 1, 2);
+        mainPane.add(num, 1, 3);
 
-        conditionName.setMaxWidth(250);
-        conditionDescription.setMaxWidth(250);
+        dateTime.setMaxWidth(250);
+        participantName.setMaxWidth(250);
+        num.setMaxWidth(250);
         
         HBox controls = new HBox();
 
@@ -88,9 +97,9 @@ public class ManageMedicalConditionGUI
         mainPane.setPadding(new Insets(10, 10, 10, 10));
 
         btnAdd.setOnAction(event -> {
-            String result = MedicalCondition.createMedicalCondition(
-                    new MedicalCondition(conditionName.getText(),
-                            conditionDescription.getText()), cosmoID);
+            String result = ProgressNotes.createProgressNote(
+                    new ProgressNotes(dateTime.getText(),
+                            participantName.getText(), num.getText()), cosmoID);
             if ( result.equals("") )
             {
                 localStage.close();
@@ -108,18 +117,18 @@ public class ManageMedicalConditionGUI
         localStage.setResizable(false);
         localStage.initModality(Modality.WINDOW_MODAL);
         localStage.initOwner(parentStage);
-        localStage.setTitle("Add a medical condition entry");
+        localStage.setTitle("Add a progress note");
         localStage.showAndWait();
         
     }
 
     /**
-     * Purpose: Edit a medical condition for a specified participant 
+     * Purpose: Edit a progressNote for a specified participant 
      * 
-     * @param condition The condition to be edited 
-     * @param cosmoID the participant that will have the condition edited 
+     * @param progressNote The progress note to be edited 
+     * @param cosmoID the participant that will have the progress note edited 
      */
-    public void showUpdateMedicalCondition(MedicalCondition condition ,String cosmoID)
+    public void showUpdateProgressNote(ProgressNotes progressNote ,String cosmoID)
     {
         Stage localStage = new Stage();
         lblMessage = new Label("");
@@ -127,17 +136,21 @@ public class ManageMedicalConditionGUI
 
         mainPane.add(lblMessage, 0, 0, 2, 1);
 
-        mainPane.add(lblConditionName, 0, 1);
-        mainPane.add(lblConditionDescription, 0, 2);
-
-        mainPane.add(conditionName, 1, 1);
-        mainPane.add(conditionDescription, 1, 2);
+        mainPane.add(lblDateTime, 0, 1);
+        mainPane.add(lblParticipantName, 0, 2);
+        mainPane.add(lblNum, 0, 3);
         
-        conditionName.setMaxWidth(250);
-        conditionDescription.setMaxWidth(250);
+        mainPane.add(dateTime, 1, 1);
+        mainPane.add(participantName, 1, 2);
+        mainPane.add(num, 1, 3);
         
-        conditionName.setText(condition.getCondition().get());
-        conditionDescription.setText(condition.getDescripion().get());
+        dateTime.setMaxWidth(250);
+        participantName.setMaxWidth(250);
+        num.setMaxWidth(250);
+        
+        dateTime.setText(progressNote.getDateTime().get());
+        participantName.setText(progressNote.getName().get());
+        num.setText(progressNote.getNum().get());
         
         HBox controls = new HBox();
 
@@ -153,10 +166,10 @@ public class ManageMedicalConditionGUI
         mainPane.setPadding(new Insets(10, 10, 10, 10));
         btnAdd.setText("Update");
         btnAdd.setOnAction(event -> {
-        	MedicalCondition newCondition = new MedicalCondition
-        			(conditionName.getText(), conditionDescription.getText());
+            ProgressNotes newProgressNote = new ProgressNotes
+        			(dateTime.getText(), participantName.getText(), num.getText());
         	
-            String result = MedicalCondition.updateMedicalCondition(newCondition,condition ,cosmoID);
+            String result = ProgressNotes.updateProgressNote(newProgressNote,progressNote ,cosmoID);
             if ( result.equals("") )
             {
                 localStage.close();
@@ -176,7 +189,7 @@ public class ManageMedicalConditionGUI
         localStage.setResizable(false);
         localStage.initModality(Modality.WINDOW_MODAL);
         localStage.initOwner(parentStage);
-        localStage.setTitle("Edit a medical condition entry");
+        localStage.setTitle("Edit a Progress Note entry");
         localStage.showAndWait();
     }
 }
