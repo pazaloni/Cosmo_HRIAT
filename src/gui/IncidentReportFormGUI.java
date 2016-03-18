@@ -182,7 +182,7 @@ public class IncidentReportFormGUI
         group.getToggles().addAll(am, pm);
 
         topBox.getChildren().addAll(lblDateOfIncident, month, day, year,
-                lblTimeOfIncident, am, pm);
+                lblTimeOfIncident,time, am, pm);
         bottomBox.getChildren().addAll(lblExactLocaitonOfIncident, location);
 
         VBox box = new VBox();
