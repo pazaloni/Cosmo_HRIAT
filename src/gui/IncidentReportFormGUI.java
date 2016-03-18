@@ -118,7 +118,8 @@ public class IncidentReportFormGUI
         mainBox.getChildren().addAll(formTitle, createHeader(), sep1,
                 createRegisteredWorkArea(), sep2, createIncidentInfo(), sep3,
                 lblBodyArea, createBodyAreaInjured(), sep4, lblTypeofInjury,
-                createTypeOfInjury(), sep5, createMidSecion(),createBottomBox());
+                createTypeOfInjury(), sep5, createMidSecion(),
+                createBottomBox());
         mainPane = new ScrollPane();
         mainPane.setContent(mainBox);
         mainPane.setMinWidth(700);
@@ -143,7 +144,7 @@ public class IncidentReportFormGUI
         otherInjured = new RadioButton("Other");
 
         personInjured = new TextField();
-        personInjured.setMinWidth(250);
+        personInjured.setMinWidth(450);
         Label lblpersonInjured = new Label("Person Injured: ");
 
         box.getChildren().addAll(lblpersonInjured, personInjured, staffInjured,
@@ -444,7 +445,7 @@ public class IncidentReportFormGUI
 
         Label lblIncident = new Label("Incident: ");
         Label lblIncidentReportedTo = new Label("Incident reported to:");
-        
+
         Label lblVerbalReport = new Label("Verbal report Given to: ");
         Label lblDateReported = new Label("Date Reported");
         Label lblDateReported2 = new Label("Date Reported");
@@ -456,8 +457,6 @@ public class IncidentReportFormGUI
         chkWitnessByParticipants = new CheckBox("Witnessed by participant(s):");
         chkWitnessByOther = new CheckBox("Witnessed by other - explain:");
 
-
-
         ToggleGroup group = new ToggleGroup();
         ToggleGroup group2 = new ToggleGroup();
 
@@ -468,17 +467,17 @@ public class IncidentReportFormGUI
                 "Personal Supports Coordinator");
         personalSupportsManager = new RadioButton("Personal Supports Manager");
         noVerbalReport = new RadioButton("No Verbal Report Given");
-        
+
         staffWitness = new TextField();
         participantWitness = new TextField();
         otherWitness = new TextField();
-        
+
         txtManagerName = new TextField();
         txtOtherName = new TextField();
         txtDateReportedTo = new TextField();
         txtDateVerbal = new TextField();
         txtDateReportWritten = new TextField();
-        
+
         staffWitness.setMinWidth(450);
         participantWitness.setMinWidth(500);
         otherWitness.setMinWidth(500);
@@ -487,24 +486,28 @@ public class IncidentReportFormGUI
         txtDateReportedTo.setMinWidth(300);
         txtDateVerbal.setMinWidth(350);
         txtDateReportWritten.setMinWidth(350);
-        
-        
+
         group.getToggles().addAll(manager, assistantManager, otherReportedTo);
         group2.getToggles().addAll(personalSupportsCoordinator,
                 personalSupportsManager, noVerbalReport);
-        
-        top.getChildren().addAll(lblIncident,chkUnwitnessed,chkWitnessedByStaff,staffWitness);
-        top2.getChildren().addAll(chkWitnessByParticipants,participantWitness);
+
+        top.getChildren().addAll(lblIncident, chkUnwitnessed,
+                chkWitnessedByStaff, staffWitness);
+        top2.getChildren().addAll(chkWitnessByParticipants, participantWitness);
         top3.getChildren().addAll(chkWitnessByOther, otherWitness);
-        top4.getChildren().addAll(lblIncidentReportedTo,manager,assistantManager,txtManagerName);
-        top5.getChildren().addAll(otherReportedTo,txtOtherName,lblDateReported,txtDateReportedTo);
-        top6.getChildren().addAll(lblVerbalReport,personalSupportsManager,personalSupportsCoordinator);
-        top7.getChildren().addAll(noVerbalReport,lblDateReported2,txtDateVerbal);
-        top8.getChildren().addAll(lblDateReportWritten,txtDateReportWritten);
+        top4.getChildren().addAll(lblIncidentReportedTo, manager,
+                assistantManager, txtManagerName);
+        top5.getChildren().addAll(otherReportedTo, txtOtherName,
+                lblDateReported, txtDateReportedTo);
+        top6.getChildren().addAll(lblVerbalReport, personalSupportsManager,
+                personalSupportsCoordinator);
+        top7.getChildren().addAll(noVerbalReport, lblDateReported2,
+                txtDateVerbal);
+        top8.getChildren().addAll(lblDateReportWritten, txtDateReportWritten);
         top9.getChildren().addAll(lblReportWrittenBy);
-        
-        int spacing =5;
-        
+
+        int spacing = 5;
+
         top.setSpacing(spacing);
         top2.setSpacing(spacing);
         top3.setSpacing(spacing);
@@ -514,8 +517,9 @@ public class IncidentReportFormGUI
         top7.setSpacing(spacing);
         top8.setSpacing(spacing);
         top9.setSpacing(spacing);
-        
-        mainBox.getChildren().addAll(top,top2,top3,top4,top5,top6,top7,top8,top9);
+
+        mainBox.getChildren().addAll(top, top2, top3, top4, top5, top6, top7,
+                top8, top9);
         mainBox.setSpacing(15);
         return mainBox;
     }
