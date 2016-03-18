@@ -1,5 +1,6 @@
 package controllers;
 import helpers.DatabaseHelper;
+import helpers.FormatHelper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,12 +12,35 @@ import java.sql.SQLException;
  * 
  * @author Breanna Wilson cst215 Steven Palchinski cst209
  */
+
+
+
 public class ParticipantUpdateFormController 
 {
 	//This will hold the passed in cosmo ID
     private int cosmoID;
     //the instance of the database
 	private DatabaseHelper db;
+	
+	private String kinFirstName;
+	private String kinLastName;
+	private String kinAddress;
+	private String kinCity;
+	private String kinPostalCode;
+	private String kinHomePhone;
+	private String kinWorkPhone;
+	
+	private String caregiverFirstName;
+	private String caregiverLastName;
+	private String caregiverAddress;
+	private String caregiverCity;
+	private String caregiverPostalCode;
+	private String caregiverHomePhone;
+	private String caregiverWorkPhone;
+	
+	private String emergencyContactFirstName;
+	private String emergencyContactLastName;
+	private String emergencyPhoneNumber;
 	
 	/**
 	 * Purpose: The constructor for the ParticipantUpdateFormController
@@ -279,26 +303,39 @@ public class ParticipantUpdateFormController
 	public String saveKinInformation(String firstName, String lastName, String address,
 			String city, String postalCode, String homePhone, String workPhone)
 	{
+		kinFirstName = firstName;
+		kinLastName = lastName;
+		kinAddress = address;
+		kinCity = city;
+		kinPostalCode = postalCode;
+		kinHomePhone = homePhone;
+		kinWorkPhone = workPhone;
+		
+		String msg = "";
+		//check if the info given is valid
+		msg = validateKinInformation(firstName,
+				lastName, address, city, postalCode, homePhone, workPhone);
+		
 		//connect to the database
 		db.connect();
-		String msg = "";
+		
 		//the array of values to compare against
 		String[][] values = new String[7][2];
 
 		values[0][0] = "firstName";
-		values[0][1] = firstName;
+		values[0][1] = kinFirstName;
 		values[1][0] = "lastName";
-		values[1][1] = lastName;
+		values[1][1] = kinLastName;
 		values[2][0] = "address";
-		values[2][1] = address;
+		values[2][1] = kinAddress;
 		values[3][0] = "city";
-		values[3][1] = city;
+		values[3][1] = kinCity;
 		values[4][0] = "postalCode";
-		values[4][1] = postalCode;
+		values[4][1] = kinPostalCode;
 		values[5][0] = "homePhoneNumber";
-		values[5][1] = homePhone;
+		values[5][1] = kinHomePhone;
 		values[6][0] = "workPhoneNumber";
-		values[6][1] = workPhone;
+		values[6][1] = kinWorkPhone;
 		
 		//create the string to put into the WHERE statement for the
 			//query
@@ -332,9 +369,7 @@ public class ParticipantUpdateFormController
 			e.printStackTrace();
 		}
 		
-		//check if the info given is valid
-		msg = validateKinInformation(firstName,
-				lastName, address, city, postalCode, homePhone, workPhone);
+		
 		
 		//if there is a matching record
 		if(!(kinInfo[1][1].equals("") || kinInfo[1][1].equals(null)))
@@ -413,6 +448,15 @@ public class ParticipantUpdateFormController
 			String address, String city, String postalCode, String homePhone, 
 			String workPhone)
 	{
+		caregiverFirstName = firstName;
+		caregiverLastName = lastName;
+		caregiverAddress = address;
+		caregiverCity = city;
+		caregiverPostalCode = postalCode;
+		caregiverHomePhone = homePhone;
+		caregiverWorkPhone = workPhone;
+
+		
 		//connect to the database
 		db.connect();
 		String msg = "";
@@ -420,19 +464,19 @@ public class ParticipantUpdateFormController
 		String[][] values = new String[7][2];
 		
 		values[0][0] = "firstName";
-		values[0][1] = firstName;
+		values[0][1] = caregiverFirstName;
 		values[1][0] = "lastName";
-		values[1][1] = lastName;
+		values[1][1] = caregiverLastName;
 		values[2][0] = "address";
-		values[2][1] = address;
+		values[2][1] = caregiverAddress;
 		values[3][0] = "city";
-		values[3][1] = city;
+		values[3][1] = caregiverCity;
 		values[4][0] = "postalCode";
-		values[4][1] = postalCode;
+		values[4][1] = caregiverPostalCode;
 		values[5][0] = "homePhoneNumber";
-		values[5][1] = homePhone;
+		values[5][1] = caregiverHomePhone;
 		values[6][0] = "workPhoneNumber";
-		values[6][1] = workPhone;
+		values[6][1] = caregiverWorkPhone;
 		
 		//create the string to put into the WHERE clause
 		String whereStmt = this.createWhereStatement(values, 7);
@@ -653,9 +697,10 @@ public class ParticipantUpdateFormController
 	 * @return - true if valid, else false
 	 * @author Breanna Wilson CST215
 	 */
-	private boolean validatePhoneNumber(String phone)
+	private String validatePhoneNumber(String phone)
 	{
-		return phone == null || phone.isEmpty() || phone.matches( "(\\d-)?(\\d{3}-)?\\d{3}-\\d{4}");
+		FormatHelper formatter = new FormatHelper();
+		return formatter.formatPhoneNum(phone);
 	}
 	
 	/**
@@ -665,10 +710,10 @@ public class ParticipantUpdateFormController
 	 * @return - true if valid, else false
 	 * @author Breanna Wilson CST215
 	 */
-	private boolean validatePostalCode(String postalCode)
+	private String validatePostalCode(String postalCode)
 	{
-		return postalCode == null || postalCode.isEmpty() ||
-				postalCode.matches("^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$");
+		FormatHelper formatter = new FormatHelper();
+		return formatter.formatPostalCode(postalCode);
 	}
 	
 	/**
@@ -770,21 +815,48 @@ public class ParticipantUpdateFormController
 			}
 			
 			//check postal code is valid
-			if(!validatePostalCode(postalCode))
+			
+			if(postalCode == null || postalCode.equals(""))
 			{
-				message += "Kin postal code must be in format \"A1A 1A1\".\n";
+				kinPostalCode = "";
+			}
+			else if(validatePostalCode(postalCode).length() == 7)
+			{
+				kinPostalCode = validatePostalCode(postalCode);
+			}
+			else
+			{
+				message += "Kin postal code is invalid. " + 
+						validatePostalCode(postalCode) + "\n";
 			}
 			
 			//check home phone number is valid
-			if(!validatePhoneNumber(homePhone))
+			if(homePhone == null || homePhone.equals(""))
 			{
-				message += "Kin home phone number must be in format \"###-###-####\".\n";
+				kinHomePhone = "";
+			}
+			else if(validatePhoneNumber(homePhone).length() == 14)
+			{
+				kinHomePhone = validatePhoneNumber(homePhone);
+			}
+			else
+			{
+				message += "Kin home phone number is invalid. " + 
+						validatePhoneNumber(homePhone) + "\n";
 			}
 			
 			//check work phone number is valid
-			if(!validatePhoneNumber(workPhone))
+			if(workPhone == null || workPhone.equals(""))
 			{
-				message += "Kin work phone number must be in format \"###-###-####\".\n";
+				kinWorkPhone = "";
+			}
+			else if(validatePhoneNumber(workPhone).length() == 14)
+			{
+				kinWorkPhone = validatePhoneNumber(workPhone);
+			}
+			else
+			{
+				message += validatePhoneNumber(workPhone);
 			}
 		}
 		
@@ -830,12 +902,12 @@ public class ParticipantUpdateFormController
 		{
 			if(! validateName(firstName))
 			{
-				message += "Caregiver first name is invalid.\n";
+				message += "Caregiver first name cannot contain numbers or special characters.\n";
 			}
 			
 			if(!validateName(lastName))
 			{
-				message += "Caregiver last name is invalid.\n";
+				message += "Caregiver last name cannot contain numbers or special characters.\n";
 			}
 			
 			if(!validateAddress(address))
@@ -848,19 +920,46 @@ public class ParticipantUpdateFormController
 				message += "Caregiver city is invalid.\n";
 			}
 			
-			if(!validatePostalCode(postalCode))
+			if(postalCode == null || postalCode.equals(""))
 			{
-				message += "Caregiver postal code is invalid.\n";
+				postalCode = "";
+			}
+			else if(validatePostalCode(postalCode).length() > 7)
+			{
+				postalCode = validatePostalCode(postalCode);
+			}
+			else
+			{
+				message += "Caregiver postal code is invalid. " + 
+						validatePostalCode(postalCode) + "\n";
 			}
 			
-			if(!validatePhoneNumber(homePhone))
+			if(homePhone == null || homePhone.equals(""))
 			{
-				message += "Caregiver home phone number is invalid.\n";
+				homePhone = "";
+			}
+			else if(validatePhoneNumber(homePhone).length() == 14)
+			{
+				homePhone = validatePhoneNumber(homePhone);
+			}
+			else
+			{
+				message += "Caregiver home phone number is invalid. " + 
+						validatePhoneNumber(homePhone) + "\n";
 			}
 			
-			if(!validatePhoneNumber(workPhone))
+			if(workPhone == null || workPhone.equals(""))
 			{
-				message += "Caregiver work phone number is invalid.\n";
+				workPhone = "";
+			}
+			else if(validatePhoneNumber(workPhone).length() == 14)
+			{
+				workPhone = validatePhoneNumber(workPhone);
+			}
+			else
+			{
+				message += "Caregiver work phone number is invalid. " + 
+						validatePhoneNumber(workPhone) + "\n";
 			}
 		}
 		
@@ -904,9 +1003,18 @@ public class ParticipantUpdateFormController
 						" contain numbers or special characters.\n";
 			}
 			
-			if(!validatePhoneNumber(phone))
+			if(phone == null || phone.equals(""))
 			{
-				message += "Emergency contact phone number is invalid.\n";
+				phone = "";
+			}
+			else if(validatePhoneNumber(phone).length() == 14)
+			{
+				phone = validatePhoneNumber(phone);
+			}
+			else
+			{
+ 				message += "Emergency contact phone number is invalid. " + 
+ 						validatePhoneNumber(phone) + "\n";
 			}
 		}
 		
