@@ -1,14 +1,15 @@
 package gui;
 
-import java.awt.Color;
 
-import java.awt.Toolkit;
+
+
+
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
-
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 
 import controllers.ParticipantUpdateFormController;
 import core.MedicalAdministrator;
@@ -18,7 +19,6 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
@@ -29,6 +29,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -177,48 +178,19 @@ public class PrintPreviewUpdateFormGUI extends ScrollPane
                         new SnapshotParameters(), null);
                 BufferedImage buffImage = SwingFXUtils.fromFXImage(formImage,
                         null);
-                try 
-                { 
-                    ImageIO.write(buffImage, "png", outputForm); 
-                } 
-                catch(IOException e) 
-                { 
-                    System.out.println("Error code:" + e); 
-                }
-                // Image form = new Image(buffImage);
-                // PrinterJob printJob = PrinterJob.getPrinterJob();
-                // imagePrint.setPrintable(new Printable(imagePrint,
-                // buffImage));
-                // File outputForm = new File(cosmoID + "UpdateForm.png");
 
-                /*
-                 * try { ImageIO.write(buffImage, "png", outputForm); } catch
-                 * (IOException e) { System.out.println("Error code:" + e); }
-                 */
-                //java.awt.Image img = Toolkit.getDefaultToolkit().createImage(
-                 //       buffImage.getSource());
-                //Image tempMain = new Image("");
+                PrinterJob printJob = PrinterJob.getPrinterJob();
+                printJob.setPrintable(new ImagePrintable(printJob, buffImage));
 
-                // tempMain.setImage(buffImage);
-                /*
-                PrinterJob job = PrinterJob.createPrinterJob();
-                if ( job != null )
-                {
-                    boolean success = false;
-                    if ( job.showPrintDialog(mainStage) )
-                    {
-                        success = job.printPage(tempMain);
-                    }
-
-                    if ( success )
-                    {
-                        job.endJob();
+                if (printJob.printDialog()) {
+                    try {
+                        printJob.print();
+                    } catch (PrinterException prt) {
+                        prt.printStackTrace();
                     }
                 }
-                printBtn.setText("Image print Complete");
 
-                printBtn.setText("Image print Complete");
-                */
+                
             });
         }
 
@@ -715,5 +687,61 @@ public class PrintPreviewUpdateFormGUI extends ScrollPane
         emergencyContactName.setText(eInfo[0] + " " + eInfo[1]);
         emergencyContactPhone.setText(eInfo[2]);
     }
+    
+    /**
+     * Purpose: inner class
+     * @author cst205
+     *
+     */
+    public class ImagePrintable implements Printable 
+    {
+
+        private double          x, y, width;
+
+        private int             orientation;
+
+        private BufferedImage   image;
+
+        /**
+         * Purpose:  for setting the multiple variables
+         * @param printJob is used to fetch info such as x, y and width dimensions
+         * @param image is scene coming in
+         */
+        public ImagePrintable(PrinterJob printJob, BufferedImage image) 
+        {
+            PageFormat pageFormat = printJob.defaultPage();
+            this.x = 0;
+            this.y = 0;
+            this.width = pageFormat.getImageableWidth();
+            this.orientation = pageFormat.getOrientation();
+            this.image = image;
+        }
+
+        /**
+         * Purpose: checks to see if orientation is portrait or landscape
+         * and prints accordingly
+         */
+        @Override
+        public int print(Graphics g, PageFormat pageFormat, int pageIndex)
+                throws PrinterException 
+        {
+            if (pageIndex == 0) 
+            {
+ 
+                
+                g.drawImage(image, (int) x, (int) y, 650, 800, null);
+                
+                //width = 468 height = 495
+                return PAGE_EXISTS;
+            }
+            else 
+            {
+                return NO_SUCH_PAGE;
+            }
+        }
+    }
+
+
+    
 
 }
