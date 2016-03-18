@@ -8,7 +8,7 @@ import javafx.beans.property.StringProperty;
 /**
  * 
  * Purpose: Represent a participant within the system, store all the information
- * pertaining the participanti in the system
+ * pertaining the participant in the system
  * 
  * @author TEAM CIMP
  * @version 1.0
@@ -22,6 +22,8 @@ public class Participant
     private StringProperty participantAddress; // TODO change to address object
     private StringProperty emergencyContactName;
     private StringProperty emergencyContactPhone;
+    ///the status attribute
+    private StringProperty participantStatus;
 
     /**
      * 
@@ -33,10 +35,12 @@ public class Participant
      * @param participantAddress
      * @param emergencyContactName
      * @param emergencyContactPhone
+     * @param participantStatus
      */
     public Participant(String cosmoID, String participantName,
             String participantAddress, String emergencyContactName,
-            String emergencyContactPhone, String informationLastUpdated)
+            String emergencyContactPhone, String informationLastUpdated, 
+            String participantStatus)
     {
         this.cosmoID = new SimpleStringProperty(cosmoID);
         this.participantName = new SimpleStringProperty(participantName);
@@ -48,7 +52,10 @@ public class Participant
                 + emergencyContactName);
         this.emergencyContactPhone = new SimpleStringProperty(""
                 + emergencyContactPhone);
-
+        this.informationLastUpdated = new SimpleStringProperty("" 
+                + informationLastUpdated);
+        this.participantStatus = new SimpleStringProperty(""
+                + participantStatus);
     }
 
     /**
@@ -185,5 +192,20 @@ public class Participant
     public StringProperty getEmergencyContactPhoneProperty()
     {
         return emergencyContactPhone;
+    }
+
+    public String getStatus()
+    {
+        return participantStatus.get();
+    }
+    
+    /**
+     * Purpose: to return the status StringProperty
+     * 
+     * @return
+     */
+    public StringProperty getStatusProperty()
+    {
+        return participantStatus;
     }
 }

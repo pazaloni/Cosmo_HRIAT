@@ -1,4 +1,5 @@
 package controllers;
+
 import helpers.DatabaseHelper;
 
 import java.sql.ResultSet;
@@ -15,6 +16,7 @@ import javafx.scene.control.TableView;
 
 /**
  * Purpose: Represents the progress notes table
+ * 
  * @author cst207
  *
  */
@@ -28,7 +30,7 @@ public class ProgressNotesTableViewController
     private TableColumn<ProgressNotes, String> nameColumn = new TableColumn<ProgressNotes, String>(
             "Name");
     private TableColumn<ProgressNotes, String> numColumn = new TableColumn<ProgressNotes, String>(
-            "No.");        
+            "No.");
     private ObservableList<ProgressNotes> progressData = FXCollections
             .observableArrayList();
 
@@ -41,10 +43,12 @@ public class ProgressNotesTableViewController
         progressTable.setMaxHeight(150);
     }
 
-
     /**
      * 
      * Purpose: Query the database for the progress notes data
+     * 
+     * @parameter cosmoId: The cosmoId of the participant whose data is being
+     *            retrieved.
      */
     private void retrieveProgressNotesData( String cosmoId )
     {
@@ -54,8 +58,8 @@ public class ProgressNotesTableViewController
         db.connect();
 
         // Select statement for the
-        ResultSet rs = db.select("dateTime, participantName, num", "ProgressNotes",
-                "cosmoID=" + cosmoId, "");
+        ResultSet rs = db.select("dateTime, participantName, num",
+                "ProgressNotes", "cosmoID=" + cosmoId, "");
 
         String dateTime;
         String participantName;
@@ -69,8 +73,8 @@ public class ProgressNotesTableViewController
                 participantName = rs.getString(2);
                 num = rs.getString(3);
 
-                ProgressNotes progressNote = new ProgressNotes(
-                        dateTime, participantName, num);
+                ProgressNotes progressNote = new ProgressNotes(dateTime,
+                        participantName, num);
 
                 progressData.add(progressNote);
             }
@@ -84,24 +88,26 @@ public class ProgressNotesTableViewController
     }
 
     /**
-     * Purpose: Refresh the progressNotes table 
+     * Purpose: Refresh the progressNotes table
      * 
      */
-    public void refreshTable(String cosmoId)
+    public void refreshTable( String cosmoId )
     {
-    	this.progressData.clear();
-    	this.progressTable.getColumns().clear();
-    	this.retrieveProgressNotesData(cosmoId);
-    	this.initialize();
+        this.progressData.clear();
+        this.progressTable.getColumns().clear();
+        this.retrieveProgressNotesData(cosmoId);
+        this.initialize();
     }
+
     /**
      * 
      * @return The selected progress note
      */
     public ProgressNotes getSelectedPK()
     {
-    	return this.progressTable.getSelectionModel().getSelectedItem();
+        return this.progressTable.getSelectionModel().getSelectedItem();
     }
+
     /**
      * 
      * Purpose: initialize the columns in the table and configure them
@@ -119,29 +125,28 @@ public class ProgressNotesTableViewController
         nameColumn.setMinWidth(440);
         nameColumn.setResizable(false);
 
-        numColumn.setCellValueFactory(cellData -> cellData.getValue()
-                .getNum());
+        numColumn.setCellValueFactory(cellData -> cellData.getValue().getNum());
         numColumn.setMinWidth(100);
         numColumn.setResizable(false);
-        
-        progressTable.getColumns().addListener(
-                new ListChangeListener<Object>()
+
+        progressTable.getColumns().addListener(new ListChangeListener<Object>()
+        {
+            @Override
+            public void onChanged( Change change )
+            {
+                change.next();
+                // if the column was changed
+                if ( change.wasReplaced() )
                 {
-                    @Override
-                    public void onChanged( Change change )
-                    {
-                        change.next();
-                        // if the column was changed
-                        if ( change.wasReplaced() )
-                        {
-                            // clear all columns
-                            progressTable.getColumns().clear();
-                            // re-add the columns in order
-                            progressTable.getColumns().addAll(dateTimeColumn,
-                                    nameColumn, numColumn);
-                        }
-                    }
-                });
-        progressTable.getColumns().addAll(dateTimeColumn, nameColumn, numColumn);
+                    // clear all columns
+                    progressTable.getColumns().clear();
+                    // re-add the columns in order
+                    progressTable.getColumns().addAll(dateTimeColumn,
+                            nameColumn, numColumn);
+                }
+            }
+        });
+        progressTable.getColumns()
+                .addAll(dateTimeColumn, nameColumn, numColumn);
     }
 }
