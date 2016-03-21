@@ -1,6 +1,7 @@
 package tests;
 
 import static org.junit.Assert.*;
+import helpers.FormatHelper;
 
 import org.junit.After;
 import org.junit.Before;
@@ -204,6 +205,34 @@ public class TestEditParticipantUpdateForm
 		errorMsg = controller.saveEmergencyContactInformation("", "", "");
 		//there should be an error message
 		assertFalse(errorMsg.equals(""));
+	}
+	
+	/**
+	 * Purpose: Test the postal code formatter,
+	 * with both formatted and unformatted valid and 
+	 * invalid postal codes
+	 */
+	@Test
+	public void testPostalCodeFormatter()
+	{
+		FormatHelper fh = new FormatHelper();
+		
+		//the unformatted postal code
+		String upc = "all1kku2ddd53443jioj324fd";
+		 //how the postal code should look once formatted
+		String pc = "A1K 2D5";
+		
+		assertTrue(fh.formatPostalCode(upc).equals(pc));
+		
+		//an invalid postal code
+		String ipc = "SS2 J8K";
+		
+		assertFalse(fh.formatPostalCode(ipc).equals(ipc));
+		
+		//a valid postal code
+		String vpc = "S7K 3P0";
+		assertTrue(fh.formatPostalCode(vpc).equals(vpc));
+		
 	}
 
 }

@@ -38,10 +38,6 @@ public class ParticipantUpdateFormController
 	private String caregiverHomePhone;
 	private String caregiverWorkPhone;
 	
-	private String emergencyContactFirstName;
-	private String emergencyContactLastName;
-	private String emergencyPhoneNumber;
-	
 	/**
 	 * Purpose: The constructor for the ParticipantUpdateFormController
 	 * 
