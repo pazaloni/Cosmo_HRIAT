@@ -16,12 +16,12 @@ public class MedicalCondition
 {
 
     private StringProperty condition;
-    private StringProperty descripion;
+    private StringProperty description;
 
     public MedicalCondition(String condition, String description)
     {
         this.condition = new SimpleStringProperty(condition);
-        this.descripion = new SimpleStringProperty(description);
+        this.description = new SimpleStringProperty(description);
 
     }
 
@@ -44,7 +44,7 @@ public class MedicalCondition
      */
     public StringProperty getDescripion()
     {
-        return descripion;
+        return description;
     }
 
     /**
@@ -61,7 +61,7 @@ public class MedicalCondition
         String result = "";
 
         if ( condition.condition.get().isEmpty()
-                || condition.descripion.get().isEmpty() )
+                || condition.description.get().isEmpty() )
         {
             result = "You have missing required fields";
         }
@@ -109,7 +109,7 @@ public class MedicalCondition
         String result = "";
 
         if ( newCondition.condition.get().isEmpty()
-                || newCondition.descripion.get().isEmpty() )
+                || newCondition.description.get().isEmpty() )
         {
             result = "You have missing required fields";
         }

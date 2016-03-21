@@ -35,6 +35,8 @@ public class ParticipantTableViewController
 			"Emergency Phone");
 	private TableColumn<Participant, String> lastUpdatedColumn = new TableColumn<Participant, String>(
 			"Last Updated");
+	private TableColumn<Participant, String> statusColumn = new TableColumn<Participant, String>(
+	        "Status");
 
 	public ObservableList<Participant> participantData = FXCollections
 			.observableArrayList();
@@ -70,7 +72,10 @@ public class ParticipantTableViewController
 			table = "Participant";
 		}
 		ResultSet rs = db.select("cosmoID, firstName, lastName, address, "
-				+ "dateUpdated", table, condition, "");
+				+ "dateUpdated, participantStatus", table, condition, 
+				"participantStatus = 'Deceased', participantStatus = 'Inactive',"
+				+ " participantStatus = 'Active'");
+
 
 		// Strings to represent the data to be displayed.
 		String cosmoID;
@@ -82,6 +87,7 @@ public class ParticipantTableViewController
 		String emergencyContactName = "";
 		String emergencyContactPhone = ""; // TODO Get from database
 		String informationLastUpdated;
+		String participantStatus;
 
 		try {
 			while (rs.next()) {
@@ -97,11 +103,15 @@ public class ParticipantTableViewController
 
 				// get the last time the information was updated
 				informationLastUpdated = rs.getString(5);
+				
+				///get the status of the participant
+				participantStatus = rs.getString(6);
 
-				// create the participant object
+				/// create the participant object
 				Participant participant = new Participant(cosmoID,
 						participantName, address, emergencyContactName,
-						emergencyContactPhone, informationLastUpdated);
+						emergencyContactPhone, informationLastUpdated, 
+						participantStatus);
 
 				// add the participant into the tableview
 				participantData.add(participant);
@@ -147,6 +157,12 @@ public class ParticipantTableViewController
          cellData.getValue().getUpdatedProperty());
         lastUpdatedColumn.setMinWidth(135);
         lastUpdatedColumn.setResizable(false);
+        
+        ///Set the properties of the new status column
+        statusColumn.setCellValueFactory(cellData ->
+                cellData.getValue().getStatusProperty());
+        statusColumn.setMinWidth(75);
+        statusColumn.setResizable(false);
 
 
 		// make table columns not draggable to reorder it
@@ -159,19 +175,19 @@ public class ParticipantTableViewController
 						if (change.wasReplaced()) {
 							// clear all columns
 							participantTable.getColumns().clear();
-							// re-add the columns in order
+							/// re-add the columns in order
 							participantTable.getColumns().addAll(cosmoIDColumn,
 									participantNameColumn, addressColumn,
 									emergencyNameColumn, emergencyPhoneColumn,
-									lastUpdatedColumn);
+									lastUpdatedColumn, statusColumn);
 						}
 					}
 				});
 
-		// add the columns to the tableview
+		/// add the columns to the tableview
 		participantTable.getColumns().addAll(cosmoIDColumn,
 				participantNameColumn, addressColumn, emergencyNameColumn,
-				emergencyPhoneColumn, lastUpdatedColumn);
+				emergencyPhoneColumn, lastUpdatedColumn, statusColumn);
 
 		// set the data into the table
 //		participantTable.setItems(participantData);

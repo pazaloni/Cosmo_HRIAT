@@ -109,7 +109,9 @@ public class ManageMedicationGUI
                 lblMessage.setText(result);
             }
         });
-
+        btnCancel.setOnAction(event -> {
+            localStage.close();
+        });
         Scene scene = new Scene(mainPane, 600, 450);
         localStage.setScene(scene);
         localStage.setResizable(false);

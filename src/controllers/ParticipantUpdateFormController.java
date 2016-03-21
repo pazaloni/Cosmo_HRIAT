@@ -68,7 +68,7 @@ public class ParticipantUpdateFormController
 		
 		//query the database
 		ResultSet rs = db.select("firstName, lastName, address, city,"
-				+ " postalCode, phoneNumber, dateOfBirth, socialInsuranceNumber"
+				+ " postalCode, phoneNumber, personalHealthNumber, socialInsuranceNumber"
 				, "Participant", "cosmoID = " + cosmoID, "");
 		
 		try
