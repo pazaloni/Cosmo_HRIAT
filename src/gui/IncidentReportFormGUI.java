@@ -2,11 +2,17 @@ package gui;
 
 import java.util.List;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
@@ -30,6 +36,12 @@ public class IncidentReportFormGUI
 {
     private static final String FORM_TITLE = "Incident Reporting Form";
 
+    private ObservableList<String> workAreas, allBodyAreas, injuredBodyAreas;
+
+    private ListView<String> lsvAllBodyAreas, lsvInjuredBodyAreas;
+
+    private ComboBox<String> cboWorkAreas;
+
     private ScrollPane mainPane;
     private VBox mainBox;
 
@@ -39,6 +51,7 @@ public class IncidentReportFormGUI
             participantWitness, otherWitness;
 
     private TextField personInjured;
+
     private TextField otherWorkArea, locationOfPain, txtManagerName,
             txtOtherName, txtDateReportedTo, txtDateVerbal,
             txtDateReportWritten;
@@ -46,20 +59,10 @@ public class IncidentReportFormGUI
     private TextArea incidentDescription, incidentFactors, txtAProtEquip;
 
     private RadioButton staffInjured, participantInjured, otherInjured, am, pm;
-    private RadioButton LSTD, programs, pathWays, frontOffice, WRD, contracts,
-            personalSupports, lifeEnrichment, other, personalSupportsManager,
+    private RadioButton other, personalSupportsManager,
             personalSupportsCoordinator, noVerbalReport;
 
     private RadioButton manager, assistantManager, otherReportedTo;
-
-    private CheckBox chkHead, chkNeck, chkChest, chkLShoulder, chkRShoulder,
-            chkPelvis, chkLButtocks, chkRButtocks, chkLAnkle, chkRAnkle,
-            chkLEar, chkREar, chkToes, chkLEye, chkREye, chkLUpperback,
-            chkRUpperBack, chkLLowerBack, chkRLowerBack, chkLFoot, chkRFoot,
-            chkRUpperArm, chkLUpperArm, chkRLowerArm, chkLLowerArm, chkNose,
-            chkFingers, chkRElbow, chkLElbow, chkRWrist, chkLWrist, chkLHand,
-            chkRHand, chkLUpperLeg, chkRUpperLeg, chkLLowerLeg, chkRLowerLeg,
-            chkLKnee, chkRKnee, chkAbdomen, chkNone, chkOther;
 
     private CheckBox chkBruise, chkScrape, chkSwelling, chkBurn, chkCut,
             chkSprain, chkInsectbite, chkImbedded, chkFall, chkFoundOnFloor,
@@ -79,6 +82,10 @@ public class IncidentReportFormGUI
     {
         this.parentStage = stage;
         this.loggedInStaff = loggedInStaff;
+        workAreas = FXCollections.observableArrayList();
+        allBodyAreas = FXCollections.observableArrayList();
+        injuredBodyAreas = FXCollections.observableArrayList();
+
     }
 
     public ScrollPane showIncidentReportForm()
@@ -139,16 +146,12 @@ public class IncidentReportFormGUI
     {
         HBox box = new HBox();
 
-        staffInjured = new RadioButton("Staff");
-        participantInjured = new RadioButton("Participant Injured");
-        otherInjured = new RadioButton("Other");
+        Label lblpersonInjured = new Label("Participant Injured: ");
 
         personInjured = new TextField();
         personInjured.setMinWidth(450);
-        Label lblpersonInjured = new Label("Person Injured: ");
 
-        box.getChildren().addAll(lblpersonInjured, personInjured, staffInjured,
-                participantInjured, otherInjured);
+        box.getChildren().addAll(lblpersonInjured, personInjured);
 
         return box;
     }
@@ -170,10 +173,14 @@ public class IncidentReportFormGUI
                 "Exact Location of Where Incident Occured:");
 
         month = new TextField();
+        month.setPromptText("Month");
         day = new TextField();
+        day.setPromptText("Day");
         year = new TextField();
+        year.setPromptText("Year");
         time = new TextField();
         location = new TextField();
+        location.setMinWidth(450);
 
         am = new RadioButton("am");
         pm = new RadioButton("pm");
@@ -182,7 +189,7 @@ public class IncidentReportFormGUI
         group.getToggles().addAll(am, pm);
 
         topBox.getChildren().addAll(lblDateOfIncident, month, day, year,
-                lblTimeOfIncident,time, am, pm);
+                lblTimeOfIncident, time, am, pm);
         bottomBox.getChildren().addAll(lblExactLocaitonOfIncident, location);
 
         VBox box = new VBox();
@@ -201,53 +208,49 @@ public class IncidentReportFormGUI
      * 
      * @return gridpane with checkboxes
      */
-    private GridPane createRegisteredWorkArea()
+    private VBox createRegisteredWorkArea()
     {
         Label registeredWorkArea = new Label("Registered Work Area: ");
         registeredWorkArea.setFont(new Font(16));
-        GridPane grid = new GridPane();
+        // GridPane grid = new GridPane();
+        VBox mainBox = new VBox();
 
-        ToggleGroup group = new ToggleGroup();
+        HBox box = new HBox();
+        HBox topBox = new HBox();
 
         otherWorkArea = new TextField();
+        workAreas.add("LSTD");
+        workAreas.add("Path Ways");
+        workAreas.add("WRD");
+        workAreas.add("Person Supports");
+        workAreas.add("Programs");
+        workAreas.add("Contracts");
+        workAreas.add("Front Office");
+        workAreas.add("Life Enrichment");
+        cboWorkAreas = new ComboBox<>(workAreas);
 
-        LSTD = new RadioButton("LSTD");
-        programs = new RadioButton("Programs");
-        pathWays = new RadioButton("Pathways");
-        frontOffice = new RadioButton("Front Office");
-        WRD = new RadioButton("WRD");
-        contracts = new RadioButton("Contracts");
-        personalSupports = new RadioButton("Personal Supports");
-        lifeEnrichment = new RadioButton("Life Enrichment");
-        other = new RadioButton("Other :");
+        other = new RadioButton("Other");
 
-        group.getToggles().addAll(LSTD, programs, pathWays, frontOffice, WRD,
-                contracts, personalSupports, lifeEnrichment, other);
-        grid.add(registeredWorkArea, 0, 0);
-        grid.add(LSTD, 1, 1);
-        grid.add(programs, 1, 2);
-        grid.add(pathWays, 2, 1);
-        grid.add(frontOffice, 3, 2);
-        grid.add(WRD, 3, 1);
-        grid.add(contracts, 2, 2);
-        grid.add(personalSupports, 4, 1);
-        grid.add(lifeEnrichment, 4, 2);
-        grid.add(other, 1, 3);
-        grid.add(otherWorkArea, 2, 3);
+        otherWorkArea.setDisable(true);
+        other.setOnAction(event -> {
+            if ( other.isSelected() )
+            {
+                otherWorkArea.setDisable(false);
+                cboWorkAreas.setDisable(true);
+            }
+            else
+            {
+                otherWorkArea.setDisable(true);
+                cboWorkAreas.setDisable(false);
+            }
+        });
+        topBox.getChildren().add(registeredWorkArea);
+        box.getChildren().addAll(cboWorkAreas, other, otherWorkArea);
+        box.setSpacing(15);
 
-        HBox hbox = new HBox();
+        mainBox.getChildren().addAll(topBox, box);
 
-        txtOther = new TextField();
-        hbox.getChildren().addAll(other, otherWorkArea);
-        txtOther.setMinWidth(4000);
-
-        grid.add(hbox, 1, 3);
-        GridPane.setColumnSpan(hbox, 4);
-
-        GridPane.setColumnSpan(otherWorkArea, 2);
-
-        grid.setHgap(40);
-        return grid;
+        return mainBox;
     }
 
     /**
@@ -262,67 +265,64 @@ public class IncidentReportFormGUI
      * 
      * 
      */
-    private GridPane createBodyAreaInjured()
+    private HBox createBodyAreaInjured()
     {
-        GridPane gridPane = new GridPane();
-
-        gridPane.add(chkHead = new CheckBox("Head"), 0, 0);
-        gridPane.add(chkNeck = new CheckBox("Neck"), 0, 1);
-        gridPane.add(chkChest = new CheckBox("Chest"), 0, 2);
-        gridPane.add(chkLShoulder = new CheckBox("Left Shoulder"), 0, 3);
-        gridPane.add(chkRShoulder = new CheckBox("Right Shoulder"), 0, 4);
-        gridPane.add(chkPelvis = new CheckBox("Pelvis/Hips"), 0, 5);
-        gridPane.add(chkLButtocks = new CheckBox("Left Buttocks"), 0, 6);
-        gridPane.add(chkRButtocks = new CheckBox("Right Buttocks"), 0, 7);
-        gridPane.add(chkLAnkle = new CheckBox("Left Ankle"), 0, 8);
-        gridPane.add(chkRAnkle = new CheckBox("Right Ankle"), 0, 9);
-        gridPane.add(chkLEar = new CheckBox("Left Ear"), 0, 10);
-        gridPane.add(chkREar = new CheckBox("Right ear"), 0, 11);
-        gridPane.add(chkToes = new CheckBox("Toe(s)"), 0, 12);
-
-        gridPane.add(chkLEye = new CheckBox("Left Eye"), 0, 13);
-        gridPane.add(chkREye = new CheckBox("Right Eye"), 1, 1);
-        gridPane.add(chkLUpperback = new CheckBox("left Upper Back"), 1, 2);
-        gridPane.add(chkRUpperBack = new CheckBox("Right Upper Back"), 1, 3);
-        gridPane.add(chkLLowerBack = new CheckBox("Left Lower Back"), 1, 4);
-        gridPane.add(chkRLowerBack = new CheckBox("Right Lower Back"), 1, 5);
-        gridPane.add(chkLFoot = new CheckBox("Left Foot"), 1, 6);
-        gridPane.add(chkRFoot = new CheckBox("Right Foot"), 1, 7);
-        gridPane.add(chkRUpperArm = new CheckBox("Right Upper Arm"), 1, 8);
-        gridPane.add(chkLUpperArm = new CheckBox("Left upper Arm"), 1, 9);
-        gridPane.add(chkRLowerArm = new CheckBox("Right Lower Arm"), 1, 10);
-        gridPane.add(chkLLowerArm = new CheckBox("Left Lower Arm"), 1, 11);
-        gridPane.add(chkNose = new CheckBox("Nose"), 1, 0);
-        gridPane.add(chkFingers = new CheckBox("Finger(s)"), 2, 1);
-        gridPane.add(chkRElbow = new CheckBox("Right Elbow"), 1, 12);
-        gridPane.add(chkLElbow = new CheckBox("Left Elbow"), 2, 0);
-        gridPane.add(chkRWrist = new CheckBox("Right Wrist"), 1, 13);
-        gridPane.add(chkLWrist = new CheckBox("Left Wrist"), 2, 11);
-        gridPane.add(chkLHand = new CheckBox("Left Hand"), 2, 12);
-        gridPane.add(chkRHand = new CheckBox("Right Hand"), 2, 2);
-        gridPane.add(chkLUpperLeg = new CheckBox("Left Upper Leg"), 2, 3);
-        gridPane.add(chkRUpperLeg = new CheckBox("Right Upper Leg"), 2, 4);
-        gridPane.add(chkLLowerLeg = new CheckBox("Left Lower Leg"), 2, 5);
-        gridPane.add(chkRLowerLeg = new CheckBox("Right Lower Leg"), 2, 6);
-        gridPane.add(chkLKnee = new CheckBox("Left Knee"), 2, 7);
-        gridPane.add(chkRKnee = new CheckBox("Right Knee"), 2, 8);
-        gridPane.add(chkAbdomen = new CheckBox("Abdomen/Stomach"), 2, 9);
-        gridPane.add(chkNone = new CheckBox("None"), 2, 10);
-
         HBox hbox = new HBox();
-        chkOther = new CheckBox("Other (Specify):");
-        txtOther = new TextField();
-        hbox.getChildren().addAll(chkOther, txtOther);
-        txtOther.setMinWidth(400);
+        VBox midBox = new VBox();
 
-        gridPane.add(hbox, 0, 14);
-        GridPane.setColumnSpan(hbox, 3);
+        Button addInjury = new Button("->");
+        Button removeInjury = new Button("<-");
 
-        gridPane.setHgap(200);
-        gridPane.setVgap(3);
-        gridPane.setMinWidth(700);
-        return gridPane;
+        allBodyAreas.addAll("Head ", "Neck", "Chest", "Left Shoulder",
+                "Right Shoulder", "Pelvis/Hips", "Left Buttocks",
+                "Right Buttocks", "Left Ankle", "Right Ankle", "Left Ear",
+                "Right ear ", "Toes", "Left Eye ", "Right Eye ",
+                "left Upper Back ", "Right Upper Back ", "Left Lower Back ",
+                "Right Lower Back ", "Left Foot ", "Right Foot ",
+                "Right Upper Arm ", "Left upper Arm ", "Right Lower Arm ",
+                "Left Lower Arm", "Nose", "Fingers", "Right Elbow",
+                "Left Elbow", "Right Wrist", "Left Wrist", "Left Hand",
+                "Right Hand ", "Left Upper Leg ", "Right Upper Leg ",
+                "Left Lower Leg ", "Right Lower Leg ", "Left Knee ",
+                "Right Knee ", "Abdomen/Stomach");
 
+        lsvAllBodyAreas = new ListView<String>(allBodyAreas);
+        lsvInjuredBodyAreas = new ListView<String>(injuredBodyAreas);
+        FXCollections.sort(allBodyAreas);
+        FXCollections.sort(injuredBodyAreas);
+        addInjury.setOnAction(event -> {
+            if ( lsvAllBodyAreas.getSelectionModel().getSelectedItem() != null )
+            {
+                injuredBodyAreas.add(lsvAllBodyAreas.getSelectionModel()
+                        .getSelectedItem());
+                lsvInjuredBodyAreas.setItems(injuredBodyAreas);
+                allBodyAreas.remove(lsvAllBodyAreas.getSelectionModel()
+                        .getSelectedItem());
+                lsvAllBodyAreas.setItems(allBodyAreas);
+            }
+            System.out.println(injuredBodyAreas.toString());
+        });
+        removeInjury
+                .setOnAction(event -> {
+                    if ( lsvInjuredBodyAreas.getSelectionModel()
+                            .getSelectedItem() != null )
+                    {
+                        allBodyAreas.add(lsvInjuredBodyAreas
+                                .getSelectionModel().getSelectedItem());
+                        lsvAllBodyAreas.setItems(allBodyAreas);
+                        injuredBodyAreas.remove(lsvInjuredBodyAreas
+                                .getSelectionModel().getSelectedItem());
+                        lsvInjuredBodyAreas.setItems(injuredBodyAreas);
+                        FXCollections.sort(allBodyAreas);
+                    }
+                });
+
+        midBox.getChildren().addAll(addInjury, removeInjury);
+        midBox.setSpacing(30);
+        hbox.getChildren().addAll(lsvAllBodyAreas, midBox, lsvInjuredBodyAreas);
+        hbox.setSpacing(30);
+        hbox.setAlignment(Pos.CENTER);
+        return hbox;
     }
 
     /**
