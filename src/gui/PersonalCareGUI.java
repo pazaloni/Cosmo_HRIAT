@@ -132,7 +132,12 @@ public class PersonalCareGUI
                 String nowString = formatter.format(now);
                 
                 PersonalCareHelper helper = new PersonalCareHelper();
-                helper.savePersonalCareInformation(optionsArray, assistanceCBOBox.getValue(),nowString, cosmoId);
+                Boolean[] valArray = new Boolean[11];
+                for(int i = 0 ; i < optionsArray.length; i++)
+                {
+                    valArray[i] = optionsArray[i].selectedProperty().getValue();
+                }
+                helper.savePersonalCareInformation(valArray, assistanceCBOBox.getValue(),nowString, cosmoId);
 
                 lastUpdatedTxt.setText(nowString);
             }
@@ -311,7 +316,7 @@ public class PersonalCareGUI
         {
             try
             {
-                date = inputFormatter.parse(info[7]);
+                date = inputFormatter.parse(info[info.length-1]);
             }
             catch ( ParseException e )
             {
