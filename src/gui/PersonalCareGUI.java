@@ -139,134 +139,112 @@ public class PersonalCareGUI
         titleBox.setSpacing(250);
         HBox insulinBox = new HBox();
 
-        Label insulinLbl = new Label("Daily Insulin");
-
-        CheckBox insulinChk = new CheckBox();
+        CheckBox insulinChk = new CheckBox("Daily Insulin");
 
         optionsArray[0] = insulinChk;
 
-        insulinBox.getChildren().addAll(insulinLbl, insulinChk);
+        insulinBox.getChildren().addAll(insulinChk);
 
         insulinBox.setSpacing(SPACING);
 
         HBox depoBox = new HBox();
 
-        Label depoLbl = new Label("Injections: Depo Every 3 Months");
-
-        CheckBox depoChk = new CheckBox();
+        CheckBox depoChk = new CheckBox("Injections: Depo Every 3 Months");
 
         optionsArray[1] = depoChk;
 
-        depoBox.getChildren().addAll(depoLbl, depoChk);
+        depoBox.getChildren().addAll(depoChk );
 
         depoBox.setSpacing(SPACING);
 
         HBox bTwelveBox = new HBox();
 
-        Label bTwelveLbl = new Label("Injections: Monthly B12");
-
-        CheckBox bTwelveChk = new CheckBox();
+        CheckBox bTwelveChk = new CheckBox("Injections: Monthly B12");
 
         optionsArray[2] = bTwelveChk;
-        bTwelveBox.getChildren().addAll(bTwelveLbl, bTwelveChk);
+        bTwelveBox.getChildren().addAll(bTwelveChk);
 
         bTwelveBox.setSpacing(SPACING);
 
         HBox suprapubicBox = new HBox();
 
-        Label suprapubicLbl = new Label("Monthly Suprapubic Catherter Change");
-
-        CheckBox suprapubicChk = new CheckBox();
+        CheckBox suprapubicChk = new CheckBox("Monthly Suprapubic Catherter Change");
 
         optionsArray[3] = suprapubicChk;
 
-        suprapubicBox.getChildren().addAll(suprapubicLbl, suprapubicChk);
+        suprapubicBox.getChildren().addAll(suprapubicChk);
 
         suprapubicBox.setSpacing(SPACING);
 
         HBox dressingBox = new HBox();
 
-        Label dressingLbl = new Label("Dressings");
-
-        CheckBox dressingChk = new CheckBox();
+        CheckBox dressingChk = new CheckBox("Dressings");
 
         optionsArray[4] = dressingChk;
 
-        dressingBox.getChildren().addAll(dressingLbl, dressingChk);
+        dressingBox.getChildren().addAll(dressingChk);
 
         dressingBox.setSpacing(SPACING);
 
         HBox cobanBox = new HBox();
 
-        Label cobanLbl = new Label("Coban Wraps");
-
-        CheckBox cobanChk = new CheckBox();
+        CheckBox cobanChk = new CheckBox("Coban Wraps");
 
         optionsArray[5] = cobanChk;
 
-        cobanBox.getChildren().addAll(cobanLbl, cobanChk);
+        cobanBox.getChildren().addAll(cobanChk);
 
         cobanBox.setSpacing(SPACING);
 
         HBox ostomyBox = new HBox();
 
-        Label ostomyLbl = new Label("Colostomy/Illiostomy Care");
-
-        CheckBox ostomyChk = new CheckBox();
+        CheckBox ostomyChk = new CheckBox("Colostomy/Illiostomy Care");
 
         optionsArray[6] = ostomyChk;
 
-        ostomyBox.getChildren().addAll(ostomyLbl, ostomyChk);
+        ostomyBox.getChildren().addAll(ostomyChk);
 
         ostomyBox.setSpacing(SPACING);
 
         HBox catheterBox = new HBox();
 
-        Label catheterLbl = new Label("Catheter");
-
-        CheckBox catheterChk = new CheckBox();
+        CheckBox catheterChk = new CheckBox("Catheter");
 
         optionsArray[7] = catheterChk;
 
-        catheterBox.getChildren().addAll(catheterLbl, catheterChk);
+        catheterBox.getChildren().addAll(catheterChk);
 
         catheterBox.setSpacing(SPACING);
 
         HBox trachBox = new HBox();
 
-        Label trachLbl = new Label("Tracheotomy");
-
-        CheckBox trachChk = new CheckBox();
+        CheckBox trachChk = new CheckBox("Tracheotomy");
 
         optionsArray[8] = trachChk;
 
-        trachBox.getChildren().addAll(trachLbl, trachChk);
+        trachBox.getChildren().addAll(trachChk);
 
         trachBox.setSpacing(SPACING);
 
-        HBox feedBox = new HBox();
+        HBox feedBox = new HBox();        
 
-        Label feedLbl = new Label("Tube Feeds");
-
-        CheckBox feedChk = new CheckBox();
+        CheckBox feedChk = new CheckBox("Tube Feeds");
 
         optionsArray[9] = feedChk;
 
-        feedBox.getChildren().addAll(feedLbl, feedChk);
+        feedBox.getChildren().addAll(feedChk);
 
         feedBox.setSpacing(SPACING);
 
         HBox dietBox = new HBox();
 
-        Label dietLbl = new Label("Diet(Food prep & feeding");
-
-        CheckBox dietChk = new CheckBox();
+        CheckBox dietChk = new CheckBox("Diet(Food prep & feeding");
 
         optionsArray[10] = dietChk;
 
-        dietBox.getChildren().addAll(dietLbl, dietChk);
+        dietBox.getChildren().addAll(dietChk);
         dietBox.setSpacing(SPACING);
-        HBox assistanceBox = new HBox();
+        VBox assistanceBox = new VBox();
 
         Label assistanceLabel = new Label("Assistance");
 
@@ -285,7 +263,7 @@ public class PersonalCareGUI
         subHeaderBox.setRight(updateBox);
         
         contentBox.getChildren().addAll(titleBox, subHeaderBox, insulinBox, depoBox,
-                bTwelveBox, dressingBox, cobanBox, ostomyBox, catheterBox,
+                bTwelveBox, suprapubicBox, dressingBox, cobanBox, ostomyBox, catheterBox,
                 trachBox, feedBox, dietBox, assistanceBox);
         contentBox.setSpacing(15);
 
