@@ -38,6 +38,8 @@ public class ParticipantUpdateFormController
 	private String caregiverHomePhone;
 	private String caregiverWorkPhone;
 	
+	private String emergencyContactPhoneNumber;
+	
 	/**
 	 * Purpose: The constructor for the ParticipantUpdateFormController
 	 * 
@@ -566,6 +568,7 @@ public class ParticipantUpdateFormController
 		//connect to the database
 		db.connect();
 		String msg = "";
+		emergencyContactPhoneNumber = phone;
 		//the array of values to be checked against
 		String[][] values = new String[3][2];
 		
@@ -574,7 +577,7 @@ public class ParticipantUpdateFormController
 		values[1][0] = "lastName";
 		values[1][1] = lastName;
 		values[2][0] = "phoneNumber";
-		values[2][1] = phone;
+		values[2][1] = emergencyContactPhoneNumber;
 		
 		//the string to be put into the WHERE clause
 		String whereStmt = this.createWhereStatement(values, 3);
@@ -918,11 +921,11 @@ public class ParticipantUpdateFormController
 			
 			if(postalCode == null || postalCode.equals(""))
 			{
-				postalCode = "";
+				caregiverPostalCode = "";
 			}
-			else if(validatePostalCode(postalCode).length() > 7)
+			else if(validatePostalCode(postalCode).length() == 7)
 			{
-				postalCode = validatePostalCode(postalCode);
+				caregiverPostalCode = validatePostalCode(postalCode);
 			}
 			else
 			{
@@ -936,7 +939,7 @@ public class ParticipantUpdateFormController
 			}
 			else if(validatePhoneNumber(homePhone).length() == 14)
 			{
-				homePhone = validatePhoneNumber(homePhone);
+				caregiverHomePhone = validatePhoneNumber(homePhone);
 			}
 			else
 			{
@@ -950,7 +953,7 @@ public class ParticipantUpdateFormController
 			}
 			else if(validatePhoneNumber(workPhone).length() == 14)
 			{
-				workPhone = validatePhoneNumber(workPhone);
+				caregiverWorkPhone = validatePhoneNumber(workPhone);
 			}
 			else
 			{
@@ -1005,7 +1008,7 @@ public class ParticipantUpdateFormController
 			}
 			else if(validatePhoneNumber(phone).length() == 14)
 			{
-				phone = validatePhoneNumber(phone);
+				emergencyContactPhoneNumber = validatePhoneNumber(phone);
 			}
 			else
 			{
