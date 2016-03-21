@@ -1,7 +1,10 @@
 package gui;
 
+import helpers.PersonalCareHelper;
 import helpers.SeizureDescriptionFormHelper;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -63,6 +66,9 @@ public class PersonalCareGUI
     //the parent Stage
     private Stage parentStage;
 
+    //The label for displaying when the form was last updated.
+    private Label lastUpdatedTxt;
+    
     //the save button
     private Button btnSave = new Button("Save Information");
 
@@ -107,7 +113,7 @@ public class PersonalCareGUI
         BorderPane subHeaderBox = new BorderPane();
         HBox updateBox = new HBox();
         Label dateCompletedLbl = new Label("Date Completed: ");
-        Label lastUpdatedTxt = new Label();
+        lastUpdatedTxt = new Label();
         // make sure basic staff can't save
         if ( !(this.loggedInUser instanceof MedicalAdministrator) )
         {
@@ -119,17 +125,16 @@ public class PersonalCareGUI
             @Override
             public void handle( ActionEvent e )
             {
-                String[] values = new String[optionsArray.length + 1];
-                for ( int i = 0; i < 7; i++ )
-                {
-                    values[i] = optionsArray[i].getText();
-                }
+
                 Date now = new Date();
                 SimpleDateFormat formatter = new SimpleDateFormat();
                 formatter.applyPattern("dd-MMM-yyyy");
-                values[7] = formatter.format(now);
+                String nowString = formatter.format(now);
+                
+                PersonalCareHelper helper = new PersonalCareHelper();
+                helper.savePersonalCareInformation(optionsArray, assistanceCBOBox.getValue(),nowString, cosmoId);
 
-                lastUpdatedTxt.setText(values[7]);
+                lastUpdatedTxt.setText(nowString);
             }
 
         });
@@ -275,9 +280,49 @@ public class PersonalCareGUI
 
         mainBox.setPadding(new Insets(10, 10, 10, 10));
 
+        assignSeizureInfo();
+        
         this.parentTab.setContent(mainBox);
 
         return parentTab;
     }
 
+    /**
+     * 
+     * Purpose: take in information from the database and display it in the
+     * proper fields, fields will be empty if the participant does not have
+     * seizures
+     * 
+     */
+    private void assignSeizureInfo()
+    {
+        PersonalCareHelper helper = new PersonalCareHelper();
+        String[] info = helper.retrievePersonalCareInformation(cosmoID);
+        for( int i = 0 ; i < optionsArray.length ; i++)
+        {
+            optionsArray[i].setSelected(Boolean.parseBoolean(info[i]));
+        }
+        
+        assistanceCBOBox.setValue(info[info.length-2]);
+        
+        DateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        if ( info[info.length-1].length() > 5 )
+        {
+            try
+            {
+                date = inputFormatter.parse(info[7]);
+            }
+            catch ( ParseException e )
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            SimpleDateFormat outputFormatter = new SimpleDateFormat();
+            outputFormatter.applyPattern("dd-MMM-yyyy");
+
+            lastUpdatedTxt.setText(outputFormatter.format(date));
+        }
+    }
+    
 }
