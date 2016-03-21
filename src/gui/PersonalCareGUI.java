@@ -38,37 +38,46 @@ import javafx.stage.Stage;
  * Purpose: Represents the progress notes form GUI, which by default pulls
  * information
  *
- * @author CIMP
+ * @author Niklaas Neijmeijer cst207 Steven Palchinski cst209
  * @version 1.0
  */
 public class PersonalCareGUI
 {
+    //the heading for the page
     public static final String FORM_TITLE = "Personal Care";
+    //the spacing for each of the hBoxes 
     public static final int SPACING = 10;
 
+    //the current participants cosmoID number
     private String cosmoID;
 
+    //the scrollbox that will hold the content
     private ScrollPane mainBox;
 
     // The Control that this will be placed in
     private Tab parentTab;
 
+    //the logged in user
     private StaffAccount loggedInUser;
 
+    //the parent Stage
     private Stage parentStage;
 
+    //the save button
     private Button btnSave = new Button("Save Information");
 
+    //Array to hold all editable checkboxes in the tab
     private CheckBox[] optionsArray = new CheckBox[11];
 
     private ComboBox<String> assistanceCBOBox;
 
+    
     /**
-     * 
      * Constructor for the Personal Care class.
      * 
-     * @param ctrl
-     *            the pane, or box that this will be placed on
+     * @param personalCareTab the current tab
+     * @param loggedInUser the logged in user
+     * @param parentStage the window this is displayed in
      */
     public PersonalCareGUI(Tab personalCareTab, StaffAccount loggedInUser,
             Stage parentStage)
@@ -138,7 +147,7 @@ public class PersonalCareGUI
 
         insulinBox.getChildren().addAll(insulinLbl, insulinChk);
 
-        insulinBox.setSpacing(10);
+        insulinBox.setSpacing(SPACING);
 
         HBox depoBox = new HBox();
 
@@ -150,7 +159,7 @@ public class PersonalCareGUI
 
         depoBox.getChildren().addAll(depoLbl, depoChk);
 
-        depoBox.setSpacing(10);
+        depoBox.setSpacing(SPACING);
 
         HBox bTwelveBox = new HBox();
 
@@ -161,7 +170,7 @@ public class PersonalCareGUI
         optionsArray[2] = bTwelveChk;
         bTwelveBox.getChildren().addAll(bTwelveLbl, bTwelveChk);
 
-        bTwelveBox.setSpacing(10);
+        bTwelveBox.setSpacing(SPACING);
 
         HBox suprapubicBox = new HBox();
 
@@ -173,7 +182,7 @@ public class PersonalCareGUI
 
         suprapubicBox.getChildren().addAll(suprapubicLbl, suprapubicChk);
 
-        suprapubicBox.setSpacing(10);
+        suprapubicBox.setSpacing(SPACING);
 
         HBox dressingBox = new HBox();
 
@@ -185,7 +194,7 @@ public class PersonalCareGUI
 
         dressingBox.getChildren().addAll(dressingLbl, dressingChk);
 
-        dressingBox.setSpacing(10);
+        dressingBox.setSpacing(SPACING);
 
         HBox cobanBox = new HBox();
 
@@ -197,7 +206,7 @@ public class PersonalCareGUI
 
         cobanBox.getChildren().addAll(cobanLbl, cobanChk);
 
-        cobanBox.setSpacing(10);
+        cobanBox.setSpacing(SPACING);
 
         HBox ostomyBox = new HBox();
 
@@ -209,7 +218,7 @@ public class PersonalCareGUI
 
         ostomyBox.getChildren().addAll(ostomyLbl, ostomyChk);
 
-        ostomyBox.setSpacing(10);
+        ostomyBox.setSpacing(SPACING);
 
         HBox catheterBox = new HBox();
 
@@ -221,7 +230,7 @@ public class PersonalCareGUI
 
         catheterBox.getChildren().addAll(catheterLbl, catheterChk);
 
-        catheterBox.setSpacing(10);
+        catheterBox.setSpacing(SPACING);
 
         HBox trachBox = new HBox();
 
@@ -233,7 +242,7 @@ public class PersonalCareGUI
 
         trachBox.getChildren().addAll(trachLbl, trachChk);
 
-        trachBox.setSpacing(10);
+        trachBox.setSpacing(SPACING);
 
         HBox feedBox = new HBox();
 
@@ -245,7 +254,7 @@ public class PersonalCareGUI
 
         feedBox.getChildren().addAll(feedLbl, feedChk);
 
-        feedBox.setSpacing(10);
+        feedBox.setSpacing(SPACING);
 
         HBox dietBox = new HBox();
 
@@ -256,11 +265,12 @@ public class PersonalCareGUI
         optionsArray[10] = dietChk;
 
         dietBox.getChildren().addAll(dietLbl, dietChk);
-        dietBox.setSpacing(10);
+        dietBox.setSpacing(SPACING);
         HBox assistanceBox = new HBox();
 
         Label assistanceLabel = new Label("Assistance");
 
+        //observable list to store the values that are displayed in the combo box
         ObservableList<String> assistanceList = FXCollections
                 .observableArrayList("", "Require total full lift",
                         "Require sit/stand lift", "Two staff assist",
@@ -270,7 +280,7 @@ public class PersonalCareGUI
 
         assistanceBox.getChildren().addAll(assistanceLabel, assistanceCBOBox);
 
-        assistanceBox.setSpacing(10);
+        assistanceBox.setSpacing(SPACING);
         
         subHeaderBox.setRight(updateBox);
         
