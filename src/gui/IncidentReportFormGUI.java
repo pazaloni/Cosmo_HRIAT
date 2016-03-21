@@ -4,6 +4,7 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -19,6 +20,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -58,7 +60,7 @@ public class IncidentReportFormGUI
 
     private TextArea incidentDescription, incidentFactors, txtAProtEquip;
 
-    private RadioButton staffInjured, participantInjured, otherInjured, am, pm;
+    private RadioButton am, pm;
     private RadioButton other, personalSupportsManager,
             personalSupportsCoordinator, noVerbalReport;
 
@@ -165,6 +167,7 @@ public class IncidentReportFormGUI
     {
 
         HBox topBox = new HBox();
+        HBox midBox = new HBox();
         HBox bottomBox = new HBox();
 
         Label lblDateOfIncident = new Label("Date of Incident:");
@@ -188,15 +191,15 @@ public class IncidentReportFormGUI
         ToggleGroup group = new ToggleGroup();
         group.getToggles().addAll(am, pm);
 
-        topBox.getChildren().addAll(lblDateOfIncident, month, day, year,
-                lblTimeOfIncident, time, am, pm);
+        midBox.getChildren().addAll(lblTimeOfIncident, time, am, pm);
+        topBox.getChildren().addAll(lblDateOfIncident, month, day, year);
         bottomBox.getChildren().addAll(lblExactLocaitonOfIncident, location);
 
         VBox box = new VBox();
-        box.getChildren().addAll(topBox, bottomBox);
+        box.getChildren().addAll(topBox, midBox, bottomBox);
         topBox.setSpacing(10);
         bottomBox.setSpacing(10);
-
+        midBox.setSpacing(10);
         box.setSpacing(5);
         return box;
     }
@@ -290,6 +293,54 @@ public class IncidentReportFormGUI
         lsvInjuredBodyAreas = new ListView<String>(injuredBodyAreas);
         FXCollections.sort(allBodyAreas);
         FXCollections.sort(injuredBodyAreas);
+
+        lsvAllBodyAreas.setOnMouseClicked(new EventHandler<MouseEvent>()
+        {
+
+            @Override
+            public void handle( MouseEvent click )
+            {
+                if ( click.getClickCount() == 2 )
+                {
+                    if ( lsvAllBodyAreas.getSelectionModel().getSelectedItem() != null )
+                    {
+                        injuredBodyAreas.add(lsvAllBodyAreas
+                                .getSelectionModel().getSelectedItem());
+                        lsvInjuredBodyAreas.setItems(injuredBodyAreas);
+                        allBodyAreas.remove(lsvAllBodyAreas.getSelectionModel()
+                                .getSelectedItem());
+                        lsvAllBodyAreas.setItems(allBodyAreas);
+                    }
+                }
+
+            }
+
+        });
+        lsvInjuredBodyAreas.setOnMouseClicked(new EventHandler<MouseEvent>()
+        {
+
+            @Override
+            public void handle( MouseEvent click )
+            {
+                if ( click.getClickCount() == 2 )
+                {
+                    if ( lsvInjuredBodyAreas.getSelectionModel()
+                            .getSelectedItem() != null )
+                    {
+                        allBodyAreas.add(lsvInjuredBodyAreas
+                                .getSelectionModel().getSelectedItem());
+                        lsvAllBodyAreas.setItems(allBodyAreas);
+                        injuredBodyAreas.remove(lsvInjuredBodyAreas
+                                .getSelectionModel().getSelectedItem());
+                        lsvInjuredBodyAreas.setItems(injuredBodyAreas);
+                        FXCollections.sort(allBodyAreas);
+                    }
+                }
+
+            }
+
+        });
+
         addInjury.setOnAction(event -> {
             if ( lsvAllBodyAreas.getSelectionModel().getSelectedItem() != null )
             {
@@ -395,8 +446,6 @@ public class IncidentReportFormGUI
 
         int maxHeight = 55;
 
-        Label lblLocationOfPain = new Label("Location of Pain:");
-        lblLocationOfPain.setFont(font);
         Label lblIncidentDescription = new Label(
                 "Description of exactly how incident occured");
         lblIncidentDescription.setFont(font);
@@ -404,8 +453,6 @@ public class IncidentReportFormGUI
                 "Factors contributing to the incident");
         lblIncidentFactors.setFont(font);
 
-        locationOfPain = new TextField();
-        locationOfPain.setMinWidth(250);
         incidentDescription = new TextArea();
         incidentDescription.setMaxHeight(maxHeight);
         incidentDescription.setWrapText(true);
@@ -414,7 +461,6 @@ public class IncidentReportFormGUI
         incidentFactors.setMaxHeight(maxHeight);
         incidentFactors.setWrapText(true);
 
-        topBox.getChildren().addAll(lblLocationOfPain, locationOfPain);
         topBox.setSpacing(15);
 
         mainBox.getChildren().addAll(topBox, lblIncidentDescription,
