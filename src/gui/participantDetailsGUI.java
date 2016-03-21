@@ -165,7 +165,7 @@ public class participantDetailsGUI extends Application
         Tab healthStatus = new Tab();
         Tab seizureDescription = new Tab();
         Tab progressNotes = new Tab();
-        Tab kinDetails = new Tab();
+        Tab personalCare = new Tab();
         Tab workDetails = new Tab();
         Tab physicianInfo = new Tab();
         Tab caregiver = new Tab();
@@ -195,7 +195,12 @@ public class participantDetailsGUI extends Application
         progressNotes.setContent(pnf.showProgressNotes(cosmoID + "")
                 .getContent());
                 
-        kinDetails.setContent(createKinDetailsTab());
+        //Create the Personal Care Tab
+        PersonalCareGUI pc = new PersonalCareGUI(personalCare, loggedInUser,
+                participantMainStage);
+        personalCare.setContent(pc.showPersonalCare(cosmoID + "")
+                .getContent());
+        
         workDetails.setContent(createWorkDetailsTab());
         physicianInfo.setContent(createPhysicianInfoTab());
         caregiver.setContent(createCaregiverTab());
@@ -206,7 +211,7 @@ public class participantDetailsGUI extends Application
         participantUpdate.setText("Participant Update");
         seizureDescription.setText("Seizure Description");
         progressNotes.setText("Progress Notes");
-        kinDetails.setText("Kin");
+        personalCare.setText("Personal Care");
         workDetails.setText("Work");
         physicianInfo.setText("Physician");
         caregiver.setText("Caregiver");
@@ -217,7 +222,7 @@ public class participantDetailsGUI extends Application
         participantUpdate.closableProperty().set(false);
         seizureDescription.closableProperty().set(false);
         progressNotes.closableProperty().set(false);
-        kinDetails.closableProperty().set(false);
+        personalCare.closableProperty().set(false);
         workDetails.closableProperty().set(false);
         physicianInfo.closableProperty().set(false);
         caregiver.closableProperty().set(false);
@@ -226,7 +231,7 @@ public class participantDetailsGUI extends Application
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(100);
         tabPane.getTabs().addAll(healthStatus, participantUpdate,
-                seizureDescription, progressNotes, kinDetails, physicianInfo, workDetails,
+                seizureDescription, progressNotes, personalCare, physicianInfo, workDetails,
                 caregiver, other);
         tabPane.setMinHeight(29);
 
