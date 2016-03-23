@@ -5,7 +5,11 @@ import java.sql.SQLException;
 import java.util.Date;
 
 import javafx.scene.control.CheckBox;
-
+/**
+ * A helper class for the PersonalCareGUI
+ * @author cst207
+ *
+ */
 public class PersonalCareHelper
 {
 
@@ -15,9 +19,15 @@ public class PersonalCareHelper
     {
         db = new DatabaseHelper();
     }
-
+    
+    /**
+     * Method for retrieved personal care information from the database
+     * @param cosmoID The cosmoID of the participant we are query the database for
+     * @return
+     */
     public String[] retrievePersonalCareInformation( String cosmoID )
     {
+        db.connect();
         String[] personalCareInfo = new String[13];
 
         String insulin = null;
@@ -82,7 +92,6 @@ public class PersonalCareHelper
         personalCareInfo[10] = diet;
         personalCareInfo[11] = assistance;
 
-        // making sure participant does not have an date if no seizure
         try
         {
             personalCareInfo[12] = lastUpdated.toString();
@@ -100,13 +109,21 @@ public class PersonalCareHelper
                 personalCareInfo[i] = " ";
             }
         }
+        db.disconnect();
         return personalCareInfo;
     }
 
+    /**
+     * A method to save the personal care information of the participant
+     * @param valArray The array of boolean values to insert into the database
+     * @param value The value of the assistance box combo box
+     * @param when The time that the method is called.
+     * @param cosmoId Which participant's information is being updated.
+     * @return
+     */
     public boolean savePersonalCareInformation( Boolean[] valArray,
             String value, String when, String cosmoId )
     {
-        String result = "";
         db.connect();
 
         String personalCareInformation[][] = new String[14][2];

@@ -9,7 +9,11 @@ import helpers.PersonalCareHelper;
 
 import org.junit.Before;
 import org.junit.Test;
-
+/**
+ * A test for the PersonalCareHelper class.
+ * @author cst207
+ *
+ */
 public class TestPersonalCareHelper
 {
     PersonalCareHelper pcOne = new PersonalCareHelper();
@@ -33,31 +37,36 @@ public class TestPersonalCareHelper
         formatter.applyPattern("dd-MMM-yyyy");
         lastUpdated = formatter.format(now);
     }
-
+    
+    /**
+     * Test that the correct information is retrieved 
+     */
     @Test
     public void testRetrievePersonalCareInformation()
     {
         assertTrue(pcOne.savePersonalCareInformation(personSave, assistance, lastUpdated, cosmoID));
     }
 
+    /**
+     * Test that information saved properly
+     */
     @Test
     public void testSavePersonalCareInformation()
     {
+        pcOne.savePersonalCareInformation(personSave, assistance, lastUpdated, cosmoID);
         personRetrieve = pcOne.retrievePersonalCareInformation(cosmoID);
-        assertTrue(personRetrieve[0].equals(personSave[0]));
-        assertTrue(personRetrieve[1].equals(personSave[1]));
-        assertTrue(personRetrieve[2].equals(personSave[2]));
-        assertTrue(personRetrieve[3].equals(personSave[3]));
-        assertTrue(personRetrieve[4].equals(personSave[4]));
-        assertTrue(personRetrieve[5].equals(personSave[5]));
-        assertTrue(personRetrieve[6].equals(personSave[6]));
-        assertTrue(personRetrieve[7].equals(personSave[7]));
-        assertTrue(personRetrieve[8].equals(personSave[8]));
-        assertTrue(personRetrieve[9].equals(personSave[9]));
-        assertTrue(personRetrieve[10].equals(personSave[10]));
-        assertTrue(personRetrieve[11].equals(personSave[11]));
-        assertTrue(personRetrieve[12].equals(assistance));
-        assertTrue(personRetrieve[13].equals(lastUpdated));
+        assertTrue(Boolean.parseBoolean(personRetrieve[0]) == (personSave[0]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[1])==(personSave[1]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[2])==(personSave[2]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[3])==(personSave[3]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[4])==(personSave[4]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[5])==(personSave[5]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[6])==(personSave[6]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[7])==(personSave[7]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[8])==(personSave[8]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[9])==(personSave[9]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[10])==(personSave[10]));
+        assertTrue(personRetrieve[11].equals(assistance));
     }
 
 }
