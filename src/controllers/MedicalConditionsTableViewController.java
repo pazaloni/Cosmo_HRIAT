@@ -80,10 +80,10 @@ public class MedicalConditionsTableViewController
      */
     public void refreshTable(String cosmoId)
     {
-    	this.conditionData.clear();
-    	this.conditionTable.getColumns().clear();
-    	this.retrieveConditionData(cosmoId);
-    	this.initialize();
+        this.conditionData.clear();
+        this.conditionTable.getColumns().clear();
+        this.retrieveConditionData(cosmoId);
+        this.initialize();
     }
     /**
      * 
@@ -91,7 +91,7 @@ public class MedicalConditionsTableViewController
      */
     public MedicalCondition getSelectedMedicalCondition()
     {
-    	return this.conditionTable.getSelectionModel().getSelectedItem();
+        return this.conditionTable.getSelectionModel().getSelectedItem();
     }
     /**
      * 

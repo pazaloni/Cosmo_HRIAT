@@ -35,6 +35,7 @@ public class TestParticipant
     private String emergencyContactNameTwo;
     private String emergencyContactPhoneTwo;
     
+    private String activeStatus = "Active";
    
 
     private String descriptionOne = "This person has Autism";
@@ -60,10 +61,10 @@ public class TestParticipant
 
         test1 = new Participant(cosmoIDOne, participantNameOne,
                 participantAddressOne, emergencyContactNameOne,
-                emergencyContactPhoneOne, informationLastUpdatedOne);
+                emergencyContactPhoneOne, informationLastUpdatedOne, activeStatus);
         test2 = new Participant(cosmoIDTwo, participantNameTwo,
                 participantAddressTwo, emergencyContactNameTwo,
-                emergencyContactPhoneTwo, informationLastUpdatedTwo);
+                emergencyContactPhoneTwo, informationLastUpdatedTwo, activeStatus);
 
     }
 

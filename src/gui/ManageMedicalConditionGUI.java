@@ -100,7 +100,9 @@ public class ManageMedicalConditionGUI
                 lblMessage.setText(result);
             }
         });
-
+        btnCancel.setOnAction(event -> {
+            localStage.close();
+        });
         Scene scene = new Scene(mainPane, 400, 300);
         localStage.setScene(scene);
         localStage.setResizable(false);

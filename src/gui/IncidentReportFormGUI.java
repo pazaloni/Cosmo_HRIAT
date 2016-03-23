@@ -8,7 +8,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -23,17 +22,20 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import core.StaffAccount;
 
+/**
+ * Purpose: represent the incident report form 
+ * 
+ * @author CIMP
+ * @version 1.0
+ */
 public class IncidentReportFormGUI
 {
     private static final String FORM_TITLE = "Incident Reporting Form";
@@ -82,6 +84,12 @@ public class IncidentReportFormGUI
 
     private StaffAccount loggedInStaff;
 
+    /**
+     * 
+     * Constructor for the IncidentReportFormGUI class.
+     * @param stage the parent stage of this form 
+     * @param loggedInStaff the staff that was logged when this form was made 
+     */
     public IncidentReportFormGUI(Stage stage, StaffAccount loggedInStaff)
     {
         this.parentStage = stage;
@@ -92,6 +100,11 @@ public class IncidentReportFormGUI
 
     }
 
+    /**
+     * 
+     * Purpose: Method that will return the entirety of the form 
+     * @return a scroll pane with all the required controls 
+     */
     public ScrollPane showIncidentReportForm()
     {
         Label formTitle = new Label(FORM_TITLE);
@@ -296,21 +309,29 @@ public class IncidentReportFormGUI
         FXCollections.sort(allBodyAreas);
         FXCollections.sort(injuredBodyAreas);
 
+        //Handler when they click on the listview that has all the body areas 
+        //Handles the double click event 
         lsvAllBodyAreas.setOnMouseClicked(new EventHandler<MouseEvent>()
         {
-
+            
             @Override
             public void handle( MouseEvent click )
             {
+                //If it a double click then 
                 if ( click.getClickCount() == 2 )
                 {
+                    // If they clicked on existing item then 
                     if ( lsvAllBodyAreas.getSelectionModel().getSelectedItem() != null )
                     {
+                        //Add that item to the injuredbody areas 
                         injuredBodyAreas.add(lsvAllBodyAreas
                                 .getSelectionModel().getSelectedItem());
+                        //set the items for the injured body areas
                         lsvInjuredBodyAreas.setItems(injuredBodyAreas);
+                        // remove the selected one from all body areas 
                         allBodyAreas.remove(lsvAllBodyAreas.getSelectionModel()
                                 .getSelectedItem());
+                        //set the items for all the body areas 
                         lsvAllBodyAreas.setItems(allBodyAreas);
                     }
                 }
@@ -381,7 +402,7 @@ public class IncidentReportFormGUI
     /**
      * Purpose: Create the area for the type of injury
      * 
-     * @return an hbox containg all the required elements
+     * @return an hbox containing all the required elements
      */
     private HBox createTypeOfInjury()
     {

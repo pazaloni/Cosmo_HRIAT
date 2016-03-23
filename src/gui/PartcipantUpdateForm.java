@@ -3,6 +3,7 @@ import java.awt.Color;
 
 
 
+
 import controllers.ParticipantUpdateFormController;
 import core.MedicalAdministrator;
 import core.PopUpMessage;
@@ -36,6 +37,7 @@ public class PartcipantUpdateForm extends ScrollPane
 	private VBox mainBox;
 	//the save button for the form
 	public Button saveBtn;
+	public Button printPreviewBtn;
 	//the controller instance
 	private ParticipantUpdateFormController controller;
 	
@@ -89,6 +91,10 @@ public class PartcipantUpdateForm extends ScrollPane
 		Separator line3 = new Separator();
 		line3.minWidth(1500);
 		
+		saveMessage = new Label();
+		
+
+		
 		//label for the Kin Information Area of the form
 		Label kinInfoAreaHeader = new Label("Kin Information:");
 		kinInfoAreaHeader.setFont(new Font("Arial", 16));
@@ -102,11 +108,12 @@ public class PartcipantUpdateForm extends ScrollPane
 		emergencyContactInfoHeader.setFont(new Font("Arial", 16));
 		
 		//add all viewable nodes to the main VBox
-		mainBox.getChildren().addAll(createHeader(), kinInfoAreaHeader,
+		mainBox.getChildren().addAll(createHeader(), saveMessage, kinInfoAreaHeader,
 				createKinInfoArea(), line2, caregiverInfoAreaHeader,
 				createCaregiverInfoArea(), line3, emergencyContactInfoHeader,
 				createEmergencyContactArea());
 		
+		mainBox.setMargin(saveMessage, new Insets(0,0,5,5));
 		//populate the textboxes with all relevant information from the database
 		this.fillKinText();
 		this.fillCaregiverText();
@@ -135,14 +142,31 @@ public class PartcipantUpdateForm extends ScrollPane
 	 */
 	private HBox createHeader()
 	{
-		HBox hbox = new HBox();
+		HBox hbox = new HBox(10);
 		
 		Label heading = new Label("Participant Information Update Form");
-		heading.setFont(new Font("Arial", 22));
+		heading.setFont(new Font(22));
 		
 		saveMessage = new Label();
 		
 		saveBtn = new Button("Save");
+		
+		// print button
+        printPreviewBtn = new Button("Print Preview");
+        
+
+        if ( loggedInUser instanceof MedicalAdministrator )
+        {
+            printPreviewBtn.setOnAction(event -> {
+
+                Stage previewStage = new Stage();
+                PrintPreviewUpdateFormGUI previewGUI = new PrintPreviewUpdateFormGUI();
+                
+                previewGUI.PrintPreviewUpdateFormGUIConstruct(previewStage, cosmoID, loggedInUser);
+
+                });
+        }
+
 		
 		saveBtn.setOnAction(event -> {
 			saveInfo();
@@ -154,11 +178,13 @@ public class PartcipantUpdateForm extends ScrollPane
 		
 		if(loggedInUser instanceof MedicalAdministrator)
 		{
-		    hbox.getChildren().addAll(saveMessage, saveBtn);
+		    hbox.getChildren().addAll(printPreviewBtn, saveBtn);
 		}
 		
 		//set spacing between save button and heading
-		hbox.setMargin(heading, new Insets(5, 170,5,280));
+		hbox.setMargin(heading, new Insets(10, 170,5,5));
+		hbox.setMargin(printPreviewBtn, new Insets(10,1,5,5));
+		hbox.setMargin(saveBtn, new Insets(10,5,5,1));
 		
 		return hbox;
 	}
@@ -453,7 +479,7 @@ public class PartcipantUpdateForm extends ScrollPane
 		//else, display error message(s)
 		else
 		{
-			saveMessage.setStyle("-fx-text-fill: blue");
+			saveMessage.setStyle("-fx-text-fill: red");
 			saveMessage.setText("Save unsuccessful. Click for details.");
 			Stage stage = new Stage();
 			PopUpMessage popUp = new PopUpMessage(errorMsg, stage);
