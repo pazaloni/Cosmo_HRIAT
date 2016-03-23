@@ -37,13 +37,36 @@ public class PersonalCareTableViewController
 	
 	public void refreshTable()
 	{
-
+        this.personalCareData.clear();
+        this.personalCareTable.getColumns().clear();
+        this.queryPersonalCareData();
+        this.initialize();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void initialize()
 	{
-
+        blankColumn.setMinWidth(80);
+        blankColumn.setResizable(false);
+        
+        supportsColumn.setCellValueFactory(cellData -> cellData.getValue()
+                .getSupportsProperty());
+        supportsColumn.setMinWidth(180);
+        supportsColumn.setResizable(false);
+        
+        
+        totalAsOfColumn.setCellValueFactory(cellData -> cellData.getValue()
+                .getTotalAsOfProperty());
+        totalAsOfColumn.setMinWidth(120);
+        totalAsOfColumn.setResizable(false);
+        
+        totalForLastYearColumn.setCellValueFactory(cellData -> cellData
+                .getValue().getTotalForLastYearProperty());
+        totalForLastYearColumn.setMinWidth(130);
+        totalForLastYearColumn.setResizable(false);
+        
+        personalCareTable.getColumns().addAll(blankColumn, supportsColumn, totalAsOfColumn,
+                totalForLastYearColumn);
 	}
 	
 

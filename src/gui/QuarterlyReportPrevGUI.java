@@ -136,7 +136,7 @@ public class QuarterlyReportPrevGUI extends Application {
         
         personalCareTVCont = new PersonalCareTableViewController();
         
-        vbox.getChildren().addAll(areaLbl);
+        vbox.getChildren().addAll(areaLbl, personalCareTVCont.personalCareTable);
         
         
         
