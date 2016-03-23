@@ -32,7 +32,7 @@ public class testSeizureDescriptionFormHelper
                 + "that the text goes to multiple lines instead";
         personSave[5] = "keep head elevated";
         personSave[6] = "two doses of medication";
-        personSave[7] = "2016-02-17";
+        personSave[7] = "17-May-1991";
         
     }
 
