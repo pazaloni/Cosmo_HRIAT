@@ -76,6 +76,8 @@ public class IncidentReportFormGUI
 
     private TextField txtOther;
     private TextField txtOtherType;
+    private Button btnSubmit;
+    
     private List<CheckBox> typesOfInjuries;
 
     private StaffAccount loggedInStaff;
@@ -351,7 +353,7 @@ public class IncidentReportFormGUI
                         .getSelectedItem());
                 lsvAllBodyAreas.setItems(allBodyAreas);
             }
-            System.out.println(injuredBodyAreas.toString());
+          
         });
         removeInjury
                 .setOnAction(event -> {
@@ -488,7 +490,11 @@ public class IncidentReportFormGUI
         HBox top7 = new HBox();
         HBox top8 = new HBox();
         HBox top9 = new HBox();
+        HBox top10 = new HBox();
 
+        btnSubmit = new Button("Submit");
+        top10.getChildren().add(btnSubmit);
+        top10.setAlignment(Pos.CENTER);
         Label lblIncident = new Label("Incident: ");
         Label lblIncidentReportedTo = new Label("Incident reported to:");
 
@@ -563,10 +569,13 @@ public class IncidentReportFormGUI
         top7.setSpacing(spacing);
         top8.setSpacing(spacing);
         top9.setSpacing(spacing);
-
+        top10.setSpacing(spacing);
+        
         mainBox.getChildren().addAll(top, top2, top3, top4, top5, top6, top7,
-                top8, top9);
+                top8, top9,top10);
+        
         mainBox.setSpacing(15);
+        
         return mainBox;
     }
 }
