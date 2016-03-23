@@ -20,9 +20,9 @@ public class OlderAdultNeedsTableViewController
 	private TableColumn<OlderAdultsNeeds, String> otherColumn = 
 			new TableColumn<OlderAdultsNeeds, String>("Other");
 	private TableColumn<OlderAdultsNeeds, String> totalAsOfColumn = 
-			new TableColumn<OlderAdultsNeeds, String>();
+			new TableColumn<OlderAdultsNeeds, String>("totalAsOfPH");
 	private TableColumn<OlderAdultsNeeds, String> totalForLastYearColumn = 
-			new TableColumn<OlderAdultsNeeds, String>();
+			new TableColumn<OlderAdultsNeeds, String>("totalForLastYearPH");
 	
 	private ObservableList<OlderAdultsNeeds> adultData = 
 			FXCollections.observableArrayList();
@@ -50,26 +50,56 @@ public class OlderAdultNeedsTableViewController
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void initialize()
+	public void initialize()
 	{
 		ageColumn.setCellValueFactory(cellData -> cellData.getValue()
 				.getAgeProperty());
-		longTermCareColumn.setCellValueFactory(cellData -> cellData.getValue()
+        ageColumn.setMinWidth(80);
+        ageColumn.setResizable(false);
+		
+        longTermCareColumn.setCellValueFactory(cellData -> cellData.getValue()
 				.getLongTermCareProperty());
+        longTermCareColumn.setMinWidth(180);
+        longTermCareColumn.setResizable(false);
+		
 		elmwoodColumn.setCellValueFactory(cellData -> cellData.getValue()
 				.getElmwoodProperty());
+        elmwoodColumn.setMinWidth(140);
+        elmwoodColumn.setResizable(false);
+		
 		lutherCareColumn.setCellValueFactory(cellData -> cellData.getValue()
 				.getLutherCareProperty());
+        lutherCareColumn.setMinWidth(140);
+        lutherCareColumn.setResizable(false);
+		
 		otherColumn.setCellValueFactory(cellData -> cellData.getValue()
 				.getOtherProperty());
+        otherColumn.setMinWidth(100);
+        otherColumn.setResizable(false);
+		
 		totalAsOfColumn.setCellValueFactory(cellData -> cellData.getValue()
 				.getTotalAsOfProperty());
+        totalAsOfColumn.setMinWidth(120);
+        totalAsOfColumn.setResizable(false);
+		
 		totalForLastYearColumn.setCellValueFactory(cellData -> cellData
 				.getValue().getTotalForLastYearProperty());
+        totalForLastYearColumn.setMinWidth(130);
+        totalForLastYearColumn.setResizable(false);
 		
 		adultNeedsTable.getColumns().addAll(ageColumn, longTermCareColumn,
 				elmwoodColumn, lutherCareColumn, otherColumn, totalAsOfColumn,
 				totalForLastYearColumn);
 	}
+	
+	public void setTotalAsOfColumn(String label)
+	{
+	    totalAsOfColumn.setText(label);
+	}
+	
+   public void setTotalForLastYearColumn(String label)
+    {
+        totalForLastYearColumn.setText(label);
+    }
 	
 }

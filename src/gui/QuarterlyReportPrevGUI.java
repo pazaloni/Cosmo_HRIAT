@@ -1,5 +1,11 @@
 package gui;
 
+import controllers.OlderAdultNeedsTableViewController;
+import controllers.PersonalCareTableViewController;
+import controllers.ReactiveCareTableViewController;
+import controllers.HealthPromotionTableViewController;
+
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -21,10 +27,10 @@ public class QuarterlyReportPrevGUI extends Application {
 	private DatePicker startDatePicker;
 	private DatePicker endDatePicker;
 	
-	private TableView olderAdultNeedsTbl;
-	private TableView personalHealthCareTbl;
-	private TableView reactiveCareTbl;
-	private TableView healthPromotionTbl;
+	private OlderAdultNeedsTableViewController olderAdultNeedsTVCont;
+	private PersonalCareTableViewController personalCareTVCont;
+	private ReactiveCareTableViewController reactiveCareTVCont;
+	private HealthPromotionTableViewController healthPromotionTVCont;
 	
 	private Button exportBtn;
 	
@@ -41,8 +47,10 @@ public class QuarterlyReportPrevGUI extends Application {
 		this.stage = stage;
 		mainVbox = new VBox();
 		stage.setTitle("Generate Quarterly Report");
+
 		mainVbox.getChildren().addAll(createHeader(),
-				createOlderAdultNeedsArea());
+				createOlderAdultNeedsArea(), createPersonalHealthCareArea(), createReactiveCareArea(), createHealthPromotionArea());
+		
 	}
 	
     @Override
@@ -109,7 +117,9 @@ public class QuarterlyReportPrevGUI extends Application {
     	areaLbl.setPadding(new Insets(5,5,5,5));
 		areaLbl.setFont(new Font("Arial", 24));
     	
-		olderAdultNeedsTbl = new TableView();
+		olderAdultNeedsTVCont = new OlderAdultNeedsTableViewController();
+		
+		vbox.getChildren().addAll(areaLbl, olderAdultNeedsTVCont.adultNeedsTable);
 		
 		
 		
@@ -118,17 +128,53 @@ public class QuarterlyReportPrevGUI extends Application {
     
     private VBox createPersonalHealthCareArea()
     {
-    	return null;
+       VBox vbox = new VBox();
+        
+        Label areaLbl = new Label("Personal Health Maintenance/Personal Care");
+        areaLbl.setPadding(new Insets(5,5,5,5));
+        areaLbl.setFont(new Font("Arial", 24));
+        
+        personalCareTVCont = new PersonalCareTableViewController();
+        
+        vbox.getChildren().addAll(areaLbl);
+        
+        
+        
+        return vbox;
     }
     
     private VBox createReactiveCareArea()
     {
-    	return null;
+       VBox vbox = new VBox();
+        
+        Label areaLbl = new Label("Reactive Care");
+        areaLbl.setPadding(new Insets(5,5,5,5));
+        areaLbl.setFont(new Font("Arial", 24));
+        
+        reactiveCareTVCont = new ReactiveCareTableViewController();
+        
+        vbox.getChildren().addAll(areaLbl);
+        
+        
+        
+        return vbox;
     }
     
     private VBox createHealthPromotionArea()
     {
-    	return null;
+       VBox vbox = new VBox();
+        
+        Label areaLbl = new Label("Health Promotion Activities");
+        areaLbl.setPadding(new Insets(5,5,5,5));
+        areaLbl.setFont(new Font("Arial", 24));
+        
+        healthPromotionTVCont = new HealthPromotionTableViewController();
+        
+        vbox.getChildren().addAll(areaLbl);
+        
+        
+        
+        return vbox;
     }
 	
     private void exportReport()
