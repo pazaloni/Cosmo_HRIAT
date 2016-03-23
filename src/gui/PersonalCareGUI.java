@@ -292,7 +292,7 @@ public class PersonalCareGUI
      * 
      * Purpose: take in information from the database and display it in the
      * proper fields, fields will be empty if the participant does not have
-     * seizures
+     * personal care information
      * 
      */
     private void assignPersonalCareInfo()
@@ -316,7 +316,6 @@ public class PersonalCareGUI
             }
             catch ( ParseException e )
             {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             SimpleDateFormat outputFormatter = new SimpleDateFormat();

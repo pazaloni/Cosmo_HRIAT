@@ -21,6 +21,7 @@ public class TestPersonalCareHelper
     Boolean[] personSave = new Boolean[11];
     String[] personRetrieve = new String[13];
     String assistance = "Require total full lift"; 
+    String assistance2 = "";
     String cosmoID = "531";
     String lastUpdated;
     @Before
@@ -47,6 +48,7 @@ public class TestPersonalCareHelper
         assertTrue(pcOne.savePersonalCareInformation(personSave, assistance, lastUpdated, cosmoID));
     }
 
+    
     /**
      * Test that information saved properly
      */
@@ -69,4 +71,27 @@ public class TestPersonalCareHelper
         assertTrue(personRetrieve[11].equals(assistance));
     }
 
+    /**
+     * Test that information saved properly if assistance is left blank
+     */
+    @Test
+    public void testSavePersonalCareInformationNoAssistance()
+    {
+        pcOne.savePersonalCareInformation(personSave, assistance2, lastUpdated, cosmoID);
+        personRetrieve = pcOne.retrievePersonalCareInformation(cosmoID);
+        assertTrue(Boolean.parseBoolean(personRetrieve[0]) == (personSave[0]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[1])==(personSave[1]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[2])==(personSave[2]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[3])==(personSave[3]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[4])==(personSave[4]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[5])==(personSave[5]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[6])==(personSave[6]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[7])==(personSave[7]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[8])==(personSave[8]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[9])==(personSave[9]));
+        assertTrue(Boolean.parseBoolean(personRetrieve[10])==(personSave[10]));
+        assertTrue(personRetrieve[11].equals(assistance2));
+    }
+
+    
 }
