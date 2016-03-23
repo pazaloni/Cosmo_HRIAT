@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
@@ -31,7 +32,7 @@ import javafx.stage.Stage;
 import core.StaffAccount;
 
 /**
- * Purpose: represent the incident report form 
+ * Purpose: represent the incident report form
  * 
  * @author CIMP
  * @version 1.0
@@ -51,10 +52,12 @@ public class IncidentReportFormGUI
 
     private Stage parentStage;
 
-    private TextField month, day, year, time, location, staffWitness,
-            participantWitness, otherWitness;
+    private TextField time, location, staffWitness, participantWitness,
+            otherWitness;
 
     private TextField personInjured;
+
+    private DatePicker dateOfIncident;
 
     private TextField otherWorkArea, locationOfPain, txtManagerName,
             txtOtherName, txtDateReportedTo, txtDateVerbal,
@@ -79,7 +82,7 @@ public class IncidentReportFormGUI
     private TextField txtOther;
     private TextField txtOtherType;
     private Button btnSubmit;
-    
+
     private List<CheckBox> typesOfInjuries;
 
     private StaffAccount loggedInStaff;
@@ -87,8 +90,9 @@ public class IncidentReportFormGUI
     /**
      * 
      * Constructor for the IncidentReportFormGUI class.
-     * @param stage the parent stage of this form 
-     * @param loggedInStaff the staff that was logged when this form was made 
+     * 
+     * @param stage the parent stage of this form
+     * @param loggedInStaff the staff that was logged when this form was made
      */
     public IncidentReportFormGUI(Stage stage, StaffAccount loggedInStaff)
     {
@@ -102,8 +106,9 @@ public class IncidentReportFormGUI
 
     /**
      * 
-     * Purpose: Method that will return the entirety of the form 
-     * @return a scroll pane with all the required controls 
+     * Purpose: Method that will return the entirety of the form
+     * 
+     * @return a scroll pane with all the required controls
      */
     public ScrollPane showIncidentReportForm()
     {
@@ -139,6 +144,7 @@ public class IncidentReportFormGUI
         mainBox = new VBox();
         mainBox.setSpacing(10);
         mainBox.setMinWidth(700);
+        mainBox.setMaxWidth(700);
         mainBox.getChildren().addAll(formTitle, createHeader(), sep1,
                 createRegisteredWorkArea(), sep2, createIncidentInfo(), sep3,
                 lblBodyArea, createBodyAreaInjured(), sep4, lblTypeofInjury,
@@ -147,8 +153,9 @@ public class IncidentReportFormGUI
         mainPane = new ScrollPane();
         mainPane.setContent(mainBox);
         mainPane.setMinWidth(700);
-        mainPane.setPadding(new Insets(5, 5, 5, 385));
+        mainPane.setMaxWidth(1180);
 
+        mainPane.setPadding(new Insets(5, 5, 5, 450));
         return mainPane;
 
     }
@@ -166,8 +173,9 @@ public class IncidentReportFormGUI
         Label lblpersonInjured = new Label("Participant Injured: ");
 
         personInjured = new TextField();
-        personInjured.setMinWidth(450);
-
+        personInjured.setMinWidth(580);
+        box.setMaxWidth(750);
+        box.setSpacing(15);
         box.getChildren().addAll(lblpersonInjured, personInjured);
 
         return box;
@@ -182,23 +190,22 @@ public class IncidentReportFormGUI
     {
 
         HBox topBox = new HBox();
-        HBox midBox = new HBox();
         HBox bottomBox = new HBox();
 
         Label lblDateOfIncident = new Label("Date of Incident:");
         Label lblTimeOfIncident = new Label("Time of Incident:");
         Label lblExactLocaitonOfIncident = new Label(
                 "Exact Location of Where Incident Occured:");
-
-        month = new TextField();
-        month.setPromptText("Month");
-        day = new TextField();
-        day.setPromptText("Day");
-        year = new TextField();
-        year.setPromptText("Year");
+        
+        lblDateOfIncident.setPadding(new Insets(0,40,0,0));
+        dateOfIncident = new DatePicker();
+        dateOfIncident.setMinWidth(250);
         time = new TextField();
+        time.setMinWidth(190);
+        lblTimeOfIncident.setPadding(new Insets(0,10,0,0));
         location = new TextField();
-        location.setMinWidth(450);
+        location.setMinWidth(300);
+        lblExactLocaitonOfIncident.setPadding(new Insets(0,160,0,0));
 
         am = new RadioButton("am");
         pm = new RadioButton("pm");
@@ -206,15 +213,14 @@ public class IncidentReportFormGUI
         ToggleGroup group = new ToggleGroup();
         group.getToggles().addAll(am, pm);
 
-        midBox.getChildren().addAll(lblTimeOfIncident, time, am, pm);
-        topBox.getChildren().addAll(lblDateOfIncident, month, day, year);
+        topBox.getChildren().addAll(lblDateOfIncident, dateOfIncident,
+                lblTimeOfIncident, time);
         bottomBox.getChildren().addAll(lblExactLocaitonOfIncident, location);
 
         VBox box = new VBox();
-        box.getChildren().addAll(topBox, midBox, bottomBox);
+        box.getChildren().addAll(topBox, bottomBox);
         topBox.setSpacing(10);
         bottomBox.setSpacing(10);
-        midBox.setSpacing(10);
         box.setSpacing(5);
         return box;
     }
@@ -229,8 +235,6 @@ public class IncidentReportFormGUI
     private VBox createRegisteredWorkArea()
     {
         Label registeredWorkArea = new Label("Registered Work Area: ");
-        registeredWorkArea.setFont(new Font(16));
-        // GridPane grid = new GridPane();
         VBox mainBox = new VBox();
 
         HBox box = new HBox();
@@ -248,7 +252,9 @@ public class IncidentReportFormGUI
         cboWorkAreas = new ComboBox<>(workAreas);
 
         other = new RadioButton("Other");
-
+        other.setPadding(new Insets(0,35,0,0));
+        cboWorkAreas.setMinWidth(250);
+        otherWorkArea.setMinWidth(195);
         otherWorkArea.setDisable(true);
         other.setOnAction(event -> {
             if ( other.isSelected() )
@@ -262,8 +268,9 @@ public class IncidentReportFormGUI
                 cboWorkAreas.setDisable(false);
             }
         });
-        topBox.getChildren().add(registeredWorkArea);
-        box.getChildren().addAll(cboWorkAreas, other, otherWorkArea);
+
+        box.getChildren().addAll(registeredWorkArea, cboWorkAreas, other,
+                otherWorkArea);
         box.setSpacing(15);
 
         mainBox.getChildren().addAll(topBox, box);
@@ -309,29 +316,29 @@ public class IncidentReportFormGUI
         FXCollections.sort(allBodyAreas);
         FXCollections.sort(injuredBodyAreas);
 
-        //Handler when they click on the listview that has all the body areas 
-        //Handles the double click event 
+        // Handler when they click on the listview that has all the body areas
+        // Handles the double click event
         lsvAllBodyAreas.setOnMouseClicked(new EventHandler<MouseEvent>()
         {
-            
+
             @Override
             public void handle( MouseEvent click )
             {
-                //If it a double click then 
+                // If it a double click then
                 if ( click.getClickCount() == 2 )
                 {
-                    // If they clicked on existing item then 
+                    // If they clicked on existing item then
                     if ( lsvAllBodyAreas.getSelectionModel().getSelectedItem() != null )
                     {
-                        //Add that item to the injuredbody areas 
+                        // Add that item to the injuredbody areas
                         injuredBodyAreas.add(lsvAllBodyAreas
                                 .getSelectionModel().getSelectedItem());
-                        //set the items for the injured body areas
+                        // set the items for the injured body areas
                         lsvInjuredBodyAreas.setItems(injuredBodyAreas);
-                        // remove the selected one from all body areas 
+                        // remove the selected one from all body areas
                         allBodyAreas.remove(lsvAllBodyAreas.getSelectionModel()
                                 .getSelectedItem());
-                        //set the items for all the body areas 
+                        // set the items for all the body areas
                         lsvAllBodyAreas.setItems(allBodyAreas);
                     }
                 }
@@ -374,7 +381,7 @@ public class IncidentReportFormGUI
                         .getSelectedItem());
                 lsvAllBodyAreas.setItems(allBodyAreas);
             }
-          
+
         });
         removeInjury
                 .setOnAction(event -> {
@@ -502,20 +509,17 @@ public class IncidentReportFormGUI
     private VBox createBottomBox()
     {
         VBox mainBox = new VBox();
-        HBox top = new HBox();
-        HBox top2 = new HBox();
-        HBox top3 = new HBox();
-        HBox top4 = new HBox();
-        HBox top5 = new HBox();
-        HBox top6 = new HBox();
-        HBox top7 = new HBox();
-        HBox top8 = new HBox();
-        HBox top9 = new HBox();
-        HBox top10 = new HBox();
+        VBox top = new VBox();
+        VBox top2 = new VBox();
+        VBox top3 = new VBox();
+        VBox top4 = new VBox();
+        VBox top5 = new VBox();
+        VBox top6 = new VBox();
+        VBox top7 = new VBox();
+        VBox top8 = new VBox();
+        VBox top9 = new VBox();
+        VBox top10 = new VBox();
 
-        btnSubmit = new Button("Submit");
-        top10.getChildren().add(btnSubmit);
-        top10.setAlignment(Pos.CENTER);
         Label lblIncident = new Label("Incident: ");
         Label lblIncidentReportedTo = new Label("Incident reported to:");
 
@@ -577,8 +581,12 @@ public class IncidentReportFormGUI
         top7.getChildren().addAll(noVerbalReport, lblDateReported2,
                 txtDateVerbal);
         top8.getChildren().addAll(lblDateReportWritten, txtDateReportWritten);
-        top9.getChildren().addAll(lblReportWrittenBy);
+        top9.getChildren().addAll(lblReportWrittenBy);       
 
+        btnSubmit = new Button("Submit");
+        top10.getChildren().add(btnSubmit);
+        top10.setAlignment(Pos.CENTER);
+        
         int spacing = 5;
 
         top.setSpacing(spacing);
@@ -591,12 +599,12 @@ public class IncidentReportFormGUI
         top8.setSpacing(spacing);
         top9.setSpacing(spacing);
         top10.setSpacing(spacing);
-        
+
         mainBox.getChildren().addAll(top, top2, top3, top4, top5, top6, top7,
-                top8, top9,top10);
-        
+                top8, top9, top10);
+
         mainBox.setSpacing(15);
-        
+
         return mainBox;
     }
 }

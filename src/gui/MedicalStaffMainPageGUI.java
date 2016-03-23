@@ -236,6 +236,7 @@ public class MedicalStaffMainPageGUI extends Application
         Tab forms = new Tab();
         Tab stats = new Tab();
         Tab incidentForm = new Tab();
+   
 
         // set text for tabs
         participants.setText("Participants");

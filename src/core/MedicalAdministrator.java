@@ -77,6 +77,10 @@ public class MedicalAdministrator extends BasicStaff
         {
             result = "One of your fields is empty";
         }
+        else if(cosmoID.length() > 9)
+        {
+            result = "CosmoID must be less than 10 digits.";
+        }
         else
         {
             DatabaseHelper db = new DatabaseHelper();

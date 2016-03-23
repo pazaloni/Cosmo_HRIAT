@@ -38,8 +38,8 @@ import javafx.stage.Stage;
 
 /**
  *
- * Purpose: Represents the progress notes form GUI, which by default pulls
- * information
+ * Purpose: Represents the personal care tab GUI, which by default pulls
+ * information from the database
  *
  * @author Niklaas Neijmeijer cst207 Steven Palchinski cst209
  * @version 1.0
@@ -62,9 +62,6 @@ public class PersonalCareGUI
 
     //the logged in user
     private StaffAccount loggedInUser;
-
-    //the parent Stage
-    private Stage parentStage;
 
     //The label for displaying when the form was last updated.
     private Label lastUpdatedTxt;
@@ -90,7 +87,6 @@ public class PersonalCareGUI
     {
         this.parentTab = personalCareTab;
         this.loggedInUser = loggedInUser;
-        this.parentStage = parentStage;
     }
 
     /**
@@ -132,7 +128,12 @@ public class PersonalCareGUI
                 String nowString = formatter.format(now);
                 
                 PersonalCareHelper helper = new PersonalCareHelper();
-                helper.savePersonalCareInformation(optionsArray, assistanceCBOBox.getValue(),nowString, cosmoId);
+                Boolean[] valArray = new Boolean[11];
+                for(int i = 0 ; i < optionsArray.length; i++)
+                {
+                    valArray[i] = optionsArray[i].selectedProperty().getValue();
+                }
+                helper.savePersonalCareInformation(valArray, assistanceCBOBox.getValue(),nowString, cosmoId);
 
                 lastUpdatedTxt.setText(nowString);
             }
@@ -280,7 +281,7 @@ public class PersonalCareGUI
 
         mainBox.setPadding(new Insets(10, 10, 10, 10));
 
-        assignSeizureInfo();
+        assignPersonalCareInfo();
         
         this.parentTab.setContent(mainBox);
 
@@ -291,10 +292,10 @@ public class PersonalCareGUI
      * 
      * Purpose: take in information from the database and display it in the
      * proper fields, fields will be empty if the participant does not have
-     * seizures
+     * personal care information
      * 
      */
-    private void assignSeizureInfo()
+    private void assignPersonalCareInfo()
     {
         PersonalCareHelper helper = new PersonalCareHelper();
         String[] info = helper.retrievePersonalCareInformation(cosmoID);
@@ -311,11 +312,10 @@ public class PersonalCareGUI
         {
             try
             {
-                date = inputFormatter.parse(info[7]);
+                date = inputFormatter.parse(info[info.length-1]);
             }
             catch ( ParseException e )
             {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             SimpleDateFormat outputFormatter = new SimpleDateFormat();

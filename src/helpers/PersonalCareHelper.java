@@ -5,7 +5,11 @@ import java.sql.SQLException;
 import java.util.Date;
 
 import javafx.scene.control.CheckBox;
-
+/**
+ * A helper class for the PersonalCareGUI
+ * @author cst207
+ *
+ */
 public class PersonalCareHelper
 {
 
@@ -15,9 +19,15 @@ public class PersonalCareHelper
     {
         db = new DatabaseHelper();
     }
-
+    
+    /**
+     * Method for retrieved personal care information from the database
+     * @param cosmoID The cosmoID of the participant we are query the database for
+     * @return
+     */
     public String[] retrievePersonalCareInformation( String cosmoID )
     {
+        db.connect();
         String[] personalCareInfo = new String[13];
 
         String insulin = null;
@@ -82,7 +92,6 @@ public class PersonalCareHelper
         personalCareInfo[10] = diet;
         personalCareInfo[11] = assistance;
 
-        // making sure participant does not have an date if no seizure
         try
         {
             personalCareInfo[12] = lastUpdated.toString();
@@ -100,17 +109,25 @@ public class PersonalCareHelper
                 personalCareInfo[i] = " ";
             }
         }
+        db.disconnect();
         return personalCareInfo;
     }
 
-    public boolean savePersonalCareInformation( CheckBox[] optionsArray,
+    /**
+     * A method to save the personal care information of the participant
+     * @param valArray The array of boolean values to insert into the database
+     * @param value The value of the assistance box combo box
+     * @param when The time that the method is called.
+     * @param cosmoId Which participant's information is being updated.
+     * @return
+     */
+    public boolean savePersonalCareInformation( Boolean[] valArray,
             String value, String when, String cosmoId )
     {
-        String result = "";
         db.connect();
-        
-        String personalCareInformation[][] = new String [14][2];
-        
+
+        String personalCareInformation[][] = new String[14][2];
+
         personalCareInformation[0][0] = "cosmoID";
         personalCareInformation[1][0] = "dailyInsulin";
         personalCareInformation[2][0] = "depoInjection";
@@ -127,24 +144,25 @@ public class PersonalCareHelper
         personalCareInformation[13][0] = "personalCareUpdated";
 
         personalCareInformation[0][1] = cosmoId;
-        personalCareInformation[1][1] = optionsArray[0].selectedProperty().getValue() + "";
-        personalCareInformation[2][1] = optionsArray[1].selectedProperty().getValue() + "";
-        personalCareInformation[3][1] = optionsArray[2].selectedProperty().getValue() + "";
-        personalCareInformation[4][1] = optionsArray[3].selectedProperty().getValue() + "";
-        personalCareInformation[5][1] = optionsArray[4].selectedProperty().getValue() + "";
-        personalCareInformation[6][1] = optionsArray[5].selectedProperty().getValue() + "";
-        personalCareInformation[7][1] = optionsArray[6].selectedProperty().getValue() + "";
-        personalCareInformation[8][1] = optionsArray[7].selectedProperty().getValue() + "";
-        personalCareInformation[9][1] = optionsArray[8].selectedProperty().getValue() + "";
-        personalCareInformation[10][1] = optionsArray[9].selectedProperty().getValue() + "";
-        personalCareInformation[11][1] = optionsArray[10].selectedProperty().getValue() + "";
+        personalCareInformation[1][1] = valArray[0] + "";
+        personalCareInformation[2][1] = valArray[1] + "";
+        personalCareInformation[3][1] = valArray[2] + "";
+        personalCareInformation[4][1] = valArray[3] + "";
+        personalCareInformation[5][1] = valArray[4] + "";
+        personalCareInformation[6][1] = valArray[5] + "";
+        personalCareInformation[7][1] = valArray[6] + "";
+        personalCareInformation[8][1] = valArray[7] + "";
+        personalCareInformation[9][1] = valArray[8] + "";
+        personalCareInformation[10][1] = valArray[9] + "";
+        personalCareInformation[11][1] = valArray[10] + "";
         personalCareInformation[12][1] = value;
         personalCareInformation[13][1] = when;
-        
-        boolean success = db.update(personalCareInformation, "Participant", cosmoId);
-        
+
+        boolean success = db.update(personalCareInformation, "Participant",
+                cosmoId);
+
         db.disconnect();
-        
+
         return success;
     }
 }
