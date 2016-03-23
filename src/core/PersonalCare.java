@@ -30,6 +30,7 @@ public class PersonalCare
     public String getTotalAsOf()
     {
         return totalAsOf;
+        //comment
     }
     
     public StringProperty getTotalAsOfProperty()
