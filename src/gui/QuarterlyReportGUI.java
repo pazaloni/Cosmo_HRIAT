@@ -140,6 +140,13 @@ public class QuarterlyReportGUI extends Application
 		//generates the quarterly report
 		Button generateReports = new Button("Generate Quarterly Report");
 		
+		generateReports.setOnAction(event -> {
+			Stage stage = new Stage();
+			QuarterlyReportPrevGUI gui = new QuarterlyReportPrevGUI(stage);
+			gui.stage.setScene(new Scene(gui.mainVbox, 875, 580));
+			gui.stage.showAndWait();
+		});
+		
 		vbox.getChildren().addAll(categoriesView, timePeriod, startDateLabel,
 				startDate, endDateLabel, endDate, generateReports);
 		
