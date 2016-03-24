@@ -1,33 +1,44 @@
 package helpers;
 
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.Security;
+import java.util.Base64;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 
-public class EncryptionHelper
+public class EncryptionHelper 
 {
-    private static byte[] iv = {0x0a, 0x01, 0x02, 0x03, 0x0b, 0x0c, 0x0d};
+    static Cipher cipher;
+    SecretKey secretKey;
     
-    
-    public byte[] encryptPassword(byte[] inpBytes, SecretKey key, String plaintext) throws Exception
-    {
-        Cipher cipher = Cipher.getInstance(plaintext);
-        IvParameterSpec ips = new IvParameterSpec(iv);
-        cipher.init(cipher.DECRYPT_MODE, key, ips);
-        return cipher.doFinal(inpBytes);
+    public EncryptionHelper() throws Exception {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        keyGenerator.init(128);
+        secretKey = keyGenerator.generateKey();
+        cipher = Cipher.getInstance("AES");
+
+
     }
     
-    public String decryptPassword(String encrypted)
+    public String encrypt(String plainText ) throws Exception
     {
-        String decrypted = "";
-        return decrypted;
+        byte[] plainTextByte = plainText.getBytes();
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        byte[] encryptedByte = cipher.doFinal(plainTextByte);
+        Base64.Encoder encoder = Base64.getEncoder();
+        String encryptedText = encoder.encodeToString(encryptedByte);
+        return encryptedText;
     }
+    
+    public String decrypt(String  encryptedText ) throws Exception
+    {
+        Base64.Decoder decoder = Base64.getDecoder();
+        byte[] encryptedTextByte = decoder.decode(encryptedText);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+        byte[] decryptedByte = cipher.doFinal(encryptedTextByte);
+        String decryptedText = new String(decryptedByte);
+        return decryptedText;
+    }
+    
+    
 }
