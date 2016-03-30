@@ -236,7 +236,7 @@ public class MedicalStaffMainPageGUI extends Application
         Tab forms = new Tab();
         Tab stats = new Tab();
         Tab incidentForm = new Tab();
-   
+        HBox box = new HBox();
 
         // set text for tabs
         participants.setText("Participants");
@@ -254,7 +254,9 @@ public class MedicalStaffMainPageGUI extends Application
         incidentForm.closableProperty().set(false);
         IncidentReportFormGUI irf = new IncidentReportFormGUI(medMainStage, loggedInUser);
         
-        incidentForm.setContent(irf.showIncidentReportForm());
+        box.getChildren().add(irf.showIncidentReportForm());
+        box.setAlignment(Pos.CENTER);
+        incidentForm.setContent(box);
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(175);
        

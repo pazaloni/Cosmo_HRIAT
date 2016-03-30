@@ -41,11 +41,13 @@ public class IncidentReportFormGUI
 {
     private static final String FORM_TITLE = "Incident Reporting Form";
 
-    private ObservableList<String> workAreas, allBodyAreas, injuredBodyAreas;
+    private ObservableList<String> workAreas, allBodyAreas, injuredBodyAreas,
+            personReportedTo;
 
     private ListView<String> lsvAllBodyAreas, lsvInjuredBodyAreas;
 
     private ComboBox<String> cboWorkAreas;
+    private ComboBox<String> cboPersonReportedTo;
 
     private ScrollPane mainPane;
     private VBox mainBox;
@@ -57,11 +59,12 @@ public class IncidentReportFormGUI
 
     private TextField personInjured;
 
-    private DatePicker dateOfIncident;
+    private DatePicker dateOfIncident, dateReportToPerson,
+            dateVerballyReported, dateReportWritten;
 
-    private TextField otherWorkArea, locationOfPain, txtManagerName,
-            txtOtherName, txtDateReportedTo, txtDateVerbal,
-            txtDateReportWritten;
+    private TextField otherWorkArea, locationOfPain, txtPersonReportedToName,
+            txtTimeReportedToPerson, txtTimeReportedVerbally,
+            txtTimeReportWritten, txtReportWrittenBy;
 
     private TextArea incidentDescription, incidentFactors, txtAProtEquip;
 
@@ -69,15 +72,15 @@ public class IncidentReportFormGUI
     private RadioButton other, personalSupportsManager,
             personalSupportsCoordinator, noVerbalReport;
 
-    private RadioButton manager, assistantManager, otherReportedTo;
-
     private CheckBox chkBruise, chkScrape, chkSwelling, chkBurn, chkCut,
             chkSprain, chkInsectbite, chkImbedded, chkFall, chkFoundOnFloor,
             chkSelfAggro, chkP2PAggro, chkP2SAggro, chkVehichleIncident,
             chkPropertyDmg, chkOtherType;
 
-    private CheckBox chkUnwitnessed, chkWitnessedByStaff,
-            chkWitnessByParticipants, chkWitnessByOther;
+    private RadioButton radUnwitnessed;
+
+    private CheckBox chkWitnessedByStaff, chkWitnessByParticipants,
+            chkWitnessByOther;
 
     private TextField txtOther;
     private TextField txtOtherType;
@@ -143,19 +146,18 @@ public class IncidentReportFormGUI
         lblTypeofInjury.setFont(new Font(16));
         mainBox = new VBox();
         mainBox.setSpacing(10);
-        mainBox.setMinWidth(700);
         mainBox.setMaxWidth(700);
         mainBox.getChildren().addAll(formTitle, createHeader(), sep1,
                 createRegisteredWorkArea(), sep2, createIncidentInfo(), sep3,
                 lblBodyArea, createBodyAreaInjured(), sep4, lblTypeofInjury,
                 createTypeOfInjury(), sep5, createMidSecion(),
                 createBottomBox());
+
         mainPane = new ScrollPane();
         mainPane.setContent(mainBox);
         mainPane.setMinWidth(700);
-        mainPane.setMaxWidth(1180);
+        mainPane.setMaxWidth(720);
 
-        mainPane.setPadding(new Insets(5, 5, 5, 450));
         return mainPane;
 
     }
@@ -196,16 +198,16 @@ public class IncidentReportFormGUI
         Label lblTimeOfIncident = new Label("Time of Incident:");
         Label lblExactLocaitonOfIncident = new Label(
                 "Exact Location of Where Incident Occured:");
-        
-        lblDateOfIncident.setPadding(new Insets(0,40,0,0));
+
+        lblDateOfIncident.setPadding(new Insets(0, 40, 0, 0));
         dateOfIncident = new DatePicker();
         dateOfIncident.setMinWidth(250);
         time = new TextField();
         time.setMinWidth(190);
-        lblTimeOfIncident.setPadding(new Insets(0,10,0,0));
+        lblTimeOfIncident.setPadding(new Insets(0, 10, 0, 0));
         location = new TextField();
         location.setMinWidth(300);
-        lblExactLocaitonOfIncident.setPadding(new Insets(0,160,0,0));
+        lblExactLocaitonOfIncident.setPadding(new Insets(0, 163, 0, 0));
 
         am = new RadioButton("am");
         pm = new RadioButton("pm");
@@ -252,7 +254,7 @@ public class IncidentReportFormGUI
         cboWorkAreas = new ComboBox<>(workAreas);
 
         other = new RadioButton("Other");
-        other.setPadding(new Insets(0,35,0,0));
+        other.setPadding(new Insets(0, 35, 0, 0));
         cboWorkAreas.setMinWidth(250);
         otherWorkArea.setMinWidth(195);
         otherWorkArea.setDisable(true);
@@ -502,6 +504,213 @@ public class IncidentReportFormGUI
     }
 
     /**
+     * 
+     * Purpose: Create the are where the incident witnesses will be filled out
+     * 
+     * @return a Vbox with a radiobutton, 3 checkboxes and 3 textfields
+     */
+    private VBox createIncidentWitness()
+    {
+        VBox top = new VBox();
+
+        GridPane topGrid = new GridPane();
+
+        staffWitness = new TextField();
+        participantWitness = new TextField();
+        otherWitness = new TextField();
+
+        chkWitnessedByStaff = new CheckBox("Witnessed by staff:");
+        chkWitnessByParticipants = new CheckBox("Witnessed by participant(s):");
+        chkWitnessByOther = new CheckBox("Witnessed by other - explain:");
+
+        int spacing = 5;
+
+        top.setSpacing(spacing);
+        radUnwitnessed = new RadioButton("Unwitnessed");
+        radUnwitnessed.setOnAction(event -> {
+            if ( radUnwitnessed.isSelected() )
+            {
+                chkWitnessByOther.setDisable(true);
+                chkWitnessByParticipants.setDisable(true);
+                chkWitnessedByStaff.setDisable(true);
+                staffWitness.setDisable(true);
+                participantWitness.setDisable(true);
+                otherWitness.setDisable(true);
+
+                chkWitnessByOther.setSelected(false);
+                chkWitnessByParticipants.setSelected(false);
+                chkWitnessedByStaff.setSelected(false);
+                staffWitness.clear();
+                participantWitness.clear();
+                otherWitness.clear();
+            }
+            else
+            {
+                chkWitnessByOther.setDisable(false);
+                chkWitnessByParticipants.setDisable(false);
+                chkWitnessedByStaff.setDisable(false);
+                staffWitness.setDisable(false);
+                participantWitness.setDisable(false);
+                otherWitness.setDisable(false);
+            }
+        });
+
+        topGrid.add(radUnwitnessed, 0, 0);
+
+        topGrid.add(chkWitnessedByStaff, 0, 1);
+        topGrid.add(chkWitnessByParticipants, 0, 2);
+        topGrid.add(chkWitnessByOther, 0, 3);
+
+        topGrid.add(staffWitness, 1, 1);
+        topGrid.add(participantWitness, 1, 2);
+        topGrid.add(otherWitness, 1, 3);
+
+        topGrid.setPadding(new Insets(0, 0, 0, 50));
+        topGrid.setHgap(60);
+        topGrid.setVgap(5);
+
+        staffWitness.setMinWidth(410);
+
+        top.getChildren().add(topGrid);
+        return top;
+    }
+
+    /**
+     * 
+     * Purpose: create the area where the incident reported to will be filled
+     * out
+     * 
+     * @return a vbox with 3 radio buttons, 4 textfields, and a date picker
+     */
+    private HBox createIncidentReportedTo()
+    {
+        HBox top = new HBox();
+
+        VBox left = new VBox();
+        left.setSpacing(25);
+        VBox midLeft = new VBox();
+        midLeft.setSpacing(15);
+        VBox midRight = new VBox();
+        midRight.setSpacing(25);
+        VBox right = new VBox();
+        right.setSpacing(15);
+        personReportedTo = FXCollections.observableArrayList();
+        txtPersonReportedToName = new TextField();
+        txtPersonReportedToName.setMinWidth(320);
+
+        txtTimeReportedToPerson = new TextField();
+        txtTimeReportedToPerson.setMinWidth(320);
+        personReportedTo.add("Manager");
+        personReportedTo.add("Assistant Manager");
+        personReportedTo.add("Other");
+
+        cboPersonReportedTo = new ComboBox<String>(personReportedTo);
+        cboPersonReportedTo.getSelectionModel().clearAndSelect(0);
+        cboPersonReportedTo.setMaxWidth(140);
+
+        dateReportToPerson = new DatePicker();
+        dateReportToPerson.setMaxWidth(140);
+
+        Label lblName = new Label("Name: ");
+        Label lblIncidentReportedTo = new Label("Incident Reported To");
+        Label lblDateReported = new Label("Date reported: ");
+        Label lblTimeReported = new Label("Time reported: ");
+
+        left.getChildren().addAll(lblIncidentReportedTo, lblDateReported);
+        midLeft.getChildren().addAll(cboPersonReportedTo, dateReportToPerson);
+        midRight.getChildren().addAll(lblName, lblTimeReported);
+        right.getChildren().addAll(txtPersonReportedToName,
+                txtTimeReportedToPerson);
+
+        top.getChildren().addAll(left, midLeft, midRight, right);
+        top.setSpacing(15);
+        return top;
+    }
+
+    /**
+     * 
+     * Purpose: create the portion of the form where they enter verbal reports
+     * 
+     * @return a node containing the required elements
+     */
+    private VBox createVerbalReport()
+    {
+        VBox box = new VBox();
+        HBox bottomBox = new HBox();
+
+        VBox innerBox = new VBox();
+
+        GridPane topGrid = new GridPane();
+        ToggleGroup group2 = new ToggleGroup();
+
+        dateVerballyReported = new DatePicker();
+        txtTimeReportedVerbally = new TextField();
+
+        dateVerballyReported.setMaxWidth(140);
+        txtTimeReportedVerbally.setMinWidth(310);
+
+        Label lblDateReportedVerbally = new Label("Date reported verbally : ");
+        Label lblTimeReported = new Label("Time reported: ");
+        personalSupportsCoordinator = new RadioButton(
+                "Personal Supports Coordinator");
+        personalSupportsManager = new RadioButton("Personal Supports Manager");
+        noVerbalReport = new RadioButton("No Verbal Report Given");
+        group2.getToggles().addAll(personalSupportsCoordinator,
+                personalSupportsManager, noVerbalReport);
+
+        topGrid.add(noVerbalReport, 0, 0);
+        topGrid.add(personalSupportsManager, 0, 1);
+        topGrid.add(personalSupportsCoordinator, 0, 2);
+        topGrid.setPadding(new Insets(5, 5, 5, 50));
+        topGrid.setVgap(10);
+
+        bottomBox.getChildren().addAll(lblDateReportedVerbally,
+                dateVerballyReported, lblTimeReported, txtTimeReportedVerbally);
+        bottomBox.setSpacing(10);
+        innerBox.getChildren().addAll(topGrid);
+        box.getChildren().addAll(innerBox, bottomBox);
+
+        return box;
+    }
+
+    /**
+     * 
+     * Purpose: create the portion of the form where they enter the date the
+     * report was written
+     * 
+     * @return a node containing the required elements
+     */
+    private VBox createReportWritten()
+    {
+        HBox topBox = new HBox();
+        HBox bottomBox = new HBox();
+        VBox box = new VBox();
+        
+        dateReportWritten = new DatePicker();
+        dateReportWritten.setMaxWidth(145);
+        
+        txtTimeReportWritten = new TextField();
+        txtTimeReportWritten.setMinWidth(310);
+        
+        txtReportWrittenBy = new TextField();
+        txtReportWrittenBy.setMinWidth(565);     
+        
+        Label lblTimeReported = new Label("Time reported: ");
+        Label lblReportWrittenBy = new Label("Report Written By : ");
+        Label lblDateReportWritten = new Label("Date Report Written : ");
+
+        topBox.getChildren().addAll(lblDateReportWritten, dateReportWritten,
+                lblTimeReported, txtTimeReportWritten);
+        topBox.setSpacing(15);
+        bottomBox.getChildren().addAll(lblReportWrittenBy,txtReportWrittenBy);
+        bottomBox.setSpacing(25);
+        box.getChildren().addAll(topBox,bottomBox);
+        box.setSpacing(10);
+        
+        return box;
+    }
+
+    /**
      * Purpose :Create the bottom part of the form
      * 
      * @return a vbox containing all the required elements
@@ -509,99 +718,30 @@ public class IncidentReportFormGUI
     private VBox createBottomBox()
     {
         VBox mainBox = new VBox();
-        VBox top = new VBox();
-        VBox top2 = new VBox();
-        VBox top3 = new VBox();
-        VBox top4 = new VBox();
-        VBox top5 = new VBox();
-        VBox top6 = new VBox();
-        VBox top7 = new VBox();
-        VBox top8 = new VBox();
-        VBox top9 = new VBox();
-        VBox top10 = new VBox();
+        VBox buttonBox = new VBox();
 
+        Separator sep = new Separator(Orientation.HORIZONTAL);
+        sep.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
+                null)));
+
+        Separator sep2 = new Separator(Orientation.HORIZONTAL);
+        sep.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
+                null)));
+
+        Separator sep3 = new Separator(Orientation.HORIZONTAL);
+        sep.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
+                null)));
+        
         Label lblIncident = new Label("Incident: ");
-        Label lblIncidentReportedTo = new Label("Incident reported to:");
-
-        Label lblVerbalReport = new Label("Verbal report Given to: ");
-        Label lblDateReported = new Label("Date Reported");
-        Label lblDateReported2 = new Label("Date Reported");
-        Label lblDateReportWritten = new Label("Date Report Written");
-        Label lblReportWrittenBy = new Label("Report Written By");
-
-        chkUnwitnessed = new CheckBox("Unwitnessed");
-        chkWitnessedByStaff = new CheckBox("Witnessed by staff:");
-        chkWitnessByParticipants = new CheckBox("Witnessed by participant(s):");
-        chkWitnessByOther = new CheckBox("Witnessed by other - explain:");
-
-        ToggleGroup group = new ToggleGroup();
-        ToggleGroup group2 = new ToggleGroup();
-
-        manager = new RadioButton("Manager");
-        assistantManager = new RadioButton("Assistant Manager");
-        otherReportedTo = new RadioButton("Other (specify)");
-        personalSupportsCoordinator = new RadioButton(
-                "Personal Supports Coordinator");
-        personalSupportsManager = new RadioButton("Personal Supports Manager");
-        noVerbalReport = new RadioButton("No Verbal Report Given");
-
-        staffWitness = new TextField();
-        participantWitness = new TextField();
-        otherWitness = new TextField();
-
-        txtManagerName = new TextField();
-        txtOtherName = new TextField();
-        txtDateReportedTo = new TextField();
-        txtDateVerbal = new TextField();
-        txtDateReportWritten = new TextField();
-
-        staffWitness.setMinWidth(450);
-        participantWitness.setMinWidth(500);
-        otherWitness.setMinWidth(500);
-        txtManagerName.setMinWidth(350);
-        txtOtherName.setMinWidth(300);
-        txtDateReportedTo.setMinWidth(300);
-        txtDateVerbal.setMinWidth(350);
-        txtDateReportWritten.setMinWidth(350);
-
-        group.getToggles().addAll(manager, assistantManager, otherReportedTo);
-        group2.getToggles().addAll(personalSupportsCoordinator,
-                personalSupportsManager, noVerbalReport);
-
-        top.getChildren().addAll(lblIncident, chkUnwitnessed,
-                chkWitnessedByStaff, staffWitness);
-        top2.getChildren().addAll(chkWitnessByParticipants, participantWitness);
-        top3.getChildren().addAll(chkWitnessByOther, otherWitness);
-        top4.getChildren().addAll(lblIncidentReportedTo, manager,
-                assistantManager, txtManagerName);
-        top5.getChildren().addAll(otherReportedTo, txtOtherName,
-                lblDateReported, txtDateReportedTo);
-        top6.getChildren().addAll(lblVerbalReport, personalSupportsManager,
-                personalSupportsCoordinator);
-        top7.getChildren().addAll(noVerbalReport, lblDateReported2,
-                txtDateVerbal);
-        top8.getChildren().addAll(lblDateReportWritten, txtDateReportWritten);
-        top9.getChildren().addAll(lblReportWrittenBy);       
+        Label lblVerbalReport = new Label("Verbal Report");
 
         btnSubmit = new Button("Submit");
-        top10.getChildren().add(btnSubmit);
-        top10.setAlignment(Pos.CENTER);
-        
-        int spacing = 5;
+        buttonBox.getChildren().add(btnSubmit);
+        buttonBox.setAlignment(Pos.CENTER);
 
-        top.setSpacing(spacing);
-        top2.setSpacing(spacing);
-        top3.setSpacing(spacing);
-        top4.setSpacing(spacing);
-        top5.setSpacing(spacing);
-        top6.setSpacing(spacing);
-        top7.setSpacing(spacing);
-        top8.setSpacing(spacing);
-        top9.setSpacing(spacing);
-        top10.setSpacing(spacing);
-
-        mainBox.getChildren().addAll(top, top2, top3, top4, top5, top6, top7,
-                top8, top9, top10);
+        mainBox.getChildren().addAll(lblIncident, createIncidentWitness(), sep,
+                createIncidentReportedTo(), sep2, lblVerbalReport,
+                createVerbalReport(), sep3,createReportWritten(),buttonBox);
 
         mainBox.setSpacing(15);
 
