@@ -46,23 +46,23 @@ public class PersonalCareTableViewController
 	@SuppressWarnings("unchecked")
 	public void initialize()
 	{
-        blankColumn.setMinWidth(80);
+        blankColumn.setMinWidth(130);
         blankColumn.setResizable(false);
         
         supportsColumn.setCellValueFactory(cellData -> cellData.getValue()
                 .getSupportsProperty());
-        supportsColumn.setMinWidth(180);
+        supportsColumn.setMinWidth(250);
         supportsColumn.setResizable(false);
         
         
         totalAsOfColumn.setCellValueFactory(cellData -> cellData.getValue()
                 .getTotalAsOfProperty());
-        totalAsOfColumn.setMinWidth(120);
+        totalAsOfColumn.setMinWidth(250);
         totalAsOfColumn.setResizable(false);
         
         totalForLastYearColumn.setCellValueFactory(cellData -> cellData
                 .getValue().getTotalForLastYearProperty());
-        totalForLastYearColumn.setMinWidth(130);
+        totalForLastYearColumn.setMinWidth(250);
         totalForLastYearColumn.setResizable(false);
         
         personalCareTable.getColumns().addAll(blankColumn, supportsColumn, totalAsOfColumn,

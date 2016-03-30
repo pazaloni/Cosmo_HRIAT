@@ -153,7 +153,7 @@ public class QuarterlyReportPrevGUI extends Application {
         
         reactiveCareTVCont = new ReactiveCareTableViewController();
         
-        vbox.getChildren().addAll(areaLbl);
+        vbox.getChildren().addAll(areaLbl, reactiveCareTVCont.reactiveCareTable);
         
         
         
@@ -164,9 +164,10 @@ public class QuarterlyReportPrevGUI extends Application {
     {
        VBox vbox = new VBox();
         
-        Label areaLbl = new Label("Health Promotion Activities");
+        Label areaLbl = new Label("Health Promotion Activities and Health-Related Supplies"
+        		+ " are to be entered after export.");
         areaLbl.setPadding(new Insets(5,5,5,5));
-        areaLbl.setFont(new Font("Arial", 24));
+        areaLbl.setFont(new Font("Arial", 12));
         
         healthPromotionTVCont = new HealthPromotionTableViewController();
         
