@@ -3,12 +3,27 @@ package core;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * Data Holder object for the reactive care information for the Quarterly Reports.
+ * Represents a row of data for the Reactive Care TableView.
+ * 
+ *  @author Breanna Wilson, Jon Froese
+ *
+ */
+
 public class ReactiveCare 
 {
 	private int year;
 	private int participants;
 	private int staff;
 	private int total;
+	
+	/**
+	 * 
+	 * @param year
+	 * @param participants
+	 * @param staff
+	 */
 	public ReactiveCare(int year, int participants, int staff)
 	{
 		this.year = year;

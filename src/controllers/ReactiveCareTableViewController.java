@@ -6,10 +6,20 @@ import javafx.scene.control.TableView;
 import core.OlderAdultsNeeds;
 import core.ReactiveCare;
 
+/**
+ * Creates, initializes, and refreshes the TableView for Reactive
+ * Care information for Quarterly Reports.
+ * 
+ * @author Breanna Wilson, Jon Froese
+ *
+ */
+
 public class ReactiveCareTableViewController 
 {
+	//the tableview containing all of the data
 	public TableView<ReactiveCare> reactiveCareTable = new TableView<ReactiveCare>();
 	
+	//Columns for all of the table data
 	private TableColumn<ReactiveCare, String> yearColumn = 
 			new TableColumn<ReactiveCare, String>("Year");
 	private TableColumn<ReactiveCare, String> participantsColumn = 
@@ -19,9 +29,15 @@ public class ReactiveCareTableViewController
 	private TableColumn<ReactiveCare, String> totaColumn =
 			new TableColumn<ReactiveCare, String>("Total");
 	
+	//observable list containing all data for the table
 	private ObservableList<ReactiveCare> reactiveCareData =
 			FXCollections.observableArrayList();
 	
+	/**
+	 * Creates and initializes the reactiveCareTable
+	 * 
+	 *  @author Breanna Wilson, Jon Froese
+	 */
 	public ReactiveCareTableViewController()
 	{
 		queryReactiveCareData();
@@ -33,9 +49,15 @@ public class ReactiveCareTableViewController
 	
 	private void queryReactiveCareData() 
 	{
-		
+		//TODO have this query the DB for reactive care info
 	}
 	
+	/**
+	 * Requeries the database, and resets the information
+	 * in the tableview with current information
+	 * 
+	 *  @author Breanna Wilson, Jon Froese
+	 */
 	public void refreshTable()
 	{
 		this.reactiveCareData.clear();
@@ -44,6 +66,12 @@ public class ReactiveCareTableViewController
 		this.initialize();
 	}
 	
+	/**
+	 * Sets the information in the tableview with information pulled from the
+	 * data holder objects (ReactiveCare), and sets the sizing for the columns.
+	 * 
+	 *  @author Breanna Wilson, Jon Froese
+	 */
 	@SuppressWarnings("unchecked")
 	public void initialize()
 	{

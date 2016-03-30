@@ -271,7 +271,7 @@ public class MedicalStaffMainPageGUI extends Application
                         }
                         else if ( mostRecentlySelectedTab.equals(stats) )
                         {
-                            QuarterlyReportGUI reportGUI = new QuarterlyReportGUI();
+                            StatisticsGUI reportGUI = new StatisticsGUI();
                             reportGUI.reportsMainStageConstruct(medMainStage,
                                     loggedInUser);
                         }
