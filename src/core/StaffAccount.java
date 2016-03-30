@@ -1,5 +1,6 @@
 package core;
 import helpers.DatabaseHelper;
+import helpers.EncryptionHelper;
 import helpers.ManageStaffAccountHelper;
 
 import java.sql.ResultSet;
@@ -21,6 +22,7 @@ import java.sql.SQLException;
 public class StaffAccount
 {
     private DatabaseHelper db;
+    private EncryptionHelper eh = new EncryptionHelper();
     private ManageStaffAccountHelper manageStaff;
 
     protected StringProperty username;
@@ -49,6 +51,7 @@ public class StaffAccount
         // the account that will be returned upon successful login
         StaffAccount staff = null;
         manageStaff = new ManageStaffAccountHelper();
+
 
         // These are set as not found because when there is nothing returned
         // form the database they are assigned nothing so they remain
@@ -290,7 +293,11 @@ public class StaffAccount
     
     public String GetPassword()
     {
-        return password.get();
+        String pass = password.get();
+        ///decrypt the password from the database
+        String decryptedPass = eh.decrypt(pass);
+        return decryptedPass;
+
     }
 
     /**
