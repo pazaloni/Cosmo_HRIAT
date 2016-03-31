@@ -38,8 +38,8 @@ public class LoginGUI extends Application
     public static Stage stageLogin;
 
     /* Static final variables */
-    public static final int WIDTH = 1280;
-    public static final int HEIGHT = 720;
+    public static final int WIDTH = 1520;
+    public static final int HEIGHT = 900;
     public static final int IMAGE_WIDTH = 606;
     public static final int IMAGE_HEIGHT = 75;
     public static final int TEXTFIELD_WIDTH = 190;
