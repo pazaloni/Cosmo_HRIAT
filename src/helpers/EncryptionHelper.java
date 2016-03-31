@@ -14,7 +14,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class EncryptionHelper 
 {
-    static final byte[] KEY = {12, -89, -94, -38, 6, 18, -43, 67, -62, 71, -114, -113, 7, 33, -97, 26};
+    private static final byte[] KEY = {12, -89, -94, -38, 6, 18, -43, 67, -62, 71, -114, -113, 7, 33, -97, 26};
     Cipher cipher;
     SecretKeySpec secretKey;
     
