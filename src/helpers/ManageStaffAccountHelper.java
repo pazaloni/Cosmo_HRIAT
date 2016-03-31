@@ -25,6 +25,7 @@ public class ManageStaffAccountHelper
     private static final String USERNAME_NOT_UNIQUE = "Username is already taken";
 
     private DatabaseHelper db;
+    ///the EncryptionHelper declaration
     private EncryptionHelper eh;
 
     /**
@@ -35,6 +36,7 @@ public class ManageStaffAccountHelper
     public ManageStaffAccountHelper()
     {
         db = new DatabaseHelper();
+        ///Instantiating the EncryptionHelper
         eh = new EncryptionHelper();
     }
 

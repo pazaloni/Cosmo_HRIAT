@@ -54,6 +54,7 @@ public class TechMainPageGUI extends Application
     // Instance of the database helper
     private DatabaseHelper dbObject = new DatabaseHelper();
     
+    ///Instated Encryption Helper
     private EncryptionHelper eh = new EncryptionHelper();
 
     // The stage
@@ -549,7 +550,6 @@ public class TechMainPageGUI extends Application
                 }
                 catch (Exception e1)
                 {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
             }
