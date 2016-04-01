@@ -1,13 +1,17 @@
 package gui;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.HorizontalDirection;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -28,7 +32,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import core.PopUpMessage;
 import core.StaffAccount;
 
 /**
@@ -45,7 +51,7 @@ public class IncidentReportFormGUI
             personReportedTo;
 
     private ListView<String> lsvAllBodyAreas, lsvInjuredBodyAreas;
-
+    private int maxWidth = 710;
     private ComboBox<String> cboWorkAreas;
     private ComboBox<String> cboPersonReportedTo;
 
@@ -86,7 +92,7 @@ public class IncidentReportFormGUI
     private TextField txtOtherType;
     private Button btnSubmit;
 
-    private List<CheckBox> typesOfInjuries;
+    private ArrayList<CheckBox> typesOfInjuries;
 
     private StaffAccount loggedInStaff;
 
@@ -121,22 +127,27 @@ public class IncidentReportFormGUI
         Separator sep = new Separator(Orientation.HORIZONTAL);
         sep.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
                 null)));
+        sep.maxWidth(maxWidth);
         Separator sep1 = new Separator(Orientation.HORIZONTAL);
         sep1.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
                 null)));
+        sep1.maxWidth(maxWidth);
         Separator sep2 = new Separator(Orientation.HORIZONTAL);
         sep2.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
                 null)));
+        sep2.maxWidth(maxWidth);
         Separator sep3 = new Separator(Orientation.HORIZONTAL);
         sep3.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
                 null)));
+        sep3.maxWidth(maxWidth);
         Separator sep4 = new Separator(Orientation.HORIZONTAL);
         sep4.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
                 null)));
+        sep4.maxWidth(maxWidth);
         Separator sep5 = new Separator(Orientation.HORIZONTAL);
         sep5.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
                 null)));
-
+        sep5.maxWidth(maxWidth);
         Label lblBodyArea = new Label(
                 "Body Area Injured: (Check ALL that apply)");
         Label lblTypeofInjury = new Label(
@@ -146,18 +157,18 @@ public class IncidentReportFormGUI
         lblTypeofInjury.setFont(new Font(16));
         mainBox = new VBox();
         mainBox.setSpacing(10);
-        mainBox.setMaxWidth(700);
+        mainBox.setMinWidth(maxWidth+5);
+        mainBox.setMaxWidth(maxWidth+10);
         mainBox.getChildren().addAll(formTitle, createHeader(), sep1,
                 createRegisteredWorkArea(), sep2, createIncidentInfo(), sep3,
                 lblBodyArea, createBodyAreaInjured(), sep4, lblTypeofInjury,
                 createTypeOfInjury(), sep5, createMidSecion(),
                 createBottomBox());
-
         mainPane = new ScrollPane();
         mainPane.setContent(mainBox);
-        mainPane.setMinWidth(700);
-        mainPane.setMaxWidth(720);
-
+        mainPane.setMinWidth(maxWidth+5);
+        mainPane.setMaxWidth(maxWidth+10);
+        mainPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         return mainPane;
 
     }
@@ -252,7 +263,7 @@ public class IncidentReportFormGUI
         workAreas.add("Front Office");
         workAreas.add("Life Enrichment");
         cboWorkAreas = new ComboBox<>(workAreas);
-
+        cboWorkAreas.getSelectionModel().select(0);
         other = new RadioButton("Other");
         other.setPadding(new Insets(0, 35, 0, 0));
         cboWorkAreas.setMinWidth(250);
@@ -417,13 +428,17 @@ public class IncidentReportFormGUI
     {
 
         HBox finalHbox = new HBox();
-
         GridPane gridPaneType = new GridPane();
         HBox otherHBox = new HBox();
+        
+        typesOfInjuries = new ArrayList<CheckBox>();
+        
         otherHBox.getChildren().addAll(
                 chkOtherType = new CheckBox("Other (Specify) :"),
                 txtOtherType = new TextField());
+
         gridPaneType.add(chkBruise = new CheckBox("Bruise/Contution"), 0, 0);
+
         gridPaneType.add(chkScrape = new CheckBox("Scrape/Abrasion"), 0, 1);
         gridPaneType.add(chkSwelling = new CheckBox("Swelling"), 0, 2);
         gridPaneType.add(chkBurn = new CheckBox("Burn"), 0, 3);
@@ -446,13 +461,28 @@ public class IncidentReportFormGUI
         gridPaneType
                 .add(chkPropertyDmg = new CheckBox("Property damage"), 1, 6);
         gridPaneType.add(otherHBox, 0, 8);
-
+        typesOfInjuries.add(chkBruise);
+        typesOfInjuries.add(chkScrape);
+        typesOfInjuries.add(chkSwelling);
+        typesOfInjuries.add(chkBurn);
+        typesOfInjuries.add(chkCut);
+        typesOfInjuries.add(chkSprain);
+        typesOfInjuries.add(chkInsectbite);
+        typesOfInjuries.add(chkImbedded);
+        typesOfInjuries.add(chkFall);
+        typesOfInjuries.add(chkFoundOnFloor);
+        typesOfInjuries.add(chkSelfAggro);
+        typesOfInjuries.add(chkP2PAggro);
+        typesOfInjuries.add(chkP2SAggro);
+        typesOfInjuries.add(chkVehichleIncident);
+        typesOfInjuries.add(chkPropertyDmg);
+        typesOfInjuries.add(chkOtherType);
         Label lblProtEquipment = new Label(
                 "Protective Equipment Used at Time of Incident?");
-        lblProtEquipment.setFont(new Font(16));
+
         txtAProtEquip = new TextArea();
         txtAProtEquip.setWrapText(true);
-
+        txtAProtEquip.setMaxWidth(200);
         VBox vbox = new VBox();
         vbox.getChildren().addAll(lblProtEquipment, txtAProtEquip);
 
@@ -487,10 +517,12 @@ public class IncidentReportFormGUI
 
         incidentDescription = new TextArea();
         incidentDescription.setMaxHeight(maxHeight);
+        incidentDescription.setMaxWidth(maxWidth-20);
         incidentDescription.setWrapText(true);
 
         incidentFactors = new TextArea();
         incidentFactors.setMaxHeight(maxHeight);
+        incidentFactors.setMaxWidth(maxWidth-20);
         incidentFactors.setWrapText(true);
 
         topBox.setSpacing(15);
@@ -647,7 +679,7 @@ public class IncidentReportFormGUI
         txtTimeReportedVerbally = new TextField();
 
         dateVerballyReported.setMaxWidth(140);
-        txtTimeReportedVerbally.setMinWidth(310);
+        txtTimeReportedVerbally.setMinWidth(320);
 
         Label lblDateReportedVerbally = new Label("Date reported verbally : ");
         Label lblTimeReported = new Label("Time reported: ");
@@ -655,8 +687,33 @@ public class IncidentReportFormGUI
                 "Personal Supports Coordinator");
         personalSupportsManager = new RadioButton("Personal Supports Manager");
         noVerbalReport = new RadioButton("No Verbal Report Given");
+        noVerbalReport.setSelected(true);
+        if(noVerbalReport.isSelected())
+        {
+            personalSupportsCoordinator.setDisable(true);
+            personalSupportsManager.setDisable(true);
+            dateVerballyReported.setDisable(true);
+            txtTimeReportedVerbally.setDisable(true);
+        }
+        noVerbalReport.setOnAction(event ->{
+            if(noVerbalReport.isSelected())
+            {
+                personalSupportsCoordinator.setDisable(true);
+                personalSupportsManager.setDisable(true);
+                dateVerballyReported.setDisable(true);
+                txtTimeReportedVerbally.setDisable(true);
+            }
+            else
+            {
+                personalSupportsCoordinator.setDisable(false);
+                personalSupportsManager.setDisable(false);
+                dateVerballyReported.setDisable(false);
+                txtTimeReportedVerbally.setDisable(false);
+            }
+        });
+
         group2.getToggles().addAll(personalSupportsCoordinator,
-                personalSupportsManager, noVerbalReport);
+                personalSupportsManager);
 
         topGrid.add(noVerbalReport, 0, 0);
         topGrid.add(personalSupportsManager, 0, 1);
@@ -685,16 +742,16 @@ public class IncidentReportFormGUI
         HBox topBox = new HBox();
         HBox bottomBox = new HBox();
         VBox box = new VBox();
-        
+
         dateReportWritten = new DatePicker();
         dateReportWritten.setMaxWidth(145);
-        
+
         txtTimeReportWritten = new TextField();
         txtTimeReportWritten.setMinWidth(310);
-        
+
         txtReportWrittenBy = new TextField();
-        txtReportWrittenBy.setMinWidth(565);     
-        
+        txtReportWrittenBy.setMinWidth(570);
+
         Label lblTimeReported = new Label("Time reported: ");
         Label lblReportWrittenBy = new Label("Report Written By : ");
         Label lblDateReportWritten = new Label("Date Report Written : ");
@@ -702,11 +759,11 @@ public class IncidentReportFormGUI
         topBox.getChildren().addAll(lblDateReportWritten, dateReportWritten,
                 lblTimeReported, txtTimeReportWritten);
         topBox.setSpacing(15);
-        bottomBox.getChildren().addAll(lblReportWrittenBy,txtReportWrittenBy);
+        bottomBox.getChildren().addAll(lblReportWrittenBy, txtReportWrittenBy);
         bottomBox.setSpacing(25);
-        box.getChildren().addAll(topBox,bottomBox);
+        box.getChildren().addAll(topBox, bottomBox);
         box.setSpacing(10);
-        
+
         return box;
     }
 
@@ -723,21 +780,26 @@ public class IncidentReportFormGUI
         Separator sep = new Separator(Orientation.HORIZONTAL);
         sep.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
                 null)));
-
+        sep.maxWidth(maxWidth);
+        sep.maxHeight(maxWidth);
         Separator sep2 = new Separator(Orientation.HORIZONTAL);
         sep.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
                 null)));
-
+        sep2.maxWidth(maxWidth);
         Separator sep3 = new Separator(Orientation.HORIZONTAL);
         sep.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
                 null)));
-        
+        sep3.maxWidth(maxWidth);
         Label lblIncident = new Label("Incident: ");
         Label lblVerbalReport = new Label("Verbal Report");
 
         btnSubmit = new Button("Submit");
         buttonBox.getChildren().add(btnSubmit);
         buttonBox.setAlignment(Pos.CENTER);
+
+        btnSubmit.setOnAction(event -> {
+            submitForm();
+        });
 
         mainBox.getChildren().addAll(lblIncident, createIncidentWitness(), sep,
                 createIncidentReportedTo(), sep2, lblVerbalReport,
@@ -746,5 +808,168 @@ public class IncidentReportFormGUI
         mainBox.setSpacing(15);
 
         return mainBox;
+    }
+
+    /**
+     * 
+     * Purpose: Submit the form once all validation is passed.
+     */
+    private void submitForm()
+    {
+        String formMessage = validateForm();
+        if ( Boolean.parseBoolean(formMessage) )
+        {
+            System.out.println("Form is valid");
+        }
+        else
+        {
+            Stage stage = new Stage();
+            stage.initOwner(parentStage);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            PopUpMessage popup = new PopUpMessage(formMessage, stage);
+            popup.stage.showAndWait();
+        }
+    }
+
+    /**
+     * 
+     * Purpose: Validate the incident report form
+     * 
+     * @return a null string if the form was valid, otherwise a string returning
+     *         a message about missing data.
+     */
+    private String validateForm()
+    {
+        boolean formValid = true;
+        StringBuilder errorMessage = new StringBuilder();
+        if ( personInjured.getText().isEmpty() )
+        {
+            errorMessage.append("\tThe participant that was injured.\n");
+            formValid = false;
+        }
+        if ( other.isSelected() )
+        {
+            if ( otherWorkArea.getText().isEmpty() )
+            {
+                errorMessage.append("\tThe other registered work area.\n");
+                formValid = false;
+            }
+        }
+        if ( dateOfIncident.getValue() == null)
+        {
+            errorMessage.append("\tThe date of the incident.\n");
+            formValid = false;
+        }
+        if ( time.getText().isEmpty() )
+        {
+            errorMessage.append("\tThe time of the incident.\n");
+            formValid = false;
+        }
+        if ( location.getText().isEmpty() )
+        {
+            errorMessage.append("\tThe exact location of incident.\n");
+            formValid = false;
+        }
+        if ( injuredBodyAreas.isEmpty() )
+        {
+            errorMessage.append("\tThe body areas injured.\n");
+            formValid = false;
+        }
+        boolean typeOfInjureySelected = false;
+        for ( CheckBox chk : typesOfInjuries )
+        {
+            if ( chk.isSelected() )
+            {
+                typeOfInjureySelected = true;
+            }
+        }
+        if ( !typeOfInjureySelected )
+        {
+            errorMessage.append("\tThe type of injury.\n");
+            formValid = false;
+        }
+        if ( incidentDescription.getText().isEmpty() )
+        {
+            errorMessage
+                    .append("\tThe description of how exactly the incident occured.\n");
+            formValid = false;
+        }
+        if ( incidentFactors.getText().isEmpty() )
+        {
+            errorMessage
+                    .append("\tThe factors contributing to the incident.\n");
+            formValid = false;
+        }
+        if ( !radUnwitnessed.isSelected() )
+        {
+            if ( !(chkWitnessedByStaff.isSelected()
+                    || chkWitnessByParticipants.isSelected() || chkWitnessByOther
+                        .isSelected()) )
+            {
+                errorMessage.append("\tThe witnesses of the incident.\n");
+                formValid = false;
+            }
+        }
+        if ( txtPersonReportedToName.getText().isEmpty() )
+        {
+            errorMessage
+                    .append("\tThe person's name this incident was reported to.\n");
+            formValid = false;
+        }
+        if ( dateReportToPerson.getValue() == null )
+        {
+            errorMessage
+                    .append("\tThe date this incident was reported to a person.\n");
+            formValid = false;
+        }
+        if ( txtTimeReportedToPerson.getText().isEmpty() )
+        {
+            errorMessage
+                    .append("\tThe time this incident was reported to a person.\n");
+        }
+        if ( !(noVerbalReport.isSelected()) )
+        {
+            if ( dateVerballyReported.getValue() == null )
+            {
+                errorMessage
+                        .append("\tThe date this incident was reported verbally.\n");
+                formValid = false;
+            }
+            if ( txtTimeReportedVerbally.getText().isEmpty() )
+            {
+                formValid = false;
+                errorMessage
+                        .append("\tThe time this incident was reported verbally.\n");
+            }
+        }
+        if ( dateReportWritten == null )
+        {
+            formValid = false;
+            errorMessage
+                    .append("\tThe date this incident report was written.\n");
+        }
+        if ( txtTimeReportWritten.getText().isEmpty() )
+        {
+            formValid = false;
+            errorMessage
+                    .append("\tThe time this incident report was written.\n");
+        }
+        if ( txtReportWrittenBy.getText().isEmpty() )
+        {
+            formValid = false;
+            errorMessage.append("\tThe person who wrote this report.\n");
+        }
+        if ( formValid == false )
+        {
+            errorMessage.insert(0,
+                    "Whoops, you have some missing data, please enter: \n\n");
+            errorMessage.append("\n\n\n\n");
+        }
+        else
+        {
+            errorMessage.append("true");
+        }
+        
+        return errorMessage.toString();
     }
 }

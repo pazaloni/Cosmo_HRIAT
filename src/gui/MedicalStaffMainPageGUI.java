@@ -256,6 +256,7 @@ public class MedicalStaffMainPageGUI extends Application
         
         box.getChildren().add(irf.showIncidentReportForm());
         box.setAlignment(Pos.CENTER);
+
         incidentForm.setContent(box);
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(175);
