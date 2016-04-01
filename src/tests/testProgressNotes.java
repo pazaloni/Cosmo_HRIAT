@@ -18,7 +18,7 @@ import core.SeizureMedication;
 /**
  * Test for the progressNotes class
  * 
- * @author cst207
+ * @author CIMP
  *
  */
 public class testProgressNotes
