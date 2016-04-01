@@ -1,8 +1,7 @@
 package gui;
 import helpers.DatabaseHelper;
+import helpers.EncryptionHelper;
 import helpers.ManageStaffAccountHelper;
-
-import java.sql.*;
 
 import controllers.StaffTableViewController;
 import core.PopUpCheck;
@@ -22,8 +21,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -56,6 +53,9 @@ public class TechMainPageGUI extends Application
 
     // Instance of the database helper
     private DatabaseHelper dbObject = new DatabaseHelper();
+    
+    ///Instated Encryption Helper
+    private EncryptionHelper eh = new EncryptionHelper();
 
     // The stage
     public static Stage stageTech;
@@ -395,10 +395,11 @@ public class TechMainPageGUI extends Application
 
                 if (newUser)
                 {
+                    ///encrypt the password when creating the new user
                     String result = manageStaff.addUser(username.getText(),
                             lastName.getText(), firstName.getText(),
-                            email.getText(), password.getText(),
-                            repeatPassword.getText(),
+                            email.getText(), eh.encrypt(password.getText()),
+                            eh.encrypt(repeatPassword.getText()),
                             returnSecurityLevel(cboSecurityLevels.getValue()));
 
                     if (result.equals(""))
@@ -414,10 +415,12 @@ public class TechMainPageGUI extends Application
 
                 else
                 {
+                    ///encrypt the password when updating the user
                     String updateResult = manageStaff.editUser(
                             username.getText(), lastName.getText(),
                             firstName.getText(), email.getText(),
-                            password.getText(), repeatPassword.getText(),
+                            eh.encrypt(password.getText()),
+                            eh.encrypt(repeatPassword.getText()),
                             returnSecurityLevel(cboSecurityLevels.getValue()));
                     if (updateResult.equals(""))
                     {
@@ -547,7 +550,6 @@ public class TechMainPageGUI extends Application
                 }
                 catch (Exception e1)
                 {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
             }

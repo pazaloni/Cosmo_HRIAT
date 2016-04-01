@@ -50,9 +50,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -232,32 +235,44 @@ public class MedicalStaffMainPageGUI extends Application
         Tab participants = new Tab();
         Tab forms = new Tab();
         Tab stats = new Tab();
+        Tab incidentForm = new Tab();
+        HBox box = new HBox();
 
         // set text for tabs
         participants.setText("Participants");
+        VBox vbox = new VBox();
+        vbox.getChildren().addAll(createHBoxPreviewNotes(),pTVCont.participantTable);
+        participants.setContent(vbox);
         forms.setText("Forms");
         stats.setText("Stats");
-
+        incidentForm.setText("Incident Reporting Form");
+        
         // set tabs to not be closable
         forms.closableProperty().set(false);
         participants.closableProperty().set(false);
         stats.closableProperty().set(false);
-
+        incidentForm.closableProperty().set(false);
+        IncidentReportFormGUI irf = new IncidentReportFormGUI(medMainStage, loggedInUser);
+        
+        box.getChildren().add(irf.showIncidentReportForm());
+        box.setAlignment(Pos.CENTER);
+        incidentForm.setContent(box);
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(175);
+       
         tabPane.getTabs().addAll(participants, forms);
 
         // if they are an administrator, add the stats tab
         if ( loggedInUser instanceof MedicalAdministrator )
         {
-            tabPane.getTabs().add(stats);
+            tabPane.getTabs().addAll(stats,incidentForm);
         }
 
         // set initial selected tab to participants
         tabPane.getSelectionModel().select(participants);
 
         // set the changed property
-        tabPane.getSelectionModel().selectedItemProperty()
+        /*tabPane.getSelectionModel().selectedItemProperty()
                 .addListener(new ChangeListener<Tab>()
                 {
 
@@ -267,7 +282,9 @@ public class MedicalStaffMainPageGUI extends Application
                     {
                         if ( mostRecentlySelectedTab.equals(forms) )
                         {
-                            // switch to forms GUI
+                            IncidentReportFormGUI irf = new IncidentReportFormGUI(
+                                    medMainStage, loggedInUser);
+                            irf.showIncidentReportForm();
                         }
                         else if ( mostRecentlySelectedTab.equals(stats) )
                         {
@@ -279,7 +296,7 @@ public class MedicalStaffMainPageGUI extends Application
                     }
 
                 });
-
+*/
         tabPane.setMinHeight(29);
         tabPane.setFocusTraversable(false);
         return tabPane;
@@ -1040,15 +1057,16 @@ public class MedicalStaffMainPageGUI extends Application
         BorderPane header = createHBoxHeader();
         // tab pane
         TabPane tabs = createTabs();
+        
         // Search bar
         HBox searchBar = createSearchBar();
         VBox.setMargin(searchBar, new Insets(5, 0, 5, 0));
         // preview notes
-        HBox previewNotes = createHBoxPreviewNotes();
+        //HBox previewNotes = createHBoxPreviewNotes();
 
         // add everything to vbox
-        vbox.getChildren().addAll(header, tabs, searchBar, previewNotes,
-                pTVCont.participantTable);
+        vbox.getChildren().addAll(header, searchBar, tabs 
+                );
 
         return vbox;
 

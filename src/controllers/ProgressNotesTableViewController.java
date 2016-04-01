@@ -4,6 +4,9 @@ import helpers.DatabaseHelper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 
 import core.MedicalCondition;
 import core.ProgressNotes;
@@ -61,15 +64,24 @@ public class ProgressNotesTableViewController
         ResultSet rs = db.select("dateTime, participantName, num",
                 "ProgressNotes", "cosmoID=" + cosmoId, "");
 
-        String dateTime;
+        LocalDate dateTime;
         String participantName;
         String num;
         try
         {
             while ( rs.next() )
             {
-
-                dateTime = rs.getString(1);
+                String progressDate = "";
+                progressDate = rs.getString(1);
+                // convert the dobtext into a localdate
+                int yearEnd = progressDate.indexOf('-');
+                int year = Integer.parseInt(progressDate.substring(0, yearEnd));
+                progressDate = progressDate.substring(yearEnd + 1);
+                int monthEnd = progressDate.indexOf('-');
+                int month = Integer.parseInt(progressDate.substring(0, monthEnd));
+                progressDate = progressDate.substring(monthEnd + 1);
+                int day = Integer.parseInt(progressDate.substring(0, 2));
+                dateTime = LocalDate.of(year, month, day);                
                 participantName = rs.getString(2);
                 num = rs.getString(3);
 
@@ -115,8 +127,9 @@ public class ProgressNotesTableViewController
     @SuppressWarnings("unchecked")
     private void initialize()
     {
+        
         dateTimeColumn.setCellValueFactory(cellData -> cellData.getValue()
-                .getDateTime());
+                .displayDateTime());
         dateTimeColumn.setMinWidth(100);
         dateTimeColumn.setResizable(false);
 
