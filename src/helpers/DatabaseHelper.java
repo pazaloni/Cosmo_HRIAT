@@ -27,7 +27,7 @@ public class DatabaseHelper
         connect();
     }
 
-    /**
+    /**k
      * Purpose: To establish a connection to the database
      * 
      * @throws SQLException

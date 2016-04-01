@@ -1,4 +1,5 @@
 package gui;
+import helpers.EncryptionHelper;
 import core.StaffAccount;
 import core.TechnicalAdministrator;
 import javafx.application.Application;
@@ -30,12 +31,15 @@ public class LoginGUI extends Application
     private PasswordField pfUserPassword;
     private Button btnLogin;
     private Image imgLogo; 
+    
+    //The encryption helper instance
+    private EncryptionHelper eh;
 
     public static Stage stageLogin;
 
     /* Static final variables */
-    public static final int WIDTH = 1280;
-    public static final int HEIGHT = 720;
+    public static final int WIDTH = 1520;
+    public static final int HEIGHT = 900;
     public static final int IMAGE_WIDTH = 606;
     public static final int IMAGE_HEIGHT = 75;
     public static final int TEXTFIELD_WIDTH = 190;
@@ -45,7 +49,7 @@ public class LoginGUI extends Application
     public static final String STAGE_TITLE = "Cosmopolitan Industries";
     public static final String IMAGE_PATH = "file:images/CosmoIconLong.png";
     public static final String BUTTON_LABEL = "Login";
-
+    
     public static void main( String[] args )
     {
         launch();
@@ -156,7 +160,7 @@ public class LoginGUI extends Application
         // the username and password form the textfields
         String username = txtUserName.getText();
         String password = pfUserPassword.getText();
-
+        
         // flag used to keep track if they logged in or not
         boolean success = false;
         // Checks the length of the textfields
