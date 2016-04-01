@@ -50,7 +50,7 @@ public class OlderAdultsNeeds
 	
 	/**
 	 * Returns the age group.
-	 * @return Age group.
+	 * @return The age group.
 	 * 
 	 *  @author Breanna Wilson, Jon Froese
 	 */
