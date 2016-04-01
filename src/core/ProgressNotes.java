@@ -1,7 +1,11 @@
 package core;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 
 import helpers.DatabaseHelper;
 import javafx.beans.property.SimpleStringProperty;
@@ -38,7 +42,7 @@ public class ProgressNotes
      * @return
      */
     public StringProperty getDateTime()
-    {
+    {       
         return dateTime;
     }
 
@@ -64,6 +68,31 @@ public class ProgressNotes
         return num;
     }
 
+    /**
+     * Method for display properly formatted date value.
+     * @return a properly formatted date string
+     */
+    public StringProperty displayDateTime()
+    {
+        
+        DateFormat dToSFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        DateFormat sToDFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String unformatedString = dateTime.get();
+        Date unformatedDate;
+        String formattedString; 
+        try
+        {
+            unformatedDate = sToDFormat.parse(unformatedString);
+            formattedString = dToSFormat.format(unformatedDate);
+        }
+        catch ( ParseException e )
+        {
+            formattedString = dateTime.toString();
+        }
+        
+        StringProperty formattedDateTime = new SimpleStringProperty(formattedString);
+        return formattedDateTime;
+    }
     /**
      * Purpose to return the date as a localDate
      * 
@@ -116,10 +145,11 @@ public class ProgressNotes
 
             String progressNotesValues[] = new String[4];
 
-            progressNotesValues[0] = note.getDateTime().get();
+            progressNotesValues[0] = note.getNum().get();
             progressNotesValues[1] = cosmoID;
-            progressNotesValues[2] = note.getName().get();
-            progressNotesValues[3] = note.getNum().get();
+            progressNotesValues[2] = note.getDateTime().get();            
+            progressNotesValues[3] = note.getName().get();
+            
 
             success = db.insert(progressNotesValues, "ProgressNotes");
 

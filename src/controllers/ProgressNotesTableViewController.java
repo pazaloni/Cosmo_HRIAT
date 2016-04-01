@@ -4,6 +4,8 @@ import helpers.DatabaseHelper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
 import core.MedicalCondition;
@@ -125,8 +127,9 @@ public class ProgressNotesTableViewController
     @SuppressWarnings("unchecked")
     private void initialize()
     {
+        
         dateTimeColumn.setCellValueFactory(cellData -> cellData.getValue()
-                .getDateTime());
+                .displayDateTime());
         dateTimeColumn.setMinWidth(100);
         dateTimeColumn.setResizable(false);
 
