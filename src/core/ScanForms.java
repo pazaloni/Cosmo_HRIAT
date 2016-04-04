@@ -2,6 +2,10 @@ package core;
 
 import helpers.DatabaseHelper;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -58,7 +62,14 @@ public class ScanForms
     {
         return fileName;
     }
-
+    
+    public StringProperty displayFileName(String cosmoID)
+    {
+        String nameString = fileName.get();
+        nameString = nameString.substring(nameString.lastIndexOf("/")+cosmoID.length()+1, nameString.length());
+        StringProperty displayName = new SimpleStringProperty(nameString);
+        return displayName;
+    }
     /**
      * Method for display properly formatted date value.
      * @return a properly formatted date string
@@ -131,14 +142,14 @@ public class ScanForms
             boolean success = false;
 
             String scanFormValues[] = new String[4];
-
-            scanFormValues[0] = form.getFileName().get();
+            String fileName = saveImage(form.fileName.get(), cosmoID);
+            scanFormValues[0] = fileName;
             scanFormValues[1] = cosmoID;
             scanFormValues[2] = form.getDateSaved().get();            
             scanFormValues[3] = form.getDescription().get();
             
 
-            success = db.insert(scanFormValues, "ScannedForms");
+            success = db.insert(scanFormValues, "ScanForms");
 
             if ( !success )
             {
@@ -154,6 +165,44 @@ public class ScanForms
         return result;
     }
 
+    /**
+     * 
+     Purpose:save the image into the image folder using the correct image path
+     * 
+     * @param imagePath path of the image chosen by the user
+     * @param cosmoID the cosmo id of the participant corresponding to the image
+     * @return the path stored in the database
+     */
+    private static String saveImage( String imagePath, String cosmoID )
+    {
+        String path = imagePath;
+
+        byte[] imageData;
+        //trim image path
+        String imageName = imagePath.substring(imagePath.lastIndexOf("\\")+1,imagePath.length()-4);
+        // This returns the path to where the jar file is stored
+        String pathToSaveTo = "./images/scannedImages/" + cosmoID + imageName + ".jpg";
+       
+        try (FileOutputStream fos = new FileOutputStream(pathToSaveTo))
+        {
+            File imageToWrite = new File(path);
+
+            imageData = Files.readAllBytes(imageToWrite.toPath());
+            fos.write(imageData);
+
+        }
+        catch ( IOException e )
+        {
+            System.out.println("File can't be found!");
+        }
+        
+        //Remove the dot to store them in properly in the database
+        pathToSaveTo = pathToSaveTo.replace("./images/", "/images/");
+        System.out.println("Path to save to "+ pathToSaveTo);
+        return pathToSaveTo;
+
+    }
+    
     /**
      * 
      * Purpose: Remove a scanned form for a participant from the database

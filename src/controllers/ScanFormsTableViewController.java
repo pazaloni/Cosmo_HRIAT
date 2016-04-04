@@ -29,8 +29,11 @@ public class ScanFormsTableViewController
     private ObservableList<ScanForms> scannedData = FXCollections
             .observableArrayList();
 
+    String cosmoID;
+    
     public ScanFormsTableViewController(String cosmoId)
     {
+        this.cosmoID = cosmoId;
         retrieveScanFormsData(cosmoId);
         initialize();
         scanTable.setItems(scannedData);
@@ -131,7 +134,7 @@ public class ScanFormsTableViewController
         descriptionColumn.setMinWidth(440);
         descriptionColumn.setResizable(false);
 
-        fileNameColumn.setCellValueFactory(cellData -> cellData.getValue().getFileName());
+        fileNameColumn.setCellValueFactory(cellData -> cellData.getValue().displayFileName(cosmoID));
         fileNameColumn.setMinWidth(100);
         fileNameColumn.setResizable(false);
 

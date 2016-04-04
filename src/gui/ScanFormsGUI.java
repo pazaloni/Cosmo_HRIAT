@@ -119,7 +119,7 @@ private VBox createScannedForm( String cosmoId )
             .setOnMouseClicked(event -> {
                 ManageScanFormsGUI manageScanForms = new ManageScanFormsGUI(
                         parentStage);
-                manageScanForms.showAddProgressNote(cosmoId);
+                manageScanForms.showAddImage(cosmoId);
                 controller.refreshTable(cosmoId);
             });
     //viewing a scanned form

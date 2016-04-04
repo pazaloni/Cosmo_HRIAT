@@ -1,14 +1,26 @@
 package gui;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.time.LocalDate;
+
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import core.ProgressNotes;
@@ -23,13 +35,11 @@ public class ManageScanFormsGUI
 
     private GridPane mainPane;
 
-    private DatePicker dateTime;
-    private TextField participantName;
-    private TextField num;
+    private TextArea description;
+    private Button imageBtn;
 
-    private Label lblDateTime;
-    private Label lblParticipantName;
-    private Label lblNum;
+    private Label lblDescription;
+    private Label lblImageVal;
 
     private Button btnAdd, btnCancel;
 
@@ -37,15 +47,13 @@ public class ManageScanFormsGUI
     {
         this.parentStage = parentStage;
 
-        this.dateTime = new DatePicker();
-        this.participantName = new TextField();
-        this.num = new TextField();
+        this.description = new TextArea();
+        this.imageBtn = new Button("Choose File");
 
-        this.lblDateTime = new Label("Date/Time: ");
-        this.lblParticipantName = new Label("Name: ");
-        this.lblNum = new Label("No.: ");
+        this.lblDescription = new Label("Description: ");
+        this.lblImageVal = new Label("");
 
-        this.btnAdd = new Button("Add");
+        this.btnAdd = new Button("Save");
         this.btnCancel = new Button("Cancel");
 
         mainPane = new GridPane();
@@ -57,34 +65,53 @@ public class ManageScanFormsGUI
      * @param cosmoID
      *            the participant that will be getting the new progresNote
      */
-    public void showAddProgressNote( String cosmoID )
+    public void showAddImage( String cosmoID )
 
     {
         Stage localStage = new Stage();
         lblMessage = new Label("");
         lblMessage.setTextFill(Color.FIREBRICK);
 
-        mainPane.add(lblMessage, 0, 0, 2, 1);
+        mainPane.add(lblMessage, 0, 1, 2, 1);
 
-        mainPane.add(lblDateTime, 0, 1);
-        mainPane.add(lblParticipantName, 0, 2);
-        mainPane.add(lblNum, 0, 3);
+        mainPane.add(lblDescription, 0, 0);
+        mainPane.add(lblImageVal, 1, 2);
 
-        mainPane.add(dateTime, 1, 1);
-        mainPane.add(participantName, 1, 2);
-        mainPane.add(num, 1, 3);
+        mainPane.add(description, 0, 1,2,1);
+        mainPane.add(imageBtn, 0, 2);
 
-        dateTime.setMaxWidth(250);
-        participantName.setMaxWidth(250);
-        num.setMaxWidth(250);
+        description.setMaxWidth(250);
+        imageBtn.setMaxWidth(250);
 
+        imageBtn
+        .setOnAction(event -> {
+            FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
+                    "Images", "*.jpg");
+            FileChooser fc = new FileChooser();
+            fc.getExtensionFilters().add(filter);
+
+            String path = "";
+
+            File file = fc.showOpenDialog(localStage);
+            if ( file == null )
+            {
+                path = "";
+            }
+            else
+            {
+                path = file.getAbsolutePath();
+            }
+            lblImageVal.setText(path);
+        });
+
+        
         HBox controls = new HBox();
-
+        
         controls.getChildren().addAll(btnCancel, btnAdd);
         controls.setMinWidth(300);
         controls.setSpacing(10);
 
-        mainPane.add(controls, 1, 5, 2, 1);
+        mainPane.add(controls, 1, 3, 2, 1);
 
         mainPane.setHgap(15);
         mainPane.setVgap(15);
@@ -92,11 +119,11 @@ public class ManageScanFormsGUI
         mainPane.setPadding(new Insets(10, 10, 10, 10));
 
         btnAdd.setOnAction(event -> {
-            if ( dateTime.getValue() != null )
+            if ( lblImageVal.getText().length() != 0 )
             {
-                String result = ProgressNotes.createProgressNote(
-                        new ProgressNotes(dateTime.getValue(), participantName
-                                .getText(), num.getText()), cosmoID);
+                String result = ScanForms.createImage(
+                        new ScanForms(LocalDate.now(), description
+                                .getText(), lblImageVal.getText()), cosmoID);
                 if ( result.equals("") )
                 {
                     localStage.close();
@@ -108,7 +135,7 @@ public class ManageScanFormsGUI
             }
             else
             {
-                lblMessage.setText("Pick a date from the datepicker.");
+                lblMessage.setText("Pick an image to add.");
             }
         });
         btnCancel.setOnAction(event -> {
@@ -119,88 +146,71 @@ public class ManageScanFormsGUI
         localStage.setResizable(false);
         localStage.initModality(Modality.WINDOW_MODAL);
         localStage.initOwner(parentStage);
-        localStage.setTitle("Add a progress note");
+        localStage.setTitle("Add an image");
         localStage.showAndWait();
 
     }
 
-    /**
-     * Purpose: Edit a progressNote for a specified participant
-     * 
-     * @param progressNote
-     *            The progress note to be edited
-     * @param cosmoID
-     *            the participant that will have the progress note edited
-     */
-    public void showUpdateProgressNote( ProgressNotes progressNote,
-            String cosmoID )
-    {
-        Stage localStage = new Stage();
-        lblMessage = new Label("");
-        lblMessage.setTextFill(Color.FIREBRICK);
-
-        mainPane.add(lblMessage, 0, 0, 2, 1);
-
-        mainPane.add(lblDateTime, 0, 1);
-        mainPane.add(lblParticipantName, 0, 2);
-        mainPane.add(lblNum, 0, 3);
-
-        mainPane.add(dateTime, 1, 1);
-        mainPane.add(participantName, 1, 2);
-        mainPane.add(num, 1, 3);
-
-        dateTime.setMaxWidth(250);
-        participantName.setMaxWidth(250);
-        num.setMaxWidth(250);
-
-        dateTime.setValue(progressNote.getLocalDateTime());
-        participantName.setText(progressNote.getName().get());
-        num.setText(progressNote.getNum().get());
-
-        HBox controls = new HBox();
-
-        controls.getChildren().addAll(btnCancel, btnAdd);
-        controls.setMinWidth(300);
-        controls.setSpacing(10);
-
-        mainPane.add(controls, 1, 5, 2, 1);
-
-        mainPane.setHgap(15);
-        mainPane.setVgap(15);
-
-        mainPane.setPadding(new Insets(10, 10, 10, 10));
-        btnAdd.setText("Update");
-        btnAdd.setOnAction(event -> {
-            ProgressNotes newProgressNote = new ProgressNotes(dateTime
-                    .getValue(), participantName.getText(), num.getText());
-
-            String result = ProgressNotes.updateProgressNote(newProgressNote,
-                    progressNote, cosmoID);
-            if ( result.equals("") )
-            {
-                localStage.close();
-            }
-            else
-            {
-                lblMessage.setText(result);
-            }
-        });
-        btnCancel.setOnAction(event -> {
-            localStage.close();
-        });
-
-        Scene scene = new Scene(mainPane, 400, 300);
-        localStage.setScene(scene);
-        localStage.setResizable(false);
-        localStage.initModality(Modality.WINDOW_MODAL);
-        localStage.initOwner(parentStage);
-        localStage.setTitle("Edit a Progress Note entry");
-        localStage.showAndWait();
-    }
 
     public void showScannedForm( ScanForms scannedForm, String cosmoId )
     {
-        // TODO Auto-generated method stub
+        Stage localStage = new Stage();
+        
+        ScrollPane imagePane = new ScrollPane();
+        ImageView viewImage = new ImageView();
+        
+        URL u = null;
+        try
+        {
+
+                u = (this.getClass().getProtectionDomain().getCodeSource()
+                        .getLocation().toURI().toURL());
+
+        }
+        catch ( URISyntaxException e )
+        {
+            e.printStackTrace();
+        }
+        catch ( MalformedURLException e )
+        {
+            e.printStackTrace();
+        }
+
+        String url = u.toString();
+
+        url = url.substring(0,
+                url.length() - (url.length() - url.lastIndexOf("/")));
+
+        url = url.replace("/bin", "");
+
+        Image img = new Image(url + scannedForm.getFileName().get());
+
+        if ( !(img.isError()) )
+        {
+            viewImage.setImage(img);
+        }
+        else
+        {
+            URL defaultURL = getClass().getResource(
+                    "../images/defaultPicture.png");
+            try
+            {
+                viewImage.setImage(new Image(defaultURL.openStream()));
+            }
+            catch ( IOException e )
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        
+        Scene scene = new Scene(imagePane, 400, 300);
+        localStage.setScene(scene);
+        localStage.setResizable(false);
+        localStage.initModality(Modality.WINDOW_MODAL);
+        localStage.initOwner(parentStage);
+        localStage.setTitle(scannedForm.getFileName().get());
+        localStage.showAndWait();
         
     }
 }
