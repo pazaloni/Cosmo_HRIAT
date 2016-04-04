@@ -18,17 +18,17 @@ public class ScanForms
     private StringProperty description;
     private StringProperty fileName;
 
-    public ScanForms(LocalDate dateTime, String name, String num)
+    public ScanForms(LocalDate dateSaved, String description, String fileName)
     {
-        this.dateSaved = new SimpleStringProperty(dateTime.toString());
-        this.description = new SimpleStringProperty(name);
-        this.fileName = new SimpleStringProperty(num);
+        this.dateSaved = new SimpleStringProperty(dateSaved.toString());
+        this.description = new SimpleStringProperty(description);
+        this.fileName = new SimpleStringProperty(fileName);
 
     }
 
     /**
      * 
-     * Purpose: return the date time
+     * Purpose: return the date form was saved
      * 
      * @return
      */
@@ -39,7 +39,7 @@ public class ScanForms
 
     /**
      * 
-     * Purpose: return the name
+     * Purpose: return the description
      * 
      * @return
      */
@@ -50,7 +50,7 @@ public class ScanForms
 
     /**
      * 
-     * Purpose: return the num
+     * Purpose: return the fileName
      * 
      * @return
      */
@@ -106,12 +106,12 @@ public class ScanForms
 
     /**
      * 
-     * Purpose: Add a progress note for a participant in the database
+     * Purpose: Add a scanned form for a participant in the database
      * 
      * @param form
      *            note to add
      * @param cosmoID
-     *            the participant that will be receiving the note
+     *            the participant that will be receiving the form
      * @return The result of the insertion in the database
      */
     public static String createImage( ScanForms form, String cosmoID )
@@ -142,7 +142,7 @@ public class ScanForms
 
             if ( !success )
             {
-                result = "Teh isnertion was unsuccesful";
+                result = "The insertion was unsuccessful";
             }
             else
             {
@@ -156,7 +156,7 @@ public class ScanForms
 
     /**
      * 
-     * Purpose: Remove a progress note for a participant from the database
+     * Purpose: Remove a scanned form for a participant from the database
      * 
      * @param note
      *            the note to remove

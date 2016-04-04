@@ -40,7 +40,7 @@ public class ScanFormsTableViewController
 
     /**
      * 
-     * Purpose: Query the database for the progress notes data
+     * Purpose: Query the database for the scanned image data
      * 
      * @parameter cosmoId: The cosmoId of the participant whose data is being
      *            retrieved.
@@ -63,16 +63,17 @@ public class ScanFormsTableViewController
         {
             while ( rs.next() )
             {
-                String progressDate = "";
-                progressDate = rs.getString(1);
+                String scannedDate = "";
+                scannedDate = rs.getString(1);
                 // convert the dobtext into a localdate
-                int yearEnd = progressDate.indexOf('-');
-                int year = Integer.parseInt(progressDate.substring(0, yearEnd));
-                progressDate = progressDate.substring(yearEnd + 1);
-                int monthEnd = progressDate.indexOf('-');
-                int month = Integer.parseInt(progressDate.substring(0, monthEnd));
-                progressDate = progressDate.substring(monthEnd + 1);
-                int day = Integer.parseInt(progressDate.substring(0, 2));
+                int yearEnd = scannedDate.indexOf('-');
+                int year = Integer.parseInt(scannedDate.substring(0, yearEnd));
+                scannedDate = scannedDate.substring(yearEnd + 1);
+                int monthEnd = scannedDate.indexOf('-');
+                int month = Integer.parseInt(scannedDate.substring(0, monthEnd));
+                scannedDate = scannedDate.substring(monthEnd + 1);
+                int day = Integer.parseInt(scannedDate.substring(0, 2));
+                
                 dateSaved = LocalDate.of(year, month, day);                
                 description = rs.getString(2);
                 fileName = rs.getString(3);

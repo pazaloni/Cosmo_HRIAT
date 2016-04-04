@@ -167,7 +167,7 @@ public class participantDetailsGUI extends Application
         Tab progressNotes = new Tab();
         Tab personalCare = new Tab();
         Tab scannedForms = new Tab();
-        Tab physicianInfo = new Tab();
+
         Tab caregiver = new Tab();
         Tab other = new Tab();
 
@@ -207,7 +207,7 @@ public class participantDetailsGUI extends Application
         scannedForms.setContent(sfg.showScannedForms(cosmoID + "")
                 .getContent());
         
-        physicianInfo.setContent(createPhysicianInfoTab());
+
         caregiver.setContent(createCaregiverTab());
         other.setContent(createOtherTab());
 
@@ -218,7 +218,7 @@ public class participantDetailsGUI extends Application
         progressNotes.setText("Progress Notes");
         personalCare.setText("Personal Care");
         scannedForms.setText("Scanned Documents");
-        physicianInfo.setText("Physician");
+
         caregiver.setText("Caregiver");
         other.setText("Other");
 
@@ -229,14 +229,14 @@ public class participantDetailsGUI extends Application
         progressNotes.closableProperty().set(false);
         personalCare.closableProperty().set(false);
         scannedForms.closableProperty().set(false);
-        physicianInfo.closableProperty().set(false);
+
         caregiver.closableProperty().set(false);
         other.closableProperty().set(false);
 
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(100);
         tabPane.getTabs().addAll(healthStatus, participantUpdate,
-                seizureDescription, progressNotes, personalCare, physicianInfo, scannedForms,
+                seizureDescription, progressNotes, personalCare, scannedForms,
                 caregiver, other);
         tabPane.setMinHeight(29);
 

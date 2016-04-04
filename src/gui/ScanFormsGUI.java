@@ -109,12 +109,12 @@ private VBox createScannedForm( String cosmoId )
     Button btnAddImage = new Button("Add Image");
     Button btnViewImage = new Button("View Image");
     Button btnDeleteImage = new Button("Delete Image");
-    buttons.setPadding(new Insets(0, 0, 0, 300));
+    buttons.setPadding(new Insets(0, 0, 10, 400));
     ScanFormsTableViewController controller = new ScanFormsTableViewController(
             cosmoId);
     TableView<ScanForms> table = controller.scanTable;
 
-    //Add the Progress Note
+    //Add the scanned form
     btnAddImage
             .setOnMouseClicked(event -> {
                 ManageScanFormsGUI manageScanForms = new ManageScanFormsGUI(
@@ -122,7 +122,7 @@ private VBox createScannedForm( String cosmoId )
                 manageScanForms.showAddProgressNote(cosmoId);
                 controller.refreshTable(cosmoId);
             });
-    //Editing a Progress Note
+    //viewing a scanned form
     btnViewImage.setOnMouseClicked(event -> {
         ScanForms scannedForm = controller.getSelectedPK();
         if(scannedForm==null)
@@ -144,6 +144,7 @@ private VBox createScannedForm( String cosmoId )
             controller.refreshTable(cosmoId);
         }
     });
+    //deleting a scanned image
     btnDeleteImage.setOnMouseClicked(event -> {
         ScanForms scannedForm = controller.getSelectedPK();
         if(scannedForm==null)
