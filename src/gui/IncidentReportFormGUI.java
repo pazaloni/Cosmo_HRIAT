@@ -60,7 +60,7 @@ public class IncidentReportFormGUI
     private ScrollPane mainPane;
     private VBox mainBox;
     private Label errorMsg;
-    private Stage parentStage,localStage;
+    private Stage parentStage, localStage;
 
     private TextField time, location, staffWitness, participantWitness,
             otherWitness;
@@ -85,12 +85,10 @@ public class IncidentReportFormGUI
     private CheckBox chkBruise, chkScrape, chkSwelling, chkBurn, chkCut,
             chkSprain, chkInsectbite, chkImbedded, chkFall, chkFoundOnFloor,
             chkSelfAggro, chkP2PAggro, chkP2SAggro, chkVehichleIncident,
-            chkPropertyDmg, chkOtherType;
+            chkPropertyDmg, chkOtherType, chkUnwitnessed;;
 
-    private RadioButton radUnwitnessed;
-
-    private CheckBox chkWitnessedByStaff, chkWitnessByParticipants,
-            chkWitnessByOther;
+    private Label lblWitnessedByStaff, lblWitnessByParticipants,
+            lblWitnessByOther;
 
     private TextField txtOther;
     private TextField txtOtherType;
@@ -124,14 +122,12 @@ public class IncidentReportFormGUI
     public void showIncidentReportForm()
     {
 
-      
         Label formTitle = new Label(FORM_TITLE);
         formTitle.setFont(new Font(22));
 
         errorMsg = new Label();
         errorMsg.setTextFill(Color.FIREBRICK);
         errorMsg.setFont(new Font(16));
-
 
         Separator sep = new Separator(Orientation.HORIZONTAL);
         sep.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
@@ -169,7 +165,7 @@ public class IncidentReportFormGUI
         mainBox.setPadding(new Insets(15));
         mainBox.setMinWidth(maxWidth + 15);
         mainBox.setMaxWidth(maxWidth + 20);
-        mainBox.getChildren().addAll(formTitle,errorMsg, createHeader(), sep1,
+        mainBox.getChildren().addAll(formTitle, errorMsg, createHeader(), sep1,
                 createRegisteredWorkArea(), sep2, createIncidentInfo(), sep3,
                 lblBodyArea, createBodyAreaInjured(), sep4, lblTypeofInjury,
                 createTypeOfInjury(), sep5, createMidSecion(),
@@ -188,7 +184,6 @@ public class IncidentReportFormGUI
         localStage.setScene(new Scene(mainPane));
         localStage.setTitle("New Incident Report");
         localStage.show();
-      
 
     }
 
@@ -345,6 +340,9 @@ public class IncidentReportFormGUI
 
         lsvAllBodyAreas = new ListView<String>(allBodyAreas);
         lsvInjuredBodyAreas = new ListView<String>(injuredBodyAreas);
+        lsvAllBodyAreas.setMaxHeight(200);
+        lsvInjuredBodyAreas.setMaxHeight(200);
+        
         FXCollections.sort(allBodyAreas);
         FXCollections.sort(injuredBodyAreas);
 
@@ -570,47 +568,55 @@ public class IncidentReportFormGUI
         participantWitness = new TextField();
         otherWitness = new TextField();
 
-        chkWitnessedByStaff = new CheckBox("Witnessed by staff:");
-        chkWitnessByParticipants = new CheckBox("Witnessed by participant(s):");
-        chkWitnessByOther = new CheckBox("Witnessed by other - explain:");
+        lblWitnessedByStaff = new Label("Witnessed by staff:");
+        lblWitnessByParticipants = new Label("Witnessed by participant(s):");
+        lblWitnessByOther = new Label("Witnessed by other - explain:");
 
         int spacing = 5;
 
         top.setSpacing(spacing);
-        radUnwitnessed = new RadioButton("Unwitnessed");
-        radUnwitnessed.setOnAction(event -> {
-            if ( radUnwitnessed.isSelected() )
+        chkUnwitnessed = new CheckBox("Unwitnessed");
+        chkUnwitnessed.setSelected(true);
+        if(chkUnwitnessed.isSelected())
+        {
+            lblWitnessByOther.setDisable(true);
+            lblWitnessByParticipants.setDisable(true);
+            lblWitnessedByStaff.setDisable(true);
+            staffWitness.setDisable(true);
+            participantWitness.setDisable(true);
+            otherWitness.setDisable(true);
+        }
+        
+        chkUnwitnessed.setOnAction(event -> {
+            if ( chkUnwitnessed.isSelected() )
             {
-                chkWitnessByOther.setDisable(true);
-                chkWitnessByParticipants.setDisable(true);
-                chkWitnessedByStaff.setDisable(true);
+                lblWitnessByOther.setDisable(true);
+                lblWitnessByParticipants.setDisable(true);
+                lblWitnessedByStaff.setDisable(true);
                 staffWitness.setDisable(true);
                 participantWitness.setDisable(true);
                 otherWitness.setDisable(true);
 
-                chkWitnessByOther.setSelected(false);
-                chkWitnessByParticipants.setSelected(false);
-                chkWitnessedByStaff.setSelected(false);
                 staffWitness.clear();
                 participantWitness.clear();
                 otherWitness.clear();
             }
             else
             {
-                chkWitnessByOther.setDisable(false);
-                chkWitnessByParticipants.setDisable(false);
-                chkWitnessedByStaff.setDisable(false);
+                lblWitnessByOther.setDisable(false);
+                lblWitnessByParticipants.setDisable(false);
+                lblWitnessedByStaff.setDisable(false);
                 staffWitness.setDisable(false);
                 participantWitness.setDisable(false);
                 otherWitness.setDisable(false);
             }
         });
 
-        topGrid.add(radUnwitnessed, 0, 0);
+        topGrid.add(chkUnwitnessed, 0, 0);
 
-        topGrid.add(chkWitnessedByStaff, 0, 1);
-        topGrid.add(chkWitnessByParticipants, 0, 2);
-        topGrid.add(chkWitnessByOther, 0, 3);
+        topGrid.add(lblWitnessedByStaff, 0, 1);
+        topGrid.add(lblWitnessByParticipants, 0, 2);
+        topGrid.add(lblWitnessByOther, 0, 3);
 
         topGrid.add(staffWitness, 1, 1);
         topGrid.add(participantWitness, 1, 2);
@@ -839,7 +845,8 @@ public class IncidentReportFormGUI
         if ( Boolean.parseBoolean(formMessage) )
         {
             errorMsg.setText("");
-            //Form is valid in here.... do all the information inserting in here.
+            // Form is valid in here.... do all the information inserting in
+            // here.
             localStage.close();
         }
         else
@@ -852,7 +859,7 @@ public class IncidentReportFormGUI
                 stage.initModality(Modality.APPLICATION_MODAL);
                 PopUpMessage popup = new PopUpMessage(formMessage, stage);
                 popup.stage.showAndWait();
-                popup.stage.setOnCloseRequest(close->{
+                popup.stage.setOnCloseRequest(close -> {
                     errorMsg.setText("");
                 });
             });
@@ -929,11 +936,11 @@ public class IncidentReportFormGUI
                     .append("\tThe factors contributing to the incident.\n");
             formValid = false;
         }
-        if ( !radUnwitnessed.isSelected() )
+        if ( !chkUnwitnessed.isSelected() )
         {
-            if ( !(chkWitnessedByStaff.isSelected()
-                    || chkWitnessByParticipants.isSelected() || chkWitnessByOther
-                        .isSelected()) )
+            if ( (staffWitness.getText().isEmpty()
+                    && participantWitness.getText().isEmpty()&& otherWitness
+                    .getText().isEmpty()) )
             {
                 errorMessage.append("\tThe witnesses of the incident.\n");
                 formValid = false;
@@ -990,8 +997,7 @@ public class IncidentReportFormGUI
         }
         if ( formValid == false )
         {
-            errorMessage.insert(0,
-                    "Whoops, you have some missing data, please enter: \n\n");
+            errorMessage.insert(0, "You have missing required field:\n\n");
             errorMessage.append("\n\n\n\n");
         }
         else
