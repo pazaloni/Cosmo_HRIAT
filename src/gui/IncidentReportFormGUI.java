@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -57,7 +59,7 @@ public class IncidentReportFormGUI
 
     private ScrollPane mainPane;
     private VBox mainBox;
-
+    private Label errorMsg;
     private Stage parentStage;
 
     private TextField time, location, staffWitness, participantWitness,
@@ -121,8 +123,15 @@ public class IncidentReportFormGUI
      */
     public ScrollPane showIncidentReportForm()
     {
+
+      
         Label formTitle = new Label(FORM_TITLE);
         formTitle.setFont(new Font(22));
+
+        errorMsg = new Label();
+        errorMsg.setTextFill(Color.FIREBRICK);
+        errorMsg.setFont(new Font(16));
+
 
         Separator sep = new Separator(Orientation.HORIZONTAL);
         sep.setBackground(new Background(new BackgroundFill(Color.BLACK, null,
@@ -157,17 +166,17 @@ public class IncidentReportFormGUI
         lblTypeofInjury.setFont(new Font(16));
         mainBox = new VBox();
         mainBox.setSpacing(10);
-        mainBox.setMinWidth(maxWidth+5);
-        mainBox.setMaxWidth(maxWidth+10);
-        mainBox.getChildren().addAll(formTitle, createHeader(), sep1,
+        mainBox.setMinWidth(maxWidth + 5);
+        mainBox.setMaxWidth(maxWidth + 10);
+        mainBox.getChildren().addAll(formTitle,errorMsg, createHeader(), sep1,
                 createRegisteredWorkArea(), sep2, createIncidentInfo(), sep3,
                 lblBodyArea, createBodyAreaInjured(), sep4, lblTypeofInjury,
                 createTypeOfInjury(), sep5, createMidSecion(),
                 createBottomBox());
         mainPane = new ScrollPane();
         mainPane.setContent(mainBox);
-        mainPane.setMinWidth(maxWidth+5);
-        mainPane.setMaxWidth(maxWidth+10);
+        mainPane.setMinWidth(maxWidth + 5);
+        mainPane.setMaxWidth(maxWidth + 10);
         mainPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         return mainPane;
 
@@ -430,9 +439,9 @@ public class IncidentReportFormGUI
         HBox finalHbox = new HBox();
         GridPane gridPaneType = new GridPane();
         HBox otherHBox = new HBox();
-        
+
         typesOfInjuries = new ArrayList<CheckBox>();
-        
+
         otherHBox.getChildren().addAll(
                 chkOtherType = new CheckBox("Other (Specify) :"),
                 txtOtherType = new TextField());
@@ -517,12 +526,12 @@ public class IncidentReportFormGUI
 
         incidentDescription = new TextArea();
         incidentDescription.setMaxHeight(maxHeight);
-        incidentDescription.setMaxWidth(maxWidth-20);
+        incidentDescription.setMaxWidth(maxWidth - 20);
         incidentDescription.setWrapText(true);
 
         incidentFactors = new TextArea();
         incidentFactors.setMaxHeight(maxHeight);
-        incidentFactors.setMaxWidth(maxWidth-20);
+        incidentFactors.setMaxWidth(maxWidth - 20);
         incidentFactors.setWrapText(true);
 
         topBox.setSpacing(15);
@@ -688,15 +697,15 @@ public class IncidentReportFormGUI
         personalSupportsManager = new RadioButton("Personal Supports Manager");
         noVerbalReport = new RadioButton("No Verbal Report Given");
         noVerbalReport.setSelected(true);
-        if(noVerbalReport.isSelected())
+        if ( noVerbalReport.isSelected() )
         {
             personalSupportsCoordinator.setDisable(true);
             personalSupportsManager.setDisable(true);
             dateVerballyReported.setDisable(true);
             txtTimeReportedVerbally.setDisable(true);
         }
-        noVerbalReport.setOnAction(event ->{
-            if(noVerbalReport.isSelected())
+        noVerbalReport.setOnAction(event -> {
+            if ( noVerbalReport.isSelected() )
             {
                 personalSupportsCoordinator.setDisable(true);
                 personalSupportsManager.setDisable(true);
@@ -803,7 +812,7 @@ public class IncidentReportFormGUI
 
         mainBox.getChildren().addAll(lblIncident, createIncidentWitness(), sep,
                 createIncidentReportedTo(), sep2, lblVerbalReport,
-                createVerbalReport(), sep3,createReportWritten(),buttonBox);
+                createVerbalReport(), sep3, createReportWritten(), buttonBox);
 
         mainBox.setSpacing(15);
 
@@ -819,15 +828,25 @@ public class IncidentReportFormGUI
         String formMessage = validateForm();
         if ( Boolean.parseBoolean(formMessage) )
         {
-            System.out.println("Form is valid");
+            errorMsg.setText("");
+            //Form is valid in here.... do all the information inserting in here.
+        
         }
         else
         {
-            Stage stage = new Stage();
-            stage.initOwner(parentStage);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            PopUpMessage popup = new PopUpMessage(formMessage, stage);
-            popup.stage.showAndWait();
+            mainPane.setVvalue(0);
+            errorMsg.setText("You have missing required fields. Click here to see.");
+            errorMsg.setOnMouseClicked(event -> {
+                Stage stage = new Stage();
+                stage.initOwner(parentStage);
+                stage.initModality(Modality.APPLICATION_MODAL);
+                PopUpMessage popup = new PopUpMessage(formMessage, stage);
+                popup.stage.showAndWait();
+                popup.stage.setOnCloseRequest(close->{
+                    errorMsg.setText("");
+                });
+            });
+
         }
     }
 
@@ -855,7 +874,7 @@ public class IncidentReportFormGUI
                 formValid = false;
             }
         }
-        if ( dateOfIncident.getValue() == null)
+        if ( dateOfIncident.getValue() == null )
         {
             errorMessage.append("\tThe date of the incident.\n");
             formValid = false;
@@ -969,7 +988,7 @@ public class IncidentReportFormGUI
         {
             errorMessage.append("true");
         }
-        
+
         return errorMessage.toString();
     }
 }

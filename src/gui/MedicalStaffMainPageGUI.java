@@ -255,7 +255,7 @@ public class MedicalStaffMainPageGUI extends Application
         IncidentReportFormGUI irf = new IncidentReportFormGUI(medMainStage, loggedInUser);
         
         box.getChildren().add(irf.showIncidentReportForm());
-        box.setAlignment(Pos.CENTER);
+        box.setPadding(new Insets(5,5,5,5));
 
         incidentForm.setContent(box);
         // set the size of the tabs and add to the pane
