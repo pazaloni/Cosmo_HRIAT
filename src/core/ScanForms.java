@@ -4,6 +4,7 @@ import helpers.DatabaseHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -141,6 +142,10 @@ public class ScanForms
         {
             result = "You have missing required fields";
         }
+        else if(form.description.get().length() > 250)
+        {
+            result = "The description has a maximum size of 250 characters.";
+        }
         else
         {
             DatabaseHelper db = new DatabaseHelper();
@@ -160,7 +165,7 @@ public class ScanForms
 
             if ( !success )
             {
-                result = "The insertion was unsuccessful";
+                result = "An image with that name already exists.";
             }
             else
             {
@@ -227,12 +232,12 @@ public class ScanForms
         DatabaseHelper db = new DatabaseHelper();
 
         db.connect();
-        boolean success = true;
-        /*
+        boolean success = false;
+        
         success = db.delete("ScanForms", "fileName='"
                 + form.getFileName().get() + "'" + "AND cosmoID='" + cosmoID
                 + "'");
-                */
+                
         if ( success )
         {
             result = "Deleted successfully";
@@ -260,10 +265,10 @@ public class ScanForms
                     url.length() - (url.length() - url.lastIndexOf("/")));
 
             url = url.replace("/bin", "");
+                
+                String pathToDelete = form.getFileName().get().substring(1, form.getFileName().get().length());
+                File imageToDelete = new File(pathToDelete);
 
-
-                String pathToDelete = url + form.getFileName().get();
-                File imageToDelete = new File("pathToDelete");
                 if(imageToDelete.delete())
                 {
                     
@@ -272,7 +277,6 @@ public class ScanForms
                 {
                     result = "The image file needs to be manually deleted.";
                 }
-
             //Generate error message if file deletion did not occur.
         }
         else

@@ -10,6 +10,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -40,7 +41,7 @@ private StaffAccount loggedInUser;
 
 private Stage parentStage;
 
-
+private TextArea descriptionArea;
 
 
 /**
@@ -74,19 +75,29 @@ public Tab showScannedForms( String cosmoId )
 
     mainBox = new ScrollPane();
 
-
+    descriptionArea = new TextArea();
+    descriptionArea.setEditable(false);
+    descriptionArea.setWrapText(true);
     
-    VBox contentBox = new VBox();
-    
-    contentBox.getChildren().addAll(title, createScannedForm(cosmoId));
-    contentBox.setSpacing(15);
-    
+    Label descriptionLbl = new Label("Description:");
+    descriptionLbl.setFont(new Font(18));
+    HBox contentBox = new HBox();
+    VBox descriptionBox = new VBox();
+    VBox tableBox = new VBox();
+    descriptionArea.setMaxWidth(230);
+    descriptionArea.setMinWidth(230);
+    descriptionArea.setMaxHeight(150);
+    tableBox.getChildren().addAll(title, createScannedForm(cosmoId));
+    tableBox.setSpacing(15);
+    descriptionBox.getChildren().addAll(descriptionLbl, descriptionArea);
+    contentBox.getChildren().addAll(tableBox, descriptionBox);
     mainBox.setContent(contentBox);
 
     mainBox.setHbarPolicy(ScrollBarPolicy.NEVER);
     mainBox.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-    mainBox.setHmax(contentBox.getWidth());
+    mainBox.setHmax(tableBox.getWidth());
 
+    descriptionBox.setPadding(new Insets(55, 10, 10, 50));
     mainBox.setPadding(new Insets(10, 10, 10, 10));
 
     this.parentTab.setContent(mainBox);
@@ -109,7 +120,7 @@ private VBox createScannedForm( String cosmoId )
     Button btnAddImage = new Button("Add Image");
     Button btnViewImage = new Button("View Image");
     Button btnDeleteImage = new Button("Delete Image");
-    buttons.setPadding(new Insets(0, 0, 10, 400));
+    buttons.setPadding(new Insets(0, 0, 10, 50));
     ScanFormsTableViewController controller = new ScanFormsTableViewController(
             cosmoId);
     TableView<ScanForms> table = controller.scanTable;
@@ -190,13 +201,24 @@ private VBox createScannedForm( String cosmoId )
 
     controls.getChildren().addAll(buttons);
 
-    table.setMaxWidth(700);
+    table.setMaxWidth(300);
 
     buttons.setSpacing(5);
     controls.setSpacing(380);
 
+    controller.scanTable.setOnMousePressed(event -> {
+        displayDescription(controller.getSelectedPK());
+    });
+    
     box.getChildren().addAll(controls, table);
     return box;
+}
+
+private void displayDescription( ScanForms selectedPK )
+{
+    
+    descriptionArea.setText(selectedPK.getDescription().get());
+    
 }
 
 

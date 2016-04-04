@@ -22,8 +22,6 @@ public class ScanFormsTableViewController
 
     private TableColumn<ScanForms, String> dateSavedColumn = new TableColumn<ScanForms, String>(
             "Date saved");
-    private TableColumn<ScanForms, String> descriptionColumn = new TableColumn<ScanForms, String>(
-            "description");
     private TableColumn<ScanForms, String> fileNameColumn = new TableColumn<ScanForms, String>(
             "file name");
     private ObservableList<ScanForms> scannedData = FXCollections
@@ -129,13 +127,8 @@ public class ScanFormsTableViewController
         dateSavedColumn.setMinWidth(100);
         dateSavedColumn.setResizable(false);
 
-        descriptionColumn.setCellValueFactory(cellData -> cellData.getValue()
-                .getDescription());
-        descriptionColumn.setMinWidth(440);
-        descriptionColumn.setResizable(false);
-
         fileNameColumn.setCellValueFactory(cellData -> cellData.getValue().displayFileName(cosmoID));
-        fileNameColumn.setMinWidth(100);
+        fileNameColumn.setMinWidth(200);
         fileNameColumn.setResizable(false);
 
         scanTable.getColumns().addListener(new ListChangeListener<Object>()
@@ -151,12 +144,12 @@ public class ScanFormsTableViewController
                     scanTable.getColumns().clear();
                     // re-add the columns in order
                     scanTable.getColumns().addAll(dateSavedColumn,
-                            descriptionColumn, fileNameColumn);
+                            fileNameColumn);
                 }
             }
         });
         scanTable.getColumns()
-                .addAll(dateSavedColumn, descriptionColumn, fileNameColumn);
+                .addAll(dateSavedColumn, fileNameColumn);
     }
 }
 

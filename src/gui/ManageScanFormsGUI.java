@@ -71,16 +71,17 @@ public class ManageScanFormsGUI
         Stage localStage = new Stage();
         lblMessage = new Label("");
         lblMessage.setTextFill(Color.FIREBRICK);
-
-        mainPane.add(lblMessage, 0, 1, 2, 1);
+        
+        mainPane.add(lblMessage, 1, 0,2,1);
 
         mainPane.add(lblDescription, 0, 0);
         mainPane.add(lblImageVal, 1, 2);
 
-        mainPane.add(description, 0, 1,2,1);
+        mainPane.add(description, 0, 1,3,1);
         mainPane.add(imageBtn, 0, 2);
 
         description.setMaxWidth(250);
+        description.setWrapText(true);
         imageBtn.setMaxWidth(250);
 
         imageBtn
