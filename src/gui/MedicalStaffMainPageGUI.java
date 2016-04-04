@@ -270,7 +270,19 @@ public class MedicalStaffMainPageGUI extends Application
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(175);
        
+
+        Button genQuartRpt = new Button("Generate Quarterly Reports");
+        genQuartRpt.setOnAction(event -> {
+        	Stage stage = new Stage();
+        	QuarterlyReportsGUI reportGUI = new QuarterlyReportsGUI(stage);
+        	stage.setScene(new Scene(reportGUI.mainVbox));
+        	stage.showAndWait();
+        });
+        stats.setContent(genQuartRpt);
+        
+        
         tabPane.getTabs().addAll(participants);
+
 
         // if they are an administrator, add the stats tab
         if ( loggedInUser instanceof MedicalAdministrator )
@@ -298,7 +310,7 @@ public class MedicalStaffMainPageGUI extends Application
                         }
                         else if ( mostRecentlySelectedTab.equals(stats) )
                         {
-                            QuarterlyReportGUI reportGUI = new QuarterlyReportGUI();
+                            StatisticsGUI reportGUI = new StatisticsGUI();
                             reportGUI.reportsMainStageConstruct(medMainStage,
                                     loggedInUser);
                         }
