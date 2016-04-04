@@ -93,7 +93,6 @@ public class ManageStaffAccountHelper
                         newUserInfo[1] = lastName;
                         newUserInfo[2] = firstName;
                         newUserInfo[3] = email;
-                        ///encrypt the password using the encryption helper
                         newUserInfo[4] = password;
                         newUserInfo[5] = securityLv;
                         db.insert(newUserInfo, "Staff");
