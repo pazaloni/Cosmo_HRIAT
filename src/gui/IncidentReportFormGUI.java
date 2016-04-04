@@ -60,7 +60,7 @@ public class IncidentReportFormGUI
     private ScrollPane mainPane;
     private VBox mainBox;
     private Label errorMsg;
-    private Stage parentStage;
+    private Stage parentStage,localStage;
 
     private TextField time, location, staffWitness, participantWitness,
             otherWitness;
@@ -78,7 +78,9 @@ public class IncidentReportFormGUI
 
     private RadioButton am, pm;
     private RadioButton other, personalSupportsManager,
-            personalSupportsCoordinator, noVerbalReport;
+            personalSupportsCoordinator;
+
+    private CheckBox noVerbalReport;
 
     private CheckBox chkBruise, chkScrape, chkSwelling, chkBurn, chkCut,
             chkSprain, chkInsectbite, chkImbedded, chkFall, chkFoundOnFloor,
@@ -118,10 +120,8 @@ public class IncidentReportFormGUI
     /**
      * 
      * Purpose: Method that will return the entirety of the form
-     * 
-     * @return a scroll pane with all the required controls
      */
-    public ScrollPane showIncidentReportForm()
+    public void showIncidentReportForm()
     {
 
       
@@ -166,8 +166,9 @@ public class IncidentReportFormGUI
         lblTypeofInjury.setFont(new Font(16));
         mainBox = new VBox();
         mainBox.setSpacing(10);
-        mainBox.setMinWidth(maxWidth + 5);
-        mainBox.setMaxWidth(maxWidth + 10);
+        mainBox.setPadding(new Insets(15));
+        mainBox.setMinWidth(maxWidth + 15);
+        mainBox.setMaxWidth(maxWidth + 20);
         mainBox.getChildren().addAll(formTitle,errorMsg, createHeader(), sep1,
                 createRegisteredWorkArea(), sep2, createIncidentInfo(), sep3,
                 lblBodyArea, createBodyAreaInjured(), sep4, lblTypeofInjury,
@@ -175,10 +176,19 @@ public class IncidentReportFormGUI
                 createBottomBox());
         mainPane = new ScrollPane();
         mainPane.setContent(mainBox);
-        mainPane.setMinWidth(maxWidth + 5);
-        mainPane.setMaxWidth(maxWidth + 10);
+        mainPane.setMinWidth(maxWidth + 15);
+        mainPane.setMaxWidth(maxWidth + 20);
         mainPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        return mainPane;
+        localStage = new Stage();
+        localStage.setResizable(false);
+        localStage.setMaxHeight(720);
+        localStage.setMinWidth(720);
+        localStage.initModality(Modality.APPLICATION_MODAL);
+        localStage.initOwner(parentStage);
+        localStage.setScene(new Scene(mainPane));
+        localStage.setTitle("New Incident Report");
+        localStage.show();
+      
 
     }
 
@@ -695,7 +705,7 @@ public class IncidentReportFormGUI
         personalSupportsCoordinator = new RadioButton(
                 "Personal Supports Coordinator");
         personalSupportsManager = new RadioButton("Personal Supports Manager");
-        noVerbalReport = new RadioButton("No Verbal Report Given");
+        noVerbalReport = new CheckBox("No Verbal Report Given");
         noVerbalReport.setSelected(true);
         if ( noVerbalReport.isSelected() )
         {
@@ -777,7 +787,7 @@ public class IncidentReportFormGUI
     }
 
     /**
-     * Purpose :Create the bottom part of the form
+     * Purpose: Create the bottom part of the form
      * 
      * @return a vbox containing all the required elements
      */
@@ -830,7 +840,7 @@ public class IncidentReportFormGUI
         {
             errorMsg.setText("");
             //Form is valid in here.... do all the information inserting in here.
-        
+            localStage.close();
         }
         else
         {

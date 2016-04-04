@@ -58,6 +58,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -229,15 +230,25 @@ public class MedicalStaffMainPageGUI extends Application
      */
     private TabPane createTabs()
     {
+        Label lblIncidnetReportForm = new Label("Incident Report Form");
+        lblIncidnetReportForm.setFont(new Font(22));
+        Button btnAddIncidentReport = new Button("Add");
+        Button btnDeleteIncidebtReport = new Button("Delete");
+        Button btnEditIncidentReport = new Button("Edit");
         TabPane tabPane = new TabPane();
 
         // Create tabs names
         Tab participants = new Tab();
         Tab forms = new Tab();
         Tab stats = new Tab();
-        Tab incidentForm = new Tab();
-        HBox box = new HBox();
 
+        HBox box = new HBox();        
+        HBox btnBox = new HBox();
+        
+        btnBox.getChildren().addAll(btnAddIncidentReport,btnEditIncidentReport,btnDeleteIncidebtReport);
+        btnBox.setSpacing(10);
+        box.getChildren().addAll(lblIncidnetReportForm,btnBox);
+        box.setSpacing(200);
         // set text for tabs
         participants.setText("Participants");
         VBox vbox = new VBox();
@@ -245,28 +256,26 @@ public class MedicalStaffMainPageGUI extends Application
         participants.setContent(vbox);
         forms.setText("Forms");
         stats.setText("Stats");
-        incidentForm.setText("Incident Reporting Form");
-        
+        btnAddIncidentReport.setOnAction(event->{
+            IncidentReportFormGUI irf = new IncidentReportFormGUI(medMainStage, loggedInUser);
+            irf.showIncidentReportForm();
+        });
         // set tabs to not be closable
         forms.closableProperty().set(false);
         participants.closableProperty().set(false);
         stats.closableProperty().set(false);
-        incidentForm.closableProperty().set(false);
-        IncidentReportFormGUI irf = new IncidentReportFormGUI(medMainStage, loggedInUser);
-        
-        box.getChildren().add(irf.showIncidentReportForm());
-        box.setPadding(new Insets(5,5,5,5));
 
-        incidentForm.setContent(box);
+
+        forms.setContent(box);
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(175);
        
-        tabPane.getTabs().addAll(participants, forms);
+        tabPane.getTabs().addAll(participants);
 
         // if they are an administrator, add the stats tab
         if ( loggedInUser instanceof MedicalAdministrator )
         {
-            tabPane.getTabs().addAll(stats,incidentForm);
+            tabPane.getTabs().addAll(stats,forms);
         }
 
         // set initial selected tab to participants
