@@ -359,7 +359,6 @@ public class MedicalStaffMainPageGUI extends Application
         }
         catch ( IOException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

@@ -129,7 +129,7 @@ private VBox createScannedForm( String cosmoId )
         {
             Stage stage = new Stage();
             PopUpMessage popup = new PopUpMessage(
-                    "Must select a form to view", stage);
+                    "Must select a form to view", parentStage);
             Scene scene = new Scene(popup.root, 300, 75);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(parentStage);

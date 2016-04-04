@@ -367,7 +367,15 @@ public class participantDetailsGUI extends Application
         editBtn.setMinWidth(30);
         editBtn.setMaxHeight(25);
         editBtn.setMaxHeight(25);
-        editBtn.setGraphic(new ImageView("images/edit.png"));
+        URL editUrl = getClass().getResource("../images/edit.png");
+        try
+        {
+            editBtn.setGraphic(new ImageView(new Image(editUrl.openStream())));
+        }
+        catch ( IOException e1 )
+        {
+            e1.printStackTrace();
+        }
 
         viewDocumentsBtn.setMaxWidth(100);
         viewDocumentsBtn.setMinWidth(100);

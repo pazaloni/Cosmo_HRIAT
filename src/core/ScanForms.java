@@ -3,9 +3,15 @@ package core;
 import helpers.DatabaseHelper;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,6 +20,7 @@ import java.util.Date;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.image.Image;
 
 public class ScanForms
 {
@@ -190,6 +197,7 @@ public class ScanForms
             imageData = Files.readAllBytes(imageToWrite.toPath());
             fos.write(imageData);
 
+
         }
         catch ( IOException e )
         {
@@ -219,13 +227,53 @@ public class ScanForms
         DatabaseHelper db = new DatabaseHelper();
 
         db.connect();
-        boolean success = false;
-        success = db.delete("ScannedForms", "fileName='"
+        boolean success = true;
+        /*
+        success = db.delete("ScanForms", "fileName='"
                 + form.getFileName().get() + "'" + "AND cosmoID='" + cosmoID
                 + "'");
+                */
         if ( success )
         {
             result = "Deleted successfully";
+            
+            URL u = null;
+            try
+            {
+
+                    u = (form.getClass().getProtectionDomain().getCodeSource()
+                            .getLocation().toURI().toURL());
+
+            }
+            catch ( URISyntaxException e )
+            {
+                e.printStackTrace();
+            }
+            catch ( MalformedURLException e )
+            {
+                e.printStackTrace();
+            }
+
+            String url = u.toString();
+
+            url = url.substring(0,
+                    url.length() - (url.length() - url.lastIndexOf("/")));
+
+            url = url.replace("/bin", "");
+
+
+                String pathToDelete = url + form.getFileName().get();
+                File imageToDelete = new File("pathToDelete");
+                if(imageToDelete.delete())
+                {
+                    
+                }
+                else
+                {
+                    result = "The image file needs to be manually deleted.";
+                }
+
+            //Generate error message if file deletion did not occur.
         }
         else
         {

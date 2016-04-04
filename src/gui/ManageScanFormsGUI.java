@@ -183,7 +183,7 @@ public class ManageScanFormsGUI
 
         url = url.replace("/bin", "");
 
-        Image img = new Image(url + scannedForm.getFileName().get());
+        Image img = new Image(url + scannedForm.getFileName().get());        
 
         if ( !(img.isError()) )
         {
@@ -192,19 +192,18 @@ public class ManageScanFormsGUI
         else
         {
             URL defaultURL = getClass().getResource(
-                    "../images/defaultPicture.png");
+                    "../images/imageNotFound.png");
             try
             {
                 viewImage.setImage(new Image(defaultURL.openStream()));
             }
             catch ( IOException e )
             {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
-        
-        Scene scene = new Scene(imagePane, 400, 300);
+        imagePane.setContent(viewImage);
+        Scene scene = new Scene(imagePane, img.getWidth() - 7, img.getHeight() - 7);        
         localStage.setScene(scene);
         localStage.setResizable(false);
         localStage.initModality(Modality.WINDOW_MODAL);
