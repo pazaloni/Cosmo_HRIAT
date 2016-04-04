@@ -166,7 +166,7 @@ public class participantDetailsGUI extends Application
         Tab seizureDescription = new Tab();
         Tab progressNotes = new Tab();
         Tab personalCare = new Tab();
-        Tab workDetails = new Tab();
+        Tab scannedForms = new Tab();
         Tab physicianInfo = new Tab();
         Tab caregiver = new Tab();
         Tab other = new Tab();
@@ -201,7 +201,12 @@ public class participantDetailsGUI extends Application
         personalCare.setContent(pc.showPersonalCare(cosmoID + "")
                 .getContent());
         
-        workDetails.setContent(createWorkDetailsTab());
+      //Create the Progress Notes Tab
+        ScanFormsGUI sfg = new ScanFormsGUI(scannedForms, loggedInUser,
+                participantMainStage);
+        scannedForms.setContent(sfg.showScannedForms(cosmoID + "")
+                .getContent());
+        
         physicianInfo.setContent(createPhysicianInfoTab());
         caregiver.setContent(createCaregiverTab());
         other.setContent(createOtherTab());
@@ -212,7 +217,7 @@ public class participantDetailsGUI extends Application
         seizureDescription.setText("Seizure Description");
         progressNotes.setText("Progress Notes");
         personalCare.setText("Personal Care");
-        workDetails.setText("Work");
+        scannedForms.setText("Scanned Documents");
         physicianInfo.setText("Physician");
         caregiver.setText("Caregiver");
         other.setText("Other");
@@ -223,7 +228,7 @@ public class participantDetailsGUI extends Application
         seizureDescription.closableProperty().set(false);
         progressNotes.closableProperty().set(false);
         personalCare.closableProperty().set(false);
-        workDetails.closableProperty().set(false);
+        scannedForms.closableProperty().set(false);
         physicianInfo.closableProperty().set(false);
         caregiver.closableProperty().set(false);
         other.closableProperty().set(false);
@@ -231,7 +236,7 @@ public class participantDetailsGUI extends Application
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(100);
         tabPane.getTabs().addAll(healthStatus, participantUpdate,
-                seizureDescription, progressNotes, personalCare, physicianInfo, workDetails,
+                seizureDescription, progressNotes, personalCare, physicianInfo, scannedForms,
                 caregiver, other);
         tabPane.setMinHeight(29);
 
