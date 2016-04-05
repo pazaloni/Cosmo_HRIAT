@@ -1,9 +1,15 @@
 package controllers;
+import helpers.DatabaseHelper;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import core.OlderAdultsNeeds;
+import core.PersonalCare;
 import core.ReactiveCare;
 
 /**
@@ -33,6 +39,8 @@ public class ReactiveCareTableViewController
 	private ObservableList<ReactiveCare> reactiveCareData =
 			FXCollections.observableArrayList();
 	
+	DatabaseHelper db = new DatabaseHelper();
+	
 	/**
 	 * Creates and initializes the reactiveCareTable
 	 * 
@@ -49,7 +57,22 @@ public class ReactiveCareTableViewController
 	
 	private void queryReactiveCareData() 
 	{
-		//TODO have this query the DB for reactive care info
+//		ResultSet rs = db.select("COUNT(dailyInsulin)", "Participant", "dailyInsulin = TRUE", "");
+//		PersonalCare dailyInsulin = null;
+//		
+//		try 
+//		{
+//			if(rs.next())
+//			{
+//				dailyInsulin = new PersonalCare("Medical","Daily Insulin Injections", rs.getString(1), "");
+//				personalCareData.add(dailyInsulin);
+//			}
+//		} 
+//		catch (SQLException e) 
+//		{
+//			e.printStackTrace();
+//		}
+		
 	}
 	
 	/**

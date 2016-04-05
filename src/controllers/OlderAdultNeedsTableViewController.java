@@ -1,9 +1,18 @@
 package controllers;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
+import java.util.Date;
+
+import helpers.DatabaseHelper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import core.OlderAdultsNeeds;
+import core.PersonalCare;
 
 /**
  * The controller for the Older Adults Needs tableview for the
@@ -38,6 +47,8 @@ public class OlderAdultNeedsTableViewController
 	private ObservableList<OlderAdultsNeeds> adultData = 
 			FXCollections.observableArrayList();
 	
+	private DatabaseHelper db = new DatabaseHelper();
+	
 	/**
 	 * Initializes the tableview, pulls the
 	 * data from the database and puts it into
@@ -54,9 +65,179 @@ public class OlderAdultNeedsTableViewController
 		adultNeedsTable.setMaxHeight(150);
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void queryAdultsNeedsData()
 	{
-		//TODO have this pull the data from the DB
+//		ResultSet rsLongTerm = db.select("COUNT(careType)", "Participant", "careType = \"Long Term Care\" AND ", "");
+//		ResultSet rsElmwood = db.select("COUNT(careType)", "Participant", "careType = \"Elmwood\"", "");
+//		ResultSet rsLuther = db.select("COUNT(careType)", "Participant", "careType = \"Luther\"", "");
+//		ResultSet rsOther = db.select("COUNT(careType)", "Participant", "careType = \"Other\"", "");
+		OlderAdultsNeeds over65 = null;
+		OlderAdultsNeeds from60to65 = null;
+		OlderAdultsNeeds from55to59 = null;
+		OlderAdultsNeeds from40to49 = null;
+		OlderAdultsNeeds from30to39 = null;
+		OlderAdultsNeeds from20to29 = null;
+		
+		int over65LongTermCount = 0;
+		int from60to65LongTermCount = 0;
+		int from55to59LongTermCount = 0;
+		int from50to54LongTermCount = 0;
+		int from40to49LongTermCount = 0;
+		int from30to39LongTermCount = 0;
+		int from20to29LongTermCount = 0;
+		
+		int over65ElmwoodResCount = 0;
+		int from60to65ElmwoodResCount = 0;
+		int from55to59ElmwoodResCount = 0;
+		int from50to54ElmwoodResCount = 0;
+		int from40to49ElmwoodResCount = 0;
+		int from30to39ElmwoodResCount = 0;
+		int from20to29ElmwoodResCount = 0;
+		
+		int over65LutherCareCount = 0;
+		int from60to65LutherCareCount = 0;
+		int from55to59LutherCareCount = 0;
+		int from50to54LutherCareCount = 0;
+		int from40to49LutherCareCount = 0;
+		int from30to39LutherCareCount = 0;
+		int from20to29LutherCareCount = 0;
+		
+		int over65OtherCount = 0;
+		int from60to65OtherCount = 0;
+		int from55to59OtherCount = 0;
+		int from50to54OtherCount = 0;
+		int from40to49OtherCount = 0;
+		int from30to39OtherCount = 0;
+		int from20to29OtherCount = 0;
+		
+		ResultSet rs = db.select("careType, address, dateOfBirth", "Participant", "","");
+		
+		
+		LocalDate current = LocalDate.of(Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH);
+		LocalDate birthday;
+		
+		try 
+		{
+			while(rs != null && rs.next())
+			{
+				birthday = LocalDate.of(rs.getDate(3).getYear(), 
+						rs.getDate(3).getMonth(), rs.getDate(3).getDate());
+				
+				long years = ChronoUnit.YEARS.between(current, birthday);
+				
+				String careType = rs.getString(1);
+				
+				if(years > 65)
+				{
+					
+					if(careType.contains("Elmwood"))
+					{
+						over65ElmwoodResCount++;
+					}
+					else if(careType.contains("Luther"))
+					{
+						over65LutherCareCount++;
+					}
+					else if(careType.contains("Other"))
+					{
+						over65OtherCount++;
+					}
+					else if(careType.contains("Long"))
+					{
+						over65LongTermCount++;
+					}
+				}
+				else if(years >= 60 && years <= 65)
+				{
+					if(careType.contains("Elmwood"))
+					{
+						from60to65ElmwoodResCount++;
+					}
+					else if(careType.contains("Luther"))
+					{
+						from60to65LutherCareCount++;
+					}
+					else if(careType.contains("Other"))
+					{
+						from60to65OtherCount++;
+					}
+					else if(careType.contains("Long"))
+					{
+						from60to65LongTermCount++;
+					}
+				}
+				else if(years >= 55 && years <= 59)
+				{
+					if(careType.contains("Elmwood"))
+					{
+						from55to59ElmwoodResCount++;
+					}
+					else if(careType.contains("Luther"))
+					{
+						from55to59LutherCareCount++;
+					}
+					else if(careType.contains("Other"))
+					{
+						from55to59OtherCount++;
+					}
+					else if(careType.contains("Long"))
+					{
+						from55to59LongTermCount++;
+					}
+				}
+				else if(years >= 50 && years <= 54)
+				{
+					if(careType.contains("Elmwood"))
+					{
+						from50to54ElmwoodResCount++;
+					}
+					else if(careType.contains("Luther"))
+					{
+						from50to54LutherCareCount++;
+					}
+					else if(careType.contains("Other"))
+					{
+						from50to54OtherCount++;
+					}
+					else if(careType.contains("Long"))
+					{
+						from50to54LongTermCount++;
+					}
+				}
+				else if(years >= 40 && years <= 49)
+				{
+					if(careType.contains("Elmwood"))
+					{
+						from40to49ElmwoodResCount++;
+					}
+					else if(careType.contains("Luther"))
+					{
+						from40to49LutherCareCount++;
+					}
+					else if(careType.contains("Other"))
+					{
+						from40to49OtherCount++;
+					}
+					else if(careType.contains("Long"))
+					{
+						from40to49LongTermCount++;
+					}
+				}
+				else if(years >= 30 && years <= 49)
+				{
+					//continue this
+				}
+				
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		
+		
 	}
 	
 	/**
