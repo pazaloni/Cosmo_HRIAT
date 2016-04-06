@@ -184,6 +184,7 @@ private VBox createScannedForm( String cosmoId )
             {
             ScanForms.deleteImage(table.getSelectionModel()
                     .getSelectedItem(), cosmoID);
+            descriptionArea.setText("");
             }
             controller.refreshTable(cosmoID);
         }

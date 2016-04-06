@@ -388,6 +388,7 @@ public class DatabaseHelper
 
         try
         {
+            System.out.println(deleteStatement);
             s = conn.createStatement();
             rows = s.executeUpdate(deleteStatement);
         }

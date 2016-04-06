@@ -33,7 +33,9 @@ public class testScanForms
     ScanForms test7;
 
     String name1;
+    String name1DB;
     String name2;
+    String name2DB;
     String nameSame;
     String nameEmpty;
     String description1;    
@@ -46,7 +48,9 @@ public class testScanForms
     public void setUp() throws Exception
     {
         name1 = "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg";
+        name1DB = "/images/scannedImages/123Koala.jpg";
         name2 = "C:\\Users\\Public\\Pictures\\Sample Pictures\\Desert.jpg";;
+        name2DB = "/images/scannedImages/123Desert.jpg";
         nameSame = "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg";;
         nameEmpty = "";
         descriptionEmpty= "";
@@ -68,7 +72,7 @@ public class testScanForms
         }
 
         description1 = "Koala";
-        description1 = "Desert";
+        description2 = "Desert";
         
 
     }
@@ -85,8 +89,8 @@ public class testScanForms
     @Test
     public void testGetFileName()
     {
-        test1 = new ScanForms(dateTime, name1, description1);
-        test2 = new ScanForms(dateTime, name2, description2);
+        test1 = new ScanForms(dateTime, description1, name1);
+        test2 = new ScanForms(dateTime, description2, name2);
 
         assertTrue(test1.getFileName().get().equals(name1));
         assertTrue(test2.getFileName().get().equals(name2));
@@ -99,8 +103,8 @@ public class testScanForms
     @Test
     public void testGetDateSaved()
     {
-        test1 = new ScanForms(dateTime, name1, description1);
-        test2 = new ScanForms(dateTime, name2, description2);
+        test1 = new ScanForms(dateTime, description1, name1);
+        test2 = new ScanForms(dateTime, description2, name2);
 
         assertTrue(test1.getDateSaved().get().equals(dateTime.toString()));
         assertTrue(test2.getDateSaved().get().equals(dateTime.toString()));
@@ -113,8 +117,8 @@ public class testScanForms
     @Test
     public void testGetDescription()
     {
-        test1 = new ScanForms(dateTime, name1, description1);
-        test2 = new ScanForms(dateTime, name2, description2);
+        test1 = new ScanForms(dateTime, description1, name1);
+        test2 = new ScanForms(dateTime, description2, name2 );
 
         assertTrue(test1.getDescription().get().equals(description1));
         assertTrue(test2.getDescription().get().equals(description2));
@@ -127,8 +131,8 @@ public class testScanForms
     @Test
     public void testDisplayDateTime()
     {
-        test1 = new ScanForms(dateTime, name1, description1);
-        test2 = new ScanForms(dateTime, name2, description2);
+        test1 = new ScanForms(dateTime, description1, name1);
+        test2 = new ScanForms(dateTime, description2, name2);
 
         assertTrue(test1.displayDateSaved().get().equals(stringTime));
         assertTrue(test2.displayDateSaved().get().equals(stringTime));
@@ -142,24 +146,24 @@ public class testScanForms
     public void testCreateImage()
     {
         //Test success
-        test1 = new ScanForms(dateTime, name1, description1);
+        test1 = new ScanForms(dateTime, description1, name1 );
         //test description empty
-        test2 = new ScanForms(dateTime, name2, descriptionEmpty);
+        test2 = new ScanForms(dateTime, descriptionEmpty, name2);
         //test name empty
-        test3 = new ScanForms(dateTime, nameEmpty, description1);
+        test3 = new ScanForms(dateTime, description1,  nameEmpty);
         //test both empty
-        test4 = new ScanForms(dateTime, nameEmpty, descriptionEmpty);
+        test4 = new ScanForms(dateTime, descriptionEmpty, nameEmpty);
         //test name exists
-        test5 = new ScanForms(dateTime, nameSame, description1);
+        test5 = new ScanForms(dateTime, description1, nameSame);
         assertTrue(ScanForms.createImage(test1, "123").equals(""));
         assertTrue(ScanForms.createImage(test2, "123").equals(
-                "Description cannot be empty"));
+                "You have missing required fields"));
         assertTrue(ScanForms.createImage(test3, "123").equals(
-                "Select an image"));
+                "You have missing required fields"));
         assertTrue(ScanForms.createImage(test4, "123").equals(
-                "Select an image"));
+                "You have missing required fields"));
         assertTrue(ScanForms.createImage(test5, "123").equals(
-                "An image with that name already exists for this participant"));
+                "An image with that name already exists."));
         ScanForms.deleteImage(test1, "123");
     }
     
@@ -170,9 +174,11 @@ public class testScanForms
     @Test
     public void testDeleteImage()
     {
-        test1 = new ScanForms(dateTime, name1, description1);
+        test1 = new ScanForms(dateTime, description1, name1);
         ScanForms.createImage(test1, "123").equals("");
         
+        test1 = null;
+        test1 = new ScanForms(dateTime, description1, name1DB);
         assertTrue(ScanForms.deleteImage(test1, "123").equals( "Deleted successfully"));
         
     }
