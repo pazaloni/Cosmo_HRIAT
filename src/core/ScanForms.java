@@ -140,7 +140,7 @@ public class ScanForms
         if ( form.dateSaved.get().isEmpty() || form.description.get().isEmpty()
                 || form.fileName.get().isEmpty() )
         {
-            result = "You have missing required fields";
+            result = "You are missing required fields";
         }
         else if(form.description.get().length() > 250)
         {
