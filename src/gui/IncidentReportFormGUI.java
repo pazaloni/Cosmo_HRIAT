@@ -168,7 +168,7 @@ public class IncidentReportFormGUI
         mainBox.getChildren().addAll(formTitle, errorMsg, createHeader(), sep1,
                 createRegisteredWorkArea(), sep2, createIncidentInfo(), sep3,
                 lblBodyArea, createBodyAreaInjured(), sep4, lblTypeofInjury,
-                createTypeOfInjury(), sep5, createMidSecion(),
+                createTypeOfInjury(), sep5, createMidSection(),
                 createBottomBox());
         mainPane = new ScrollPane();
         mainPane.setContent(mainBox);
@@ -177,7 +177,7 @@ public class IncidentReportFormGUI
         mainPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         localStage = new Stage();
         localStage.setResizable(false);
-        localStage.setMaxHeight(720);
+        localStage.setMaxHeight(920);
         localStage.setMinWidth(720);
         localStage.initModality(Modality.APPLICATION_MODAL);
         localStage.initOwner(parentStage);
@@ -308,14 +308,7 @@ public class IncidentReportFormGUI
     /**
      * Purpose: creates the section of the form where the user can select
      * multiple checkboxes outlining the area of the injured body.
-     * 
-     * 42 checkboxes.
-     * 
-     * 15 14 13
-     * 
-     * GRID LAYOUT
-     * 
-     * 
+     *
      */
     private HBox createBodyAreaInjured()
     {
@@ -326,17 +319,17 @@ public class IncidentReportFormGUI
         Button removeInjury = new Button("<-");
 
         allBodyAreas.addAll("Head ", "Neck", "Chest", "Left Shoulder",
-                "Right Shoulder", "Pelvis/Hips", "Left Buttocks",
+                "Right Shoulder", "Pelvis or Hips", "Left Buttocks",
                 "Right Buttocks", "Left Ankle", "Right Ankle", "Left Ear",
-                "Right ear ", "Toes", "Left Eye ", "Right Eye ",
+                "Right Ear ", "Toes", "Left Eye ", "Right Eye ",
                 "left Upper Back ", "Right Upper Back ", "Left Lower Back ",
                 "Right Lower Back ", "Left Foot ", "Right Foot ",
-                "Right Upper Arm ", "Left upper Arm ", "Right Lower Arm ",
+                "Right Upper Arm ", "Left Upper Arm ", "Right Lower Arm ",
                 "Left Lower Arm", "Nose", "Fingers", "Right Elbow",
                 "Left Elbow", "Right Wrist", "Left Wrist", "Left Hand",
                 "Right Hand ", "Left Upper Leg ", "Right Upper Leg ",
                 "Left Lower Leg ", "Right Lower Leg ", "Left Knee ",
-                "Right Knee ", "Abdomen/Stomach");
+                "Right Knee ", "Abdomen or Stomach");
 
         lsvAllBodyAreas = new ListView<String>(allBodyAreas);
         lsvInjuredBodyAreas = new ListView<String>(injuredBodyAreas);
@@ -454,9 +447,9 @@ public class IncidentReportFormGUI
                 chkOtherType = new CheckBox("Other (Specify) :"),
                 txtOtherType = new TextField());
 
-        gridPaneType.add(chkBruise = new CheckBox("Bruise/Contution"), 0, 0);
+        gridPaneType.add(chkBruise = new CheckBox("Bruise or Contuion"), 0, 0);
 
-        gridPaneType.add(chkScrape = new CheckBox("Scrape/Abrasion"), 0, 1);
+        gridPaneType.add(chkScrape = new CheckBox("Scrape or Abrasion"), 0, 1);
         gridPaneType.add(chkSwelling = new CheckBox("Swelling"), 0, 2);
         gridPaneType.add(chkBurn = new CheckBox("Burn"), 0, 3);
         gridPaneType.add(chkCut = new CheckBox("Cut/Laceration"), 0, 4);
@@ -517,7 +510,7 @@ public class IncidentReportFormGUI
      * 
      * @return a VBox containing all the required elements
      */
-    private VBox createMidSecion()
+    private VBox createMidSection()
     {
         VBox mainBox = new VBox();
         HBox topBox = new HBox();
@@ -847,11 +840,17 @@ public class IncidentReportFormGUI
             errorMsg.setText("");
             // Form is valid in here.... do all the information inserting in
             // here.
+            
+            
+            
             localStage.close();
+
         }
         else
         {
+            //scrolls the pane all the way to the top
             mainPane.setVvalue(0);
+            
             errorMsg.setText("You have missing required fields. Click here to see.");
             errorMsg.setOnMouseClicked(event -> {
                 Stage stage = new Stage();
