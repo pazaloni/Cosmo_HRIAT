@@ -3,13 +3,12 @@ import helpers.DatabaseHelper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import core.OlderAdultsNeeds;
-import core.PersonalCare;
 import core.ReactiveCare;
 
 /**
@@ -57,21 +56,30 @@ public class ReactiveCareTableViewController
 	
 	private void queryReactiveCareData() 
 	{
-//		ResultSet rs = db.select("COUNT(dailyInsulin)", "Participant", "dailyInsulin = TRUE", "");
-//		PersonalCare dailyInsulin = null;
-//		
-//		try 
-//		{
-//			if(rs.next())
-//			{
-//				dailyInsulin = new PersonalCare("Medical","Daily Insulin Injections", rs.getString(1), "");
-//				personalCareData.add(dailyInsulin);
-//			}
-//		} 
-//		catch (SQLException e) 
-//		{
-//			e.printStackTrace();
-//		}
+		ResultSet rsNumParticpants = db.select("COUNT(cosmoID)", "IncidentReport", "", "");
+		ResultSet rsNumStaff = db.select("COUNT(injuryID)", "IncidentInjuryTypes", "injuryID = 13", "");
+		int numParticipants = 0;
+		int numStaff = 0;
+		
+		try 
+		{
+			if(rsNumParticpants != null && rsNumParticpants.next())
+			{
+				numParticipants = rsNumParticpants.getInt(1);
+			}
+			
+			if(rsNumStaff != null && rsNumStaff.next())
+			{
+				numStaff += rsNumStaff.getInt(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Date d = new Date();
+		
+		ReactiveCare rc = new ReactiveCare(d.getYear(), numParticipants, numStaff);
 		
 	}
 	
