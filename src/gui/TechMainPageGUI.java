@@ -398,8 +398,8 @@ public class TechMainPageGUI extends Application
                     ///encrypt the password when creating the new user
                     String result = manageStaff.addUser(username.getText(),
                             lastName.getText(), firstName.getText(),
-                            email.getText(), eh.encrypt(password.getText()),
-                            eh.encrypt(repeatPassword.getText()),
+                            email.getText(), password.getText(),
+                            repeatPassword.getText(),
                             returnSecurityLevel(cboSecurityLevels.getValue()));
 
                     if (result.equals(""))
