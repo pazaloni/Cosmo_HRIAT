@@ -55,6 +55,14 @@ public class TestEncryption
     private String firstPasswordOne;
     private String secondPasswordOne;
     private String securityOne;
+    
+    private String usernameTwo;
+    private String firstNameTwo;
+    private String lastNameTwo;
+    private String emailTwo;
+    private String firstPasswordTwo;
+    private String secondPasswordTwo;
+    private String securityTwo;
         
     @Before
     public void setUp() throws Exception
@@ -83,6 +91,14 @@ public class TestEncryption
         firstPasswordOne = "password";
         secondPasswordOne = "password";
         securityOne = "1";
+        
+        usernameTwo = "snowJ";
+        firstNameTwo = "john";
+        lastNameTwo = "snow";
+        emailTwo = "john@awesome.com";
+        firstPasswordTwo = "thrones";
+        secondPasswordTwo = "thrones";
+        securityTwo = "2";
        
      }
 
@@ -138,11 +154,24 @@ public class TestEncryption
     public void testGetPassword()
     {
         //add the user to the database
-        String result = testHelper.addUser(usernameOne, lastNameOne, firstNameOne,
+        String results1 = testHelper.addUser(usernameOne, lastNameOne, firstNameOne,
                 emailOne, firstPasswordOne, secondPasswordOne, securityOne);
         //compare original plain text password matches the password from the database
         assertTrue(firstPasswordOne.equals(testHelper.queryStaff(usernameOne).GetPassword()));
         
+    }
+    
+    /**
+     * To test that a new account will have the password that is encrypted properly
+     */
+    @Test
+    public void createUser()
+    {
+        //add the new user to the database
+        String results2 = testHelper.addUser(usernameTwo, lastNameTwo, firstNameTwo, emailTwo, 
+                firstPasswordTwo, secondPasswordTwo, securityTwo);
+        //confirm that the password entered matches the decrypted password from the database
+        assertTrue(firstPasswordTwo.equals(testHelper.queryStaff(usernameTwo).GetPassword()));
     }
     
     /**
@@ -152,6 +181,7 @@ public class TestEncryption
     public void tearDown()
     {
         testHelper.removeUser(usernameOne);
+        testHelper.removeUser(usernameTwo);
     }
 
 }

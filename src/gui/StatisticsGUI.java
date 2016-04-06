@@ -31,7 +31,7 @@ import javafx.scene.text.Font;
  * @author CST215
  *
  */
-public class QuarterlyReportGUI extends Application
+public class StatisticsGUI extends Application
 {
 	//the listview containing the categories for quarterly reports
 	private ListView categoriesView;
@@ -63,7 +63,7 @@ public class QuarterlyReportGUI extends Application
 		reportsMainStageConstruct(stage, this.loggedInStaff);
 	}
 	
-	public QuarterlyReportGUI() 
+	public StatisticsGUI() 
 	{
 		//do not need to do any work here
 	}
@@ -142,7 +142,7 @@ public class QuarterlyReportGUI extends Application
 		
 		generateReports.setOnAction(event -> {
 			Stage stage = new Stage();
-			QuarterlyReportPrevGUI gui = new QuarterlyReportPrevGUI(stage);
+			QuarterlyReportsGUI gui = new QuarterlyReportsGUI(stage);
 			gui.stage.setScene(new Scene(gui.mainVbox, 875, 580));
 			gui.stage.showAndWait();
 		});
