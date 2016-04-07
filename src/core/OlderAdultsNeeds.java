@@ -36,7 +36,7 @@ public class OlderAdultsNeeds
 	 * 
 	 *  @author Breanna Wilson, Jon Froese
 	 */
-	public OlderAdultsNeeds(String age, int longTermCare, int elmwood, int lutherCare, int other,
+	public OlderAdultsNeeds(String age, int longTermCare, int elmwood, int lutherCare, int other, int totalAsOf,
 			int totalForLastYear)
 	{
 		this.age = age;

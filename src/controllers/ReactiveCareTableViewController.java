@@ -3,6 +3,7 @@ import helpers.DatabaseHelper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
 
 import javafx.collections.FXCollections;
@@ -56,16 +57,21 @@ public class ReactiveCareTableViewController
 	
 	private void queryReactiveCareData() 
 	{
-		ResultSet rsNumParticpants = db.select("COUNT(cosmoID)", "IncidentReport", "", "");
+
+	    
+		//ResultSet rsNumParticipants = db.select("COUNT(cosmoID),", "IncidentReport", "", "");
+	    ResultSet rsNumParticipants = db.select("COUNT(Incidents.incidentID), Year(dateOfIncident)", "Incidents GROUP BY (Year(dateOfIncident))","","");
 		ResultSet rsNumStaff = db.select("COUNT(injuryID)", "IncidentInjuryTypes", "injuryID = 13", "");
 		int numParticipants = 0;
 		int numStaff = 0;
+		int year = 0;
 		
 		try 
 		{
-			if(rsNumParticpants != null && rsNumParticpants.next())
+			if(rsNumParticipants != null && rsNumParticipants.next())
 			{
-				numParticipants = rsNumParticpants.getInt(1);
+				numParticipants = rsNumParticipants.getInt(1);
+				year = rsNumParticipants.getInt(2);
 			}
 			
 			if(rsNumStaff != null && rsNumStaff.next())
@@ -77,9 +83,9 @@ public class ReactiveCareTableViewController
 			e.printStackTrace();
 		}
 		
-		Date d = new Date();
-		
-		ReactiveCare rc = new ReactiveCare(d.getYear(), numParticipants, numStaff);
+		ReactiveCare rc = new ReactiveCare(year, numParticipants, numStaff);
+	
+        reactiveCareData.add(rc);
 		
 	}
 	

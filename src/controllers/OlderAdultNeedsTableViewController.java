@@ -279,17 +279,17 @@ public class OlderAdultNeedsTableViewController
 			
 			over65 = new OlderAdultsNeeds(">65", over65LongTermCount,
 						over65ElmwoodResCount, over65LutherCareCount, 
-						over65OtherCount,0);
+						over65OtherCount,0,0);
 			from55to59 = new OlderAdultsNeeds("55-59", from55to59LongTermCount, 
-					from55to59ElmwoodResCount, from55to59LutherCareCount, from55to59OtherCount, 0);
+					from55to59ElmwoodResCount, from55to59LutherCareCount, from55to59OtherCount,0, 0);
 			from50to54 = new OlderAdultsNeeds("50-54", from50to54LongTermCount, 
-					from50to54ElmwoodResCount, from50to54LutherCareCount, from50to54OtherCount, 0);
+					from50to54ElmwoodResCount, from50to54LutherCareCount, from50to54OtherCount,0, 0);
 			from40to49 = new OlderAdultsNeeds("40-49", from40to49LongTermCount, from40to49ElmwoodResCount,
-					from40to49LutherCareCount, from40to49OtherCount, 0);
+					from40to49LutherCareCount, from40to49OtherCount,0, 0);
 			from30to39 = new OlderAdultsNeeds("30-39", from30to39LongTermCount, from30to39ElmwoodResCount,
-					from30to39LutherCareCount, from30to39OtherCount, 0);
+					from30to39LutherCareCount, from30to39OtherCount,0, 0);
 			from20to29 = new OlderAdultsNeeds("<29", from20to29LongTermCount, from20to29ElmwoodResCount,
-					from20to29LutherCareCount, from20to29OtherCount, 0);
+					from20to29LutherCareCount, from20to29OtherCount,0, 0);
 			
 			adultData.addAll(over65, from55to59, from50to54, from40to49, from30to39, from20to29); 
 			
