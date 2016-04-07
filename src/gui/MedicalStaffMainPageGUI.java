@@ -374,15 +374,8 @@ public class MedicalStaffMainPageGUI extends Application
         // create picture box for left side of preview pane
         VBox pictureBox = new VBox();
         // default preview picture
-        URL url = getClass().getResource("../images/defaultPicture.png");
-        try
-        {
-            previewPicture = new ImageView(new Image(url.openStream()));
-        }
-        catch ( IOException e )
-        {
-            e.printStackTrace();
-        }
+        //URL url = getClass().getResource("images/defaultPicture.png");
+        previewPicture = new ImageView(new Image("images/defaultPicture.png"));
 
         // details button
         Button detailsButton = new Button("View Details");

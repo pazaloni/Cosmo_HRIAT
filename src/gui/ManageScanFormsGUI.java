@@ -152,7 +152,11 @@ public class ManageScanFormsGUI
 
     }
 
-
+    /**
+     * Method to display a view of the image.
+     * @param scannedForm the form to be displayed
+     * @param cosmoId the person whose form is being displayed
+     */
     public void showScannedForm( ScanForms scannedForm, String cosmoId )
     {
         Stage localStage = new Stage();
@@ -192,16 +196,7 @@ public class ManageScanFormsGUI
         }
         else
         {
-            URL defaultURL = getClass().getResource(
-                    "../images/imageNotFound.png");
-            try
-            {
-                viewImage.setImage(new Image(defaultURL.openStream()));
-            }
-            catch ( IOException e )
-            {
-                e.printStackTrace();
-            }
+            viewImage.setImage(new Image("images/imageNotFound.png"));
         }
         imagePane.setContent(viewImage);
         Scene scene = new Scene(imagePane, img.getWidth() - 7, img.getHeight() - 7);        

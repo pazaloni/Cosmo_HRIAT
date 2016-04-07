@@ -286,15 +286,8 @@ public class participantDetailsGUI extends Application
         // create picture box for left side of preview pane
         VBox pictureBox = new VBox();
         // default preview picture
-        URL url = getClass().getResource("../images/defaultPicture.png");
-        try
-        {
-            previewPicture = new ImageView(new Image(url.openStream()));
-        }
-        catch ( IOException e )
-        {
-            e.printStackTrace();
-        }
+        //URL url = getClass().getResource("../images/defaultPicture.png");
+        previewPicture = new ImageView(new Image("images/defaultPicture.png"));
 
         // set margins
         VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
@@ -367,15 +360,7 @@ public class participantDetailsGUI extends Application
         editBtn.setMinWidth(30);
         editBtn.setMaxHeight(25);
         editBtn.setMaxHeight(25);
-        URL editUrl = getClass().getResource("../images/edit.png");
-        try
-        {
-            editBtn.setGraphic(new ImageView(new Image(editUrl.openStream())));
-        }
-        catch ( IOException e1 )
-        {
-            e1.printStackTrace();
-        }
+        editBtn.setGraphic(new ImageView(new Image("images/edit.png")));
 
         viewDocumentsBtn.setMaxWidth(100);
         viewDocumentsBtn.setMinWidth(100);
