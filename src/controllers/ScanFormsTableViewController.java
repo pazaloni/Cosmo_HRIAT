@@ -14,7 +14,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import core.ScanForms;
 import core.ScanForms;
-
+/**
+ * Controls the table of scanned forms
+ * @author cst207
+ *
+ */
 public class ScanFormsTableViewController
 {
 
