@@ -23,6 +23,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 
+/**
+ * Object that holds scanned forms.
+ * 
+ * @author cst207
+ *
+ */
 public class ScanForms
 {
 
@@ -45,7 +51,7 @@ public class ScanForms
      * @return
      */
     public StringProperty getDateSaved()
-    {       
+    {
         return dateSaved;
     }
 
@@ -70,26 +76,38 @@ public class ScanForms
     {
         return fileName;
     }
-    
-    public StringProperty displayFileName(String cosmoID)
+
+    /**
+     * Purpose: return a filename formatted for display.
+     * 
+     * @param cosmoID
+     *            : The cosmoID that needs to be removed from the end of the
+     *            filename
+     * @return
+     */
+    public StringProperty displayFileName( String cosmoID )
     {
         String nameString = fileName.get();
-        nameString = nameString.substring(nameString.lastIndexOf("/")+cosmoID.length()+1, nameString.length());
+        nameString = nameString.substring(
+                nameString.lastIndexOf("/") + cosmoID.length() + 1,
+                nameString.length());
         StringProperty displayName = new SimpleStringProperty(nameString);
         return displayName;
     }
+
     /**
      * Method for display properly formatted date value.
+     * 
      * @return a properly formatted date string
      */
     public StringProperty displayDateSaved()
     {
-        
+
         DateFormat dToSFormat = new SimpleDateFormat("dd-MMM-yyyy");
         DateFormat sToDFormat = new SimpleDateFormat("yyyy-MM-dd");
         String unformatedString = dateSaved.get();
         Date unformatedDate;
-        String formattedString; 
+        String formattedString;
         try
         {
             unformatedDate = sToDFormat.parse(unformatedString);
@@ -99,10 +117,12 @@ public class ScanForms
         {
             formattedString = dateSaved.toString();
         }
-        
-        StringProperty formattedDateTime = new SimpleStringProperty(formattedString);
+
+        StringProperty formattedDateTime = new SimpleStringProperty(
+                formattedString);
         return formattedDateTime;
     }
+
     /**
      * Purpose to return the date as a localDate
      * 
@@ -142,7 +162,7 @@ public class ScanForms
         {
             result = "You are missing required fields";
         }
-        else if(form.description.get().length() > 250)
+        else if ( form.description.get().length() > 250 )
         {
             result = "The description has a maximum size of 250 characters.";
         }
@@ -157,9 +177,8 @@ public class ScanForms
             String fileName = saveImage(form.fileName.get(), cosmoID);
             scanFormValues[0] = fileName;
             scanFormValues[1] = cosmoID;
-            scanFormValues[2] = form.getDateSaved().get();            
+            scanFormValues[2] = form.getDateSaved().get();
             scanFormValues[3] = form.getDescription().get();
-            
 
             success = db.insert(scanFormValues, "ScanForms");
 
@@ -181,8 +200,10 @@ public class ScanForms
      * 
      Purpose:save the image into the image folder using the correct image path
      * 
-     * @param imagePath path of the image chosen by the user
-     * @param cosmoID the cosmo id of the participant corresponding to the image
+     * @param imagePath
+     *            path of the image chosen by the user
+     * @param cosmoID
+     *            the cosmo id of the participant corresponding to the image
      * @return the path stored in the database
      */
     private static String saveImage( String imagePath, String cosmoID )
@@ -190,11 +211,13 @@ public class ScanForms
         String path = imagePath;
 
         byte[] imageData;
-        //trim image path
-        String imageName = imagePath.substring(imagePath.lastIndexOf("\\")+1,imagePath.length()-4);
+        // trim image path
+        String imageName = imagePath.substring(imagePath.lastIndexOf("\\") + 1,
+                imagePath.length() - 4);
         // This returns the path to where the jar file is stored
-        String pathToSaveTo = "./images/scannedImages/" + cosmoID + imageName + ".jpg";
-       
+        String pathToSaveTo = "./images/scannedImages/" + cosmoID + imageName
+                + ".jpg";
+
         try (FileOutputStream fos = new FileOutputStream(pathToSaveTo))
         {
             File imageToWrite = new File(path);
@@ -202,20 +225,19 @@ public class ScanForms
             imageData = Files.readAllBytes(imageToWrite.toPath());
             fos.write(imageData);
 
-
         }
         catch ( IOException e )
         {
             System.out.println("File can't be found!");
         }
-        
-        //Remove the dot to store them in properly in the database
+
+        // Remove the dot to store them in properly in the database
         pathToSaveTo = pathToSaveTo.replace("./images/", "/images/");
-        System.out.println("Path to save to "+ pathToSaveTo);
+        System.out.println("Path to save to " + pathToSaveTo);
         return pathToSaveTo;
 
     }
-    
+
     /**
      * 
      * Purpose: Remove a scanned form for a participant from the database
@@ -233,21 +255,21 @@ public class ScanForms
 
         db.connect();
         boolean success = false;
-        
+
         success = db.delete("ScanForms", "fileName='"
                 + form.getFileName().get() + "'" + "AND cosmoID='" + cosmoID
                 + "'");
-                
+
         if ( success )
         {
             result = "Deleted successfully";
-            
+
             URL u = null;
             try
             {
 
-                    u = (form.getClass().getProtectionDomain().getCodeSource()
-                            .getLocation().toURI().toURL());
+                u = (form.getClass().getProtectionDomain().getCodeSource()
+                        .getLocation().toURI().toURL());
 
             }
             catch ( URISyntaxException e )
@@ -265,19 +287,20 @@ public class ScanForms
                     url.length() - (url.length() - url.lastIndexOf("/")));
 
             url = url.replace("/bin", "");
-                
-                String pathToDelete = form.getFileName().get().substring(1, form.getFileName().get().length());
-                File imageToDelete = new File(pathToDelete);
 
-                if(imageToDelete.delete())
-                {
-                    
-                }
-                else
-                {
-                    result = "The image file needs to be manually deleted.";
-                }
-            //Generate error message if file deletion did not occur.
+            String pathToDelete = form.getFileName().get()
+                    .substring(1, form.getFileName().get().length());
+            File imageToDelete = new File(pathToDelete);
+
+            if ( imageToDelete.delete() )
+            {
+
+            }
+            else
+            {
+                result = "The image file needs to be manually deleted.";
+            }
+            // Generate error message if file deletion did not occur.
         }
         else
         {

@@ -25,7 +25,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import core.ProgressNotes;
 import core.ScanForms;
-
+/**
+ * Class for managing popups for the scanFormsGui
+ * @author cst207
+ *
+ */
 public class ManageScanFormsGUI
 {
 

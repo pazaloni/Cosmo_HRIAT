@@ -157,11 +157,11 @@ public class testScanForms
         test5 = new ScanForms(dateTime, description1, nameSame);
         assertTrue(ScanForms.createImage(test1, "123").equals(""));
         assertTrue(ScanForms.createImage(test2, "123").equals(
-                "you are missing required fields"));
+                "You are missing required fields"));
         assertTrue(ScanForms.createImage(test3, "123").equals(
-                "you are missing required fields"));
+                "You are missing required fields"));
         assertTrue(ScanForms.createImage(test4, "123").equals(
-                "you are missing required fields"));
+                "You are missing required fields"));
         assertTrue(ScanForms.createImage(test5, "123").equals(
                 "An image with that name already exists."));
         ScanForms.deleteImage(test1, "123");

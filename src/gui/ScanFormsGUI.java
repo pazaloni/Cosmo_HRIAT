@@ -22,7 +22,11 @@ import core.PopUpCheck;
 import core.PopUpMessage;
 import core.ScanForms;
 import core.StaffAccount;
-
+/**
+ * Displays the stab for scanned documents.
+ * @author cst207
+ *
+ */
 public class ScanFormsGUI
 {
 
@@ -214,7 +218,10 @@ private VBox createScannedForm( String cosmoId )
     box.getChildren().addAll(controls, table);
     return box;
 }
-
+/**
+ * Displays the description associated with the filename.
+ * @param selectedPK
+ */
 private void displayDescription( ScanForms selectedPK )
 {
     
