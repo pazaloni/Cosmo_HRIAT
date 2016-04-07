@@ -3,7 +3,14 @@ import helpers.DatabaseHelper;
 import helpers.NotePaneHelper;
 import helpers.PreviewPaneHelper;
 
+import java.awt.Paint;
+import java.awt.PaintContext;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -236,7 +243,9 @@ public class MedicalStaffMainPageGUI extends Application
         Tab forms = new Tab();
         Tab stats = new Tab();
         Tab incidentForm = new Tab();
+        Tab physicianManagement = new Tab();
         HBox box = new HBox();
+        HBox pmgBox = new HBox();
 
         // set text for tabs
         participants.setText("Participants");
@@ -246,17 +255,27 @@ public class MedicalStaffMainPageGUI extends Application
         forms.setText("Forms");
         stats.setText("Stats");
         incidentForm.setText("Incident Reporting Form");
+        physicianManagement.setText("Physician Management");
         
         // set tabs to not be closable
         forms.closableProperty().set(false);
         participants.closableProperty().set(false);
         stats.closableProperty().set(false);
         incidentForm.closableProperty().set(false);
+        physicianManagement.closableProperty().set(false);
         IncidentReportFormGUI irf = new IncidentReportFormGUI(medMainStage, loggedInUser);
+        PhysicianManagementGUI pmg = new PhysicianManagementGUI();
         
         box.getChildren().add(irf.showIncidentReportForm());
+        pmgBox.getChildren().add(pmg.showPhysicianManagementForm());
+        
+  
         box.setAlignment(Pos.CENTER);
         incidentForm.setContent(box);
+        
+        pmgBox.setAlignment(Pos.CENTER_LEFT);
+        physicianManagement.setContent(pmgBox);
+        
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(175);
        
@@ -265,7 +284,7 @@ public class MedicalStaffMainPageGUI extends Application
         // if they are an administrator, add the stats tab
         if ( loggedInUser instanceof MedicalAdministrator )
         {
-            tabPane.getTabs().addAll(stats,incidentForm);
+            tabPane.getTabs().addAll(stats,incidentForm,physicianManagement);
         }
 
         // set initial selected tab to participants

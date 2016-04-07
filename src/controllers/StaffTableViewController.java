@@ -57,6 +57,8 @@ public class StaffTableViewController
         // The result set that will query the database to get all the users
         ResultSet rs = db.select("UserName, lastName, firstName, email, "
                 + "accessLevel", "Staff", "", "");
+        
+       
         String username;
         String lastName;
         String firstName;
