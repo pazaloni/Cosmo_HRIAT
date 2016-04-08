@@ -28,7 +28,7 @@ public class BodyArea
      * Purpose: get the body area
      * @return the body area
      */
-    public String getBodyArea()
+    public String getArea()
     {
         return bodyArea;
     }

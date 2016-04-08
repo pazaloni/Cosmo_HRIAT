@@ -353,7 +353,7 @@ public class IncidentReportFormGUI
                     // If they clicked on existing item then
                     if ( lsvAllBodyAreas.getSelectionModel().getSelectedItem() != null )
                     {
-                        // Add that item to the injuredbody areas
+                        // Add that item to the injured body areas
                         injuredBodyAreas.add(lsvAllBodyAreas
                                 .getSelectionModel().getSelectedItem());
                         // set the items for the injured body areas
