@@ -211,7 +211,7 @@ public class MedicalStaffMainPageGUI extends Application
             }
         });
         // logo image size
-        ImageView logo = new ImageView(new Image("images/CosmoIconLong.png"));
+        ImageView logo = new ImageView(new Image("file:images/CosmoIconLong.png"));
         logo.setFitWidth(400);
         logo.setFitHeight(49);
 
@@ -375,7 +375,7 @@ public class MedicalStaffMainPageGUI extends Application
         VBox pictureBox = new VBox();
         // default preview picture
         //URL url = getClass().getResource("images/defaultPicture.png");
-        previewPicture = new ImageView(new Image("images/defaultPicture.png"));
+        previewPicture = new ImageView(new Image("file:images/defaultPicture.png"));
 
         // details button
         Button detailsButton = new Button("View Details");
@@ -566,9 +566,7 @@ public class MedicalStaffMainPageGUI extends Application
             }
             else
             {
-                URL defaultURL = getClass().getResource(
-                        "../images/defaultPicture.png");
-                previewPicture.setImage(new Image(defaultURL.openStream()));
+                previewPicture.setImage(new Image("file:images/defaultPicture.png"));
             }
         }
         catch ( IllegalArgumentException | IOException ie )

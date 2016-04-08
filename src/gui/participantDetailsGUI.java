@@ -140,7 +140,7 @@ public class participantDetailsGUI extends Application
         logoAndLogin.setStyle("-fx-background-color: #FFFFFF;");
 
         // logo image size
-        ImageView logo = new ImageView(new Image("images/CosmoIconLong.png"));
+        ImageView logo = new ImageView(new Image("file:images/CosmoIconLong.png"));
         logo.setFitWidth(400);
         logo.setFitHeight(49);
 
@@ -287,7 +287,7 @@ public class participantDetailsGUI extends Application
         VBox pictureBox = new VBox();
         // default preview picture
         //URL url = getClass().getResource("../images/defaultPicture.png");
-        previewPicture = new ImageView(new Image("images/defaultPicture.png"));
+        previewPicture = new ImageView(new Image("file:images/defaultPicture.png"));
 
         // set margins
         VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
@@ -360,7 +360,7 @@ public class participantDetailsGUI extends Application
         editBtn.setMinWidth(30);
         editBtn.setMaxHeight(25);
         editBtn.setMaxHeight(25);
-        editBtn.setGraphic(new ImageView(new Image("images/edit.png")));
+        editBtn.setGraphic(new ImageView(new Image("file:images/edit.png")));
 
         viewDocumentsBtn.setMaxWidth(100);
         viewDocumentsBtn.setMinWidth(100);

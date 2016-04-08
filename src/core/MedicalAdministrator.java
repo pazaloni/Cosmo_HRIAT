@@ -87,6 +87,7 @@ public class MedicalAdministrator extends BasicStaff
             db.connect();
             if ( imagePath.isEmpty() )
             {
+                //TODO: Double check when making jar
                 imagePath = "images/defaultImage.jpg";
             }
             // check to see if the CosmoID is a number
