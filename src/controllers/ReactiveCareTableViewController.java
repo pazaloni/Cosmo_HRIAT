@@ -57,35 +57,54 @@ public class ReactiveCareTableViewController
 	
 	private void queryReactiveCareData() 
 	{
-
 	    
 		//ResultSet rsNumParticipants = db.select("COUNT(cosmoID),", "IncidentReport", "", "");
-	    ResultSet rsNumParticipants = db.select("COUNT(Incidents.incidentID), Year(dateOfIncident)", "Incidents GROUP BY (Year(dateOfIncident))","","");
-		ResultSet rsNumStaff = db.select("COUNT(injuryID)", "IncidentInjuryTypes", "injuryID = 13", "");
+		//ResultSet rsNumParticipants = db.select("COUNT(Incidents.incidentID), Year(dateOfIncident)","Incidents GROUP BY (Year(dateOfIncident))","","");
+	    ResultSet rsNumParticipants = db.select("COUNT(Incidents.incidentID), Year(dateOfIncident)","Incidents GROUP BY (Year(dateOfIncident))","","");
+		ResultSet rsNumStaff = null;
 		int numParticipants = 0;
 		int numStaff = 0;
 		int year = 0;
 		
+		
+		
+		
 		try 
 		{
-			if(rsNumParticipants != null && rsNumParticipants.next())
+			while(rsNumParticipants != null && rsNumParticipants.next())
 			{
-				numParticipants = rsNumParticipants.getInt(1);
-				year = rsNumParticipants.getInt(2);
+				if(rsNumParticipants != null)
+				{
+					
+					numParticipants = rsNumParticipants.getInt(1);
+					year = rsNumParticipants.getInt(2);
+					
+					rsNumStaff = db.select("COUNT(injuryID)", "IncidentInjuryTypes i JOIN Incidents j ON i.incidentID = j.incidentID", 
+							"injuryID = 13 AND Year(dateOfIncident) = " + year, "");
+					
+					if(rsNumStaff != null && rsNumStaff.next())
+					{
+						numStaff = rsNumStaff.getInt(1);
+					}
+					
+					//numStaff += rsNumParticipants.getInt(3);
+				}
+				
+//				if(rsNumStaff != null && rsNumStaff.next())
+//				{
+//					numStaff += rsNumStaff.getInt(1);
+//				}
+				
+				ReactiveCare rc = new ReactiveCare(year, numParticipants, numStaff);
+				
+				reactiveCareData.add(rc);
 			}
 			
-			if(rsNumStaff != null && rsNumStaff.next())
-			{
-				numStaff += rsNumStaff.getInt(1);
-			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		ReactiveCare rc = new ReactiveCare(year, numParticipants, numStaff);
-	
-        reactiveCareData.add(rc);
 		
 	}
 	

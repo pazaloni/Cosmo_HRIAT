@@ -1,5 +1,8 @@
 package gui;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import controllers.OlderAdultNeedsTableViewController;
 import controllers.PersonalCareTableViewController;
 import controllers.ReactiveCareTableViewController;
@@ -63,6 +66,16 @@ public class QuarterlyReportsGUI extends Application {
 				createOlderAdultNeedsArea(), createPersonalHealthCareArea(),
 				createReactiveCareArea(), createHealthPromotionArea());
 		
+		
+		endDate.setOnAction(event->{
+			if(endDate.getValue() != null)
+			{
+				olderAdultNeedsTVCont.setTotalAsOfColumn("Total As of: " + formatDate(endDate.getValue()));
+				personalCareTVCont.setTotalAsOfColumn("Total As of: " + formatDate(endDate.getValue()));
+				olderAdultNeedsTVCont.setTotalForLastYearColumn("Total For " + (endDate.getValue().getYear() - 1 ));
+				personalCareTVCont.setTotalForLastYearColumn("Total For " + (endDate.getValue().getYear() - 1 ));
+			}
+		});
 	}
 	
     @Override
@@ -129,6 +142,12 @@ public class QuarterlyReportsGUI extends Application {
 		return vbox;
     }
     
+    private String formatDate( LocalDate date )
+    {
+        return date.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
+    }
+
+    
     /**
      * Creates the VBox containing the header label and tableview for
      * the adult needs table.
@@ -145,6 +164,10 @@ public class QuarterlyReportsGUI extends Application {
 		areaLbl.setFont(new Font("Arial", 24));
     	
 		olderAdultNeedsTVCont = new OlderAdultNeedsTableViewController();
+		
+		
+		
+		
 		
 		vbox.getChildren().addAll(areaLbl, olderAdultNeedsTVCont.adultNeedsTable);
 		

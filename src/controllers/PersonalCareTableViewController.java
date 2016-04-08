@@ -55,6 +55,28 @@ public class PersonalCareTableViewController
         personalCareTable.setMaxHeight(150);
 	}
 	
+	/**
+	 * Sets the label for the "Total as of <Date>" column.
+	 * @param label The text for the label.
+	 * 
+	 * @author Breanna Wilson, Jon Froese
+	 */
+	public void setTotalAsOfColumn(String label)
+	{
+	    totalAsOfColumn.setText(label);
+	}
+	
+	/**
+	 * Sets the label for the "Total for <Date>" column.
+	 * @param label The text for the label.
+	 * 
+	 * @author Breanna Wilson, Jon Froese
+	 */
+    public void setTotalForLastYearColumn(String label)
+    {
+        totalForLastYearColumn.setText(label);
+    }
+	
 	private void queryPersonalCareData()
 	{
 		db.connect();
