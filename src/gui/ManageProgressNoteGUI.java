@@ -1,6 +1,6 @@
 package gui;
 
-import core.MedicalCondition;
+import object.QueryResult;
 import core.ProgressNotes;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;

@@ -33,6 +33,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -270,7 +271,7 @@ public class MedicalStaffMainPageGUI extends Application
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(175);
        
-
+/*TODO
         Button genQuartRpt = new Button("Generate Quarterly Reports");
         genQuartRpt.setOnAction(event -> {
         	Stage stage = new Stage();
@@ -279,7 +280,11 @@ public class MedicalStaffMainPageGUI extends Application
         	stage.showAndWait();
         });
         stats.setContent(genQuartRpt);
-        
+      */
+        StatisticsTabGUI stg = new StatisticsTabGUI(stats,
+                loggedInUser, medMainStage);
+        stats.setContent(stg.showStatistics()
+                .getContent());
         
         tabPane.getTabs().addAll(participants);
 
@@ -323,6 +328,7 @@ public class MedicalStaffMainPageGUI extends Application
         tabPane.setFocusTraversable(false);
         return tabPane;
     }
+
 
     /**
      * 

@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import object.Medication;
 import controllers.SeizureMedicationTableViewController;
 import core.MedicalAdministrator;
-import core.Medication;
 import core.PopUpCheck;
 import core.PopUpMessage;
 import core.StaffAccount;

@@ -1,4 +1,4 @@
-package core;
+package object;
 import helpers.DatabaseHelper;
 
 import java.sql.ResultSet;

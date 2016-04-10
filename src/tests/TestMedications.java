@@ -5,11 +5,11 @@ import helpers.DatabaseHelper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import object.Medication;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import core.Medication;
 
 /**
  * 

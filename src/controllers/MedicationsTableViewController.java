@@ -4,7 +4,7 @@ import helpers.DatabaseHelper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import core.Medication;
+import object.Medication;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

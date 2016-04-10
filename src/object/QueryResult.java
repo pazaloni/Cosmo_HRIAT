@@ -1,4 +1,4 @@
-package core;
+package object;
 import helpers.DatabaseHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -12,13 +12,13 @@ import javafx.beans.property.StringProperty;
  * @author CIMP
  * @version 1.0
  */
-public class MedicalCondition
+public class QueryResult
 {
 
     private StringProperty condition;
     private StringProperty description;
 
-    public MedicalCondition(String condition, String description)
+    public QueryResult(String condition, String description)
     {
         this.condition = new SimpleStringProperty(condition);
         this.description = new SimpleStringProperty(description);
@@ -55,7 +55,7 @@ public class MedicalCondition
      * @param cosmoID the participant that will be receiving the condition
      * @return The result of the insertion in the database
      */
-    public static String createMedicalCondition( MedicalCondition condition,
+    public static String createMedicalCondition( QueryResult condition,
             String cosmoID )
     {
         String result = "";
@@ -103,8 +103,8 @@ public class MedicalCondition
      * @param cosmoID the participant that will have the condition changed
      * @return a string containing the status of the update
      */
-    public static String updateMedicalCondition( MedicalCondition newCondition,
-            MedicalCondition oldCondition, String cosmoID )
+    public static String updateMedicalCondition( QueryResult newCondition,
+            QueryResult oldCondition, String cosmoID )
     {
         String result = "";
 
@@ -151,7 +151,7 @@ public class MedicalCondition
      * @param cosmoID the participant that will have the condition removed
      * @return a string containing the status of the deletion
      */
-    public static String deleteCondition( MedicalCondition condition,
+    public static String deleteCondition( QueryResult condition,
             String cosmoID )
     {
         String result = "";

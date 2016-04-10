@@ -8,7 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
-import core.MedicalCondition;
+import object.QueryResult;
 import core.ProgressNotes;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;

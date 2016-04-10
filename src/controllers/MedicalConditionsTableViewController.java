@@ -4,7 +4,7 @@ import helpers.DatabaseHelper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import core.MedicalCondition;
+import object.QueryResult;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -15,14 +15,14 @@ import javafx.scene.control.TableView;
 public class MedicalConditionsTableViewController
 {
 
-    public TableView<MedicalCondition> conditionTable = new TableView<MedicalCondition>();
+    public TableView<QueryResult> conditionTable = new TableView<QueryResult>();
 
-    private TableColumn<MedicalCondition, String> conditionColumn = new TableColumn<MedicalCondition, String>(
+    private TableColumn<QueryResult, String> conditionColumn = new TableColumn<QueryResult, String>(
             "Medical Condition");
-    private TableColumn<MedicalCondition, String> descriptionColumn = new TableColumn<MedicalCondition, String>(
+    private TableColumn<QueryResult, String> descriptionColumn = new TableColumn<QueryResult, String>(
             "Description");
 
-    private ObservableList<MedicalCondition> conditionData = FXCollections
+    private ObservableList<QueryResult> conditionData = FXCollections
             .observableArrayList();
 
     public MedicalConditionsTableViewController(String cosmoId)
@@ -60,7 +60,7 @@ public class MedicalConditionsTableViewController
                 conditionName = rs.getString(1);
                 description = rs.getString(2);
 
-                MedicalCondition medicalCondition = new MedicalCondition(
+                QueryResult medicalCondition = new QueryResult(
                         conditionName, description);
 
                 conditionData.add(medicalCondition);
@@ -89,7 +89,7 @@ public class MedicalConditionsTableViewController
      * 
      * @return The selected medical condition 
      */
-    public MedicalCondition getSelectedMedicalCondition()
+    public QueryResult getSelectedMedicalCondition()
     {
         return this.conditionTable.getSelectionModel().getSelectedItem();
     }
