@@ -950,6 +950,67 @@ public class TestMedicalAdministrator
         db.delete("Participant", "cosmoID = " + cosmoIDOne);        
     }
     
+    
+    /**
+     * 
+     * Purpose: to test if the Social Insurance Number is changed
+     * @throws SQLException 
+     */
+    @Test 
+    public void testChangeCareType() throws SQLException
+    {
+        
+        //create the original participant
+        String result = MedicalAdministrator.createParticipant(cosmoIDFour,
+                participantFirstNameFour, participantFirstNameFour,
+                participantBirthdateFour, physicianFNameFour, physicianLNameFour,
+                healthNumberFour, phoneFour, addressFour, careTypeFour, path);
+        
+        //edit the participant with a different care Type
+        String originalEdit = MedicalAdministrator.editParticipant(cosmoIDFour,
+                participantFirstNameFour, participantLastNameFour,
+                participantBirthdateOne, healthNumberFour, "19595 Testing Avenue", phoneFour,
+                cityOne, postalCodeFour, sinTwo, careTypeTwo, activeStatus);
+        
+        //get it from the database
+        ResultSet results = db.select("careType" , "Participant", "cosmoID = " + this.cosmoIDFour, "");      
+        
+        //get the sin of the participant
+        String originalCareType = "";
+        
+        while (results.next())
+        {
+            originalCareType = results.getString(1);
+        }
+        //make sure the insertion was successful
+        assertTrue(result.equals(""));
+        
+        //edit the participant with a different sin
+        String secondEdit = MedicalAdministrator.editParticipant(cosmoIDFour,
+                participantFirstNameFour, participantLastNameFour,
+                participantBirthdateOne, healthNumberFour, "19595 Testing Avenue", phoneFour,
+                cityFour, postalCodeFour, sinFour,careTypeThree, activeStatus);
+        
+        //get edited result set
+        ResultSet editedResultSet = db.select("careType" , "Participant", "cosmoID = " + this.cosmoIDFour, "");  
+        
+        //get the new name
+        String editedCareType= "";
+        while (editedResultSet.next())
+        {
+            editedCareType = editedResultSet.getString(1);
+        }
+
+        //make sure the insertion was successful
+        assertTrue(secondEdit.equals(""));
+        
+        assertTrue(!originalCareType.equals(editedCareType));
+        assertTrue(editedCareType.equals(careTypeThree));
+        
+        db.delete("Participant", "cosmoID = " + cosmoIDFour);
+    }
+    
+    
     @After
     public void tearDown()
     {
