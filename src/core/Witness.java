@@ -7,9 +7,9 @@ public class Witness
     /*
      * P - Participant, S - Staff, O - Other
      */
-    private char witnessType;
+    private String witnessType;
 
-    public Witness(String witnessName, char witnessType)
+    public Witness(String witnessName, String witnessType)
     {
         this.witnessName = witnessName;
         this.witnessType = witnessType;
@@ -43,7 +43,7 @@ public class Witness
      * 
      * @return witness' type
      */
-    public char getWitnessType()
+    public String getWitnessType()
     {
         return witnessType;
     }

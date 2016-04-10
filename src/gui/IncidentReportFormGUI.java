@@ -2,6 +2,7 @@ package gui;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javafx.beans.value.ChangeListener;
@@ -38,6 +39,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import core.PopUpMessage;
 import core.StaffAccount;
+import core.Witness;
 
 /**
  * Purpose: represent the incident report form
@@ -77,7 +79,7 @@ public class IncidentReportFormGUI
     private TextArea incidentDescription, incidentFactors, txtAProtEquip;
 
     private RadioButton am, pm;
-    private RadioButton other, personalSupportsManager,
+    private RadioButton radOtherWorkArea, personalSupportsManager,
             personalSupportsCoordinator;
 
     private CheckBox noVerbalReport;
@@ -278,13 +280,13 @@ public class IncidentReportFormGUI
         workAreas.add("Life Enrichment");
         cboWorkAreas = new ComboBox<>(workAreas);
         cboWorkAreas.getSelectionModel().select(0);
-        other = new RadioButton("Other");
-        other.setPadding(new Insets(0, 35, 0, 0));
+        radOtherWorkArea = new RadioButton("Other");
+        radOtherWorkArea.setPadding(new Insets(0, 35, 0, 0));
         cboWorkAreas.setMinWidth(250);
         otherWorkArea.setMinWidth(195);
         otherWorkArea.setDisable(true);
-        other.setOnAction(event -> {
-            if ( other.isSelected() )
+        radOtherWorkArea.setOnAction(event -> {
+            if ( radOtherWorkArea.isSelected() )
             {
                 otherWorkArea.setDisable(false);
                 cboWorkAreas.setDisable(true);
@@ -296,7 +298,7 @@ public class IncidentReportFormGUI
             }
         });
 
-        box.getChildren().addAll(registeredWorkArea, cboWorkAreas, other,
+        box.getChildren().addAll(registeredWorkArea, cboWorkAreas, radOtherWorkArea,
                 otherWorkArea);
         box.setSpacing(15);
 
@@ -487,6 +489,21 @@ public class IncidentReportFormGUI
         typesOfInjuries.add(chkVehichleIncident);
         typesOfInjuries.add(chkPropertyDmg);
         typesOfInjuries.add(chkOtherType);
+        txtOtherType.setDisable(true);
+        
+        chkOtherType.setOnAction(event->{
+            
+            if(chkOtherType.isSelected())
+            {
+                txtOtherType.setDisable(false);
+            }
+            else
+            {
+                txtOtherType.setDisable(true);
+            }
+        });
+        
+        
         Label lblProtEquipment = new Label(
                 "Protective Equipment Used at Time of Incident?");
 
@@ -841,7 +858,39 @@ public class IncidentReportFormGUI
             // Form is valid in here.... do all the information inserting in
             // here.
             
+            //Check to see how many types of injures were selected.
             
+            ArrayList<String> selectedTypesOfInjuries = new ArrayList<String>();
+                        
+            for( CheckBox chk: typesOfInjuries)
+            {
+                if(chk.isSelected())
+                {
+                    selectedTypesOfInjuries.add(chk.getText());
+                }
+            }
+            //If the other type of injury is selected, we'll add it to the list
+            if(chkOtherType.isSelected())
+            {
+                selectedTypesOfInjuries.add(txtOtherType.getText());
+            }
+            
+            String [] selectedInjuries = (String[]) selectedTypesOfInjuries.toArray();
+            
+            Witness[] witnesses = new Witness[3];
+            
+            if(!staffWitness.getText().isEmpty())
+            {
+                witnesses[0] = new Witness(staffWitness.getText(), "S");
+            }            
+            if(!participantWitness.getText().isEmpty())
+            {
+                witnesses[0] = new Witness(participantWitness.getText(),"P");
+            }
+            if(!otherWitness.getText().isEmpty())
+            {
+                witnesses[0] = new Witness(otherWitness.getText(), "P");
+            }
             
             localStage.close();
 
@@ -882,7 +931,7 @@ public class IncidentReportFormGUI
             errorMessage.append("\tThe participant that was injured.\n");
             formValid = false;
         }
-        if ( other.isSelected() )
+        if ( radOtherWorkArea.isSelected() )
         {
             if ( otherWorkArea.getText().isEmpty() )
             {
