@@ -83,6 +83,7 @@ public class participantDetailsGUI extends Application
     private Label cityText = new Label();
     private Label postalText = new Label();
     private Label sinText = new Label();
+    private Label careText = new Label();
     ///new label to represent the participant's status within the system
     private Label statusText = new Label();
 
@@ -200,13 +201,13 @@ public class participantDetailsGUI extends Application
                 participantMainStage);
         personalCare.setContent(pc.showPersonalCare(cosmoID + "")
                 .getContent());
-        
-      //Create the Progress Notes Tab
-        ScanFormsGUI sfg = new ScanFormsGUI(scannedForms, loggedInUser,
-                participantMainStage);
-        scannedForms.setContent(sfg.showScannedForms(cosmoID + "")
-                .getContent());
-        
+//        
+//      //Create the Progress Notes Tab
+//        ScanFormsGUI sfg = new ScanFormsGUI(scannedForms, loggedInUser,
+//                participantMainStage);
+//        scannedForms.setContent(sfg.showScannedForms(cosmoID + "")
+//                .getContent());
+//        
 
         caregiver.setContent(createCaregiverTab());
         other.setContent(createOtherTab());
@@ -389,6 +390,7 @@ public class participantDetailsGUI extends Application
         Label postalLabel = new Label("Postal Code: ");
         Label phoneLabel = new Label("Phone Number: ");
         Label sinLabel = new Label("SIN: ");
+        Label careLabel = new Label("Care Type: ");
 
         // use width to made container large enough
         cosmoIDLabel.setMinWidth(100);
@@ -406,10 +408,11 @@ public class participantDetailsGUI extends Application
         postalLabel.setPadding(new Insets(5, 5, 5, 5));
         phoneLabel.setPadding(new Insets(5, 5, 5, 5));
         sinLabel.setPadding(new Insets(5, 5, 5, 5));
+        careLabel.setPadding(new Insets(5, 5, 5, 5));
         /// get participant name, phn, diagnosis, and address from database
         ResultSet results = DBObject
                 .select("firstName, lastName, dateOfBirth, personalHealthNumber, conditionName,"
-                        + "description, address, imagePath, phoneNumber, city, postalCode, socialInsuranceNumber",
+                        + "description, address, imagePath, phoneNumber, city, postalCode, socialInsuranceNumber, careType",
                         "Participant p LEFT OUTER JOIN Conditions c ON p.cosmoID = c.cosmoID",
                         "cosmoID =" + this.cosmoID, "");
 
@@ -434,6 +437,7 @@ public class participantDetailsGUI extends Application
                 cityText.setText(results.getString(10)+"");
                 postalText.setText(results.getString(11)+"");
                 sinText.setText(results.getString(12)+"");
+                careText.setText(results.getString(13)+"");
                 URL u = null;
                 try
                 {
@@ -503,6 +507,7 @@ public class participantDetailsGUI extends Application
         basicInfoPane.add(cityLabel, 0, 8);
         basicInfoPane.add(postalLabel, 0, 9);
         basicInfoPane.add(sinLabel, 0, 10);
+        basicInfoPane.add(careLabel, 0,11);
 
         basicInfoPane.add(cosmoIDText, 1, 0);
         basicInfoPane.add(firstNameText, 1, 2);
@@ -514,6 +519,8 @@ public class participantDetailsGUI extends Application
         basicInfoPane.add(cityText, 1, 8);
         basicInfoPane.add(postalText, 1, 9);
         basicInfoPane.add(sinText, 1, 10);
+        basicInfoPane.add(careText,1,11);
+        
 
         // add buttons to the previewPane
         if ( loggedInUser instanceof MedicalAdministrator )
@@ -538,7 +545,7 @@ public class participantDetailsGUI extends Application
                 mainEditWindow.setTitle("Edit Participant");
 
                 mainEditWindow.setScene(new Scene(editParticipantPopUp(), 290,
-                        420));
+                        440));
                 mainEditWindow.initModality(Modality.APPLICATION_MODAL);
                 mainEditWindow.initOwner(participantMainStage);
                 mainEditWindow.setResizable(false);
@@ -1151,6 +1158,7 @@ public class participantDetailsGUI extends Application
         Label cityLbl = new Label("City");
         Label postalCodeLbl = new Label("Postal Code");
         Label sinLbl = new Label("SIN");
+        Label careLbl = new Label("Care Type");
         ///Label to display the participant status
         Label statusLabel = new Label("Status:");
 
@@ -1251,6 +1259,9 @@ public class participantDetailsGUI extends Application
         //SIN Text
         TextField sinTxt = new TextField(sinText.getText());
         
+        //care type
+        TextField careTxt = new TextField(careText.getText());
+        
         ///set the combobox value to the current status
         statusCombo.setValue(statusText.getText());
 
@@ -1264,8 +1275,9 @@ public class participantDetailsGUI extends Application
         grid.add(cityLbl, 0, 7);
         grid.add(postalCodeLbl, 0, 8);
         grid.add(sinLbl, 0, 9);
+        grid.add(careLbl,0,10);
         ///Add the status label to the gui
-        grid.add(statusLabel, 0, 10);
+        grid.add(statusLabel, 0, 11);
         
         grid.add(lblWarning, 1, 0);
         
@@ -1278,13 +1290,14 @@ public class participantDetailsGUI extends Application
         grid.add(cityTxt, 1,7);
         grid.add(postalTxt, 1, 8);
         grid.add(sinTxt, 1, 9);
+        grid.add(careTxt, 1, 10);
         ///add the combobox to the GUI
-        grid.add(statusCombo, 1, 10);
+        grid.add(statusCombo, 1, 11);
 
 
         // setPadding of the grid
         grid.setPadding(new Insets(10, 10, 0, 10));
-        grid.setHgap(10);
+        grid.setHgap(5);
         grid.setVgap(10);
 
         // Adding participant event handler
@@ -1300,7 +1313,7 @@ public class participantDetailsGUI extends Application
                         cosmoIDText.getText(), firstNameTxt.getText(),
                         lastNameTxt.getText(), birthDatePicker.getValue(),
                         healthNumTxt.getText(), addressTxt.getText(), phoneNumTxt.getText(),
-                        cityTxt.getText(), postalTxt.getText(), sinTxt.getText(), statusCombo.getValue().toString());
+                        cityTxt.getText(), postalTxt.getText(), sinTxt.getText(), careTxt.getText(), statusCombo.getValue().toString());
 
                 // if no error message is recieved then close this window and
                 // refresh the table
@@ -1344,8 +1357,13 @@ public class participantDetailsGUI extends Application
                    checkForChanges(sinText, sinTxt.getText(),
                            "SIN", cosmoIDText.getText());
                    
+                   checkForChanges(careText, careTxt.getText(),
+                           "Care Type", cosmoIDText.getText());
+                   
                    checkForChanges(statusText, statusCombo.getValue().toString(),
-                           "Status", cosmoIDText.getText());    
+                           "Status", cosmoIDText.getText()); 
+                   
+                   
                    
                 }
                 // if there is an error message, display it
@@ -1377,6 +1395,7 @@ public class participantDetailsGUI extends Application
                 cityTxt.setText("");
                 postalTxt.setText("");
                 sinTxt.setText("");
+                careTxt.setText("");
                 lblWarning.setText("");
             }
 
@@ -1389,8 +1408,8 @@ public class participantDetailsGUI extends Application
         buttonsHbox.setAlignment(Pos.CENTER);
         resetHbox.getChildren().addAll(resetBtn);
         resetHbox.setAlignment(Pos.CENTER_RIGHT);
-        grid.add(buttonsHbox, 1, 11);
-        grid.add(resetHbox, 0, 11);
+        grid.add(buttonsHbox, 1, 12);
+        grid.add(resetHbox, 0, 12);
 
         return grid;
     }
