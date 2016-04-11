@@ -113,7 +113,7 @@ public class ProgressNotesFormGUI
         Button btnAddProgressNote = new Button("Add");
         Button btnEditProgressNote = new Button("Edit");
         Button btnDeleteProgressNote = new Button("Delete");
-        buttons.setPadding(new Insets(0, 0, 0, 500));
+        buttons.setPadding(new Insets(0, 0, 10, 500));
         ProgressNotesTableViewController controller = new ProgressNotesTableViewController(
                 cosmoId);
         TableView<ProgressNotes> table = controller.progressTable;

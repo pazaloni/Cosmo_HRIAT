@@ -166,8 +166,8 @@ public class participantDetailsGUI extends Application
         Tab seizureDescription = new Tab();
         Tab progressNotes = new Tab();
         Tab personalCare = new Tab();
-        Tab workDetails = new Tab();
-        Tab physicianInfo = new Tab();
+        Tab scannedForms = new Tab();
+
         Tab caregiver = new Tab();
         Tab other = new Tab();
 
@@ -201,8 +201,13 @@ public class participantDetailsGUI extends Application
         personalCare.setContent(pc.showPersonalCare(cosmoID + "")
                 .getContent());
         
-        workDetails.setContent(createWorkDetailsTab());
-        physicianInfo.setContent(createPhysicianInfoTab());
+      //Create the Progress Notes Tab
+        ScanFormsGUI sfg = new ScanFormsGUI(scannedForms, loggedInUser,
+                participantMainStage);
+        scannedForms.setContent(sfg.showScannedForms(cosmoID + "")
+                .getContent());
+        
+
         caregiver.setContent(createCaregiverTab());
         other.setContent(createOtherTab());
 
@@ -212,8 +217,8 @@ public class participantDetailsGUI extends Application
         seizureDescription.setText("Seizure Description");
         progressNotes.setText("Progress Notes");
         personalCare.setText("Personal Care");
-        workDetails.setText("Work");
-        physicianInfo.setText("Physician");
+        scannedForms.setText("Scanned Documents");
+
         caregiver.setText("Caregiver");
         other.setText("Other");
 
@@ -223,15 +228,15 @@ public class participantDetailsGUI extends Application
         seizureDescription.closableProperty().set(false);
         progressNotes.closableProperty().set(false);
         personalCare.closableProperty().set(false);
-        workDetails.closableProperty().set(false);
-        physicianInfo.closableProperty().set(false);
+        scannedForms.closableProperty().set(false);
+
         caregiver.closableProperty().set(false);
         other.closableProperty().set(false);
 
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(100);
         tabPane.getTabs().addAll(healthStatus, participantUpdate,
-                seizureDescription, progressNotes, personalCare, physicianInfo, workDetails,
+                seizureDescription, progressNotes, personalCare, scannedForms,
                 caregiver, other);
         tabPane.setMinHeight(29);
 
@@ -281,15 +286,8 @@ public class participantDetailsGUI extends Application
         // create picture box for left side of preview pane
         VBox pictureBox = new VBox();
         // default preview picture
-        URL url = getClass().getResource("../images/defaultPicture.png");
-        try
-        {
-            previewPicture = new ImageView(new Image(url.openStream()));
-        }
-        catch ( IOException e )
-        {
-            e.printStackTrace();
-        }
+        //URL url = getClass().getResource("../images/defaultPicture.png");
+        previewPicture = new ImageView(new Image("images/defaultPicture.png"));
 
         // set margins
         VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
@@ -362,7 +360,7 @@ public class participantDetailsGUI extends Application
         editBtn.setMinWidth(30);
         editBtn.setMaxHeight(25);
         editBtn.setMaxHeight(25);
-        editBtn.setGraphic(new ImageView("images/edit.png"));
+        editBtn.setGraphic(new ImageView(new Image("images/edit.png")));
 
         viewDocumentsBtn.setMaxWidth(100);
         viewDocumentsBtn.setMinWidth(100);
