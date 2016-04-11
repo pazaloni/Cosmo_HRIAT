@@ -241,7 +241,7 @@ public class MedicalStaffMainPageGUI extends Application
         Tab participants = new Tab();
         Tab forms = new Tab();
         Tab stats = new Tab();
-
+        VBox formsBox = new VBox();
         HBox box = new HBox();        
         HBox btnBox = new HBox();
         
@@ -265,8 +265,9 @@ public class MedicalStaffMainPageGUI extends Application
         participants.closableProperty().set(false);
         stats.closableProperty().set(false);
 
-
-        forms.setContent(box);
+        ////todo:add incident table
+        formsBox.getChildren().addAll(box, );
+        forms.setContent(formsBox);
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(175);
        
