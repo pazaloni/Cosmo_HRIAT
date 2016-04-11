@@ -1,5 +1,6 @@
 package gui;
 import helpers.EncryptionHelper;
+import helpers.EncryptionHelper;
 import core.StaffAccount;
 import core.TechnicalAdministrator;
 import javafx.application.Application;
@@ -14,7 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+   
 /**
  * Purpose: Create the first page the user sees when they launch the program
  * 
@@ -24,7 +25,6 @@ import javafx.stage.Stage;
 public class LoginGUI extends Application
 {
 	StaffAccount staffloginHelper = new StaffAccount();
-
     /* Login Elements */
     private VBox vbMainPane;
     private TextField txtUserName;
@@ -47,7 +47,7 @@ public class LoginGUI extends Application
     public static final String USERNAME_PROMPT_TEXT = "Username";
     public static final String PASSWORD_PROMPT_TEXT = "Password";
     public static final String STAGE_TITLE = "Cosmopolitan Industries";
-    public static final String IMAGE_PATH = "file:images/CosmoIconLong.png";
+    public static final String IMAGE_PATH = "images/CosmoIconLong.png";
     public static final String BUTTON_LABEL = "Login";
     
     public static void main( String[] args )
