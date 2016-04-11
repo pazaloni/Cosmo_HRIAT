@@ -120,6 +120,12 @@ public class PhysicianTableViewController
         PhysicianTable.setItems(PhysicianData);
     }
 
+    /**
+     * Purpose:THIS GRABS THE SELECTED USER ON THE TABLE FOR MODIFICATION.
+     * 
+     * 
+     * @author Kyle Unick cst214
+     */
     public String getSelectedPK()
     {
         String result;

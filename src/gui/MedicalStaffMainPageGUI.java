@@ -65,6 +65,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -266,7 +267,7 @@ public class MedicalStaffMainPageGUI extends Application
         IncidentReportFormGUI irf = new IncidentReportFormGUI(medMainStage, loggedInUser);
         PhysicianManagementGUI pmg = new PhysicianManagementGUI();
         
-        box.getChildren().add(irf.showIncidentReportForm());
+        //box.getChildren().add(irf.showIncidentReportForm());
         pmgBox.getChildren().add(pmg.showPhysicianManagementForm());
         
   

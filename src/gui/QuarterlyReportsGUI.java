@@ -21,44 +21,62 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class QuarterlyReportPrevGUI extends Application {
+/**
+ * The interface for previewing the querterly reports based on the dates selected.
+ * @author Breanna Wilson, Jon Froese
+ *
+ */
 
+public class QuarterlyReportsGUI extends Application {
 	
-	private DatePicker startDatePicker;
-	private DatePicker endDatePicker;
+	//NOTE: start and end dates do not affect how data is pulled from
+	// the database, it is only to print it onto the exported form
+	private DatePicker startDate;
+	private DatePicker endDate;
 	
+	//Controllers for each TableView
 	private OlderAdultNeedsTableViewController olderAdultNeedsTVCont;
 	private PersonalCareTableViewController personalCareTVCont;
 	private ReactiveCareTableViewController reactiveCareTVCont;
-	private HealthPromotionTableViewController healthPromotionTVCont;
 	
 	private Button exportBtn;
-	
+	//VBox containing all other nodes
 	public VBox mainVbox;
 	
 	public Stage stage;
 	private Scene scene;
 	
-	DatePicker startDate;
-	DatePicker endDate;
 	
-	public QuarterlyReportPrevGUI(Stage stage)
+	/**
+	 * Initializes the main VBox and contained nodes.
+	 * @param stage The stage holding the main VBox
+	 * 
+	 * @author Breanna Wilson, Jon Froese
+	 */
+	public QuarterlyReportsGUI(Stage stage)
 	{
 		this.stage = stage;
 		mainVbox = new VBox();
 		stage.setTitle("Generate Quarterly Report");
 
 		mainVbox.getChildren().addAll(createHeader(),
-				createOlderAdultNeedsArea(), createPersonalHealthCareArea(), createReactiveCareArea(), createHealthPromotionArea());
+				createOlderAdultNeedsArea(), createPersonalHealthCareArea(),
+				createReactiveCareArea(), createHealthPromotionArea());
 		
 	}
 	
     @Override
     public void start( Stage stage ) throws Exception
     {
-		
+		//Nothing is necessary to do here, as it is done in the constructor instead
     }
     
+    /**
+     * Creates the header for the cosmo logo, datepickers, and the export button
+     * @return The VBox containing the header objects
+     * 
+     *  @author Breanna Wilson, Jon Froese
+     */
     private VBox createHeader()
     {
     	VBox vbox = new VBox();
@@ -74,6 +92,7 @@ public class QuarterlyReportPrevGUI extends Application {
 		
 		vbox.getChildren().addAll(logo, pageLbl);
 		
+		//container for the datepickers and their labels
 		GridPane dateContainer = new GridPane();
 		
 		Label startDateLbl = new Label("Start Date:");
@@ -87,6 +106,7 @@ public class QuarterlyReportPrevGUI extends Application {
 		dateContainer.add(endDateLbl, 1, 0);
 		dateContainer.add(endDate, 1, 1);
 		
+		//add some spacing for the datepickers and their labels
 		dateContainer.setHgap(5);
 		dateContainer.setVgap(5);
 		
@@ -109,6 +129,13 @@ public class QuarterlyReportPrevGUI extends Application {
 		return vbox;
     }
     
+    /**
+     * Creates the VBox containing the header label and tableview for
+     * the adult needs table.
+     * @return VBox containing adult needs label and tableview
+     * 
+     *  @author Breanna Wilson, Jon Froese
+     */
     private VBox createOlderAdultNeedsArea()
     {
     	VBox vbox = new VBox();
@@ -121,11 +148,17 @@ public class QuarterlyReportPrevGUI extends Application {
 		
 		vbox.getChildren().addAll(areaLbl, olderAdultNeedsTVCont.adultNeedsTable);
 		
-		
-		
     	return vbox;
     }
     
+    /**
+     * Creates the label and tableview for the personal
+     * health care area.
+     * @return The VBox containing the label and tableview for
+     *  participant personal health care
+     *  
+     *   @author Breanna Wilson, Jon Froese
+     */
     private VBox createPersonalHealthCareArea()
     {
        VBox vbox = new VBox();
@@ -136,13 +169,19 @@ public class QuarterlyReportPrevGUI extends Application {
         
         personalCareTVCont = new PersonalCareTableViewController();
         
-        vbox.getChildren().addAll(areaLbl);
-        
-        
+        vbox.getChildren().addAll(areaLbl, personalCareTVCont.personalCareTable);
         
         return vbox;
     }
     
+    /**
+     * Creates the label and tableview for the reactive care
+     * area.
+     * @return The VBox containing the label and tableview for the
+     *  reactive care area
+     *  
+     *   @author Breanna Wilson, Jon Froese
+     */
     private VBox createReactiveCareArea()
     {
        VBox vbox = new VBox();
@@ -153,32 +192,35 @@ public class QuarterlyReportPrevGUI extends Application {
         
         reactiveCareTVCont = new ReactiveCareTableViewController();
         
-        vbox.getChildren().addAll(areaLbl);
-        
-        
+        vbox.getChildren().addAll(areaLbl, reactiveCareTVCont.reactiveCareTable);
         
         return vbox;
     }
     
+    /**
+     * Creates the label and tableview for the health promotion area.
+     * @return The VBox containing the label and tableview for the 
+     * health promotion area
+     * 
+     *  @author Breanna Wilson, Jon Froese
+     */
     private VBox createHealthPromotionArea()
     {
        VBox vbox = new VBox();
         
-        Label areaLbl = new Label("Health Promotion Activities");
+        Label areaLbl = new Label("Health Promotion Activities and Health-Related Supplies"
+        		+ " are to be entered after export.");
         areaLbl.setPadding(new Insets(5,5,5,5));
-        areaLbl.setFont(new Font("Arial", 24));
+        areaLbl.setFont(new Font("Arial", 12));
         
-        healthPromotionTVCont = new HealthPromotionTableViewController();
         
         vbox.getChildren().addAll(areaLbl);
-        
-        
         
         return vbox;
     }
 	
     private void exportReport()
     {
-    	
+    	//TODO have this function export the report to a file
     }
 }

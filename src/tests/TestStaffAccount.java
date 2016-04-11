@@ -98,7 +98,7 @@ public class TestStaffAccount
     {
 
         StaffAccount user = test.login(usernameThree, firstPasswordThree);
-        assertTrue(user.getClass().getName().equals("BasicStaff"));
+        assertTrue(user.getClass().getSimpleName().equals("BasicStaff"));
     }
 
     @Test
@@ -106,7 +106,7 @@ public class TestStaffAccount
     {
 
         StaffAccount user = test.login(usernameOne, firstPasswordOne);
-        assertTrue(user.getClass().getName().equals("MedicalAdministrator"));
+        assertTrue(user.getClass().getSimpleName().equals("MedicalAdministrator"));
     }
 
     @Test
@@ -114,7 +114,7 @@ public class TestStaffAccount
     {
 
         StaffAccount user = test.login(usernameTwo, firstPasswordTwo);
-        assertTrue(user.getClass().getName().equals("TechnicalAdministrator"));
+        assertTrue(user.getClass().getSimpleName().equals("TechnicalAdministrator"));
     }
 
     @Test

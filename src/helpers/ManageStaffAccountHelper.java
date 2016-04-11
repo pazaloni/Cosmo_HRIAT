@@ -25,6 +25,8 @@ public class ManageStaffAccountHelper
     private static final String USERNAME_NOT_UNIQUE = "Username is already taken";
 
     private DatabaseHelper db;
+    ///the EncryptionHelper declaration
+    private EncryptionHelper eh;
 
     /**
      * purpose: Constructor for ManageStaffAccountHelper which creates and
@@ -34,6 +36,8 @@ public class ManageStaffAccountHelper
     public ManageStaffAccountHelper()
     {
         db = new DatabaseHelper();
+        ///Instantiating the EncryptionHelper
+        eh = new EncryptionHelper();
     }
 
     /**
@@ -89,7 +93,7 @@ public class ManageStaffAccountHelper
                         newUserInfo[1] = lastName;
                         newUserInfo[2] = firstName;
                         newUserInfo[3] = email;
-                        newUserInfo[4] = password;
+                        newUserInfo[4] = eh.encrypt(password);
                         newUserInfo[5] = securityLv;
                         db.insert(newUserInfo, "Staff");
                         result = "";

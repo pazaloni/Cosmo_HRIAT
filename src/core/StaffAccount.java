@@ -1,5 +1,6 @@
 package core;
 import helpers.DatabaseHelper;
+import helpers.EncryptionHelper;
 import helpers.ManageStaffAccountHelper;
 
 import java.sql.ResultSet;
@@ -21,6 +22,8 @@ import java.sql.SQLException;
 public class StaffAccount
 {
     private DatabaseHelper db;
+    ///Instantiating the EncryptionHelper
+    private EncryptionHelper eh = new EncryptionHelper();
     private ManageStaffAccountHelper manageStaff;
 
     protected StringProperty username;
@@ -50,6 +53,7 @@ public class StaffAccount
         StaffAccount staff = null;
         manageStaff = new ManageStaffAccountHelper();
 
+
         // These are set as not found because when there is nothing returned
         // form the database they are assigned nothing so they remain
         // uninstantiated
@@ -67,30 +71,6 @@ public class StaffAccount
         // password and accesslevel
        
        StaffAccount currentUser = manageStaff.queryStaff(username);
-        
-//        ResultSet user = db.select(
-//                "UserName, lastName, firstName, email, password, accessLevel",
-//                "Staff", "username='" + username + "'", "");
-//        try
-//        {
-//            // if the user result set has values in it
-//            while (user.next())
-//            {
-//                // the username, password and accessLevel returned from the
-//                // database
-//                returnedUsername = user.getString(1);
-//                returnedLastName = user.getString(2);
-//                returnedFirstName = user.getString(3);
-//                returnedEmail = user.getString(4);
-//                returnedPassword = user.getString(5);
-//                accessLevel = user.getString(6);
-//            }
-//        }
-//        catch (SQLException e1)
-//        {
-//            // TODO Auto-generated catch block
-//            e1.printStackTrace();
-//        }
 
         // flag used to check if the returned user exists
         if (currentUser != null)
@@ -157,7 +137,6 @@ public class StaffAccount
         }
         catch (SQLException e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         
@@ -290,7 +269,11 @@ public class StaffAccount
     
     public String GetPassword()
     {
-        return password.get();
+        String pass = password.get();
+        ///decrypt the encrypted password from the database
+        String decryptedPass = eh.decrypt(pass);
+        return decryptedPass;
+
     }
 
     /**

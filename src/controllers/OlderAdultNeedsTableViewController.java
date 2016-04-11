@@ -5,6 +5,17 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import core.OlderAdultsNeeds;
 
+/**
+ * The controller for the Older Adults Needs tableview for the
+ * Quarterly Reports Preview GUI.
+ * 
+ * This will take care of handling putting data into the tableview, 
+ * as well as the tableview's layout.
+ * 
+ * @author Breanna Wilson, Jon Froese
+ *
+ */
+
 public class OlderAdultNeedsTableViewController 
 {
 	public TableView<OlderAdultsNeeds> adultNeedsTable = new TableView<OlderAdultsNeeds>();
@@ -27,6 +38,13 @@ public class OlderAdultNeedsTableViewController
 	private ObservableList<OlderAdultsNeeds> adultData = 
 			FXCollections.observableArrayList();
 	
+	/**
+	 * Initializes the tableview, pulls the
+	 * data from the database and puts it into
+	 * the tableview.
+	 * 
+	 * @author Breanna Wilson, Jon Froese
+	 */
 	public OlderAdultNeedsTableViewController()
 	{
 		queryAdultsNeedsData();
@@ -38,9 +56,16 @@ public class OlderAdultNeedsTableViewController
 	
 	private void queryAdultsNeedsData()
 	{
-		
+		//TODO have this pull the data from the DB
 	}
 	
+	/**
+	 * Clears the tableview and the observablelist, re-queries
+	 * the database, and places the fresh data into the list and
+	 * then the tableview.
+	 * 
+	 * @author Breanna Wilson, Jon Froese
+	 */
 	public void refreshTable()
 	{
 		this.adultData.clear();
@@ -49,6 +74,13 @@ public class OlderAdultNeedsTableViewController
 		this.initialize();
 	}
 	
+	/**
+	 * Initializes the tableview. The tablecolumns are
+	 * set up to pull data from the data holder object, 
+	 * and are put into the tableview.
+	 * 
+	 * @author Breanna Wilson, Jon Froese
+	 */
 	@SuppressWarnings("unchecked")
 	public void initialize()
 	{
@@ -92,12 +124,24 @@ public class OlderAdultNeedsTableViewController
 				totalForLastYearColumn);
 	}
 	
+	/**
+	 * Sets the label for the "Total as of <Date>" column.
+	 * @param label The text for the label.
+	 * 
+	 * @author Breanna Wilson, Jon Froese
+	 */
 	public void setTotalAsOfColumn(String label)
 	{
 	    totalAsOfColumn.setText(label);
 	}
 	
-   public void setTotalForLastYearColumn(String label)
+	/**
+	 * Sets the label for the "Total for <Date>" column.
+	 * @param label The text for the label.
+	 * 
+	 * @author Breanna Wilson, Jon Froese
+	 */
+    public void setTotalForLastYearColumn(String label)
     {
         totalForLastYearColumn.setText(label);
     }
