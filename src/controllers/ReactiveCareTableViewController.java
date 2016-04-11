@@ -55,18 +55,20 @@ public class ReactiveCareTableViewController
 		reactiveCareTable.setMaxHeight(150);
 	}
 	
+	/**
+	 * Queries the database for statistics on reactive care, counting the number
+	 * of participants and staff members involved for incidents each year that is stored in the database,
+	 * and places the data into the tableview.
+	 * 
+	 * @author Breanna Wilson, Jon Froese
+	 */
 	private void queryReactiveCareData() 
 	{
-	    
-		//ResultSet rsNumParticipants = db.select("COUNT(cosmoID),", "IncidentReport", "", "");
-		//ResultSet rsNumParticipants = db.select("COUNT(Incidents.incidentID), Year(dateOfIncident)","Incidents GROUP BY (Year(dateOfIncident))","","");
 	    ResultSet rsNumParticipants = db.select("COUNT(Incidents.incidentID), Year(dateOfIncident)","Incidents GROUP BY (Year(dateOfIncident))","","");
 		ResultSet rsNumStaff = null;
 		int numParticipants = 0;
 		int numStaff = 0;
 		int year = 0;
-		
-		
 		
 		
 		try 
@@ -87,21 +89,17 @@ public class ReactiveCareTableViewController
 						numStaff = rsNumStaff.getInt(1);
 					}
 					
-					//numStaff += rsNumParticipants.getInt(3);
 				}
 				
-//				if(rsNumStaff != null && rsNumStaff.next())
-//				{
-//					numStaff += rsNumStaff.getInt(1);
-//				}
 				
 				ReactiveCare rc = new ReactiveCare(year, numParticipants, numStaff);
 				
 				reactiveCareData.add(rc);
 			}
 			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (SQLException e) 
+		{
 			e.printStackTrace();
 		}
 		

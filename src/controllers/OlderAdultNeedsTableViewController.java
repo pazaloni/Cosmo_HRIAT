@@ -65,13 +65,18 @@ public class OlderAdultNeedsTableViewController
 		adultNeedsTable.setMaxHeight(150);
 	}
 	
+	/**
+	 * Queries the database for participants care types, and calculates
+	 * who is living in long term care facilities, elmwood, luther care, 
+	 * or other care arrangements. It shows the total up to the end date 
+	 * selected. All of the information is sorted by age groups.
+	 * 
+	 * @author Breanna Wilson, Jon Froese
+	 */
 	@SuppressWarnings("deprecation")
 	private void queryAdultsNeedsData()
 	{
-//		ResultSet rsLongTerm = db.select("COUNT(careType)", "Participant", "careType = \"Long Term Care\" AND ", "");
-//		ResultSet rsElmwood = db.select("COUNT(careType)", "Participant", "careType = \"Elmwood\"", "");
-//		ResultSet rsLuther = db.select("COUNT(careType)", "Participant", "careType = \"Luther\"", "");
-//		ResultSet rsOther = db.select("COUNT(careType)", "Participant", "careType = \"Other\"", "");
+		//data objects representing each age group
 		OlderAdultsNeeds over65 = null;
 		OlderAdultsNeeds from60to65 = null;
 		OlderAdultsNeeds from50to54 = null;
@@ -80,6 +85,7 @@ public class OlderAdultNeedsTableViewController
 		OlderAdultsNeeds from30to39 = null;
 		OlderAdultsNeeds from20to29 = null;
 		
+		//long term care counters for each age group
 		int over65LongTermCount = 0;
 		int from60to65LongTermCount = 0;
 		int from55to59LongTermCount = 0;
@@ -88,6 +94,7 @@ public class OlderAdultNeedsTableViewController
 		int from30to39LongTermCount = 0;
 		int from20to29LongTermCount = 0;
 		
+		//elmwood res counters for each age group
 		int over65ElmwoodResCount = 0;
 		int from60to65ElmwoodResCount = 0;
 		int from55to59ElmwoodResCount = 0;
@@ -96,6 +103,7 @@ public class OlderAdultNeedsTableViewController
 		int from30to39ElmwoodResCount = 0;
 		int from20to29ElmwoodResCount = 0;
 		
+		//luther care counters for each age group
 		int over65LutherCareCount = 0;
 		int from60to65LutherCareCount = 0;
 		int from55to59LutherCareCount = 0;
@@ -104,6 +112,7 @@ public class OlderAdultNeedsTableViewController
 		int from30to39LutherCareCount = 0;
 		int from20to29LutherCareCount = 0;
 		
+		//other care counters for each age group
 		int over65OtherCount = 0;
 		int from60to65OtherCount = 0;
 		int from55to59OtherCount = 0;
@@ -114,30 +123,27 @@ public class OlderAdultNeedsTableViewController
 		
 		ResultSet rs = db.select("careType, address, dateOfBirth", "Participant", "","");
 		
-		
-		//LocalDate current = LocalDate.of(Calendar.YEAR, Calendar.MONTH + 1, Calendar.DAY_OF_MONTH);
 		Date current = new Date(Calendar.YEAR, Calendar.MONTH + 1, Calendar.DAY_OF_MONTH);
 		System.out.println(current.toString());
-		//LocalDate birthday;
 		Date birthday;
 		
 		try 
 		{
 			while(rs != null && rs.next())
 			{
-				//birthday = LocalDate.of(rs.getDate(3).getYear(), 
-				//		rs.getDate(3).getMonth() + 1, rs.getDate(3).getDate());
 				birthday = rs.getDate(3);
 				System.out.println(birthday.toString());
 				
+				//get the age of the participant
 				long years = current.getYear() - birthday.getYear();
 				System.out.println(years);
 				
 				String careType = rs.getString(1);
 				
+				//if they are over 65 years of age
 				if(years > 65)
 				{
-					
+					//check the careType, and increment the correlated counter
 					if(careType != null && careType.contains("Elmwood"))
 					{
 						over65ElmwoodResCount++;
@@ -156,8 +162,10 @@ public class OlderAdultNeedsTableViewController
 					}
 					
 				}
+				//else if they are age 60-65
 				else if(years >= 60 && years <= 65)
 				{
+					//check the careType, and increment the correlated counter
 					if(careType != null && careType.contains("Elmwood"))
 					{
 						from60to65ElmwoodResCount++;
@@ -175,8 +183,10 @@ public class OlderAdultNeedsTableViewController
 						from60to65OtherCount++;
 					}
 				}
+				//else if they are age 55-59
 				else if(years >= 55 && years <= 59)
 				{
+					//check the careType, and increment the correlated counter
 					if(careType != null && careType.contains("Elmwood"))
 					{
 						from55to59ElmwoodResCount++;
@@ -195,8 +205,10 @@ public class OlderAdultNeedsTableViewController
 					}
 					
 				}
+				//else if they are age 50-54
 				else if(years >= 50 && years <= 54)
 				{
+					//check the careType, and increment the correlated counter
 					if(careType != null && careType.contains("Elmwood"))
 					{
 						from50to54ElmwoodResCount++;
@@ -214,8 +226,10 @@ public class OlderAdultNeedsTableViewController
 						from50to54OtherCount++;
 					}
 				}
+				//else if they are age 40-49
 				else if(years >= 40 && years <= 49)
 				{
+					//check the careType, and increment the correlated counter
 					if(careType != null && careType.contains("Elmwood"))
 					{
 						from40to49ElmwoodResCount++;
@@ -234,8 +248,10 @@ public class OlderAdultNeedsTableViewController
 					}
 					
 				}
+				//else if they are age 30-39
 				else if(years >= 30 && years <= 39)
 				{
+					//check the careType, and increment the correlated counter
 					if(careType != null && careType.contains("Elmwood"))
 					{
 						from30to39ElmwoodResCount++;
@@ -254,8 +270,10 @@ public class OlderAdultNeedsTableViewController
 					}
 					
 				}
+				//else they fall into the less than 29 age group
 				else
 				{
+					//check the careType, and increment the correlated counter
 					if(careType != null && careType.contains("Elmwood"))
 					{
 						from20to29ElmwoodResCount++;
@@ -277,9 +295,12 @@ public class OlderAdultNeedsTableViewController
 				
 			}
 			
+			//create all of the age group objects
 			over65 = new OlderAdultsNeeds(">65", over65LongTermCount,
 						over65ElmwoodResCount, over65LutherCareCount, 
 						over65OtherCount,0,0);
+			from60to65 = new OlderAdultsNeeds("60-65", from60to65LongTermCount, from60to65ElmwoodResCount, 
+					from60to65LutherCareCount, from60to65OtherCount, 0, 0);
 			from55to59 = new OlderAdultsNeeds("55-59", from55to59LongTermCount, 
 					from55to59ElmwoodResCount, from55to59LutherCareCount, from55to59OtherCount,0, 0);
 			from50to54 = new OlderAdultsNeeds("50-54", from50to54LongTermCount, 
@@ -290,16 +311,14 @@ public class OlderAdultNeedsTableViewController
 					from30to39LutherCareCount, from30to39OtherCount,0, 0);
 			from20to29 = new OlderAdultsNeeds("<29", from20to29LongTermCount, from20to29ElmwoodResCount,
 					from20to29LutherCareCount, from20to29OtherCount,0, 0);
-			
-			adultData.addAll(over65, from55to59, from50to54, from40to49, from30to39, from20to29); 
+			//add each object into the tableview data list
+			adultData.addAll(over65, from60to65, from55to59, from50to54, from40to49, from30to39, from20to29); 
 			
 		} 
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 		}
-		
-		
 		
 	}
 	

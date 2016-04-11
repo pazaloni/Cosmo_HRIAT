@@ -66,7 +66,7 @@ public class QuarterlyReportsGUI extends Application {
 				createOlderAdultNeedsArea(), createPersonalHealthCareArea(),
 				createReactiveCareArea(), createHealthPromotionArea());
 		
-		
+		//When the ending date has been set or changed, update the column headers
 		endDate.setOnAction(event->{
 			if(endDate.getValue() != null)
 			{
@@ -142,6 +142,11 @@ public class QuarterlyReportsGUI extends Application {
 		return vbox;
     }
     
+    /**
+     * Formats the date to a dd-MMM-yyyy format.
+     * @param date The date to be formatted
+     * @return A string representing the formatted date
+     */
     private String formatDate( LocalDate date )
     {
         return date.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));

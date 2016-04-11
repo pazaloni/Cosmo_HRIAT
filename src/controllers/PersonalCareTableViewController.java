@@ -77,6 +77,13 @@ public class PersonalCareTableViewController
         totalForLastYearColumn.setText(label);
     }
 	
+    /**
+     * Queries the database for personal care data, and sorts into the
+     * different categories for each support type, totalling the amount
+     * used for the year.
+     * 
+     * @author Breanna Wilson, Jon Froese
+     */
 	private void queryPersonalCareData()
 	{
 		db.connect();
