@@ -26,12 +26,12 @@ public class PersonalCare
      * 
      * @author Breanna Wilson, Jon Froese
      */
-    public PersonalCare(String type, String supports, String totalAsOf, String totalForLastYear)
+    public PersonalCare(String type, String supports, String totalAsOf)
     {
     	this.type = type;
         this.supports = supports;
         this.totalAsOf = totalAsOf;
-        this.totalForLastYear = totalForLastYear;
+        this.totalForLastYear = "";
     }
     
     public String getType()

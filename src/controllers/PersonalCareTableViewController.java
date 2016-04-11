@@ -96,7 +96,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs.next())
 			{
-				dailyInsulin = new PersonalCare("Medical","Daily Insulin Injections", rs.getString(1), "");
+				dailyInsulin = new PersonalCare("Medical","Daily Insulin Injections", rs.getString(1));
 				personalCareData.add(dailyInsulin);
 			}
 		} 
@@ -112,7 +112,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs.next())
 			{
-				depoInjection = new PersonalCare("Medical","Injections - Depo every 3 months", rs.getString(1), "");
+				depoInjection = new PersonalCare("Medical","Injections - Depo every 3 months", rs.getString(1));
 				personalCareData.add(depoInjection);
 			}
 		} 
@@ -128,7 +128,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs.next())
 			{
-				b12Injection = new PersonalCare("Medical","Injections - Monthly - B12", rs.getString(1), "");
+				b12Injection = new PersonalCare("Medical","Injections - Monthly - B12", rs.getString(1));
 				personalCareData.add(b12Injection);
 			}
 		} 
@@ -144,7 +144,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs  != null && rs.next())
 			{
-				suprapublicCatheter = new PersonalCare("Medical","Monthly Suprapubic Catheter Change", rs.getString(1), "");
+				suprapublicCatheter = new PersonalCare("Medical","Monthly Suprapubic Catheter Change", rs.getString(1));
 				personalCareData.add(suprapublicCatheter);
 			}
 		} 
@@ -162,7 +162,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs  != null && rs.next())
 			{
-				dressings = new PersonalCare("Medical","Dressings", rs.getString(1), "");
+				dressings = new PersonalCare("Medical","Dressings", rs.getString(1));
 				personalCareData.add(dressings);
 			}
 		} 
@@ -178,7 +178,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs  != null && rs.next())
 			{
-				cobanWraps = new PersonalCare("Medical","Coban Wraps", rs.getString(1), "");
+				cobanWraps = new PersonalCare("Medical","Coban Wraps", rs.getString(1));
 				personalCareData.add(cobanWraps);
 			}
 		} 
@@ -196,7 +196,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs  != null && rs.next())
 			{
-				ostomy = new PersonalCare("Other Supports","Colostomy/Illiostomy Care", rs.getString(1), "");
+				ostomy = new PersonalCare("Other Supports","Colostomy/Illiostomy Care", rs.getString(1));
 				personalCareData.add(ostomy);
 			}
 		} 
@@ -212,7 +212,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs  != null && rs.next())
 			{
-				catheter = new PersonalCare("Other Supports","Catheters", rs.getString(1), "");
+				catheter = new PersonalCare("Other Supports","Catheters", rs.getString(1));
 				personalCareData.add(catheter);
 			}
 		} 
@@ -228,7 +228,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs  != null && rs.next())
 			{
-				tracheotomy = new PersonalCare("Other Supports","Tracheotomy", rs.getString(1), "");
+				tracheotomy = new PersonalCare("Other Supports","Tracheotomy", rs.getString(1));
 				personalCareData.add(tracheotomy);
 			}
 		} 
@@ -244,7 +244,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs  != null && rs.next())
 			{
-				tubeFeeds = new PersonalCare("Other Supports","Tube Feeds", rs.getString(1), "");
+				tubeFeeds = new PersonalCare("Other Supports","Tube Feeds", rs.getString(1));
 				personalCareData.add(tubeFeeds);
 			}
 		} 
@@ -260,7 +260,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs  != null && rs.next())
 			{
-				foodAllergy = new PersonalCare("Medical Conditions or Concerns","Food Allergies", rs.getString(1), "");
+				foodAllergy = new PersonalCare("Medical Conditions or Concerns","Food Allergies", rs.getString(1));
 				personalCareData.add(foodAllergy);
 			}
 		} 
@@ -276,7 +276,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs  != null && rs.next())
 			{
-				drugAllergy = new PersonalCare("Medical Conditions or Concerns","Drug Allergies", rs.getString(1), "");
+				drugAllergy = new PersonalCare("Medical Conditions or Concerns","Drug Allergies", rs.getString(1));
 				personalCareData.add(drugAllergy);
 			}
 		} 
@@ -292,7 +292,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs  != null && rs.next())
 			{
-				enivroAllergy = new PersonalCare("Medical Conditions or Concerns","Environmental Allergies", rs.getString(1), "");
+				enivroAllergy = new PersonalCare("Medical Conditions or Concerns","Environmental Allergies", rs.getString(1));
 				personalCareData.add(enivroAllergy);
 			}
 		} 
@@ -309,7 +309,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs  != null && rs.next())
 			{
-				diabetes = new PersonalCare("Medical Conditions or Concerns","Diabetics", rs.getString(1), "");
+				diabetes = new PersonalCare("Medical Conditions or Concerns","Diabetics", rs.getString(1));
 				personalCareData.add(diabetes);
 			}
 		} 
@@ -325,7 +325,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs  != null && rs.next())
 			{
-				diet = new PersonalCare("Medical Conditions or Concerns","Diet (food prep and feeding)", rs.getString(1), "");
+				diet = new PersonalCare("Medical Conditions or Concerns","Diet (food prep and feeding)", rs.getString(1));
 				personalCareData.add(diet);
 			}
 		} 
@@ -342,7 +342,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs  != null && rs.next())
 			{
-				epileptics = new PersonalCare("Medical Conditions or Concerns","Epileptics", rs.getString(1), "");
+				epileptics = new PersonalCare("Medical Conditions or Concerns","Epileptics", rs.getString(1));
 				personalCareData.add(epileptics);
 			}
 		} 
@@ -358,7 +358,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs  != null && rs.next())
 			{
-				liftsFull = new PersonalCare("Personal Care","Require total full lifts", rs.getString(1), "");
+				liftsFull = new PersonalCare("Personal Care","Require total full lifts", rs.getString(1));
 				personalCareData.add(liftsFull);
 			}
 		} 
@@ -375,7 +375,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs  != null && rs.next())
 			{
-				liftsOther = new PersonalCare("Personal Care","Require sit/stand lift", rs.getString(1), "");
+				liftsOther = new PersonalCare("Personal Care","Require sit/stand lift", rs.getString(1));
 				personalCareData.add(liftsOther);
 			}
 		} 
@@ -392,7 +392,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs  != null && rs.next())
 			{
-				twoStaff = new PersonalCare("Personal Care","2 staff assist", rs.getString(1), "");
+				twoStaff = new PersonalCare("Personal Care","2 staff assist", rs.getString(1));
 				personalCareData.add(twoStaff);
 			}
 		} 
@@ -408,7 +408,7 @@ public class PersonalCareTableViewController
 		{
 			if(rs  != null && rs.next())
 			{
-				oneStaff = new PersonalCare("Personal Care","1 staff assist", rs.getString(1), "");
+				oneStaff = new PersonalCare("Personal Care","1 staff assist", rs.getString(1));
 				personalCareData.add(oneStaff);
 			}
 		} 
