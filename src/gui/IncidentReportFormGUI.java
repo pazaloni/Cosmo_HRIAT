@@ -1,5 +1,7 @@
 package gui;
 
+import helpers.IncidentReportFormHelper;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,6 +35,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.EqualizerBand;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -298,8 +301,8 @@ public class IncidentReportFormGUI
             }
         });
 
-        box.getChildren().addAll(registeredWorkArea, cboWorkAreas, radOtherWorkArea,
-                otherWorkArea);
+        box.getChildren().addAll(registeredWorkArea, cboWorkAreas,
+                radOtherWorkArea, otherWorkArea);
         box.setSpacing(15);
 
         mainBox.getChildren().addAll(topBox, box);
@@ -337,7 +340,7 @@ public class IncidentReportFormGUI
         lsvInjuredBodyAreas = new ListView<String>(injuredBodyAreas);
         lsvAllBodyAreas.setMaxHeight(200);
         lsvInjuredBodyAreas.setMaxHeight(200);
-        
+
         FXCollections.sort(allBodyAreas);
         FXCollections.sort(injuredBodyAreas);
 
@@ -449,7 +452,7 @@ public class IncidentReportFormGUI
                 chkOtherType = new CheckBox("Other (Specify) :"),
                 txtOtherType = new TextField());
 
-        gridPaneType.add(chkBruise = new CheckBox("Bruise or Contuion"), 0, 0);
+        gridPaneType.add(chkBruise = new CheckBox("Bruise or Contusion"), 0, 0);
 
         gridPaneType.add(chkScrape = new CheckBox("Scrape or Abrasion"), 0, 1);
         gridPaneType.add(chkSwelling = new CheckBox("Swelling"), 0, 2);
@@ -490,10 +493,10 @@ public class IncidentReportFormGUI
         typesOfInjuries.add(chkPropertyDmg);
         typesOfInjuries.add(chkOtherType);
         txtOtherType.setDisable(true);
-        
-        chkOtherType.setOnAction(event->{
-            
-            if(chkOtherType.isSelected())
+
+        chkOtherType.setOnAction(event -> {
+
+            if ( chkOtherType.isSelected() )
             {
                 txtOtherType.setDisable(false);
             }
@@ -502,8 +505,7 @@ public class IncidentReportFormGUI
                 txtOtherType.setDisable(true);
             }
         });
-        
-        
+
         Label lblProtEquipment = new Label(
                 "Protective Equipment Used at Time of Incident?");
 
@@ -587,7 +589,7 @@ public class IncidentReportFormGUI
         top.setSpacing(spacing);
         chkUnwitnessed = new CheckBox("Unwitnessed");
         chkUnwitnessed.setSelected(true);
-        if(chkUnwitnessed.isSelected())
+        if ( chkUnwitnessed.isSelected() )
         {
             lblWitnessByOther.setDisable(true);
             lblWitnessByParticipants.setDisable(true);
@@ -596,7 +598,7 @@ public class IncidentReportFormGUI
             participantWitness.setDisable(true);
             otherWitness.setDisable(true);
         }
-        
+
         chkUnwitnessed.setOnAction(event -> {
             if ( chkUnwitnessed.isSelected() )
             {
@@ -857,49 +859,70 @@ public class IncidentReportFormGUI
             errorMsg.setText("");
             // Form is valid in here.... do all the information inserting in
             // here.
-            
-            //Check to see how many types of injures were selected.
-            
+
+            // Check to see how many types of injures were selected.
+
             ArrayList<String> selectedTypesOfInjuries = new ArrayList<String>();
-                        
-            for( CheckBox chk: typesOfInjuries)
+
+            for ( CheckBox chk : typesOfInjuries )
             {
-                if(chk.isSelected())
+                if ( chk.isSelected() )
                 {
                     selectedTypesOfInjuries.add(chk.getText());
                 }
             }
-            //If the other type of injury is selected, we'll add it to the list
-            if(chkOtherType.isSelected())
+            // If the other type of injury is selected, we'll add it to the list
+            if ( chkOtherType.isSelected() )
             {
                 selectedTypesOfInjuries.add(txtOtherType.getText());
             }
-            
-            String [] selectedInjuries = (String[]) selectedTypesOfInjuries.toArray();
-            
+
+            String[] selectedInjuries = selectedTypesOfInjuries
+                    .toArray(new String[selectedTypesOfInjuries.size()]);
+
             Witness[] witnesses = new Witness[3];
-            
-            if(!staffWitness.getText().isEmpty())
+
+            if ( !staffWitness.getText().isEmpty() )
             {
                 witnesses[0] = new Witness(staffWitness.getText(), "S");
-            }            
-            if(!participantWitness.getText().isEmpty())
-            {
-                witnesses[0] = new Witness(participantWitness.getText(),"P");
             }
-            if(!otherWitness.getText().isEmpty())
+            if ( !participantWitness.getText().isEmpty() )
             {
-                witnesses[0] = new Witness(otherWitness.getText(), "P");
+                witnesses[1] = new Witness(participantWitness.getText(), "P");
             }
-            
+            if ( !otherWitness.getText().isEmpty() )
+            {
+                witnesses[2] = new Witness(otherWitness.getText(), "P");
+            }
+
+            String[] injuredAreas = injuredBodyAreas
+                    .toArray(new String[injuredBodyAreas.size()]);
+            IncidentReportFormHelper irfh = new IncidentReportFormHelper();
+
+            String reported = noVerbalReport.isSelected() + "";
+
+            irfh.saveIncidentInfo(personInjured.getText(),
+                    dateOfIncident.getValue(), time.getText(),
+                    location.getText(), txtAProtEquip.getText(),
+                    incidentDescription.getText(), incidentFactors.getText(),
+                    txtPersonReportedToName.getText(),
+                    dateReportToPerson.getValue(),
+                    txtTimeReportedToPerson.getText(), reported,
+                    dateVerballyReported.getValue(),
+                    txtTimeReportedVerbally.getText(),
+                    dateReportWritten.getValue(),
+                    txtTimeReportWritten.getText(),
+                    txtReportWrittenBy.getText(), injuredAreas,
+                    selectedInjuries, witnesses);
+
             localStage.close();
 
         }
         else
         {
-            //scrolls the pane all the way to the top
+            // scrolls the pane all the way to the top
             mainPane.setVvalue(0);
-            
+
             errorMsg.setText("You have missing required fields. Click here to see.");
             errorMsg.setOnMouseClicked(event -> {
                 Stage stage = new Stage();
@@ -987,7 +1010,7 @@ public class IncidentReportFormGUI
         if ( !chkUnwitnessed.isSelected() )
         {
             if ( (staffWitness.getText().isEmpty()
-                    && participantWitness.getText().isEmpty()&& otherWitness
+                    && participantWitness.getText().isEmpty() && otherWitness
                     .getText().isEmpty()) )
             {
                 errorMessage.append("\tThe witnesses of the incident.\n");

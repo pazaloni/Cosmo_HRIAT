@@ -18,11 +18,8 @@ public class IncidentReportFormHelper
 {
     public static final String DATE_FORMAT = "dd-MMM-yyyy";
 
-    private DatabaseHelper db;
-
     public IncidentReportFormHelper()
     {
-        db = new DatabaseHelper();
     }
 
     public boolean saveIncidentInfo( String cosmoID, LocalDate dateOfIncident,
@@ -36,27 +33,31 @@ public class IncidentReportFormHelper
             String[] injuredBodyAreas, String[] typesOfInjuries,
             Witness[] witnesses )
     {
+        boolean result = false;
+
+        DatabaseHelper db = new DatabaseHelper();
+
         db.connect();
 
-        String updateValues[][] = new String[16][2];
-        updateValues[0][0] = "participantID";
-        updateValues[1][0] = "dateOfIncident";
-        updateValues[2][0] = "timeOfIncident";
-        updateValues[3][0] = "locationOfIncident";
-        updateValues[4][0] = "protectiveEquipment";
-        updateValues[5][0] = "incidentDescription";
-        updateValues[6][0] = "contributingFactors";
-        updateValues[7][0] = "reportedTo";
-        updateValues[8][0] = "dateReported";
-        updateValues[9][0] = "timeReported";
-        updateValues[10][0] = "verballyReportedTo";
-        updateValues[11][0] = "verbalReportDate";
-        updateValues[12][0] = "verbalReportTime";
-        updateValues[13][0] = "dateReportWritten";
-        updateValues[14][0] = "timeReportWritten";
-        updateValues[15][0] = "reportedWrittenBy";
+        String newRecord[][] = new String[16][2];
+        newRecord[0][0] = "participantID";
+        newRecord[1][0] = "dateOfIncident";
+        newRecord[2][0] = "timeOfIncident";
+        newRecord[3][0] = "locationOfIncident";
+        newRecord[4][0] = "protectiveEquipment";
+        newRecord[5][0] = "incidentDescription";
+        newRecord[6][0] = "contributingFactors";
+        newRecord[7][0] = "reportedTo";
+        newRecord[8][0] = "dateReported";
+        newRecord[9][0] = "timeReported";
+        newRecord[10][0] = "verballyReportedTo";
+        newRecord[11][0] = "verbalReportDate";
+        newRecord[12][0] = "verbalReportTime";
+        newRecord[13][0] = "dateReportWritten";
+        newRecord[14][0] = "timeReportWritten";
+        newRecord[15][0] = "reportWrittenBy";
 
-        updateValues[0][1] = cosmoID;
+        newRecord[0][1] = cosmoID;
 
         String dateOfIncidentString = "";
         if ( dateOfIncident != null )
@@ -64,13 +65,13 @@ public class IncidentReportFormHelper
             dateOfIncidentString = formatDate(dateOfIncident);
         }
 
-        updateValues[1][1] = dateOfIncidentString;
-        updateValues[2][1] = timeOfIncident;
-        updateValues[3][1] = locationOfIncident;
-        updateValues[4][1] = protectiveEquipment;
-        updateValues[5][1] = incidentDescription;
-        updateValues[6][1] = contributingFactors;
-        updateValues[7][1] = reportedTo;
+        newRecord[1][1] = dateOfIncidentString;
+        newRecord[2][1] = timeOfIncident;
+        newRecord[3][1] = locationOfIncident;
+        newRecord[4][1] = protectiveEquipment;
+        newRecord[5][1] = incidentDescription;
+        newRecord[6][1] = contributingFactors;
+        newRecord[7][1] = reportedTo;
         String dateReportedToString = "";
 
         if ( dateReported != null )
@@ -78,9 +79,9 @@ public class IncidentReportFormHelper
             dateReportedToString = formatDate(dateReported);
         }
 
-        updateValues[8][1] = dateReportedToString;
-        updateValues[9][1] = timeReported;
-        updateValues[10][1] = verballyReported;
+        newRecord[8][1] = dateReportedToString;
+        newRecord[9][1] = timeReported;
+        newRecord[10][1] = verballyReported;
 
         String verbalReportString = "";
 
@@ -89,52 +90,36 @@ public class IncidentReportFormHelper
             verbalReportString = formatDate(verbalReportDate);
 
         }
-        updateValues[11][1] = verbalReportString;
+        newRecord[11][1] = verbalReportString;
 
-        updateValues[12][1] = verbalReportTime;
+        newRecord[12][1] = verbalReportTime;
         String dateReportWrittenString = "";
 
         if ( dateReportWritten != null )
         {
             dateReportWrittenString = formatDate(dateReportWritten);
         }
-        updateValues[13][1] = dateReportWrittenString;
-        updateValues[14][1] = timeReported;
-        updateValues[15][1] = reportedWrittenBy;
+        newRecord[13][1] = dateReportWrittenString;
+        newRecord[14][1] = timeReported;
+        newRecord[15][1] = reportedWrittenBy;
 
-        // Insert data into Incident table
-        int incidentId = getLastIncidentId();
-        saveInjuredBodyAreas(typesOfInjuries, incidentId);
-        saveInjuryTypes(typesOfInjuries, incidentId);
-        saveIncidentWitnesses(witnesses, incidentId);
-
-        return false;
-    }
-
-    /**
-     * 
-     * Purpose: like the name says, gets the last incident id
-     * 
-     * @return an integer representing the last integer ID
-     */
-    public int getLastIncidentId()
-    {
-        int result = -1;
-
-        DatabaseHelper db = new DatabaseHelper();
-        db.connect();
-        ResultSet rs = db.select("MAX(incidentID)", "Incidents", "", "");
-        try
-        {
-            rs.next();
-            result = rs.getInt(1);
-        }
-        catch ( SQLException e )
-        {
-            e.printStackTrace();
-        }
+        boolean incidnetResult = db.insert(newRecord, "Incidents");
 
         db.disconnect();
+        if ( incidnetResult )
+        {
+            // Insert data into Incident table
+            int incidentId = getLastIncidentId();
+            boolean injuredAreas = saveInjuredBodyAreas(injuredBodyAreas,
+                    incidentId);
+            boolean injuryTypes = saveInjuryTypes(typesOfInjuries, incidentId);
+            boolean incidentWitness = saveIncidentWitnesses(witnesses,
+                    incidentId);
+            if ( injuredAreas && injuryTypes && incidentWitness )
+            {
+                result = true;
+            }   
+        }
 
         return result;
     }
@@ -177,20 +162,25 @@ public class IncidentReportFormHelper
      */
     private boolean saveInjuryTypes( String[] injuries, int incidentId )
     {
-        boolean result = false;
+        boolean result = true;
 
-        boolean newInjuryResult = false;
-        String newInjuryType = injuries[injuries.length - 1];
-        if ( !injuryTypeExists(newInjuryType) )
+        // Get the last injury and check if its a new one.
+        String newInjuryName = injuries[injuries.length - 1];
+        // Check if that last one exists in the database.
+        boolean needNewInjury = injuryTypeExists(newInjuryName);
+
+        // if false, we need a new injury to be added in the database
+        if ( needNewInjury == false )
         {
-
-            newInjuryResult = saveNewInjuryType(newInjuryType);
+            needNewInjury = saveNewInjuryType(newInjuryName);
+            // if we were not able to add the new injury
+            if ( !needNewInjury )
+            {
+                result = false;
+            }
         }
-        else
+        else if ( result == true )
         {
-            // At this point, we didn't have to add a new injury
-            newInjuryResult = true;
-
             boolean currentResult = true;
 
             // Adding all the injury types
@@ -198,6 +188,10 @@ public class IncidentReportFormHelper
             {
                 int currentInjuryId = getInjuryId(injuries[i]);
                 currentResult = addInjuryToIncident(incidentId, currentInjuryId);
+                if ( currentResult == false )
+                {
+                    result = false;
+                }
             }
         }
 
@@ -220,10 +214,10 @@ public class IncidentReportFormHelper
         {
             // the witness already exists in the database already, so we'll just
             // connect their id and the incidnet's id
-            if ( witnessExists(witnesses[i]) )
+            if ( witnessAlreadyExists(witnesses[i]) )
             {
                 int currentWittnessId = getWitnessId(witnesses[i]);
-                addWittnessToIncident(incidentId, currentWittnessId);
+                addWitnessToIncident(incidentId, currentWittnessId);
             }
             else
             // The witness is new and we need to add them to the database first
@@ -231,10 +225,36 @@ public class IncidentReportFormHelper
                 if ( saveNewWitness(witnesses[i]) )
                 {
                     int currentWittnessId = getWitnessId(witnesses[i]);
-                    addWittnessToIncident(incidentId, currentWittnessId);
+                    addWitnessToIncident(incidentId, currentWittnessId);
                 }
             }
         }
+
+        return result;
+    }
+
+    /**
+     * 
+     * Purpose: Save the new injury type when the checkbox for the other injury
+     * type is selected
+     * 
+     * @param injuryType the new injury
+     * @return true if the injury was saved false otherwise
+     */
+    private boolean saveNewInjuryType( String injuryType )
+    {
+        boolean result = false;
+
+        DatabaseHelper db = new DatabaseHelper();
+        db.connect();
+        String[][] newRecord = new String[1][2];
+        // new injury record
+        newRecord[0][0] = "injuryName";
+        newRecord[0][1] = injuryType;
+
+        result = db.insert(newRecord, "InjuryType");
+
+        db.disconnect();
 
         return result;
     }
@@ -266,75 +286,18 @@ public class IncidentReportFormHelper
 
     /**
      * 
-     * Purpose: get the injury id form the database
-     * 
-     * @param injuryName the injury to search for
-     * @return the injury id
-     */
-    private int getInjuryId( String injuryName )
-    {
-        int id = 0;
-
-        DatabaseHelper db = new DatabaseHelper();
-        db.connect();
-
-        ResultSet rs = db.select("injuryID", "InjuryType", "injuryName = '"
-                + injuryName + "'", "");
-        try
-        {
-            rs.next();
-            id = rs.getInt(1);
-        }
-        catch ( SQLException e )
-        {
-            e.printStackTrace();
-        }
-
-        db.disconnect();
-
-        return id;
-    }
-
-    /**
-     * 
-     * Purpose: Save the new injury type when the checkbox for the other injury
-     * type is selected
-     * 
-     * @param injuryType the new injury
-     * @return true if the injury was saved or not
-     */
-    private boolean saveNewInjuryType( String injuryType )
-    {
-        boolean result = false;
-
-        DatabaseHelper db = new DatabaseHelper();
-        db.connect();
-        String[][] newRecord = new String[1][1];
-        // new injury record
-        newRecord[0][0] = "injuryName";
-        newRecord[0][1] = injuryType;
-
-        result = db.insert(newRecord, "InjuryType");
-
-        db.disconnect();
-
-        return result;
-    }
-
-    /**
-     * 
      * Purpose: Check the database to see if the selected injury type exits
      * 
-     * @param injuryType the injury type we're checking
+     * @param injuryName the injury type we're checking
      * @return true if it exists, false otherwise
      */
-    private boolean injuryTypeExists( String injuryType )
+    private boolean injuryTypeExists( String injuryName )
     {
         DatabaseHelper db = new DatabaseHelper();
         db.connect();
 
         ResultSet rs = db.select("count(*)", "InjuryType", "injuryName = '"
-                + injuryType + "'", "");
+                + injuryName + "'", "");
 
         int recordExits = 0;
 
@@ -366,7 +329,7 @@ public class IncidentReportFormHelper
         DatabaseHelper db = new DatabaseHelper();
 
         db.connect();
-        String[][] newRecord = new String[1][1];
+        String[][] newRecord = new String[2][2];
 
         // new witness record
         newRecord[0][0] = "witnessNames";
@@ -389,11 +352,12 @@ public class IncidentReportFormHelper
      * @param witness the witness to check
      * @return true if the witness exits, false otherwise
      */
-    private boolean witnessExists( Witness witness )
+    private boolean witnessAlreadyExists( Witness witness )
     {
         DatabaseHelper db = new DatabaseHelper();
         db.connect();
-
+        
+       System.out.println(witness.getWitnessName());
         ResultSet rs = db.select("count(*)", "Witness", "witnessNames = '"
                 + witness.getWitnessName() + "'", "");
 
@@ -422,7 +386,7 @@ public class IncidentReportFormHelper
      * @param witnessId the witness id in the database
      * @return true if addition was successful, false otherwise
      */
-    private boolean addWittnessToIncident( int incidentId, int witnessId )
+    private boolean addWitnessToIncident( int incidentId, int witnessId )
     {
         boolean result = false;
         DatabaseHelper db = new DatabaseHelper();
@@ -430,8 +394,8 @@ public class IncidentReportFormHelper
 
         String[] injuryWitnessvalues = new String[2];
 
-        injuryWitnessvalues[0] = incidentId + "";
-        injuryWitnessvalues[1] = witnessId + "";
+        injuryWitnessvalues[0] =witnessId  + "";
+        injuryWitnessvalues[1] =incidentId  + "";
 
         result = db.insert(injuryWitnessvalues, "IncidentWitness");
 
@@ -468,6 +432,65 @@ public class IncidentReportFormHelper
         }
         return witnessId;
 
+    }
+
+    /**
+     * 
+     * Purpose: get the injury id form the database
+     * 
+     * @param injuryName the injury to search for
+     * @return the injury id
+     */
+    private int getInjuryId( String injuryName )
+    {
+        int id = 0;
+
+        DatabaseHelper db = new DatabaseHelper();
+        db.connect();
+
+        ResultSet rs = db.select("injuryID", "InjuryType", "injuryName = '"
+                + injuryName + "'", "");
+        try
+        {
+            rs.next();
+            id = rs.getInt(1);
+        }
+        catch ( SQLException e )
+        {
+            e.printStackTrace();
+        }
+
+        db.disconnect();
+
+        return id;
+    }
+
+    /**
+     * 
+     * Purpose: like the name says, gets the last incident id
+     * 
+     * @return an integer representing the last integer ID
+     */
+    private int getLastIncidentId()
+    {
+        int result = -1;
+
+        DatabaseHelper db = new DatabaseHelper();
+        db.connect();
+        ResultSet rs = db.select("MAX(incidentID)", "Incidents", "", "");
+        try
+        {
+            rs.next();
+            result = rs.getInt(1);
+        }
+        catch ( SQLException e )
+        {
+            e.printStackTrace();
+        }
+
+        db.disconnect();
+
+        return result;
     }
 
     public String[] retrieveIncidentInfo( String incidentID )
