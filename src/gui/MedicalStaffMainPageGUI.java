@@ -17,6 +17,7 @@ import java.util.Date;
 import javax.imageio.ImageIO;
 import javax.swing.plaf.synth.SynthSeparatorUI;
 
+import controllers.IncidentReportTableViewController;
 import controllers.NoteTableViewController;
 import controllers.ParticipantTableViewController;
 import core.MedicalAdministrator;
@@ -75,6 +76,8 @@ public class MedicalStaffMainPageGUI extends Application
 {
 
     private ParticipantTableViewController pTVCont;
+    
+    private IncidentReportTableViewController iTVCont;
 
     private DatabaseHelper dbObject = new DatabaseHelper();
 
@@ -146,6 +149,9 @@ public class MedicalStaffMainPageGUI extends Application
         dbObject.activtyLogEntry(loggedInStaff.GetUsername(), "Logged In", "");
         pTVCont = new ParticipantTableViewController();
         pTVCont.initialize();
+        
+        iTVCont = new IncidentReportTableViewController();
+        iTVCont.initialize();
 
         // the table view of notes
         this.noteTableView = new TableView<Note>();
@@ -265,8 +271,8 @@ public class MedicalStaffMainPageGUI extends Application
         participants.closableProperty().set(false);
         stats.closableProperty().set(false);
 
-        ////todo:add incident table
-        formsBox.getChildren().addAll(box, );
+        ////add incident table
+        formsBox.getChildren().addAll(box, iTVCont.incidentTable);
         forms.setContent(formsBox);
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(175);

@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import helpers.DatabaseHelper;
 import core.Incident;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -33,18 +34,19 @@ public class IncidentReportTableViewController
     
     public IncidentReportTableViewController()
     {
-        initializeIncidentData();
+        retrieveIncidentData("", "Incidents");
         incidentTable.setItems(incidentData);
+        incidentTable.setFocusTraversable(false);
     }
 
-    private void initializeIncidentData()
+    private void retrieveIncidentData( String conditon, String table )
     {
+        incidentData.clear();
         DatabaseHelper db = new DatabaseHelper();
-        
-        ObservableList<String> row = FXCollections.observableArrayList();
         
         ResultSet rs = db.select("incidentID, cosmoID, dateOfIncident, "
                 + "timeOfIncident, incidentDescription", "Incidents", "", "");
+        
         String incidentID;
         String cosmoID;
         String dateOfIncident;
@@ -60,6 +62,11 @@ public class IncidentReportTableViewController
                 dateOfIncident = rs.getString(3);
                 timeOfIncident = rs.getString(4);
                 incidentDescription = rs.getString(5);
+                
+                Incident incident = new Incident(incidentID, cosmoID, 
+                        dateOfIncident, timeOfIncident, incidentDescription);
+                
+                incidentData.add(incident);
             }
         }
         catch ( SQLException e )
@@ -67,23 +74,47 @@ public class IncidentReportTableViewController
             e.printStackTrace();
         }
     }
+
     
     public void initialize()
     {
         incidentIDColumn.setCellValueFactory(cellData -> cellData.getValue().incidentIDProperty());
+        incidentIDColumn.setMinWidth(50);
+        incidentIDColumn.setResizable(false);
         
         cosmoIDColumn.setCellValueFactory(cellData -> cellData.getValue().cosmoIDProperty());
+        cosmoIDColumn.setMinWidth(50);
+        cosmoIDColumn.setResizable(false);
         
         dateOfIncidentColumn.setCellValueFactory(cellData -> cellData.getValue().dateOfIncidentIDProperty());
+        dateOfIncidentColumn.setMinWidth(100);
+        dateOfIncidentColumn.setResizable(false);
         
         timeOfIncidentColumn.setCellValueFactory(cellData -> cellData.getValue().timeOfIncidentIDProperty());
+        timeOfIncidentColumn.setMinWidth(100);
+        timeOfIncidentColumn.setResizable(false);
         
         descriptionColumn.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
+        descriptionColumn.setMinWidth(500);
+        descriptionColumn.setResizable(false);
+        
+        incidentTable.getColumns().addListener(
+                new ListChangeListener<Object>() {
+                    @Override
+                    public void onChanged(Change change){
+                    change.next();
+                    if(change.wasReplaced())
+                    {
+                        incidentTable.getColumns().clear();
+                        incidentTable.getColumns().addAll(incidentIDColumn, 
+                                cosmoIDColumn, dateOfIncidentColumn, 
+                                timeOfIncidentColumn, descriptionColumn);
+                    }
+                } 
+           });
         
         incidentTable.getColumns().addAll(incidentIDColumn, cosmoIDColumn, 
                 dateOfIncidentColumn, timeOfIncidentColumn, descriptionColumn);
-        
-        incidentTable.setItems(incidentData);
     }
     
     public String getSelectedPK()
@@ -101,5 +132,13 @@ public class IncidentReportTableViewController
             result = incident.getIncidentID();
         }
         return result;
+    }
+    
+    public void refreshTable(String condition, String table)
+    {
+        this.incidentData.clear();
+        this.retrieveIncidentData(condition, table);
+        this.incidentTable.getColumns().clear();
+        this.initialize();
     }
 }
