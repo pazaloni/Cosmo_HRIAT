@@ -4,7 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import core.Participant;
 import core.Witness;
 
 /**
@@ -20,6 +24,36 @@ public class IncidentReportFormHelper
 
     public IncidentReportFormHelper()
     {
+
+    }
+
+    public static ObservableList<Participant> getParticipants()
+    {
+        ObservableList<Participant> participants = FXCollections
+                .observableArrayList();
+        DatabaseHelper db = new DatabaseHelper();
+        db.connect();
+
+        ResultSet rs = db.select("cosmoID, firstName, lastName", "Participant",
+                "participantStatus='Active'", "firstName");
+        try
+        {
+            while ( rs.next() )
+            {
+                String cosmoId = rs.getString(1);
+                String name = rs.getString(2) + " " + rs.getString(3);
+                participants.add(new Participant(cosmoId, name));
+            }
+        }
+        catch ( SQLException e )
+        {
+            e.printStackTrace();
+        }
+
+        db.disconnect();
+
+        return participants;
+
     }
 
     public boolean saveIncidentInfo( String cosmoID, LocalDate dateOfIncident,
@@ -31,7 +65,7 @@ public class IncidentReportFormHelper
             String verbalReportTime, LocalDate dateReportWritten,
             String timeReportWritten, String reportedWrittenBy,
             String[] injuredBodyAreas, String[] typesOfInjuries,
-            Witness[] witnesses )
+            ArrayList<Witness> witnesses )
     {
         boolean result = false;
 
@@ -40,7 +74,7 @@ public class IncidentReportFormHelper
         db.connect();
 
         String newRecord[][] = new String[16][2];
-        newRecord[0][0] = "participantID";
+        newRecord[0][0] = "cosmoID";
         newRecord[1][0] = "dateOfIncident";
         newRecord[2][0] = "timeOfIncident";
         newRecord[3][0] = "locationOfIncident";
@@ -118,7 +152,7 @@ public class IncidentReportFormHelper
             if ( injuredAreas && injuryTypes && incidentWitness )
             {
                 result = true;
-            }   
+            }
         }
 
         return result;
@@ -206,25 +240,26 @@ public class IncidentReportFormHelper
      * @param incidentId the incident that we will save the witnesses for
      * @return true if the witnesses were saved successfully, false otherwise
      */
-    private boolean saveIncidentWitnesses( Witness[] witnesses, int incidentId )
+    private boolean saveIncidentWitnesses( ArrayList<Witness> witnesses,
+            int incidentId )
     {
         boolean result = false;
 
-        for ( int i = 0; i < witnesses.length; i++ )
+        for ( Witness wit : witnesses )
         {
             // the witness already exists in the database already, so we'll just
             // connect their id and the incidnet's id
-            if ( witnessAlreadyExists(witnesses[i]) )
+            if ( witnessAlreadyExists(wit) )
             {
-                int currentWittnessId = getWitnessId(witnesses[i]);
+                int currentWittnessId = getWitnessId(wit);
                 addWitnessToIncident(incidentId, currentWittnessId);
             }
             else
             // The witness is new and we need to add them to the database first
             {
-                if ( saveNewWitness(witnesses[i]) )
+                if ( saveNewWitness(wit) )
                 {
-                    int currentWittnessId = getWitnessId(witnesses[i]);
+                    int currentWittnessId = getWitnessId(wit);
                     addWitnessToIncident(incidentId, currentWittnessId);
                 }
             }
@@ -356,8 +391,8 @@ public class IncidentReportFormHelper
     {
         DatabaseHelper db = new DatabaseHelper();
         db.connect();
-        
-       System.out.println(witness.getWitnessName());
+
+        System.out.println(witness.getWitnessName());
         ResultSet rs = db.select("count(*)", "Witness", "witnessNames = '"
                 + witness.getWitnessName() + "'", "");
 
@@ -394,8 +429,8 @@ public class IncidentReportFormHelper
 
         String[] injuryWitnessvalues = new String[2];
 
-        injuryWitnessvalues[0] =witnessId  + "";
-        injuryWitnessvalues[1] =incidentId  + "";
+        injuryWitnessvalues[0] = witnessId + "";
+        injuryWitnessvalues[1] = incidentId + "";
 
         result = db.insert(injuryWitnessvalues, "IncidentWitness");
 
@@ -498,7 +533,6 @@ public class IncidentReportFormHelper
 
         return null;
     }
-    
 
     /**
      * 

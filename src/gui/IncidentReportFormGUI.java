@@ -19,6 +19,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -40,6 +41,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import core.Participant;
 import core.PopUpMessage;
 import core.StaffAccount;
 import core.Witness;
@@ -70,7 +72,7 @@ public class IncidentReportFormGUI
     private TextField time, location, staffWitness, participantWitness,
             otherWitness;
 
-    private TextField personInjured;
+    private ComboBox<Participant> personInjured;
 
     private DatePicker dateOfIncident, dateReportToPerson,
             dateVerballyReported, dateReportWritten;
@@ -204,7 +206,9 @@ public class IncidentReportFormGUI
 
         Label lblpersonInjured = new Label("Participant Injured: ");
 
-        personInjured = new TextField();
+        personInjured = new ComboBox<Participant>();
+        personInjured.setItems(IncidentReportFormHelper.getParticipants());
+
         personInjured.setMinWidth(580);
         box.setMaxWidth(750);
         box.setSpacing(15);
@@ -880,31 +884,31 @@ public class IncidentReportFormGUI
             String[] selectedInjuries = selectedTypesOfInjuries
                     .toArray(new String[selectedTypesOfInjuries.size()]);
 
-            Witness[] witnesses = new Witness[3];
+            ArrayList<Witness> witnesses = new ArrayList<Witness>();
 
             if ( !staffWitness.getText().isEmpty() )
             {
-                witnesses[0] = new Witness(staffWitness.getText(), "S");
+                witnesses.add(new Witness(staffWitness.getText(), "S"));
             }
             if ( !participantWitness.getText().isEmpty() )
             {
-                witnesses[1] = new Witness(participantWitness.getText(), "P");
+                witnesses.add(new Witness(participantWitness.getText(), "P"));
             }
             if ( !otherWitness.getText().isEmpty() )
             {
-                witnesses[2] = new Witness(otherWitness.getText(), "P");
+                witnesses.add(new Witness(otherWitness.getText(), "O"));
             }
-
             String[] injuredAreas = injuredBodyAreas
                     .toArray(new String[injuredBodyAreas.size()]);
             IncidentReportFormHelper irfh = new IncidentReportFormHelper();
 
             String reported = noVerbalReport.isSelected() + "";
 
-            irfh.saveIncidentInfo(personInjured.getText(),
-                    dateOfIncident.getValue(), time.getText(),
-                    location.getText(), txtAProtEquip.getText(),
-                    incidentDescription.getText(), incidentFactors.getText(),
+            irfh.saveIncidentInfo(personInjured.getSelectionModel()
+                    .getSelectedItem().getCosmoID(), dateOfIncident.getValue(),
+                    time.getText(), location.getText(),
+                    txtAProtEquip.getText(), incidentDescription.getText(),
+                    incidentFactors.getText(),
                     txtPersonReportedToName.getText(),
                     dateReportToPerson.getValue(),
                     txtTimeReportedToPerson.getText(), reported,
@@ -949,7 +953,8 @@ public class IncidentReportFormGUI
     {
         boolean formValid = true;
         StringBuilder errorMessage = new StringBuilder();
-        if ( personInjured.getText().isEmpty() )
+        if ( personInjured.getSelectionModel().getSelectedItem().getCosmoID()
+                .isEmpty() )
         {
             errorMessage.append("\tThe participant that was injured.\n");
             formValid = false;

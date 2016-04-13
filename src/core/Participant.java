@@ -1,4 +1,5 @@
 package core;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -22,7 +23,7 @@ public class Participant
     private StringProperty participantAddress; // TODO change to address object
     private StringProperty emergencyContactName;
     private StringProperty emergencyContactPhone;
-    ///the status attribute
+    // /the status attribute
     private StringProperty participantStatus;
 
     /**
@@ -39,7 +40,7 @@ public class Participant
      */
     public Participant(String cosmoID, String participantName,
             String participantAddress, String emergencyContactName,
-            String emergencyContactPhone, String informationLastUpdated, 
+            String emergencyContactPhone, String informationLastUpdated,
             String participantStatus)
     {
         this.cosmoID = new SimpleStringProperty(cosmoID);
@@ -52,10 +53,22 @@ public class Participant
                 + emergencyContactName);
         this.emergencyContactPhone = new SimpleStringProperty(""
                 + emergencyContactPhone);
-        this.informationLastUpdated = new SimpleStringProperty("" 
+        this.informationLastUpdated = new SimpleStringProperty(""
                 + informationLastUpdated);
         this.participantStatus = new SimpleStringProperty(""
                 + participantStatus);
+    }
+
+    @Override
+    public String toString()
+    {
+        return participantName.get() ;
+    }
+
+    public Participant(String cosmoId, String participantName)
+    {
+        this.cosmoID = new SimpleStringProperty("" + cosmoId);
+        this.participantName = new SimpleStringProperty("" + participantName);
     }
 
     /**
@@ -198,7 +211,7 @@ public class Participant
     {
         return participantStatus.get();
     }
-    
+
     /**
      * Purpose: to return the status StringProperty
      * 

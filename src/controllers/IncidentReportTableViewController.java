@@ -45,6 +45,9 @@ public class IncidentReportTableViewController
         retrieveIncidentData("", "Incidents");
         //add the data to the table
         incidentTable.setItems(incidentData);
+        incidentTable.setMaxWidth(700);
+        incidentTable.setMaxHeight(250);
+        
         //set the focus to not be traversable 
         incidentTable.setFocusTraversable(false);
     }
@@ -120,7 +123,7 @@ public class IncidentReportTableViewController
         timeOfIncidentColumn.setResizable(false);
         
         descriptionColumn.setCellValueFactory(cellData -> cellData.getValue().getIncidentDescription());
-        descriptionColumn.setMinWidth(500);
+        descriptionColumn.setMinWidth(300);
         descriptionColumn.setResizable(false);
         
         //Prevent the columns from being reordered
