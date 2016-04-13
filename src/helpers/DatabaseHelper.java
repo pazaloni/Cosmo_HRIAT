@@ -460,6 +460,7 @@ public class DatabaseHelper
 
             //System.out.println(query);
             // execute the query
+            System.out.println(query);
             rs = s.executeQuery(query);
         }
         catch ( SQLException e )

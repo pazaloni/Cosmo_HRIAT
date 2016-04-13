@@ -33,10 +33,9 @@ public class SavedQuery
         {
             
             DatabaseHelper db = new DatabaseHelper();
-            /*
+            
             ResultSet queryExists = db.select("count(*)",
-                    "medication", "medicationName = '" + medicationName
-                            + "' AND cosmoID = '" + cosmoID + "'", "");
+                    "savedQuery", "queryName = '" + name + "'", "");
 
             int recordExists = 0;
 
@@ -44,24 +43,34 @@ public class SavedQuery
             // that user
             try
             {
-                medicationExists.next();
-                recordExists = medicationExists.getInt(1);
+                queryExists.next();
+                recordExists = queryExists.getInt(1);
             }
             catch ( SQLException e )
             {
                 e.printStackTrace();
             }
-            // If no medication with that name exists, then insert the
-            // medication
             if ( recordExists == 0 )
             {
-            String[] values = new String[] { name, query };
-            
-            
-            db.update(values, "SavedQuery", "queryName");
-            
-           */
+                String[] values = new String[] { name, query };
+                db.insert(values, "SavedQuery");
+            }
+            else
+            {
+                result = "A query with that name has already been entered.";
+            }
+           
         }
         return result;
+    }
+
+    public static void removeQuery( String queryName )
+    {
+        DatabaseHelper db = new DatabaseHelper();
+        db.connect();
+        db.delete("savedQuery", "QueryName= \"" + queryName + "\"");
+        db.disconnect();
+
+        
     }
 }

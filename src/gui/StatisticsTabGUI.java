@@ -82,8 +82,10 @@ public class StatisticsTabGUI
 
     Label queryParticipantsLbl;
 
+    VBox savedQueryBox;
+
     ListView<String> savedQueryList;
-    
+
     private Button btnSave = new Button("Save");
 
     HealthStatusInformationHelper helper = new HealthStatusInformationHelper();
@@ -115,7 +117,7 @@ public class StatisticsTabGUI
         mainBox = new HBox(50);
 
         VBox generateBox = new VBox(20);
-        
+
         Label categoriesLbl = new Label("Categories: ");
         categoriesLbl.setFont(new Font(16));
         ListView<String> fieldList = new ListView<String>();
@@ -142,14 +144,15 @@ public class StatisticsTabGUI
             stage.setScene(new Scene(reportGUI.mainVbox));
             stage.showAndWait();
         });
-        generateBox.getChildren().addAll(categoriesLbl, fieldList, comparisonLbl, comparisonCmbo,
-                conditionLbl, conditionTxt, generateQryBtn, genQuartRpt);
+        generateBox.getChildren().addAll(categoriesLbl, fieldList,
+                comparisonLbl, comparisonCmbo, conditionLbl, conditionTxt,
+                generateQryBtn, genQuartRpt);
 
         VBox queryBox = new VBox(40);
         Label sqlLbl = new Label("SQL Query");
         sqlLbl.setFont(new Font(16));
         TextArea sqlTxtArea = new TextArea();
-        sqlTxtArea.setWrapText(true);        
+        sqlTxtArea.setWrapText(true);
 
         HBox queryBtnBox = new HBox(20);
 
@@ -159,7 +162,7 @@ public class StatisticsTabGUI
         });
         Button saveQryBtn = new Button("Save Query");
         queryBtnBox.getChildren().addAll(qryBtn, saveQryBtn);
-        
+
         generateQryBtn.setOnAction(event -> {
             String query = generateSQL(fieldList.getSelectionModel()
                     .getSelectedItem(), comparisonCmbo.getSelectionModel()
@@ -169,31 +172,80 @@ public class StatisticsTabGUI
 
         saveQryBtn.setOnAction(event -> {
             saveQuery(sqlTxtArea.getText());
-            createSavedQueryList();
+            savedQueryBox.getChildren().set(1, createSavedQueryList());
         });
-        
+
         Label totalParticipantsLbl = new Label();
         queryParticipantsLbl = new Label();
         queryBox.getChildren().addAll(sqlLbl, sqlTxtArea, queryBtnBox,
                 totalParticipantsLbl, queryParticipantsLbl);
+        Label loadQueryLbl = new Label("Saved Queries:");
+        loadQueryLbl.setFont(new Font(16));
+        savedQueryBox = new VBox();
+        savedQueryBox.getChildren()
+                .addAll(loadQueryLbl, createSavedQueryList());
         VBox loadQueryBox = new VBox(20);
         Button loadQueryBtn = new Button("Load Query");
         loadQueryBtn.setOnAction(event -> {
-            String queryName = savedQueryList.getSelectionModel().getSelectedItem();
+            String queryName = savedQueryList.getSelectionModel()
+                    .getSelectedItem();
             sqlTxtArea.setText(populateQuery(queryName));
         });
-        
-        loadQueryBox.getChildren().addAll(loadQueryBtn);
-        mainBox.getChildren().addAll(generateBox, queryBox, createSavedQueryList(), loadQueryBox);
+        Button deleteQueryBtn = new Button("Delete Query");
+        deleteQueryBtn.setOnAction(event -> {
+            String queryName = savedQueryList.getSelectionModel()
+                    .getSelectedItem();
+            deleteQuery(queryName);
+            savedQueryBox.getChildren().set(1, createSavedQueryList());
+        });
+        loadQueryBox.getChildren().addAll(loadQueryBtn, deleteQueryBtn);
+        mainBox.getChildren().addAll(generateBox, queryBox, savedQueryBox,
+                loadQueryBox);
         mainBox.setPadding(new Insets(20));
         parentTab.setContent(mainBox);
         return parentTab;
     }
 
+    private void deleteQuery( String queryName )
+    {
+        Stage stage = new Stage();
+        Scene scene;
+
+        if ( queryName != null && queryName != "null" )
+        {
+
+            PopUpCheck checkBox = new PopUpCheck("Are you sure you want to "
+                    + "delete the query '" + queryName + "'?", stage);
+
+            scene = new Scene(checkBox.root, 300, 75);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(this.parentStage);
+            stage.showAndWait();
+
+            // when the user is removed from the database
+            if ( checkBox.result )
+            {
+                SavedQuery.removeQuery(queryName);
+            }
+
+        }
+        // pop up a message saying that no user has been selected to delete
+        else
+        {
+            // tell the user to select a user to delete
+            PopUpMessage messageBox = new PopUpMessage("Please select a query"
+                    + " to remove.", stage);
+
+            messageBox.stage.showAndWait();
+        }
+
+    }
+
     private void saveQuery( String text )
     {
-        Stage saveQueryStage = new Stage();        
-
+        Stage saveQueryStage = new Stage();
 
         GridPane grid = new GridPane();
 
@@ -202,14 +254,14 @@ public class StatisticsTabGUI
         lblWarning.setTextFill(Color.FIREBRICK);
 
         // text field labels
-        Label queryNameLbl = new Label("What do you want to name this query?: ");
-        queryNameLbl.setFont(new Font(18));
-        
+        Label queryNameLbl = new Label("What do you want to name this query? ");
+        queryNameLbl.setFont(new Font(16));
+
         TextField queryNameTxt = new TextField();
 
-        grid.add(queryNameLbl, 0, 1,1,2);
-        grid.add(lblWarning, 1, 0);
-        grid.add(queryNameTxt, 0, 2,1,2);
+        grid.add(queryNameLbl, 0, 0, 2, 1);
+        // grid.add(lblWarning, 1, 0);
+        grid.add(queryNameTxt, 0, 1, 2, 1);
 
         grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setHgap(10);
@@ -224,13 +276,13 @@ public class StatisticsTabGUI
                 // call create participant on medical administrator with the
                 // text passed in
                 String result = SavedQuery.createSavedQuery(
-                        queryNameTxt.getText(), text );
+                        queryNameTxt.getText(), text);
 
                 // if no error message is recieved then close this window and
                 // refresh the table
                 if ( result.equals("") )
                 {
-                   saveQueryStage.close();
+                    saveQueryStage.close();
                 }
                 // if there is an error message, display it
                 else
@@ -242,18 +294,13 @@ public class StatisticsTabGUI
         });
 
         HBox addHbox = new HBox();
-        HBox resetHbox = new HBox();
         addHbox.getChildren().add(addQueryBtn);
-        grid.add(resetHbox, 0, 4);
-        grid.add(addHbox, 1, 4);
-        saveQueryStage.setScene(new Scene(
-                grid, 325, 200));
-        saveQueryStage
-                .initModality(Modality.APPLICATION_MODAL);
-        saveQueryStage
-                .initOwner(this.parentStage);
+        grid.add(addHbox, 1, 3);
+        saveQueryStage.setScene(new Scene(grid, 325, 200));
+        saveQueryStage.initModality(Modality.APPLICATION_MODAL);
+        saveQueryStage.initOwner(this.parentStage);
         saveQueryStage.setResizable(false);
-        saveQueryStage.show();
+        saveQueryStage.showAndWait();
     }
 
     private String populateQuery( String queryName )
@@ -261,12 +308,13 @@ public class StatisticsTabGUI
         String result = "";
         DatabaseHelper db = new DatabaseHelper();
         db.connect();
-        ResultSet rs = db.select("query", "SavedQuery","queryName ='" + queryName + "'","");
+        ResultSet rs = db.select("query", "SavedQuery", "queryName ='"
+                + queryName + "'", "");
         try
         {
             rs.next();
             result = rs.getString(1);
-            
+
         }
         catch ( SQLException e )
         {
@@ -285,7 +333,7 @@ public class StatisticsTabGUI
         ResultSet rs = db.select("queryName", "SavedQuery", "", "");
         try
         {
-            while(rs.next())
+            while ( rs.next() )
             {
                 objects.add(rs.getString(1));
             }
@@ -335,7 +383,7 @@ public class StatisticsTabGUI
                 query += " FROM Medication WHERE ";
                 break;
             case "Vaccinations":
-                
+
                 conditionArray = getTableHeadings("Vaccinations");
                 for ( int i = 0; i < conditionArray.length; i++ )
                 {
@@ -344,7 +392,7 @@ public class StatisticsTabGUI
                 query += " FROM Vaccination WHERE ";
                 break;
             case "Conditions":
-                
+
                 conditionArray = getTableHeadings("Conditions");
                 for ( int i = 0; i < conditionArray.length; i++ )
                 {
@@ -378,7 +426,8 @@ public class StatisticsTabGUI
             case "contains":
                 for ( int i = 0; i < conditionArray.length; i++ )
                 {
-                    query += conditionArray[i] + " LIKE '*" + condition + "*'";
+                    query += conditionArray[i] + " LIKE \"*" + condition
+                            + "*\"";
                     if ( i < conditionArray.length - 1 )
                     {
                         query += " OR ";
@@ -388,7 +437,7 @@ public class StatisticsTabGUI
             case "equals":
                 for ( int i = 0; i < conditionArray.length; i++ )
                 {
-                    query += conditionArray[i] + " = '" + condition + "'";
+                    query += conditionArray[i] + " = \"" + condition + "\"";
                     if ( i < conditionArray.length - 1 )
                     {
                         query += " OR ";
@@ -398,7 +447,7 @@ public class StatisticsTabGUI
             case "greater than":
                 for ( int i = 0; i < conditionArray.length; i++ )
                 {
-                    query += conditionArray[i] + " > '" + condition + "'";
+                    query += conditionArray[i] + " > \"" + condition + "\"";
                     if ( i < conditionArray.length - 1 )
                     {
                         query += " OR ";
@@ -408,7 +457,7 @@ public class StatisticsTabGUI
             case "less than":
                 for ( int i = 0; i < conditionArray.length; i++ )
                 {
-                    query += conditionArray[i] + " < '" + condition + "'";
+                    query += conditionArray[i] + " < \"" + condition + "\"";
                     if ( i < conditionArray.length - 1 )
                     {
                         query += " OR ";
@@ -418,7 +467,12 @@ public class StatisticsTabGUI
             case "between":
                 for ( int i = 0; i < conditionArray.length; i++ )
                 {
-                    query += conditionArray[i] + " = '" + condition + "'";
+                    query += conditionArray[i]
+                            + " BETWEEN \""
+                            + condition.substring(0, condition.indexOf(" "))
+                            + "\" AND \""
+                            + condition.substring(condition.indexOf(" ")+1,
+                                    condition.length()) + "\"";
                     if ( i < conditionArray.length - 1 )
                     {
                         query += " OR ";
@@ -426,7 +480,6 @@ public class StatisticsTabGUI
                 }
                 break;
         }
-        // query = searchFor + " " + comparison + " " +condition;
 
         return query;
 
@@ -460,7 +513,7 @@ public class StatisticsTabGUI
         String result = "";
         if ( queryString.toUpperCase().indexOf("SELECT") == 0
                 && (queryString.indexOf(";") == -1 || queryString.indexOf(";") == queryString
-                        .length()) )
+                        .length() - 1) )
 
         {
             DatabaseHelper db = new DatabaseHelper();
@@ -518,352 +571,4 @@ public class StatisticsTabGUI
         queryParticipantsLbl.setText(result);
     }
 
-    /*
-     * private TableView<QueryResult> createResultTable() {
-     * QueryResultTableViewController controller = new
-     * QueryResultTableViewController( "5"); TableView<QueryResult> table =
-     * controller.conditionTable; table. table.setMaxWidth(700); return table; }
-     *//**
-     * 
-     * Purpose: Create the medical conditions table
-     * 
-     * @return: HBox containing the medical conditions
-     */
-    private VBox createMedicalConditions( String cosmoId )
-    {
-        VBox box = new VBox();
-        HBox controls = new HBox();
-        HBox buttons = new HBox();
-
-        Label medicalCondtionsLbl = new Label("Medical Conditions");
-        medicalCondtionsLbl.setFont(Font.font(22));
-
-        Button btnAddMedicalCondition = new Button("Add");
-        Button btnEditMedicalCondition = new Button("Edit");
-        Button btnDeleteMedicalCondition = new Button("Delete");
-
-        MedicalConditionsTableViewController controller = new MedicalConditionsTableViewController(
-                cosmoId);
-        TableView<QueryResult> table = controller.conditionTable;
-
-        // Add the medical condition
-        btnAddMedicalCondition
-                .setOnMouseClicked(event -> {
-                    ManageMedicalConditionGUI manageMedicalCondition = new ManageMedicalConditionGUI(
-                            parentStage);
-                    manageMedicalCondition.showAddMedicalCondition(cosmoId);
-                    controller.refreshTable(cosmoId);
-                });
-        // Editing a medical condition
-        btnEditMedicalCondition
-                .setOnMouseClicked(event -> {
-                    QueryResult condition = controller
-                            .getSelectedMedicalCondition();
-                    if ( condition == null )
-                    {
-                        Stage stage = new Stage();
-                        PopUpMessage popup = new PopUpMessage(
-                                "Must select a medical condition to edit",
-                                stage);
-                        Scene scene = new Scene(popup.root, 300, 75);
-                        stage.initModality(Modality.APPLICATION_MODAL);
-                        stage.initOwner(parentStage);
-                        stage.setScene(scene);
-                        stage.showAndWait();
-                    }
-                    else
-                    {
-                        ManageMedicalConditionGUI manageMedicalCondition = new ManageMedicalConditionGUI(
-                                parentStage);
-                        manageMedicalCondition.showUpdateMedicalCondition(
-                                condition, cosmoId);
-                        controller.refreshTable(cosmoId);
-                    }
-                });
-        btnDeleteMedicalCondition
-                .setOnMouseClicked(event -> {
-                    QueryResult condition = controller
-                            .getSelectedMedicalCondition();
-                    if ( condition == null )
-                    {
-                        Stage stage = new Stage();
-                        PopUpMessage popup = new PopUpMessage(
-                                "Must select a medical condition to delete",
-                                stage);
-                        Scene scene = new Scene(popup.root, 300, 75);
-                        stage.initModality(Modality.APPLICATION_MODAL);
-                        stage.initOwner(parentStage);
-                        stage.setScene(scene);
-                        stage.showAndWait();
-                    }
-                    else
-                    {
-                        Stage stage = new Stage();
-                        PopUpCheck popup = new PopUpCheck(
-                                "Are you sure you want to delete the selected medical condition ?",
-                                stage);
-                        Scene scene = new Scene(popup.root, 450, 75);
-                        stage.initModality(Modality.APPLICATION_MODAL);
-                        stage.initOwner(parentStage);
-                        stage.setScene(scene);
-                        stage.showAndWait();
-                        if ( popup.runCheck() )
-                        {
-                            QueryResult.deleteCondition(table
-                                    .getSelectionModel().getSelectedItem(),
-                                    cosmoID);
-                        }
-                        controller.refreshTable(cosmoID);
-                    }
-                });
-
-        if ( !(this.loggedInUser instanceof MedicalAdministrator) )
-        {
-            btnAddMedicalCondition.setVisible(false);
-            btnEditMedicalCondition.setVisible(false);
-            btnDeleteMedicalCondition.setVisible(false);
-        }
-
-        buttons.getChildren().addAll(btnAddMedicalCondition,
-                btnEditMedicalCondition, btnDeleteMedicalCondition);
-
-        controls.getChildren().addAll(buttons);
-
-        table.setMaxWidth(700);
-
-        buttons.setSpacing(5);
-        controls.setSpacing(380);
-
-        box.getChildren().addAll(medicalCondtionsLbl, table, controls);
-        return box;
-    }
-
-    /**
-     * 
-     * Purpose: Create the allergies info for the participant
-     * 
-     * @param cosmoID
-     *            The participant cosmoId which is used to pull the information
-     *            from the database
-     *
-     * @return VBox with a label and a table view
-     */
-    private VBox createAllergiesInfo( String cosmoID )
-    {
-        VBox box = new VBox();
-        HBox controls = new HBox();
-        HBox buttons = new HBox();
-
-        Label allergiesLbl = new Label("Allergies");
-        allergiesLbl.setFont(Font.font(22));
-
-        Button btnAddAllergy = new Button("Add");
-        Button btnEditAllergy = new Button("Edit");
-        Button btnDelAllergy = new Button("Delete");
-
-        buttons.getChildren().addAll(btnAddAllergy, btnEditAllergy,
-                btnDelAllergy);
-
-        controls.getChildren().addAll(buttons);
-
-        AllergiesTableViewController controller = new AllergiesTableViewController(
-                cosmoID + "");
-        TableView<Allergies> table = controller.allergiesTable;
-        btnEditAllergy.setOnAction(event -> {
-            Allergies allergy = controller.getSelectedAllergy();
-            // If there is no allergy selected, then display a message
-                if ( allergy == null )
-                {
-                    Stage stage = new Stage();
-                    PopUpMessage popup = new PopUpMessage(
-                            "Must select an allergy to edit", stage);
-                    Scene scene = new Scene(popup.root, 300, 75);
-                    stage.initModality(Modality.APPLICATION_MODAL);
-                    stage.initOwner(parentStage);
-                    stage.setScene(scene);
-                    stage.showAndWait();
-                }
-                else
-                {
-                    ManageAllergyGUI manageAllergies = new ManageAllergyGUI(
-                            parentStage);
-                    manageAllergies.showUpdateAllergy(table.getSelectionModel()
-                            .getSelectedItem(), cosmoID);
-                    controller.refreshTable(cosmoID);
-                }
-            });
-
-        btnAddAllergy
-                .setOnAction(event -> {
-                    ManageAllergyGUI manageAllergies = new ManageAllergyGUI(
-                            parentStage);
-                    manageAllergies.showAddAllergy(cosmoID);
-                    controller.refreshTable(cosmoID);
-                });
-
-        btnDelAllergy
-                .setOnAction(event -> {
-
-                    Allergies allergy = controller.getSelectedAllergy();
-
-                    if ( allergy == null )
-                    {
-                        Stage stage = new Stage();
-                        PopUpMessage popup = new PopUpMessage(
-                                "Must select an allergy to delete", stage);
-                        Scene scene = new Scene(popup.root, 300, 75);
-                        stage.initModality(Modality.APPLICATION_MODAL);
-                        stage.initOwner(parentStage);
-                        stage.setScene(scene);
-                        stage.showAndWait();
-                    }
-                    else
-                    {
-                        Stage stage = new Stage();
-                        PopUpCheck popup = new PopUpCheck(
-                                "Are you sure you want to delete the selected allergy ?",
-                                stage);
-                        Scene scene = new Scene(popup.root, 300, 75);
-                        stage.initModality(Modality.APPLICATION_MODAL);
-                        stage.initOwner(parentStage);
-                        stage.setScene(scene);
-                        stage.showAndWait();
-                        if ( popup.runCheck() )
-                        {
-                            Allergies.deleteAllergy(table.getSelectionModel()
-                                    .getSelectedItem(), cosmoID);
-                        }
-                        controller.refreshTable(cosmoID);
-                    }
-
-                });
-        table.setMaxWidth(700);
-
-        buttons.setSpacing(5);
-        controls.setSpacing(485);
-
-        if ( !(this.loggedInUser instanceof MedicalAdministrator) )
-        {
-            btnAddAllergy.setVisible(false);
-            btnEditAllergy.setVisible(false);
-            btnDelAllergy.setVisible(false);
-        }
-        box.getChildren().addAll(allergiesLbl, table, controls);
-        return box;
-    }
-
-    /**
-     * 
-     * Purpose: Create the medications info for the participant
-     * 
-     * @param cosmoId
-     *            The participant cosmoId which is used to pull the information
-     *            from the database
-     *
-     * @return VBox with a label and a table view
-     */
-    private VBox createMedicationInfo( String cosmoId )
-    {
-        VBox box = new VBox();
-        HBox controls = new HBox();
-        HBox buttons = new HBox();
-
-        Label medicationsLbl = new Label("Medications");
-        medicationsLbl.setFont(Font.font(22));
-
-        Button btnAddMedication = new Button("Add");
-        Button btnEditMedication = new Button("Edit");
-        Button btnDeleteMedication = new Button("Delete");
-        MedicationsTableViewController controller = new MedicationsTableViewController(
-                cosmoId);
-        TableView<Medication> table = controller.medicationsTable;
-
-        btnAddMedication.setOnAction(event -> {
-
-            ManageMedicationGUI manageMedicaiton = new ManageMedicationGUI(
-                    parentStage);
-            manageMedicaiton.showAddMedication(cosmoId);
-            controller.refreshTable(cosmoId);
-        });
-
-        // Handle the editing of a medication
-        btnEditMedication
-                .setOnAction(event -> {
-                    // Get the selected medication
-                    Medication med = controller.getSelectedMedication();
-                    if ( med == null )
-                    {
-                        Stage stage = new Stage();
-                        PopUpMessage popup = new PopUpMessage(
-                                "Must select an entry to edit", stage);
-                        Scene scene = new Scene(popup.root, 300, 75);
-                        stage.initModality(Modality.APPLICATION_MODAL);
-                        stage.initOwner(parentStage);
-                        stage.setScene(scene);
-                        stage.showAndWait();
-                    }
-                    else
-                    {
-                        ManageMedicationGUI manageMedication = new ManageMedicationGUI(
-                                parentStage);
-                        manageMedication.showUpdateMedication(cosmoId, med);
-                        controller.refreshTable(cosmoId);
-                    }
-
-                });
-        btnDeleteMedication
-                .setOnAction(event -> {
-                    Medication med = controller.getSelectedMedication();
-                    if ( med == null )
-                    {
-                        Stage stage = new Stage();
-                        PopUpMessage popup = new PopUpMessage(
-                                "Must select a medication entry to delete",
-                                stage);
-                        Scene scene = new Scene(popup.root, 300, 75);
-                        stage.initModality(Modality.APPLICATION_MODAL);
-                        stage.initOwner(parentStage);
-                        stage.setScene(scene);
-                        stage.showAndWait();
-                    }
-                    else
-                    {
-                        Stage stage = new Stage();
-                        PopUpCheck popup = new PopUpCheck(
-                                "Are you sure you want to delete the selected medication entry ?",
-                                stage);
-                        Scene scene = new Scene(popup.root, 450, 75);
-                        stage.initModality(Modality.APPLICATION_MODAL);
-                        stage.initOwner(parentStage);
-                        stage.setScene(scene);
-                        stage.showAndWait();
-                        if ( popup.runCheck() )
-                        {
-                            Medication.removeMedication(med.getMedicationName()
-                                    .get(), cosmoID);
-                            controller.refreshTable(cosmoID);
-                        }
-
-                    }
-                });
-        buttons.getChildren().addAll(btnAddMedication, btnEditMedication,
-                btnDeleteMedication);
-
-        controls.getChildren().addAll(buttons);
-
-        table.setMaxWidth(700);
-
-        buttons.setSpacing(5);
-        controls.setSpacing(450);
-        if ( !(this.loggedInUser instanceof MedicalAdministrator) )
-        {
-            btnAddMedication.setVisible(false);
-            btnDeleteMedication.setVisible(false);
-            btnEditMedication.setVisible(false);
-        }
-
-        box.getChildren().addAll(medicationsLbl, table, controls);
-
-        return box;
-    }
 }
