@@ -166,7 +166,7 @@ public class TestMedicalAdministrator
         healthNumberThree = "999999999";
         phoneThree = "6669116666";
         addressThree = "123 Yummy yum";
-        careTypeThree = "Elmwood";
+        careTypeThree = "Other";
         cityThree = "Yumville";
         postalCodeThree = "Y0M 0M0";
         sinThree = "123123123";
@@ -953,7 +953,7 @@ public class TestMedicalAdministrator
     
     /**
      * 
-     * Purpose: to test if the Social Insurance Number is changed
+     * Purpose: to test if the care Type is changed
      * @throws SQLException 
      */
     @Test 
@@ -1004,7 +1004,7 @@ public class TestMedicalAdministrator
         //make sure the insertion was successful
         assertTrue(secondEdit.equals(""));
         
-        assertTrue(!originalCareType.equals(editedCareType));
+        assertFalse(originalCareType.equals(editedCareType));
         assertTrue(editedCareType.equals(careTypeThree));
         
         db.delete("Participant", "cosmoID = " + cosmoIDFour);

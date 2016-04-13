@@ -46,6 +46,7 @@ public class MedicalAdministrator extends BasicStaff
      * @param healthNumber the healthnumber of the participant
      * @param phone the phone number of the participant
      * @param address the address of the participant
+     * @param careType the type of care for the participant
      * @param imagePath the path to the image representing the participant
      * 
      * @return A string indicating the result of the creation, could include
@@ -317,6 +318,7 @@ public class MedicalAdministrator extends BasicStaff
      * @param city - the participant city
      * @param postal code - the participant postal code
      * @param sin - the participant social insurance number
+     * @param careType - the care type of the participant
      * @param status - the participant status
      * @return
      */
