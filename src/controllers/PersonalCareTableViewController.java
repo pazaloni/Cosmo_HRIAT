@@ -26,7 +26,7 @@ public class PersonalCareTableViewController
     public TableView<PersonalCare> personalCareTable = new TableView<PersonalCare>();
     
     private TableColumn<PersonalCare, String> typeColumn = 
-            new TableColumn<PersonalCare, String>("");
+            new TableColumn<PersonalCare, String>("Categories");
     private TableColumn<PersonalCare, String> supportsColumn =
             new TableColumn<PersonalCare, String>("Supports");
     private TableColumn<PersonalCare, String> totalAsOfColumn = 
