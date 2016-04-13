@@ -530,8 +530,24 @@ public class IncidentReportFormHelper
 
     public String[] retrieveIncidentInfo( String incidentID )
     {
-
-        return null;
+        DatabaseHelper db = new DatabaseHelper();
+        db.connect();
+        String[] incidentInfo = new String[15];
+        
+        ResultSet incidentQuery = db.select("*", "Incidents", "incidentID ='" + incidentID + "'", "");
+        
+        try
+        {
+            while (incidentQuery.next())
+            {
+                
+            }
+        }
+        catch ( SQLException e )
+        {
+            e.printStackTrace();
+        }
+        return incidentInfo;
     }
 
     /**
