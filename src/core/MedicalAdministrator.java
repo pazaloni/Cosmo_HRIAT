@@ -46,6 +46,7 @@ public class MedicalAdministrator extends BasicStaff
      * @param healthNumber the healthnumber of the participant
      * @param phone the phone number of the participant
      * @param address the address of the participant
+     * @param careType the type of care for the participant
      * @param imagePath the path to the image representing the participant
      * 
      * @return A string indicating the result of the creation, could include
@@ -54,7 +55,7 @@ public class MedicalAdministrator extends BasicStaff
     public static String createParticipant( String cosmoID, String firstName,
             String lastName, LocalDate birthDate, String physicianFName,
             String physicianLName, String healthNumber, String phone,
-            String address, String imagePath )
+            String address, String careType, String imagePath )
     {
         // initialize birth date string to an empty string
         String birthDateString = "";
@@ -73,7 +74,7 @@ public class MedicalAdministrator extends BasicStaff
         if ( cosmoID.isEmpty() || firstName.isEmpty() || lastName.isEmpty()
                 || birthDateString.equals("") || physicianFName.isEmpty()
                 || physicianLName.isEmpty() || healthNumber.isEmpty()
-                || phone.isEmpty() || address.isEmpty() )
+                || phone.isEmpty() || address.isEmpty() || careType.isEmpty() )
         {
             result = "One of your fields is empty";
         }
@@ -173,7 +174,7 @@ public class MedicalAdministrator extends BasicStaff
                     }
 
                     // array of field names
-                    String values[][] = new String[16][2];
+                    String values[][] = new String[17][2];
                     values[0][0] = "cosmoID";
                     values[1][0] = "firstName";
                     values[2][0] = "lastName";
@@ -181,15 +182,16 @@ public class MedicalAdministrator extends BasicStaff
                     values[4][0] = "personalHealthNumber";
                     values[5][0] = "phoneNumber";
                     values[6][0] = "address";
-                    values[7][0] = "dateUpdated";
-                    values[8][0] = "agencyID";
-                    values[9][0] = "chwNurseID";
-                    values[10][0] = "caregiverID";
-                    values[11][0] = "kinID";
-                    values[12][0] = "landlordID";
-                    values[13][0] = "physicianID";
-                    values[14][0] = "workID";
-                    values[15][0] = "imagePath";
+                    values[7][0] = "careType";
+                    values[8][0] = "dateUpdated";
+                    values[9][0] = "agencyID";
+                    values[10][0] = "chwNurseID";
+                    values[11][0] = "caregiverID";
+                    values[12][0] = "kinID";
+                    values[13][0] = "landlordID";
+                    values[14][0] = "physicianID";
+                    values[15][0] = "workID";
+                    values[16][0] = "imagePath";
 
                     // get the current date to insert into "lastUpdated"
                     Calendar c = Calendar.getInstance();
@@ -206,15 +208,16 @@ public class MedicalAdministrator extends BasicStaff
                     values[4][1] = healthNumber;
                     values[5][1] = fh.formatPhoneNum(phone);
                     values[6][1] = address;
-                    values[7][1] = formattedDate;
-                    values[8][1] = "1";
+                    values[7][1] = careType;
+                    values[8][1] = formattedDate;
                     values[9][1] = "1";
                     values[10][1] = "1";
                     values[11][1] = "1";
                     values[12][1] = "1";
-                    values[13][1] = physicianID;
-                    values[14][1] = "1";
-                    values[15][1] = dbPath;
+                    values[13][1] = "1";
+                    values[14][1] = physicianID;
+                    values[15][1] = "1";
+                    values[16][1] = dbPath;
 
                     // inserting into the database
                     successful = db.insert(values, "Participant");
@@ -315,13 +318,14 @@ public class MedicalAdministrator extends BasicStaff
      * @param city - the participant city
      * @param postal code - the participant postal code
      * @param sin - the participant social insurance number
+     * @param careType - the care type of the participant
      * @param status - the participant status
      * @return
      */
 	public static String editParticipant(String cosmoId, String firstName,
             String lastName, LocalDate birthDate,
             String phn, String address, String phoneNum, String city, String postalCode,
-            String sin, String status)
+            String sin, String careType, String status)
 	{
         // initialize birth date string to an empty string
         String birthDateString = "";
@@ -373,7 +377,7 @@ public class MedicalAdministrator extends BasicStaff
             {
                 successful = false;
                     // array of field names
-                    String values[][] = new String[12][2];
+                    String values[][] = new String[13][2];
                     values[0][0] = "cosmoID";
                     values[1][0] = "firstName";
                     values[2][0] = "lastName";
@@ -384,8 +388,9 @@ public class MedicalAdministrator extends BasicStaff
                     values[7][0] = "city";
                     values[8][0] = "postalCode";
                     values[9][0] = "socialInsuranceNumber";
-                    values[10][0] = "participantStatus";
-                    values[11][0] = "dateUpdated";
+                    values[10][0] = "careType";
+                    values[11][0] = "participantStatus";
+                    values[12][0] = "dateUpdated";
 
                  
                     // get the current date to insert into "lastUpdated"
@@ -403,8 +408,9 @@ public class MedicalAdministrator extends BasicStaff
                     values[7][1] = city;
                     values[8][1] = postalCode;
                     values[9][1] = sin;
-                    values[10][1] = status;
-                    values[11][1] = formattedDate;         
+                    values[10][1] = careType;
+                    values[11][1] = status;
+                    values[12][1] = formattedDate;         
     
                     Calendar ca = Calendar.getInstance();
                     // inserting into the database
