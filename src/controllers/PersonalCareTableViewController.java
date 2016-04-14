@@ -34,7 +34,7 @@ public class PersonalCareTableViewController
     private TableColumn<PersonalCare, String> totalForLastYearColumn = 
             new TableColumn<PersonalCare, String>("totalForLastYearPH");
     
-    private ObservableList<PersonalCare> personalCareData = 
+    public ObservableList<PersonalCare> personalCareData = 
             FXCollections.observableArrayList();
     
     DatabaseHelper db = new DatabaseHelper();

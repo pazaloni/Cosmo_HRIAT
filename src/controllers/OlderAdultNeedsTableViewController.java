@@ -44,7 +44,7 @@ public class OlderAdultNeedsTableViewController
 	private TableColumn<OlderAdultsNeeds, String> totalForLastYearColumn = 
 			new TableColumn<OlderAdultsNeeds, String>("totalForLastYearPH");
 	
-	private ObservableList<OlderAdultsNeeds> adultData = 
+	public ObservableList<OlderAdultsNeeds> adultData = 
 			FXCollections.observableArrayList();
 	
 	private DatabaseHelper db = new DatabaseHelper();

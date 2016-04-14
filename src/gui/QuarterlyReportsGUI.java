@@ -1,5 +1,7 @@
 package gui;
 
+import helpers.QuarterlyReportExportHelper;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -247,8 +249,17 @@ public class QuarterlyReportsGUI extends Application {
         return vbox;
     }
 	
+    /**
+     * Exports the information from the Quarterly Report form into a csv file.
+     * 
+     * @author Breanna Wilson
+     */
     private void exportReport()
     {
-    	//TODO have this function export the report to a file
+    	QuarterlyReportExportHelper helper = 
+    			new QuarterlyReportExportHelper(personalCareTVCont.personalCareData,
+    					reactiveCareTVCont.reactiveCareData, olderAdultNeedsTVCont.adultData, 
+    					formatDate(endDate.getValue()), endDate.getValue().getYear());
+    	helper.exportToCSV();
     }
 }

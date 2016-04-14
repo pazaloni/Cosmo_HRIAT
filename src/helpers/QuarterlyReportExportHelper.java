@@ -1,14 +1,26 @@
 package helpers;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import core.OlderAdultsNeeds;
 import core.PersonalCare;
 import core.ReactiveCare;
 import javafx.collections.ObservableList;
 
+/**
+ * Purpose: Used to export the quarterly report
+ * infomration into a formatted csv file.
+ * @author Breanna Wilson
+ *
+ */
+
 public class QuarterlyReportExportHelper 
 {
+	//the lists of data to be put into the report
 	ObservableList<PersonalCare> personalCareList;
 	ObservableList<ReactiveCare> reactiveCareList;
 	ObservableList<OlderAdultsNeeds> olderAdultNeedsList;
@@ -27,8 +39,19 @@ public class QuarterlyReportExportHelper
 	
 	public void exportToCSV()
 	{
-		String exportStr = createOlderAdultNeedsCSVString() + 
-				createPersonalCareCSVString() + createReactiveCareCSVString();
+		String exportStr = "Older Adults Needs\n" + createOlderAdultNeedsCSVString() + 
+				"Personal Care\n" + createPersonalCareCSVString() + "Reactive Care\n" + 
+				createReactiveCareCSVString() + "\nHealth Promotion Activities\n\nHealth Related Supplies";
+		
+		try {
+			PrintWriter out = new PrintWriter("quarterlyReport" + this.date + ".csv");
+			out.print(exportStr);
+			out.close();
+		} 
+		catch (FileNotFoundException e) 
+		{
+			e.printStackTrace();
+		}
 		
 		
 		
@@ -38,15 +61,17 @@ public class QuarterlyReportExportHelper
 	{
 		String csvStr = ", Supports, Total Persons as of: " + date + ", Total For: " + prevYear + "\n";
 		Iterator<PersonalCare> iter = personalCareList.iterator();
-		PersonalCare current =iter.next();
-		while(current != null)
+		PersonalCare current = null;
+		while(iter.hasNext())
 		{
+			current = iter.next();
+			
 			csvStr += current.getType() + ",";
 			csvStr += current.getSupports() + ",";
 			csvStr += current.getTotalAsOf() + ",";
 			csvStr += current.getTotalForLastYear() + "\n";
 			
-			current = iter.next();
+			
 		}
 		
 		csvStr += "\n\n";
@@ -58,16 +83,16 @@ public class QuarterlyReportExportHelper
 	{
 		String csvStr = "Year, Participants Involved, Staff Members Involved, Total\n";
 		Iterator<ReactiveCare> iter = reactiveCareList.iterator();
-		ReactiveCare current = iter.next();
+		ReactiveCare current = null;
 		
-		while(current != null)
+		while(iter.hasNext())
 		{
+			current = iter.next();
+			
 			csvStr += current.getYear() + ",";
 			csvStr += current.getParticipants() + ",";
 			csvStr += current.getStaff() + ",";
 			csvStr += current.getTotal() + "\n";
-			
-			current = iter.next();
 		}
 		
 		csvStr += "\n\n";
@@ -81,10 +106,12 @@ public class QuarterlyReportExportHelper
 				+ "Luther Care, Other, Total As Of: " + date + ", Total For: " + 
 				prevYear + "\n";
 		Iterator<OlderAdultsNeeds> iter = olderAdultNeedsList.iterator();
-		OlderAdultsNeeds current = iter.next();
+		OlderAdultsNeeds current = null;
 		
-		while(current != null)
+		while(iter.hasNext())
 		{
+			current = iter.next();
+			
 			csvStr += current.getAge() + ",";
 			csvStr += current.getLongTermCare() + ",";
 			csvStr += current.getElmwood() + ",";
@@ -92,13 +119,11 @@ public class QuarterlyReportExportHelper
 			csvStr += current.getOther() + ",";
 			csvStr += current.getTotalAsOf() + ",";
 			csvStr += current.getTotalForLastYear() + "\n";
-			
-			current = iter.next();
 		}
 		
 		csvStr += "\n\n";
 		
-		return null;
+		return csvStr;
 	}
 	
 }

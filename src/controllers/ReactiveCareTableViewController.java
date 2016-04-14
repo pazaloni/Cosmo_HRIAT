@@ -36,7 +36,7 @@ public class ReactiveCareTableViewController
 			new TableColumn<ReactiveCare, String>("Total");
 	
 	//observable list containing all data for the table
-	private ObservableList<ReactiveCare> reactiveCareData =
+	public ObservableList<ReactiveCare> reactiveCareData =
 			FXCollections.observableArrayList();
 	
 	DatabaseHelper db = new DatabaseHelper();
