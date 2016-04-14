@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -38,7 +39,7 @@ public class PhysicianManagementGUI
     public static Stage stageTech;
 
     // Button, used to finish adding a physician to database
-    private Button btnSubmit = new Button("Submit");
+    private Button btnSubmit = new Button("Add");
 
     // label that will be displayed when there will be an error
     public static Label lblWarning = new Label();
@@ -180,27 +181,27 @@ public class PhysicianManagementGUI
         newUserForm.setPadding(new Insets(15));
         // first name field and formatting
         Label lblFirstName = new Label("First Name");
-        lblFirstName.setFont(new Font(15));
+       // lblFirstName.setFont(new Font(15));
         TextField firstName = new TextField();
         // Last name field and formatting
         Label lblLastName = new Label("Last Name");
-        lblLastName.setFont(new Font(15));
+        //lblLastName.setFont(new Font(15));
         TextField lastName = new TextField();
         // last name field and formatting
         Label lblPhone = new Label("Phone Number");
-        lblPhone.setFont(new Font(15));
+        //lblPhone.setFont(new Font(15));
         TextField Phone = new TextField();
 
         // warning for when info is not correct. //not this story
-        lblWarning.setFont(new Font(15));
-        lblWarning.setStyle("-fx-text-fill: red");
+        //lblWarning.setFont(new Font(15));
+        lblWarning.setTextFill(Color.FIREBRICK);
 
         HBox completionButtons = new HBox();
         // used to reset all fields
         Button btnReset = new Button("Reset");
 
         btnReset.minWidth(150);
-        btnReset.setFont(new Font(15));
+        //btnReset.setFont(new Font(15));
         // clears all fields
         btnReset.setOnAction(event -> {
             firstName.setText("");
@@ -210,9 +211,10 @@ public class PhysicianManagementGUI
         });
 
         btnSubmit.minWidth(150);
-        btnSubmit.setFont(new Font(15));
+        //btnSubmit.setFont(new Font(15));
         if (!newUser)
         {
+            btnSubmit.setText("Edit");
             String[] physInfo = new String[3];
             physInfo = pTVCont.getSelectedInfo();
 
@@ -221,10 +223,15 @@ public class PhysicianManagementGUI
             Phone.setText(physInfo[2]);
 
         }
+        else
+        {
+            btnSubmit.setText("Add");
+        }
 
         // used to format phone number as desired by the client (xxx)-xxx-xxxx
         FormatHelper fm = new FormatHelper();
         // on submit clicked
+        
         btnSubmit.setOnAction(new EventHandler<ActionEvent>()
         {
 
@@ -240,22 +247,23 @@ public class PhysicianManagementGUI
                 // if the user is not a new user (it is being edited)
                 if (!newUser)
                 {
+                    
                     // format phone numbers
                     String unformmattedNumber = Phone.getText();
                     String formattedPhone = fm
                             .formatPhoneNum(unformmattedNumber);
                     // error checking
                     if (formattedPhone
-                            .equals("A phone number must have 10 digits."))
+                            .equals("Phone Number must be 10 digits"))
                     {
                         lblWarning
-                                .setText("A phone number must have 10 digits.");
+                                .setText("Phone Number must be 10 digits");
 
                     }
                     else if (firstName.getText().equals("")
                             || lastName.getText().equals(""))
                     {
-                        lblWarning.setText("Both name fields are required.");
+                        lblWarning.setText("You have missing required fields");
                     }
                     else
                     {
@@ -274,16 +282,16 @@ public class PhysicianManagementGUI
                     String formattedPhone = fm
                             .formatPhoneNum(unformmattedNumber);
                     if (formattedPhone
-                            .equals("A phone number must have 10 digits."))
+                            .equals("You have missing required fields"))
                     {
                         lblWarning
-                                .setText("A phone number must have 10 digits.");
+                                .setText("You have missing required fields");
 
                     }
                     else if (firstName.getText().equals("")
                             || lastName.getText().equals(""))
                     {
-                        lblWarning.setText("Both name fields are required.");
+                        lblWarning.setText("You have missing required fields");
                     }
                     else
                     {
@@ -311,6 +319,7 @@ public class PhysicianManagementGUI
         newUserForm.add(lblPhone, 0, 3);
         newUserForm.add(Phone, 1, 3);
 
+        Phone.setPromptText("Ex: 3062879111");
         // completionButtons.setSpacing(50);
         newUserForm.add(completionButtons, 0, 9);
         newUserForm.setColumnSpan(completionButtons, 3);
@@ -318,7 +327,7 @@ public class PhysicianManagementGUI
         // newUserForm.add(btnSubmit, 1,9);
 
         // btnReset.setAlignment(Pos.CENTER_RIGHT);
-        newUserForm.add(lblWarning, 0, 4);
+        newUserForm.add(lblWarning, 0, 0);
         // GridPane.setColumnSpan(completionButtons, 2);
 
         GridPane.setColumnSpan(lblWarning, 2);
