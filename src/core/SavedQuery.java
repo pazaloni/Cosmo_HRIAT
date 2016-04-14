@@ -13,15 +13,6 @@ import javafx.beans.property.StringProperty;
 public class SavedQuery
 {
 
-    // private String name;
-    // private String query;
-
-    /*
-     * public SavedQuery(String name, String query) { this.name = name;
-     * this.query = query;
-     * 
-     * }
-     */
     public static String createSavedQuery( String queryName, String query )
     {
         String result = "";
@@ -39,8 +30,6 @@ public class SavedQuery
 
             int recordExists = 0;
 
-            // check if there is already a medication with that name for
-            // that user
             try
             {
                 queryExists.next();

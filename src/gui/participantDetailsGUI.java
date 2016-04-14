@@ -168,8 +168,7 @@ public class participantDetailsGUI extends Application
         Tab personalCare = new Tab();
         Tab scannedForms = new Tab();
 
-        Tab caregiver = new Tab();
-        Tab other = new Tab();
+
 
 
 
@@ -208,8 +207,6 @@ public class participantDetailsGUI extends Application
                 .getContent());
         
 
-        caregiver.setContent(createCaregiverTab());
-        other.setContent(createOtherTab());
 
         // set text for tabs
         healthStatus.setText("Health Status");
@@ -219,9 +216,6 @@ public class participantDetailsGUI extends Application
         personalCare.setText("Personal Care");
         scannedForms.setText("Scanned Documents");
 
-        caregiver.setText("Caregiver");
-        other.setText("Other");
-
         // set tabs to not be closable
         healthStatus.closableProperty().set(false);
         participantUpdate.closableProperty().set(false);
@@ -230,14 +224,12 @@ public class participantDetailsGUI extends Application
         personalCare.closableProperty().set(false);
         scannedForms.closableProperty().set(false);
 
-        caregiver.closableProperty().set(false);
-        other.closableProperty().set(false);
+
 
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(100);
         tabPane.getTabs().addAll(healthStatus, participantUpdate,
-                seizureDescription, progressNotes, personalCare, scannedForms,
-                caregiver, other);
+                seizureDescription, progressNotes, personalCare, scannedForms);
         tabPane.setMinHeight(29);
 
         return tabPane;
@@ -331,8 +323,8 @@ public class participantDetailsGUI extends Application
 
         //create buttons
         Button editBtn = new Button();
-        Button viewDocumentsBtn = new Button("View \nAttached \nDocuments");
-        Button generateFormsBtn = new Button("Generate Forms");
+        //Button viewDocumentsBtn = new Button("View \nAttached \nDocuments");
+        //Button generateFormsBtn = new Button("Generate Forms");
         Button createNoteBtn = new Button("Create Note");
 
         createNoteBtn.setOnAction(new EventHandler<ActionEvent>()
@@ -362,6 +354,7 @@ public class participantDetailsGUI extends Application
         editBtn.setMaxHeight(25);
         editBtn.setGraphic(new ImageView(new Image("images/edit.png")));
 
+        /*
         viewDocumentsBtn.setMaxWidth(100);
         viewDocumentsBtn.setMinWidth(100);
         viewDocumentsBtn.setMinHeight(60);
@@ -369,7 +362,8 @@ public class participantDetailsGUI extends Application
 
         generateFormsBtn.setMaxWidth(100);
         generateFormsBtn.setMinWidth(100);
-
+         */
+        
         createNoteBtn.setMaxWidth(100);
         createNoteBtn.setMinWidth(100);
 
@@ -471,8 +465,7 @@ public class participantDetailsGUI extends Application
             e.printStackTrace();
         }
 
-        pictureBox.getChildren().addAll(statusBox, viewDocumentsBtn, generateFormsBtn,
-                createNoteBtn);
+        pictureBox.getChildren().addAll(statusBox, createNoteBtn);
 
         cosmoIDText.setMaxWidth(PREVIEW_TEXT_WIDTH);
         cosmoIDText.setMinWidth(PREVIEW_TEXT_WIDTH);

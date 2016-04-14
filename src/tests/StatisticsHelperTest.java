@@ -31,7 +31,7 @@ public class StatisticsHelperTest
         where1 = "Allergies";
         where2 = "Seizures";
 
-        operatorEqual = "equal";
+        operatorEqual = "equals";
         operatorLike = "contains";
         operatorBetween = "between";
         operatorGreaterThan = "greater than";

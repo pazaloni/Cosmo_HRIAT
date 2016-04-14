@@ -1,4 +1,5 @@
 package gui;
+
 import helpers.DatabaseHelper;
 import helpers.NotePaneHelper;
 import helpers.PreviewPaneHelper;
@@ -137,7 +138,8 @@ public class MedicalStaffMainPageGUI extends Application
      * Purpose: Construct the main stage for the medical staff when they have
      * successfully logged in
      * 
-     * @param stage: the stage the medical staff will see
+     * @param stage
+     *            : the stage the medical staff will see
      */
     public void medMainPageConstruct( Stage stage, StaffAccount loggedInStaff )
     {
@@ -167,7 +169,8 @@ public class MedicalStaffMainPageGUI extends Application
         {
             public void handle( WindowEvent we )
             {
-                dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout","");
+                dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout",
+                        "");
             }
         });
     }
@@ -198,7 +201,8 @@ public class MedicalStaffMainPageGUI extends Application
                 medMainStage.setOnCloseRequest(null);
 
                 medMainStage.close();
-                dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout","");
+                dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout",
+                        "");
                 LoginGUI test5 = new LoginGUI();
                 try
                 {
@@ -243,22 +247,25 @@ public class MedicalStaffMainPageGUI extends Application
         Tab forms = new Tab();
         Tab stats = new Tab();
 
-        HBox box = new HBox();        
+        HBox box = new HBox();
         HBox btnBox = new HBox();
-        
-        btnBox.getChildren().addAll(btnAddIncidentReport,btnEditIncidentReport,btnDeleteIncidebtReport);
+
+        btnBox.getChildren().addAll(btnAddIncidentReport,
+                btnEditIncidentReport, btnDeleteIncidebtReport);
         btnBox.setSpacing(10);
-        box.getChildren().addAll(lblIncidnetReportForm,btnBox);
+        box.getChildren().addAll(lblIncidnetReportForm, btnBox);
         box.setSpacing(200);
         // set text for tabs
         participants.setText("Participants");
         VBox vbox = new VBox();
-        vbox.getChildren().addAll(createHBoxPreviewNotes(),pTVCont.participantTable);
+        vbox.getChildren().addAll(createHBoxPreviewNotes(),
+                pTVCont.participantTable);
         participants.setContent(vbox);
         forms.setText("Forms");
         stats.setText("Stats");
-        btnAddIncidentReport.setOnAction(event->{
-            IncidentReportFormGUI irf = new IncidentReportFormGUI(medMainStage, loggedInUser);
+        btnAddIncidentReport.setOnAction(event -> {
+            IncidentReportFormGUI irf = new IncidentReportFormGUI(medMainStage,
+                    loggedInUser);
             irf.showIncidentReportForm();
         });
         // set tabs to not be closable
@@ -266,69 +273,46 @@ public class MedicalStaffMainPageGUI extends Application
         participants.closableProperty().set(false);
         stats.closableProperty().set(false);
 
-
         forms.setContent(box);
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(175);
-       
-/*TODO
-        Button genQuartRpt = new Button("Generate Quarterly Reports");
-        genQuartRpt.setOnAction(event -> {
-        	Stage stage = new Stage();
-        	QuarterlyReportsGUI reportGUI = new QuarterlyReportsGUI(stage);
-        	stage.setScene(new Scene(reportGUI.mainVbox));
-        	stage.showAndWait();
-        });
-        stats.setContent(genQuartRpt);
-      */
-        StatisticsTabGUI stg = new StatisticsTabGUI(stats,
-                loggedInUser, medMainStage);
-        stats.setContent(stg.showStatistics()
-                .getContent());
-        
-        tabPane.getTabs().addAll(participants);
 
+        StatisticsTabGUI stg = new StatisticsTabGUI(stats, medMainStage);
+        stats.setContent(stg.showStatistics().getContent());
+
+        tabPane.getTabs().addAll(participants);
 
         // if they are an administrator, add the stats tab
         if ( loggedInUser instanceof MedicalAdministrator )
         {
-            tabPane.getTabs().addAll(stats,forms);
+            tabPane.getTabs().addAll(stats, forms);
         }
 
         // set initial selected tab to participants
         tabPane.getSelectionModel().select(participants);
 
         // set the changed property
-        /*tabPane.getSelectionModel().selectedItemProperty()
-                .addListener(new ChangeListener<Tab>()
-                {
-
-                    @Override
-                    public void changed( ObservableValue<? extends Tab> arg0,
-                            Tab arg1, Tab mostRecentlySelectedTab )
-                    {
-                        if ( mostRecentlySelectedTab.equals(forms) )
-                        {
-                            IncidentReportFormGUI irf = new IncidentReportFormGUI(
-                                    medMainStage, loggedInUser);
-                            irf.showIncidentReportForm();
-                        }
-                        else if ( mostRecentlySelectedTab.equals(stats) )
-                        {
-                            StatisticsGUI reportGUI = new StatisticsGUI();
-                            reportGUI.reportsMainStageConstruct(medMainStage,
-                                    loggedInUser);
-                        }
-
-                    }
-
-                });
-*/
+        /*
+         * tabPane.getSelectionModel().selectedItemProperty() .addListener(new
+         * ChangeListener<Tab>() {
+         * 
+         * @Override public void changed( ObservableValue<? extends Tab> arg0,
+         * Tab arg1, Tab mostRecentlySelectedTab ) { if (
+         * mostRecentlySelectedTab.equals(forms) ) { IncidentReportFormGUI irf =
+         * new IncidentReportFormGUI( medMainStage, loggedInUser);
+         * irf.showIncidentReportForm(); } else if (
+         * mostRecentlySelectedTab.equals(stats) ) { StatisticsGUI reportGUI =
+         * new StatisticsGUI();
+         * reportGUI.reportsMainStageConstruct(medMainStage, loggedInUser); }
+         * 
+         * }
+         * 
+         * });
+         */
         tabPane.setMinHeight(29);
         tabPane.setFocusTraversable(false);
         return tabPane;
     }
-
 
     /**
      * 
@@ -380,7 +364,7 @@ public class MedicalStaffMainPageGUI extends Application
         // create picture box for left side of preview pane
         VBox pictureBox = new VBox();
         // default preview picture
-        //URL url = getClass().getResource("images/defaultPicture.png");
+        // URL url = getClass().getResource("images/defaultPicture.png");
         previewPicture = new ImageView(new Image("images/defaultPicture.png"));
 
         // details button
@@ -839,10 +823,12 @@ public class MedicalStaffMainPageGUI extends Application
                 {
                     createParticipantStage.close();
                     pTVCont.refreshTable("", "Participant");
-                    
-                    //create activity log entry for creating this user
-                    dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Created Participant (" + cosmoIdTxt.getText() + ")",
-                    "Name: \"" + firstNameTxt.getText() + " " + lastNameTxt.getText() + "\"" );
+
+                    // create activity log entry for creating this user
+                    dbObject.activtyLogEntry(loggedInUser.GetUsername(),
+                            "Created Participant (" + cosmoIdTxt.getText()
+                                    + ")", "Name: \"" + firstNameTxt.getText()
+                                    + " " + lastNameTxt.getText() + "\"");
 
                 }
                 // if there is an error message, display it
@@ -970,7 +956,7 @@ public class MedicalStaffMainPageGUI extends Application
         noteDisplayPane.add(participantLabel, 0, 1);
         noteDisplayPane.add(subjectLabel, 0, 3);
         noteDisplayPane.add(resolvedCb, 0, 4);
-        
+
         // Initially the labes for notes will be empty because they haven't
         // selected a note yet
         dateInfoLabel = new Label();
@@ -1012,7 +998,8 @@ public class MedicalStaffMainPageGUI extends Application
      * Purpose: Assign the information pulled from the database to the various
      * control
      * 
-     * @param selectedPK the note selected
+     * @param selectedPK
+     *            the note selected
      */
     private void assignNoteDetailLabels( String selectedPK )
     {
@@ -1077,16 +1064,15 @@ public class MedicalStaffMainPageGUI extends Application
         BorderPane header = createHBoxHeader();
         // tab pane
         TabPane tabs = createTabs();
-        
+
         // Search bar
         HBox searchBar = createSearchBar();
         VBox.setMargin(searchBar, new Insets(5, 0, 5, 0));
         // preview notes
-        //HBox previewNotes = createHBoxPreviewNotes();
+        // HBox previewNotes = createHBoxPreviewNotes();
 
         // add everything to vbox
-        vbox.getChildren().addAll(header, searchBar, tabs 
-                );
+        vbox.getChildren().addAll(header, searchBar, tabs);
 
         return vbox;
 

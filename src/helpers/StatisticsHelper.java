@@ -10,10 +10,7 @@ public class StatisticsHelper
     public String generateSQL( String searchFor, String comparison,
             String condition )
     {
-        int z = 1;
         String query = "SELECT cosmoID";
-        while(z == 1)
-        {
         query = "SELECT cosmoID";
         String[] conditionArray = null;
         switch ( searchFor )
@@ -123,7 +120,7 @@ public class StatisticsHelper
                 }
                 break;
         }
-        }
+
         return query;
 
     }

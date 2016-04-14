@@ -60,25 +60,18 @@ import javafx.stage.Stage;
 
 /**
  *
- * Purpose: Represents the health status form GUI, which by default pulls
- * information
+ * Purpose: Represents the statistics tab GUI information
  *
  * @author CIMP
  * @version 1.0
  */
 public class StatisticsTabGUI
 {
-    public static final String FORM_TITLE = "Health Status Information";
     public static final int SPACING = 10;
-
-    private String cosmoID;
 
     private HBox mainBox;
 
-    // The Control that this will be placed in
     private Tab parentTab;
-
-    private StaffAccount loggedInUser;
 
     private Stage parentStage;
 
@@ -87,8 +80,6 @@ public class StatisticsTabGUI
     VBox savedQueryBox;
 
     ListView<String> savedQueryList;
-
-    private Button btnSave = new Button("Save");
 
     HealthStatusInformationHelper helper = new HealthStatusInformationHelper();
 
@@ -99,11 +90,9 @@ public class StatisticsTabGUI
      * @param ctrl
      *            the pane, or box that this will be placed on
      */
-    public StatisticsTabGUI(Tab statsTab, StaffAccount loggedInUser,
-            Stage parentStage)
+    public StatisticsTabGUI(Tab statsTab, Stage parentStage)
     {
         this.parentTab = statsTab;
-        this.loggedInUser = loggedInUser;
         this.parentStage = parentStage;
     }
 
@@ -303,15 +292,13 @@ public class StatisticsTabGUI
         addHbox.getChildren().add(addQueryBtn);
         grid.add(addQueryBtn, 1, 3);
         GridPane.setHalignment(addQueryBtn, HPos.CENTER);
-        grid.setPadding(new Insets(20,0,0,20));
+        grid.setPadding(new Insets(20, 0, 0, 20));
         saveQueryStage.setScene(new Scene(grid, 275, 150));
         saveQueryStage.initModality(Modality.APPLICATION_MODAL);
         saveQueryStage.initOwner(this.parentStage);
         saveQueryStage.setResizable(false);
         saveQueryStage.showAndWait();
     }
-
-
 
     private ListView<String> createSavedQueryList()
     {
@@ -336,7 +323,6 @@ public class StatisticsTabGUI
         db.disconnect();
         return savedQueryList;
     }
-
 
     private void getStatistics( String queryString )
     {
