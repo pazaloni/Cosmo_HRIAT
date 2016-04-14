@@ -27,7 +27,7 @@ public class TestEditPhysician
         db.connect();
 
         Physician originalPhysician = null;
-        //select the physician with an id of 1
+        //select the physician with an id of 1 
         //we will edit this exact physician and then select it again
         //to see if the changes were made to the exact same physician record
         //in the database
@@ -63,10 +63,12 @@ public class TestEditPhysician
         originalPhysician = new Physician(PhysID, firstName, lastName, phone);
 
         //change the physicians first name to something other than what it is
-        firstName = "Mark";
-        
+        firstName = "Markyd1";
+        lastName = "Test1d";
+        phone = "9999991995";
         //helper will pass in the changes and update the database
         managePhys.editUser(firstName, lastName, phone, PhysID);
+        
 
         
         Physician editedPhysician = null;
@@ -110,15 +112,17 @@ public class TestEditPhysician
         if (originalPhysician.getPhysID().equals(editedPhysician.getPhysID()))
         {
             //if the names are the same, the test failed 
-            if (originalPhysician.getFirstName().equals(
-                    editedPhysician.getFirstName()))
-            {
-                assertTrue(false);
-            }
-            {
-                //names are different but the ids are the same, test passed
-                assertTrue(true);
-            }
+            assertFalse(originalPhysician.getFirstName().equals(editedPhysician.getFirstName()));
+            assertFalse(originalPhysician.getLastName().equals(editedPhysician.getLastName()));
+            assertFalse(originalPhysician.getPhysPhone().equals(editedPhysician.getPhysPhone()));
+            
+            
+            assertTrue(editedPhysician.getFirstName().equals(firstName2));
+            assertTrue(editedPhysician.getLastName().equals(lastName2));
+            assertTrue(editedPhysician.getPhysPhone().equals(phone2));
+            
+            managePhys.editUser(originalPhysician.getFirstName(), originalPhysician.getLastName(), originalPhysician.getPhysPhone(), PhysID);
+            
         }
 
     }

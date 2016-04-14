@@ -29,7 +29,7 @@ public class FormatHelper
         }
         else
         {
-            result = "A phone number must have 10 digits.";
+            result = "Phone Number must be 10 digits";
         }
         return result;
     }
