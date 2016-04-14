@@ -642,7 +642,7 @@ public class MedicalStaffMainPageGUI extends Application
                     createParticipantStage.setTitle("Create Participant");
 
                     createParticipantStage.setScene(new Scene(
-                            createParticipantPopUp(), 325, 425));
+                            createParticipantPopUp(), 325, 485));
                     createParticipantStage
                             .initModality(Modality.APPLICATION_MODAL);
                     createParticipantStage.initOwner(medMainStage);
@@ -732,6 +732,7 @@ public class MedicalStaffMainPageGUI extends Application
         Label phoneLbl = new Label("Phone Number");
         Label cosmoIdLbl = new Label("Cosmo ID");
         Label addressLbl = new Label("Participant Address");
+        Label careTypeLbl = new Label("Care Type");
         Label imageLbl = new Label("Participant Picture");
 
         // the text fields
@@ -753,6 +754,7 @@ public class MedicalStaffMainPageGUI extends Application
         phoneTxt.setPromptText("Ex: 3062879111");
         TextField cosmoIdTxt = new TextField();
         TextField addressTxt = new TextField();
+        TextField careTypeTxt = new TextField();
         Button imageBrowseBtn = new Button("Browse...");
         TextField chosenPathTxt = new TextField("");
 
@@ -787,7 +789,8 @@ public class MedicalStaffMainPageGUI extends Application
         grid.add(healthNumLbl, 0, 7);
         grid.add(phoneLbl, 0, 8);
         grid.add(addressLbl, 0, 9);
-        grid.add(imageLbl, 0, 10);
+        grid.add(careTypeLbl,0,10);
+        grid.add(imageLbl, 0, 11);
 
         grid.add(lblWarning, 1, 0);
         grid.add(cosmoIdTxt, 1, 1);
@@ -799,7 +802,8 @@ public class MedicalStaffMainPageGUI extends Application
         grid.add(healthNumTxt, 1, 7);
         grid.add(phoneTxt, 1, 8);
         grid.add(addressTxt, 1, 9);
-        grid.add(imageBrowseBtn, 1, 10);
+        grid.add(careTypeTxt,1,10);
+        grid.add(imageBrowseBtn, 1, 11);
 
         // setPadding of the grid
         grid.setPadding(new Insets(10, 10, 0, 10));
@@ -822,7 +826,7 @@ public class MedicalStaffMainPageGUI extends Application
                         lastNameTxt.getText(), birthDatePicker.getValue(),
                         physicianFNameTxt.getText(),
                         physicianLNameTxt.getText(), healthNumTxt.getText(),
-                        phoneTxt.getText(), addressTxt.getText(),
+                        phoneTxt.getText(), addressTxt.getText(), careTypeTxt.getText(),
                         chosenPathTxt.getText());
 
                 // if no error message is recieved then close this window and
@@ -883,8 +887,8 @@ public class MedicalStaffMainPageGUI extends Application
         buttonsHbox.setAlignment(Pos.CENTER);
         resetHbox.getChildren().addAll(resetBtn);
         resetHbox.setAlignment(Pos.CENTER_RIGHT);
-        grid.add(buttonsHbox, 1, 11);
-        grid.add(resetHbox, 0, 11);
+        grid.add(buttonsHbox, 1, 12);
+        grid.add(resetHbox, 0, 12);
 
         return grid;
     }

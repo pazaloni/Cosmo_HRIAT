@@ -12,6 +12,7 @@ import javafx.beans.property.StringProperty;
 
 public class PersonalCare
 {
+	private String type;
     private String supports;
     private String totalAsOf;
     private String totalForLastYear;
@@ -25,11 +26,24 @@ public class PersonalCare
      * 
      * @author Breanna Wilson, Jon Froese
      */
-    public PersonalCare(String supports, String totalAsOf, String totalForLastYear)
+    public PersonalCare(String type, String supports, String totalAsOf, String totalForLastYear)
     {
+    	this.type = type;
         this.supports = supports;
         this.totalAsOf = totalAsOf;
         this.totalForLastYear = totalForLastYear;
+    }
+    
+    public String getType()
+    {
+    	return type;
+    }
+    
+    public StringProperty getTypeProperty()
+    {
+    	StringProperty prop = new SimpleStringProperty();
+    	prop.setValue(type);
+    	return prop;
     }
     
     /**

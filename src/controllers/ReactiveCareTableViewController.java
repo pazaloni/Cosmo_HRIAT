@@ -1,9 +1,15 @@
 package controllers;
+import helpers.DatabaseHelper;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import core.OlderAdultsNeeds;
 import core.ReactiveCare;
 
 /**
@@ -33,6 +39,8 @@ public class ReactiveCareTableViewController
 	private ObservableList<ReactiveCare> reactiveCareData =
 			FXCollections.observableArrayList();
 	
+	DatabaseHelper db = new DatabaseHelper();
+	
 	/**
 	 * Creates and initializes the reactiveCareTable
 	 * 
@@ -47,9 +55,55 @@ public class ReactiveCareTableViewController
 		reactiveCareTable.setMaxHeight(150);
 	}
 	
+	/**
+	 * Queries the database for statistics on reactive care, counting the number
+	 * of participants and staff members involved for incidents each year that is stored in the database,
+	 * and places the data into the tableview.
+	 * 
+	 * @author Breanna Wilson, Jon Froese
+	 */
 	private void queryReactiveCareData() 
 	{
-		//TODO have this query the DB for reactive care info
+	    ResultSet rsNumParticipants = db.select("COUNT(Incidents.incidentID), Year(dateOfIncident)","Incidents GROUP BY (Year(dateOfIncident))","","");
+		ResultSet rsNumStaff = null;
+		int numParticipants = 0;
+		int numStaff = 0;
+		int year = 0;
+		
+		
+		try 
+		{
+			while(rsNumParticipants != null && rsNumParticipants.next())
+			{
+				if(rsNumParticipants != null)
+				{
+					
+					numParticipants = rsNumParticipants.getInt(1);
+					year = rsNumParticipants.getInt(2);
+					
+					rsNumStaff = db.select("COUNT(injuryID)", "IncidentInjuryTypes i JOIN Incidents j ON i.incidentID = j.incidentID", 
+							"injuryID = 13 AND Year(dateOfIncident) = " + year, "");
+					
+					if(rsNumStaff != null && rsNumStaff.next())
+					{
+						numStaff = rsNumStaff.getInt(1);
+					}
+					
+				}
+				
+				
+				ReactiveCare rc = new ReactiveCare(year, numParticipants, numStaff);
+				
+				reactiveCareData.add(rc);
+			}
+			
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 	/**

@@ -102,6 +102,8 @@ public class testDatabase {
 	private String AM = "8:00";
 	//when it ends
 	private String PM = "3:00";
+	
+	private String careType = "Luther";
 	//the participant's caregivers first name
 	private String careFirstName = "Marius";
 	//their last name
@@ -138,7 +140,7 @@ public class testDatabase {
 	public void testSelect() 
 	{
 	    MedicalAdministrator.createParticipant(cosmoID, firstName, lastname, dob, physName, physLastName, phn,
-	           phoneNum, address, imagePath);
+	           phoneNum, address, careType, imagePath);
 	    
 		//select the participants basic information from the database, as well as
 			//any foreign keys to be used to find other information in other tables
