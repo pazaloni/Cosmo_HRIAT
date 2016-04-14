@@ -120,7 +120,7 @@ public class participantDetailsGUI extends Application
         participantMainStage.setTitle("Cosmo Industries");
 
         VBox root = createMainVBox();
-        participantMainStage.setScene(new Scene(root, 875, 580));
+        participantMainStage.setScene(new Scene(root,  1420, 800));
         participantMainStage.initModality(Modality.APPLICATION_MODAL);
         participantMainStage.initOwner(stage);
         participantMainStage.resizableProperty().set(true);
@@ -201,12 +201,12 @@ public class participantDetailsGUI extends Application
         personalCare.setContent(pc.showPersonalCare(cosmoID + "")
                 .getContent());
 //        
-//      //Create the Progress Notes Tab
-//        ScanFormsGUI sfg = new ScanFormsGUI(scannedForms, loggedInUser,
-//                participantMainStage);
-//        scannedForms.setContent(sfg.showScannedForms(cosmoID + "")
-//                .getContent());
-//        
+//      //Create the Scanned Forms Tab
+        ScanFormsGUI sfg = new ScanFormsGUI(scannedForms, loggedInUser,
+                participantMainStage);
+        scannedForms.setContent(sfg.showScannedForms(cosmoID + "")
+                .getContent());
+        
 
 
         // set text for tabs

@@ -52,7 +52,7 @@ public class StatisticsHelper
                 break;
             case "Medications":
 
-                conditionArray = getTableHeadings("Medications");
+                conditionArray = getTableHeadings("Medication");
                 for ( int i = 0; i < conditionArray.length; i++ )
                 {
                     query += ", " + conditionArray[i];
@@ -61,7 +61,7 @@ public class StatisticsHelper
                 break;
             case "Vaccinations":
 
-                conditionArray = getTableHeadings("Vaccinations");
+                conditionArray = getTableHeadings("Vaccination");
                 for ( int i = 0; i < conditionArray.length; i++ )
                 {
                     query += ", " + conditionArray[i];
