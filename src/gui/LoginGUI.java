@@ -76,6 +76,8 @@ public class LoginGUI extends Application
         btnLogin = new Button(BUTTON_LABEL);
         // making the image for the logo to be displayed
         imgLogo = new Image(IMAGE_PATH);
+    
+    
     }
 
     /**

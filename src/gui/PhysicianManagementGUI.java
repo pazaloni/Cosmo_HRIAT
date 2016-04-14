@@ -1,5 +1,6 @@
 package gui;
 
+import helpers.FormatHelper;
 import helpers.ManagePhysicianAccountHelper;
 import controllers.PhysicianTableViewController;
 import javafx.event.ActionEvent;
@@ -17,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import core.Physician;
 import core.PopUpMessage;
 
 /**
@@ -81,6 +83,7 @@ public class PhysicianManagementGUI
      */
     public ScrollPane showPhysicianManagementForm()
     {
+
         Label formTitle = new Label(FORM_TITLE);
         formTitle.setFont(new Font(22));
         mainBox = new VBox();
@@ -105,6 +108,8 @@ public class PhysicianManagementGUI
             {
                 lblWarning.setText("");
                 manageUser(false);
+                System.out.println("What");
+
             }
             else
             {
@@ -118,6 +123,20 @@ public class PhysicianManagementGUI
                 Scene popScene = new Scene(messageBox.root, 300, 75);
                 popUpStage.setScene(popScene);
                 popUpStage.showAndWait();
+
+            }
+
+        });
+
+        // action to pop up the edit form to edit a current physician
+        removePhys.setOnAction((ActionEvent) -> {
+            if (!(pTVCont.getSelectedPK().equals("null")))
+            {
+                // lblWarning.setText("");
+                // manageUser(false);
+            }
+            else
+            {
 
             }
 
@@ -194,18 +213,18 @@ public class PhysicianManagementGUI
         btnSubmit.setFont(new Font(15));
         if (!newUser)
         {
-            // StaffAccount selectedStaff = managePhys.queryStaff(sTVCont
-            // .getSelectedPK());
-            // firstName.setText(selectedStaff.GetFirstName());
-            // Phone.setDisable(true);
-            // lastName.setText(selectedStaff.GetLastName());
-            // Phone.setText(selectedStaff.GetUsername());
-            // email.setText(selectedStaff.GetEmail());
-            // password.setText(selectedStaff.GetPassword());
-            // repeatPassword.setText(selectedStaff.GetPassword());
-            // cboSecurityLevels.setValue(securityLevels.get(Integer
-            // .parseInt(selectedStaff.GetAccessLevel())));
+            String[] physInfo = new String[3];
+            physInfo = pTVCont.getSelectedInfo();
+
+            firstName.setText(physInfo[0]);
+            lastName.setText(physInfo[1]);
+            Phone.setText(physInfo[2]);
+
         }
+
+        // used to format phone number as desired by the client (xxx)-xxx-xxxx
+        FormatHelper fm = new FormatHelper();
+        // on submit clicked
         btnSubmit.setOnAction(new EventHandler<ActionEvent>()
         {
 
@@ -213,43 +232,69 @@ public class PhysicianManagementGUI
             public void handle(ActionEvent event)
             {
 
-                // if (newUser)
-                // {
-                // String result = managePhys.addUser(username.getText(),
-                // lastName.getText(), firstName.getText(),
-                // email.getText(), password.getText(),
-                // repeatPassword.getText(),
-                // returnSecurityLevel(cboSecurityLevels.getValue()));
-                //
-                // if (result.equals(""))
-                // {
-                // stageNewUser.close();
-                // sTVCont.refreshTable();
-                // }
-                // else
-                // {
-                // lblWarning.setText(result);
-                // }
-                // }
+                String[] physInfo = new String[3];
+                // gets all phys info for the selected phys
+                physInfo = pTVCont.getSelectedInfo();
 
-                // else
-                // {
-                // String updateResult = managePhys.editUser(
-                // username.getText(), lastName.getText(),
-                // firstName.getText(), email.getText(),
-                // password.getText(), repeatPassword.getText(),
-                // returnSecurityLevel(cboSecurityLevels.getValue()));
-                // if (updateResult.equals(""))
-                // {
-                // stageNewUser.close();
-                // sTVCont.refreshTable();
-                // }
-                // else
-                // {
-                // lblWarning.setText(updateResult);
-                // }
-                // }
-                // sTVCont.refreshTable();
+                String PhysID = physInfo[3];
+                // if the user is not a new user (it is being edited)
+                if (!newUser)
+                {
+                    // format phone numbers
+                    String unformmattedNumber = Phone.getText();
+                    String formattedPhone = fm
+                            .formatPhoneNum(unformmattedNumber);
+                    // error checking
+                    if (formattedPhone
+                            .equals("A phone number must have 10 digits."))
+                    {
+                        lblWarning
+                                .setText("A phone number must have 10 digits.");
+
+                    }
+                    else if (firstName.getText().equals("")
+                            || lastName.getText().equals(""))
+                    {
+                        lblWarning.setText("Both name fields are required.");
+                    }
+                    else
+                    {
+                        managePhys.editUser(firstName.getText(),
+                                lastName.getText(), formattedPhone, PhysID);
+                        // after editing, refresh the table to diplaty results
+                        pTVCont.refreshTable();
+                        // then close the window.
+                        stageNewUser.close();
+                    }
+                }
+                else
+                {
+
+                    String unformmattedNumber = Phone.getText();
+                    String formattedPhone = fm
+                            .formatPhoneNum(unformmattedNumber);
+                    if (formattedPhone
+                            .equals("A phone number must have 10 digits."))
+                    {
+                        lblWarning
+                                .setText("A phone number must have 10 digits.");
+
+                    }
+                    else if (firstName.getText().equals("")
+                            || lastName.getText().equals(""))
+                    {
+                        lblWarning.setText("Both name fields are required.");
+                    }
+                    else
+                    {
+                        managePhys.addUser(firstName.getText(),
+                                lastName.getText(), formattedPhone);
+
+                        pTVCont.refreshTable();
+                        stageNewUser.close();
+                    }
+
+                }
 
             }
 
@@ -257,6 +302,8 @@ public class PhysicianManagementGUI
         // add all buttons to grid form
         completionButtons.getChildren().addAll(btnReset, btnSubmit);
         completionButtons.setSpacing(10);
+        completionButtons.setPadding(new Insets(0, 0, 0, 60));
+        // completionButtons.setAlignment(Pos.CENTER_LEFT);
         newUserForm.add(lblFirstName, 0, 1);
         newUserForm.add(firstName, 1, 1);
         newUserForm.add(lblLastName, 0, 2);
@@ -264,14 +311,23 @@ public class PhysicianManagementGUI
         newUserForm.add(lblPhone, 0, 3);
         newUserForm.add(Phone, 1, 3);
 
-        newUserForm.add(completionButtons, 1, 9);
-        newUserForm.add(lblWarning, 0, 0, 2, 1);
+        // completionButtons.setSpacing(50);
+        newUserForm.add(completionButtons, 0, 9);
+        newUserForm.setColumnSpan(completionButtons, 3);
+        // newUserForm.add(btnReset, 0,9);
+        // newUserForm.add(btnSubmit, 1,9);
 
+        // btnReset.setAlignment(Pos.CENTER_RIGHT);
+        newUserForm.add(lblWarning, 0, 4);
+        // GridPane.setColumnSpan(completionButtons, 2);
+
+        GridPane.setColumnSpan(lblWarning, 2);
+        //newUserForm.setGridLinesVisible(true);
         Scene scene = new Scene(newUserForm);
         // add form to stage
         stageNewUser.setScene(scene);
 
-        stageNewUser.setTitle("Account Registration");
+        stageNewUser.setTitle("Physician Management");
         // set the modality
         stageNewUser.initModality(Modality.WINDOW_MODAL);
         // set the parent of the this stage to the 'techstage' so the modality

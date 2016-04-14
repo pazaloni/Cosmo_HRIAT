@@ -1,9 +1,11 @@
 package helpers;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import core.BasicStaff;
 import core.MedicalAdministrator;
+import core.Physician;
 import core.StaffAccount;
 import core.TechnicalAdministrator;
 
@@ -18,11 +20,8 @@ import core.TechnicalAdministrator;
  */
 public class ManagePhysicianAccountHelper
 {
-
+    // displayed when a field is empty
     private static final String EMPTY_FIELD = "One or more of your fields is empty";
-    private static final String PASSWORD_NOT_SAME = "Passwords do not match";
-    private static final String EMAIL_NOT_VALID = "Email is not valid";
-    private static final String USERNAME_NOT_UNIQUE = "Username is already taken";
 
     private DatabaseHelper db;
 
@@ -41,171 +40,86 @@ public class ManagePhysicianAccountHelper
      * Purpose: Return true or false if the user was added to the database
      * successfully
      * 
-     * @param username
-     *            : the username the user passed in
+     * @param phone
+     *            : the phone number the user passed in
      * @param lastName
      *            : the lastname the user passed in
      * @param firstName
      *            : the firstName the user passed in
-     * @param email
-     *            : the email the user passed in
-     * @param password
-     *            : the password the user passed in
-     * @param repeatPW
-     *            : the second password the user passed in
-     * @param securityLv
-     *            : the the user passed in
+     * 
      * 
      * @return boolean: true if the user addition was successful, false
      *         otherwise
      */
-    public String addUser(String username, String lastName, String firstName,
-            String email, String password, String repeatPW, String securityLv)
+    public String addUser(String firstName, String lastName, String phone)
     {
         String result = "";
 
-        if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty()
-                || password.isEmpty() || repeatPW.isEmpty()
-                || securityLv.isEmpty())
+        if (firstName.isEmpty() || lastName.isEmpty() || phone.isEmpty())
 
         {
             result = EMPTY_FIELD;
         }
         else
         {
-            // if the paswords are the same, proceed
-            if (password.equals(repeatPW))
-            {
-                // if the email cotains an @ and .
-                if (email.contains("@") && email.contains("."))
-                {
 
-                    db.connect();
-                    // if the username does not exist in the database
-                    if (!usernameExists(username))
-                    {
-                        String[] newUserInfo = new String[6];
-                        newUserInfo[0] = username;
-                        newUserInfo[1] = lastName;
-                        newUserInfo[2] = firstName;
-                        newUserInfo[3] = email;
-                        newUserInfo[4] = password;
-                        newUserInfo[5] = securityLv;
-                        db.insert(newUserInfo, "Staff");
-                        result = "";
+            db.connect();
+            // 2d array to hold all the column names and data
+            String[][] newUserInfo = new String[4][2];
+            // column names
+            newUserInfo[0][0] = "physicianID";
+            newUserInfo[1][0] = "firstName";
+            newUserInfo[2][0] = "lastName";
+            newUserInfo[3][0] = "phone";
+            // actual data for the columns, phone is left out because it is an
+            // auto number
+            newUserInfo[1][1] = firstName;
+            newUserInfo[2][1] = lastName;
+            newUserInfo[3][1] = phone;
 
-                    }
-                    // if the username does exist, change the warning label with
-                    // the appropriate message
-                    else
-                    {
-                        result = USERNAME_NOT_UNIQUE;
-                    }
-                }
-                // if the email is not valid, change the warning label with the
-                // appropriate message
-                else
-                {
-                    result = EMAIL_NOT_VALID;
-                }
-            }
-            // if the passwords do not match, change the warning label with the
-            // appropriate message
-            else
-            {
-                result = PASSWORD_NOT_SAME;
-            }
+            // insert the data into the database
+            db.insert(newUserInfo, "Physician");
+            result = "";
+
         }
         return result;
     }
 
     /**
      * 
-     * Purpose: Query the database and check if the username has been taken
-     *
-     * @param username
-     *            : the username for the new account
-     * @return boolean: true if the username exists, false otherwise
-     */
-    private boolean usernameExists(String username)
-    {
-        boolean result = false;
-
-        // result set that we obtain form the database
-        ResultSet set = db.select("UserName", "Staff", "", "");
-        try
-        {
-            while (set.next() && !result)
-            {
-                // if the username for the new user is already in the database
-                // then the result is false
-                if (username.equals(set.getString(1)))
-                {
-                    result = true;
-                }
-            }
-        }
-        catch (SQLException e)
-        {
-
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    /**
+     * Purpose: edit an existing user in the database
      * 
-     * Purpose: edit an existing user
-     * 
-     * @param username
+     * @param phone
+     *            : the phone number the user passed in
+     * @param lastName
+     *            : the lastname the user passed in
+     * @param firstName
+     *            : the firstName the user passes in
+     * @param physID
+     *            : the primary key used to grab the correct record to edit
      */
-    public String editUser(String username, String lastName, String firstName,
-            String email, String password, String repeatPW, String securityLv)
+    public String editUser(String firstName, String lastName, String phone,
+            String physID)
     {
         String result = "";
 
-        if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty()
-                || password.isEmpty() || repeatPW.isEmpty()
-                || securityLv.isEmpty())
-
+        if (firstName.isEmpty() || lastName.isEmpty() || phone.isEmpty())
         {
             result = EMPTY_FIELD;
         }
         else
         {
-            // if the paswords are the same, proceed
-            if (password.equals(repeatPW))
-            {
-                // if the email cotains an @ and .
-                if (email.contains("@") && email.contains("."))
-                {
+            db.connect();
 
-                    db.connect();
+            String[] newUserInfo = new String[4];
+            newUserInfo[0] = physID;
+            newUserInfo[1] = firstName;
+            newUserInfo[2] = lastName;
+            newUserInfo[3] = phone;
 
-                    String[] newUserInfo = new String[6];
-                    newUserInfo[0] = username;
-                    newUserInfo[1] = lastName;
-                    newUserInfo[2] = firstName;
-                    newUserInfo[3] = email;
-                    newUserInfo[4] = password;
-                    newUserInfo[5] = securityLv;
-                    db.update(newUserInfo, "Staff", username);
-                    result = "";
+            db.update(newUserInfo, "Physician", physID);
+            result = "";
 
-                }
-                // if the email is not valid, change the warning label with the
-                // appropriate message
-                else
-                {
-                    result = EMAIL_NOT_VALID;
-                }
-            }
-            // if the passwords do not match, change the warning label with the
-            // appropriate message
-            else
-            {
-                result = PASSWORD_NOT_SAME;
-            }
         }
         return result;
     }
@@ -226,60 +140,47 @@ public class ManagePhysicianAccountHelper
 
     /**
      * 
-     * Purpose: To take in a username, query the database for that username and
-     * if the user exists, return an object of the user
+     * Purpose: To take in a physician ID, query the database for that ID and if
+     * the physician exists, return an object of the physician
      * 
      * @param username
      *            String of user name to be queried on
-     * @return StaffAccount a staff account object 
+     * @return StaffAccount a staff account object
      */
-    public StaffAccount queryStaff(String username)
+    public Physician queryStaff(String ID)
     {
-        StaffAccount staffToReturn = null;
-        
-        ResultSet staff = db.select(
-                "UserName, lastName, firstName, email, password, accessLevel",
-                "Staff", "username='" + username + "'", "");
-        
-        String usernameOut = "";
+        Physician staffToReturn = null;
+
+        ResultSet rs = db.select("physicianID, firstName, lastName, phone",
+                "Physician", "", "");
+
         String lastName = "";
         String firstName = "";
-        String email = "";
-        String password = "";
-        String accessLevel = "";
-        
+        String phone = "";
+        String PhysID = "";
+
         try
         {
-            while (staff.next())
+            while (rs.next())
             {
-                usernameOut = staff.getString(1);
-                lastName = staff.getString(2);
-                firstName = staff.getString(3);
-                email = staff.getString(4);
-                password = staff.getString(5);
-                accessLevel = staff.getString(6);
+                PhysID = rs.getString(1);
+
+                firstName = rs.getString(2);
+
+                lastName = rs.getString(3);
+
+                phone = rs.getString(4);
+
             }
         }
+        // if this fail, print the stack trace
         catch (SQLException e)
         {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
         }
-        
-        
-        if (accessLevel.equals("0"))
-        {
-            staffToReturn = new BasicStaff(usernameOut, lastName, firstName, email, password, accessLevel);
-        }
-        else if (accessLevel.equals("1"))
-        {
-            staffToReturn = new MedicalAdministrator(usernameOut, lastName, firstName, email, password, accessLevel);
-        }
-        else if (accessLevel.equals("2"))
-        {
-            staffToReturn = new TechnicalAdministrator(usernameOut, lastName, firstName, email, password, accessLevel);
-        }
-        
+
+        staffToReturn = new Physician(PhysID, firstName, lastName, phone);
 
         return staffToReturn;
     }

@@ -140,12 +140,13 @@ public class PhysicianTableViewController
         else
         {
 
-            result = physician.getFirstName();
+            result = physician.getPhysID();
 
         }
         return result;
     }
 
+    
     /**
      * Purpose: This will remove the Physician from the table and then refresh
      * the table.
@@ -175,4 +176,36 @@ public class PhysicianTableViewController
         this.PhysicianTable.getColumns().clear();
         this.initialize();
     }
+    
+    /**
+     * Purpose: Grabs the first and last name, and phone number of the highlighted
+     * user in the table, and then returns the data in a string array.
+     * @return
+     */
+    public String[] getSelectedInfo()
+    {
+        //array to hold aall of the data
+        String[] result = new String[4];
+
+        //create a physician instance based on the selected record in the table
+        Physician physician = PhysicianTable.getSelectionModel()
+                .getSelectedItem();
+
+        //if no physician is selected, return null
+        if (physician == null)
+        {
+            result[0] = "null";
+        }
+        else
+        {
+
+            result[0] = physician.getFirstName();
+            result[1] = physician.getLastName();
+            result[2] = physician.getPhysPhone();
+            result[3] = physician.getPhysID();
+
+        }
+        return result;
+    }
+
 }
