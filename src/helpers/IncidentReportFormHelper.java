@@ -1,6 +1,7 @@
 package helpers;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -532,7 +533,24 @@ public class IncidentReportFormHelper
     {
         DatabaseHelper db = new DatabaseHelper();
         db.connect();
-        String[] incidentInfo = new String[15];
+        String[] incidentInfo = new String[18];
+        
+        String cosmoID = null;
+        String dateOfIncident = null;
+        String timeOfIncident = null; 
+        String locationOfIncident = null;
+        String protectiveEquipment = null; 
+        String incidentDescription = null;
+        String contributingFactors = null; 
+        String reportedTo = null;
+        String dateReported = null; 
+        String timeReported = null;
+        String verballyReported = null; 
+        String verbalReportDate = null;
+        String verbalReportTime = null; 
+        String dateReportWritten = null;
+        String timeReportWritten = null; 
+        String reportedWrittenBy = null;
         
         ResultSet incidentQuery = db.select("*", "Incidents", "incidentID ='" + incidentID + "'", "");
         
@@ -540,14 +558,125 @@ public class IncidentReportFormHelper
         {
             while (incidentQuery.next())
             {
+                cosmoID = incidentQuery.getString(2);
+                dateOfIncident = incidentQuery.getString(3);
+                timeOfIncident = incidentQuery.getString(4); 
+                locationOfIncident = incidentQuery.getString(5);
+                protectiveEquipment = incidentQuery.getString(6); 
+                incidentDescription = incidentQuery.getString(7);
+                contributingFactors = incidentQuery.getString(8); 
+                reportedTo = incidentQuery.getString(9);
+                dateReported = incidentQuery.getString(10); 
+                timeReported = incidentQuery.getString(11);
+                verballyReported = incidentQuery.getString(12); 
+                verbalReportDate = incidentQuery.getString(13);
+                verbalReportTime = incidentQuery.getString(14); 
+                dateReportWritten = incidentQuery.getString(15);
+                timeReportWritten = incidentQuery.getString(16); 
+                reportedWrittenBy = incidentQuery.getString(17); 
                 
+                incidentInfo[0] = cosmoID;
+                incidentInfo[1] = dateOfIncident;
+                incidentInfo[2] = timeOfIncident;
+                incidentInfo[3] = locationOfIncident;
+                incidentInfo[4] = protectiveEquipment;
+                incidentInfo[5] = incidentDescription;
+                incidentInfo[6] = contributingFactors;
+                incidentInfo[7] = reportedTo;
+                incidentInfo[8] = dateReported;
+                incidentInfo[9] = timeReported;
+                incidentInfo[10] = verballyReported;
+                incidentInfo[11] = verbalReportDate;
+                incidentInfo[12] = verbalReportTime;
+                incidentInfo[13] = dateReportWritten;
+                incidentInfo[14] = timeReportWritten;
+                incidentInfo[15] = reportedWrittenBy;
             }
         }
         catch ( SQLException e )
         {
             e.printStackTrace();
         }
+        
+        db.disconnect();
+        
         return incidentInfo;
+    }
+    
+    public String[] retrieveInjuredBodyAreas(String incidentID)
+    {
+        DatabaseHelper db = new DatabaseHelper();
+        db.connect();
+        String[] bodyAreaInfo = new String[1];
+        
+        String bodyArea = null;
+        
+        ResultSet bodyAreaQuery = db.select("bodyArea", "InjuredBodyAreas", "incidentID ='" + incidentID + "'", "");
+        
+        try
+        {
+            while (bodyAreaQuery.next())
+            {
+                bodyArea = bodyAreaQuery.getString(1);
+            }
+        }
+        catch ( SQLException e )
+        {
+            e.printStackTrace();
+        }
+        
+        bodyAreaInfo[0] = bodyArea;
+        
+        return bodyAreaInfo;
+    }
+    
+    public String[] retrieveInjuryTypes(String injuryID)
+    {
+        DatabaseHelper db = new DatabaseHelper();
+        db.connect();
+        int count = 0;
+        String injuryName = null;
+      
+        ResultSet injuryTypeQuery = db.select("bodyArea", "InjuryType", "injuryID ='" + injuryID + "'", "");
+        
+        try
+        {
+            injuryTypeQuery.last();
+            count = injuryTypeQuery.getRow();
+            injuryTypeQuery.first();
+        }
+        catch ( SQLException e1 )
+        {
+            e1.printStackTrace();
+        }
+        
+        String[] injuryTypeInfo = new String[count];
+        try
+        {
+            int i = 0;
+            while (injuryTypeQuery.next())
+            {
+                injuryName = injuryTypeQuery.getString(1);
+                injuryTypeInfo[i] = injuryName;
+                i++;
+            }
+        }
+        catch ( SQLException e )
+        {
+            e.printStackTrace();
+        }
+        db.disconnect();
+        return injuryTypeInfo;
+    }
+    
+    public String[] retrieveIncidentWitnesses(String incidentID)
+    {
+        DatabaseHelper db = new DatabaseHelper();
+        db.connect();
+        
+        String[] witnessInfo = new String[3];
+        db.disconnect();
+        return witnessInfo;
     }
 
     /**
