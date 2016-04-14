@@ -2,6 +2,7 @@ package gui;
 
 import helpers.DatabaseHelper;
 import helpers.HealthStatusInformationHelper;
+import helpers.StatisticsHelper;
 
 import java.awt.Dialog.ModalExclusionType;
 import java.io.FileNotFoundException;
@@ -15,23 +16,24 @@ import java.util.List;
 
 import javax.naming.spi.DirStateFactory.Result;
 
-import object.Allergies;
-import object.QueryResult;
-import object.Medication;
-import object.SavedQuery;
 import controllers.AllergiesTableViewController;
 import controllers.MedicalConditionsTableViewController;
 import controllers.ProgressNotesTableViewController;
 import controllers.MedicationsTableViewController;
+import core.Allergies;
 import core.MedicalAdministrator;
+import core.Medication;
 import core.PopUpCheck;
 import core.PopUpMessage;
+import core.QueryResult;
+import core.SavedQuery;
 import core.StaffAccount;
 import javafx.collections.FXCollections;
 import javafx.collections.ModifiableObservableListBase;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -114,7 +116,7 @@ public class StatisticsTabGUI
      */
     public Tab showStatistics()
     {
-        mainBox = new HBox(50);
+        mainBox = new HBox(75);
 
         VBox generateBox = new VBox(20);
 
@@ -123,10 +125,9 @@ public class StatisticsTabGUI
         ListView<String> fieldList = new ListView<String>();
         ObservableList<String> objects = FXCollections.observableArrayList(
                 "Allergies", "Seizures", "Medications", "Vaccinations",
-                "Conditions", "Falls over time", "Age Groups", "Lift Usage",
-                "Catheters", "Injections given");
+                "Conditions");
         fieldList.setItems(objects);
-        fieldList.setMaxHeight(255);
+        fieldList.setMaxHeight(118);
         Label comparisonLbl = new Label("Comparison: ");
         ComboBox<String> comparisonCmbo = new ComboBox<String>();
         ObservableList<String> comparisons = FXCollections.observableArrayList(
@@ -137,16 +138,9 @@ public class StatisticsTabGUI
         TextField conditionTxt = new TextField();
         Button generateQryBtn = new Button("Generate Query");
 
-        Button genQuartRpt = new Button("Generate Quarterly Reports");
-        genQuartRpt.setOnAction(event -> {
-            Stage stage = new Stage();
-            QuarterlyReportsGUI reportGUI = new QuarterlyReportsGUI(stage);
-            stage.setScene(new Scene(reportGUI.mainVbox));
-            stage.showAndWait();
-        });
         generateBox.getChildren().addAll(categoriesLbl, fieldList,
                 comparisonLbl, comparisonCmbo, conditionLbl, conditionTxt,
-                generateQryBtn, genQuartRpt);
+                generateQryBtn);
 
         VBox queryBox = new VBox(40);
         Label sqlLbl = new Label("SQL Query");
@@ -156,15 +150,15 @@ public class StatisticsTabGUI
 
         HBox queryBtnBox = new HBox(20);
 
-        Button qryBtn = new Button("Query");
+        Button qryBtn = new Button("Execute Query");
         qryBtn.setOnAction(event -> {
             getStatistics(sqlTxtArea.getText());
         });
         Button saveQryBtn = new Button("Save Query");
         queryBtnBox.getChildren().addAll(qryBtn, saveQryBtn);
-
+        StatisticsHelper sh = new StatisticsHelper();
         generateQryBtn.setOnAction(event -> {
-            String query = generateSQL(fieldList.getSelectionModel()
+            String query = sh.generateSQL(fieldList.getSelectionModel()
                     .getSelectedItem(), comparisonCmbo.getSelectionModel()
                     .getSelectedItem(), conditionTxt.getText());
             sqlTxtArea.setText(query);
@@ -181,24 +175,36 @@ public class StatisticsTabGUI
                 totalParticipantsLbl, queryParticipantsLbl);
         Label loadQueryLbl = new Label("Saved Queries:");
         loadQueryLbl.setFont(new Font(16));
-        savedQueryBox = new VBox();
+        savedQueryBox = new VBox(20);
         savedQueryBox.getChildren()
                 .addAll(loadQueryLbl, createSavedQueryList());
-        VBox loadQueryBox = new VBox(20);
+        VBox loadQueryBox = new VBox(10);
+        loadQueryBox.setPadding(new Insets(45, 0, 0, -60));
         Button loadQueryBtn = new Button("Load Query");
+        loadQueryBtn.setMinWidth(100);
         loadQueryBtn.setOnAction(event -> {
             String queryName = savedQueryList.getSelectionModel()
                     .getSelectedItem();
-            sqlTxtArea.setText(populateQuery(queryName));
+            sqlTxtArea.setText(SavedQuery.populateQuery(queryName));
         });
         Button deleteQueryBtn = new Button("Delete Query");
+        deleteQueryBtn.setMinWidth(100);
         deleteQueryBtn.setOnAction(event -> {
             String queryName = savedQueryList.getSelectionModel()
                     .getSelectedItem();
             deleteQuery(queryName);
             savedQueryBox.getChildren().set(1, createSavedQueryList());
         });
-        loadQueryBox.getChildren().addAll(loadQueryBtn, deleteQueryBtn);
+        Button genQuartRpt = new Button("Generate Quarterly Reports");
+        VBox.setMargin(genQuartRpt, new Insets(305, 0, 0, 0));
+        genQuartRpt.setOnAction(event -> {
+            Stage stage = new Stage();
+            QuarterlyReportsGUI reportGUI = new QuarterlyReportsGUI(stage);
+            stage.setScene(new Scene(reportGUI.mainVbox));
+            stage.showAndWait();
+        });
+        loadQueryBox.getChildren().addAll(loadQueryBtn, deleteQueryBtn,
+                genQuartRpt);
         mainBox.getChildren().addAll(generateBox, queryBox, savedQueryBox,
                 loadQueryBox);
         mainBox.setPadding(new Insets(20));
@@ -215,9 +221,9 @@ public class StatisticsTabGUI
         {
 
             PopUpCheck checkBox = new PopUpCheck("Are you sure you want to "
-                    + "delete the query '" + queryName + "'?", stage);
+                    + "delete the query: \n\n'" + queryName + "'", stage);
 
-            scene = new Scene(checkBox.root, 300, 75);
+            scene = new Scene(checkBox.root, 300, 120);
             stage.setScene(scene);
             stage.setResizable(false);
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -255,7 +261,7 @@ public class StatisticsTabGUI
 
         // text field labels
         Label queryNameLbl = new Label("What do you want to name this query? ");
-        queryNameLbl.setFont(new Font(16));
+        queryNameLbl.setFont(new Font(14));
 
         TextField queryNameTxt = new TextField();
 
@@ -295,34 +301,17 @@ public class StatisticsTabGUI
 
         HBox addHbox = new HBox();
         addHbox.getChildren().add(addQueryBtn);
-        grid.add(addHbox, 1, 3);
-        saveQueryStage.setScene(new Scene(grid, 325, 200));
+        grid.add(addQueryBtn, 1, 3);
+        GridPane.setHalignment(addQueryBtn, HPos.CENTER);
+        grid.setPadding(new Insets(20,0,0,20));
+        saveQueryStage.setScene(new Scene(grid, 275, 150));
         saveQueryStage.initModality(Modality.APPLICATION_MODAL);
         saveQueryStage.initOwner(this.parentStage);
         saveQueryStage.setResizable(false);
         saveQueryStage.showAndWait();
     }
 
-    private String populateQuery( String queryName )
-    {
-        String result = "";
-        DatabaseHelper db = new DatabaseHelper();
-        db.connect();
-        ResultSet rs = db.select("query", "SavedQuery", "queryName ='"
-                + queryName + "'", "");
-        try
-        {
-            rs.next();
-            result = rs.getString(1);
 
-        }
-        catch ( SQLException e )
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return result;
-    }
 
     private ListView<String> createSavedQueryList()
     {
@@ -348,165 +337,6 @@ public class StatisticsTabGUI
         return savedQueryList;
     }
 
-    private String generateSQL( String searchFor, String comparison,
-            String condition )
-    {
-        String query = "SELECT cosmoID";
-        String[] conditionArray = null;
-        switch ( searchFor )
-        {
-            case "Allergies":
-
-                conditionArray = getTableHeadings("Allergies");
-                for ( int i = 0; i < conditionArray.length; i++ )
-                {
-                    query += ", " + conditionArray[i];
-                }
-                query += " FROM Allergies WHERE ";
-                break;
-            case "Seizures":
-
-                conditionArray = getTableHeadings("Seizures");
-                for ( int i = 0; i < conditionArray.length; i++ )
-                {
-                    query += ", " + conditionArray[i];
-                }
-                query += " FROM Seizures WHERE ";
-                break;
-            case "Medications":
-
-                conditionArray = getTableHeadings("Medications");
-                for ( int i = 0; i < conditionArray.length; i++ )
-                {
-                    query += ", " + conditionArray[i];
-                }
-                query += " FROM Medication WHERE ";
-                break;
-            case "Vaccinations":
-
-                conditionArray = getTableHeadings("Vaccinations");
-                for ( int i = 0; i < conditionArray.length; i++ )
-                {
-                    query += ", " + conditionArray[i];
-                }
-                query += " FROM Vaccination WHERE ";
-                break;
-            case "Conditions":
-
-                conditionArray = getTableHeadings("Conditions");
-                for ( int i = 0; i < conditionArray.length; i++ )
-                {
-                    query += ", " + conditionArray[i];
-                }
-                query += " FROM Conditions WHERE ";
-                break;
-            case "Falls over time":
-                // TODO
-                query += "?????";
-                break;
-            case "Age Groups":
-                // TODO
-                query += "?????";
-                break;
-            case "Lift Usage":
-                // TODO
-                query += "?????";
-                break;
-            case "Catheters":
-                // TODO
-                query += "?????";
-                break;
-            case "Injections given":
-                // TODO
-                query += "?????";
-                break;
-        }
-        switch ( comparison )
-        {
-            case "contains":
-                for ( int i = 0; i < conditionArray.length; i++ )
-                {
-                    query += conditionArray[i] + " LIKE \"*" + condition
-                            + "*\"";
-                    if ( i < conditionArray.length - 1 )
-                    {
-                        query += " OR ";
-                    }
-                }
-                break;
-            case "equals":
-                for ( int i = 0; i < conditionArray.length; i++ )
-                {
-                    query += conditionArray[i] + " = \"" + condition + "\"";
-                    if ( i < conditionArray.length - 1 )
-                    {
-                        query += " OR ";
-                    }
-                }
-                break;
-            case "greater than":
-                for ( int i = 0; i < conditionArray.length; i++ )
-                {
-                    query += conditionArray[i] + " > \"" + condition + "\"";
-                    if ( i < conditionArray.length - 1 )
-                    {
-                        query += " OR ";
-                    }
-                }
-                break;
-            case "less than":
-                for ( int i = 0; i < conditionArray.length; i++ )
-                {
-                    query += conditionArray[i] + " < \"" + condition + "\"";
-                    if ( i < conditionArray.length - 1 )
-                    {
-                        query += " OR ";
-                    }
-                }
-                break;
-            case "between":
-                for ( int i = 0; i < conditionArray.length; i++ )
-                {
-                    query += conditionArray[i]
-                            + " BETWEEN \""
-                            + condition.substring(0, condition.indexOf(" "))
-                            + "\" AND \""
-                            + condition.substring(condition.indexOf(" ")+1,
-                                    condition.length()) + "\"";
-                    if ( i < conditionArray.length - 1 )
-                    {
-                        query += " OR ";
-                    }
-                }
-                break;
-        }
-
-        return query;
-
-    }
-
-    private String[] getTableHeadings( String queryName )
-    {
-        DatabaseHelper db = new DatabaseHelper();
-        db.connect();
-        ResultSet rs = db.directSelect("Select * from " + queryName);
-        String[] result = new String[0];
-        try
-        {
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int columnCount = rsmd.getColumnCount();
-            result = new String[columnCount];
-            for ( int i = 1; i <= result.length; i++ )
-            {
-                result[i - 1] = rsmd.getColumnLabel(i);
-            }
-        }
-        catch ( SQLException e )
-        {
-            e.printStackTrace();
-        }
-        return result;
-    }
 
     private void getStatistics( String queryString )
     {

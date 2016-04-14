@@ -1,9 +1,10 @@
 package tests;
 import static org.junit.Assert.assertTrue;
-import object.QueryResult;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import core.QueryResult;
 
 /**
  *

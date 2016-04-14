@@ -284,7 +284,7 @@ public class participantDetailsGUI extends Application
         BorderPane previewPane = new BorderPane();
 
         // create picture box for left side of preview pane
-        VBox pictureBox = new VBox();
+        VBox pictureBox = new VBox(3);
         // default preview picture
         //URL url = getClass().getResource("../images/defaultPicture.png");
         previewPicture = new ImageView(new Image("images/defaultPicture.png"));

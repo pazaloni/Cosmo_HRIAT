@@ -8,8 +8,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
-import object.QueryResult;
 import core.ProgressNotes;
+import core.QueryResult;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

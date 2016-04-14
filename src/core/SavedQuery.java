@@ -1,4 +1,4 @@
-package object;
+package core;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,10 +22,10 @@ public class SavedQuery
      * 
      * }
      */
-    public static String createSavedQuery( String name, String query )
+    public static String createSavedQuery( String queryName, String query )
     {
         String result = "";
-        if ( name.isEmpty() )
+        if ( queryName.isEmpty() )
         {
             result = "You must give your query a name";
         }
@@ -35,7 +35,7 @@ public class SavedQuery
             DatabaseHelper db = new DatabaseHelper();
             
             ResultSet queryExists = db.select("count(*)",
-                    "savedQuery", "queryName = '" + name + "'", "");
+                    "savedQuery", "queryName = '" + queryName + "'", "");
 
             int recordExists = 0;
 
@@ -52,7 +52,7 @@ public class SavedQuery
             }
             if ( recordExists == 0 )
             {
-                String[] values = new String[] { name, query };
+                String[] values = new String[] { queryName, query };
                 db.insert(values, "SavedQuery");
             }
             else
@@ -72,5 +72,25 @@ public class SavedQuery
         db.disconnect();
 
         
+    }
+    
+    public static String populateQuery( String queryName )
+    {
+        String result = "";
+        DatabaseHelper db = new DatabaseHelper();
+        db.connect();
+        ResultSet rs = db.select("query", "SavedQuery", "queryName ='"
+                + queryName + "'", "");
+        try
+        {
+            rs.next();
+            result = rs.getString(1);
+
+        }
+        catch ( SQLException e )
+        {
+
+        }
+        return result;
     }
 }

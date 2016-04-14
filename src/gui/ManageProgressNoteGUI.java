@@ -1,7 +1,7 @@
 package gui;
 
-import object.QueryResult;
 import core.ProgressNotes;
+import core.QueryResult;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

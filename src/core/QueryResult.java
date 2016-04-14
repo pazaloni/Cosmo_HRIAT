@@ -1,4 +1,4 @@
-package object;
+package core;
 import helpers.DatabaseHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

@@ -1,5 +1,5 @@
 package gui;
-import object.Medication;
+import core.Medication;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
