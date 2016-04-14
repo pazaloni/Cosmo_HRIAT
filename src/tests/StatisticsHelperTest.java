@@ -58,15 +58,15 @@ public class StatisticsHelperTest
 
         assertTrue(sh
                 .generateSQL(where1, operatorEqual, condition2)
-                .equals("SELECT cosmoID, allergicTo, cosmoID, allergyType, description "
+                .equals("SELECT cosmoID, allergicTo, cosmoID, allergyType, description, category "
                         + "FROM Allergies WHERE allergicTo = \"Peanuts\" OR cosmoID = \"Peanuts\" "
-                        + "OR allergyType = \"Peanuts\" OR description = \"Peanuts\""));
+                        + "OR allergyType = \"Peanuts\" OR description = \"Peanuts\" OR category = \"Peanuts\""));
         assertTrue(sh
                 .generateSQL(where1, operatorLike, condition1)
                 .equals("SELECT cosmoID, allergicTo, cosmoID, allergyType, "
-                        + "description FROM Allergies WHERE allergicTo LIKE \"*Pea*\" "
+                        + "description, category FROM Allergies WHERE allergicTo LIKE \"*Pea*\" "
                         + "OR cosmoID LIKE \"*Pea*\" OR allergyType LIKE "
-                        + "\"*Pea*\" OR description LIKE \"*Pea*\""));
+                        + "\"*Pea*\" OR description LIKE \"*Pea*\" OR category LIKE \"*Pea*\""));
         assertTrue(sh
                 .generateSQL(where2, operatorGreaterThan, condition3)
                 .equals("SELECT cosmoID, seizureID, cosmoID, seizureType, "
@@ -83,10 +83,10 @@ public class StatisticsHelperTest
                 + "description < 100 OR frequency < 100 OR duration < 100 OR aftermath "
                 + "< 100 OR aftermathAssistance < 100 OR emergencyTreatment < 100 OR seizuresLastUpdated < 100"));
         assertTrue(sh.generateSQL(where1, operatorBetween, condition4).equals(
-                "SELECT cosmoID, allergicTo, cosmoID, allergyType, description "
+                "SELECT cosmoID, allergicTo, cosmoID, allergyType, description, category "
                 + "FROM Allergies WHERE allergicTo BETWEEN \"5\" AND \"200\" OR "
                 + "cosmoID BETWEEN \"5\" AND \"200\" OR allergyType BETWEEN \"5\""
-                + " AND \"200\" OR description BETWEEN \"5\" AND \"200\""));
+                + " AND \"200\" OR description BETWEEN \"5\" AND \"200\" OR category BETWEEN \"5\" AND \"200\""));
     }
 
 }

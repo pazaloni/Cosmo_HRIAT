@@ -80,15 +80,18 @@ public class StatisticsTabGUI
     VBox savedQueryBox;
 
     ListView<String> savedQueryList;
-    
+
     ListView<String> fieldList;
 
     HealthStatusInformationHelper helper = new HealthStatusInformationHelper();
 
     /**
      * Constructor for the statistics class
-     * @param statsTab the tab that this is inserted into
-     * @param parentStage the stage that tab is in
+     * 
+     * @param statsTab
+     *            the tab that this is inserted into
+     * @param parentStage
+     *            the stage that tab is in
      */
     public StatisticsTabGUI(Tab statsTab, Stage parentStage)
     {
@@ -145,12 +148,12 @@ public class StatisticsTabGUI
         queryBtnBox.getChildren().addAll(qryBtn, saveQryBtn);
         StatisticsHelper sh = new StatisticsHelper();
         generateQryBtn.setOnAction(event -> {
-            String query ="";
-            if(!(fieldList.getSelectionModel()
-                    .getSelectedItem() == null)){
-            query = sh.generateSQL(fieldList.getSelectionModel()
-                    .getSelectedItem(), comparisonCmbo.getSelectionModel()
-                    .getSelectedItem(), conditionTxt.getText());
+            String query = "";
+            if ( !(fieldList.getSelectionModel().getSelectedItem() == null) )
+            {
+                query = sh.generateSQL(fieldList.getSelectionModel()
+                        .getSelectedItem(), comparisonCmbo.getSelectionModel()
+                        .getSelectedItem(), conditionTxt.getText());
             }
             else
             {
@@ -209,7 +212,9 @@ public class StatisticsTabGUI
 
     /**
      * method for deleting a saved query
-     * @param queryName the name of the query to be deleted
+     * 
+     * @param queryName
+     *            the name of the query to be deleted
      */
     private void deleteQuery( String queryName )
     {
@@ -247,7 +252,9 @@ public class StatisticsTabGUI
 
     /**
      * Method for saving a query to the database
-     * @param text the sql of the query to save
+     * 
+     * @param text
+     *            the sql of the query to save
      */
     private void saveQuery( String text )
     {
@@ -298,7 +305,7 @@ public class StatisticsTabGUI
 
         HBox addHbox = new HBox();
         addHbox.getChildren().add(addQueryBtn);
-        grid.add(lblWarning,1,2);
+        grid.add(lblWarning, 1, 2);
         grid.add(addQueryBtn, 1, 3);
         GridPane.setHalignment(addQueryBtn, HPos.CENTER);
         grid.setPadding(new Insets(20, 0, 0, 20));
@@ -311,6 +318,7 @@ public class StatisticsTabGUI
 
     /**
      * A list that contains every query name in the database
+     * 
      * @return
      */
     private ListView<String> createSavedQueryList()
@@ -338,12 +346,14 @@ public class StatisticsTabGUI
 
     /**
      * Method for generating statistics from the sql field.
-     * @param queryString The sql string that needs to be queryed with.
+     * 
+     * @param queryString
+     *            The sql string that needs to be queryed with.
      */
     private void getStatistics( String queryString )
     {
         String result = "";
-        //Check to ensure that the sql is valid
+        // Check to ensure that the sql is valid
         if ( queryString.toUpperCase().indexOf("SELECT") == 0
                 && (queryString.indexOf(";") == -1 || queryString.indexOf(";") == queryString
                         .length() - 1) )
@@ -395,7 +405,8 @@ public class StatisticsTabGUI
             {
                 e1.printStackTrace();
             }
-            result = "Number of participants found: " + count;
+            result = "Statistics.csv has been made \nNumber of participants found: "
+                    + count;
         }
         else
         {
