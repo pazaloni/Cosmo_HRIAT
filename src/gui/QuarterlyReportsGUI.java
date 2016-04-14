@@ -11,6 +11,7 @@ import controllers.ReactiveCareTableViewController;
 import controllers.HealthPromotionTableViewController;
 
 
+import core.PopUpMessage;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -256,10 +257,32 @@ public class QuarterlyReportsGUI extends Application {
      */
     private void exportReport()
     {
-    	QuarterlyReportExportHelper helper = 
-    			new QuarterlyReportExportHelper(personalCareTVCont.personalCareData,
-    					reactiveCareTVCont.reactiveCareData, olderAdultNeedsTVCont.adultData, 
-    					formatDate(endDate.getValue()), endDate.getValue().getYear());
-    	helper.exportToCSV();
+    	Stage stage = new Stage();
+    	
+    	if(startDate.getValue() == null)
+    	{
+    		PopUpMessage msg = new PopUpMessage("Start Date must be set.", stage);
+        	msg.stage.showAndWait();
+    		
+    	}
+    	else if(endDate.getValue() == null)
+    	{
+    		PopUpMessage msg = new PopUpMessage("End date must be set.", stage);
+        	msg.stage.showAndWait();
+    		
+    	}
+    	else
+    	{
+    		QuarterlyReportExportHelper helper = 
+        			new QuarterlyReportExportHelper(personalCareTVCont.personalCareData,
+        					reactiveCareTVCont.reactiveCareData, olderAdultNeedsTVCont.adultData, 
+        					formatDate(endDate.getValue()), endDate.getValue().getYear() - 1);
+        	helper.exportToCSV();
+        	
+        	
+        	PopUpMessage msg = new PopUpMessage("Quarterly Report has been exported.", stage);
+        	msg.stage.showAndWait();
+    	}
+    	
     }
 }

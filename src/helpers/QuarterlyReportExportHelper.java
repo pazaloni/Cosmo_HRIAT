@@ -21,12 +21,27 @@ import javafx.collections.ObservableList;
 public class QuarterlyReportExportHelper 
 {
 	//the lists of data to be put into the report
-	ObservableList<PersonalCare> personalCareList;
-	ObservableList<ReactiveCare> reactiveCareList;
-	ObservableList<OlderAdultsNeeds> olderAdultNeedsList;
-	String date;
-	int prevYear;
+	private ObservableList<PersonalCare> personalCareList;
+	private ObservableList<ReactiveCare> reactiveCareList;
+	private ObservableList<OlderAdultsNeeds> olderAdultNeedsList;
+	private String date;
+	private int prevYear;
 	
+	/**
+	 * Initializes the values for all of the lists
+	 * and the dates needed to export onto the quarterly report.
+	 * 
+	 * @param personalCareList An observablelist of personal care objects
+	 * 	to populate the personal care table,
+	 * @param reactiveCareList An observablelist of reactive care objects
+	 * 	to populate the personal care table
+	 * @param olderAdultNeedsList An observablelist of olderAdultNeeds objects
+	 * 	to populate the older adults needs table
+	 * @param formattedDate A string representing the formatted date
+	 * @param prevYear The previous year
+	 * 
+	 * @author Breanna Wilson
+	 */
 	public QuarterlyReportExportHelper(ObservableList personalCareList, ObservableList reactiveCareList,
 			ObservableList olderAdultNeedsList, String formattedDate, int prevYear)
 	{
@@ -37,6 +52,12 @@ public class QuarterlyReportExportHelper
 		this.prevYear = prevYear;
 	}
 	
+	/**
+	 * Writes the information given into tables in a
+	 * csv file
+	 * 
+	 * @author Breanna Wilson
+	 */
 	public void exportToCSV()
 	{
 		String exportStr = "Older Adults Needs\n" + createOlderAdultNeedsCSVString() + 
@@ -57,6 +78,14 @@ public class QuarterlyReportExportHelper
 		
 	}
 	
+	/**
+	 * Takes the information from the personalCare observablelist,
+	 * and formats it into a table using the information given
+	 * @return A string representing the table of information
+	 * in a comma delimited format
+	 * 
+	 * @author Breanna Wilson
+	 */
 	private String createPersonalCareCSVString()
 	{
 		String csvStr = ", Supports, Total Persons as of: " + date + ", Total For: " + prevYear + "\n";
@@ -79,6 +108,14 @@ public class QuarterlyReportExportHelper
 		return csvStr;
 	}
 	
+	/**
+	 * Takes the information from the reactiveCare observablelist,
+	 * and formats it into a table using the information given
+	 * @return A string representing the table of information in
+	 * a comma delimited format
+	 * 
+	 * @author Breanna Wilson
+	 */
 	private String createReactiveCareCSVString()
 	{
 		String csvStr = "Year, Participants Involved, Staff Members Involved, Total\n";
@@ -100,6 +137,16 @@ public class QuarterlyReportExportHelper
 		return csvStr;
 	}
 	
+	/**
+	 * Takes the information from the OlderAdultNeeds
+	 * observablelist, and formats it into a table using the information
+	 * given
+	 *
+	 * @return A string representing the table of information
+	 * given in a comma delimited format
+	 * 
+	 * @author Breanna Wilson
+	 */
 	private String createOlderAdultNeedsCSVString()
 	{
 		String csvStr = "Age, Long Term Care Facility, Elmwood Res, "
