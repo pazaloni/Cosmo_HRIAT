@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import core.MedicalCondition;
+import core.QueryResult;
 
 /**
  *
@@ -15,8 +15,8 @@ import core.MedicalCondition;
  */
 public class TestMedicalConditions
 {
-    MedicalCondition test1;
-    MedicalCondition test2;
+    QueryResult test1;
+    QueryResult test2;
 
     String condition1;
     String condition2;
@@ -35,8 +35,8 @@ public class TestMedicalConditions
         condition2 = "OCD";
         description2 = "Severe";
 
-        test1 = new MedicalCondition(condition1, description1);
-        test2 = new MedicalCondition(condition2, description2);
+        test1 = new QueryResult(condition1, description1);
+        test2 = new QueryResult(condition2, description2);
 
     }
     /**
@@ -68,11 +68,11 @@ public class TestMedicalConditions
     @Test
     public void testCreateMedicalCondition()
     {
-    	String result = MedicalCondition.createMedicalCondition(test1, cosmoID);
+    	String result = QueryResult.createMedicalCondition(test1, cosmoID);
     	assertTrue(result.isEmpty());
     	
-    	MedicalCondition empty = new MedicalCondition("", "");
-    	String result2 = MedicalCondition.createMedicalCondition(empty, cosmoID);
+    	QueryResult empty = new QueryResult("", "");
+    	String result2 = QueryResult.createMedicalCondition(empty, cosmoID);
     	assertTrue(result2.equals("You have missing required fields"));
     }
 
@@ -83,10 +83,10 @@ public class TestMedicalConditions
     @Test
     public void testUpdateMedicalCondition()
     {
-    	String result = MedicalCondition.updateMedicalCondition(test2, test1, cosmoID);
+    	String result = QueryResult.updateMedicalCondition(test2, test1, cosmoID);
     	assertTrue(result.isEmpty());
-    	MedicalCondition empty = new MedicalCondition("", "");
-    	String result2 = MedicalCondition.updateMedicalCondition(test2, empty, cosmoID);
+    	QueryResult empty = new QueryResult("", "");
+    	String result2 = QueryResult.updateMedicalCondition(test2, empty, cosmoID);
     	System.out.println(result2);
     	assertTrue(result2.equals("Update not successful"));
     }
@@ -98,7 +98,7 @@ public class TestMedicalConditions
     @Test
     public void testDeleteMedicalCondition()
     {
-    	String result = MedicalCondition.deleteCondition(test2, cosmoID);
+    	String result = QueryResult.deleteCondition(test2, cosmoID);
     	assertTrue(result.equals("Deleted successfully"));   	
     }
 }

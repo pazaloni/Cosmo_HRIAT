@@ -1,6 +1,8 @@
 package controllers;
 import helpers.DatabaseHelper;
+import helpers.FormatHelper;
 import javafx.application.*;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.sql.*;
@@ -72,7 +74,7 @@ public class ParticipantTableViewController
 			table = "Participant";
 		}
 		ResultSet rs = db.select("cosmoID, firstName, lastName, address, "
-				+ "dateUpdated, participantStatus", table, condition, 
+				+ "dateUpdated, participantStatus, emergencyContactID", table, condition, 
 				"participantStatus = 'Deceased', participantStatus = 'Inactive',"
 				+ " participantStatus = 'Active'");
 
@@ -106,6 +108,35 @@ public class ParticipantTableViewController
 				
 				///get the status of the participant
 				participantStatus = rs.getString(6);
+				
+				//Query for the participant emergency contact info
+				ResultSet crs = db.select("firstName, lastName, phoneNumber", 
+				        "EmergencyContact", "", "emergencyContactID=" + rs.getString(7));
+				
+				while (crs.next())
+				{
+				    if (crs.getString(1) == null && crs.getString(2) == null)
+				    {
+				        emergencyContactName = " ";
+				    }
+				    else
+				    {
+				        emergencyContactName = crs.getString(1) + " " + crs.getString(2);
+				    }
+				    
+				    if (crs.getString(3) == null )
+                    {
+				        emergencyContactPhone = " ";
+                    }
+                    else
+                    {
+                        emergencyContactPhone = crs.getString(3);
+                    }
+				    
+				}
+				
+				//emergencyContactPhone = displayPhoneNumber(cosmoID, emergencyContactPhone);
+				
 
 				/// create the participant object
 				Participant participant = new Participant(cosmoID,
@@ -149,7 +180,7 @@ public class ParticipantTableViewController
 		emergencyNameColumn.setResizable(false);
 
 		emergencyPhoneColumn.setCellValueFactory(cellData -> cellData
-				.getValue().getEmergencyContactPhoneProperty());
+				.getValue().displayEmergencyContactPhoneProperty());
 		emergencyPhoneColumn.setMinWidth(115);
 		emergencyPhoneColumn.setResizable(false);
 
@@ -215,5 +246,23 @@ public class ParticipantTableViewController
 		this.participantTable.getColumns().clear();
 		this.initialize();
 	}
+	
+	 /**
+     * Purpose: return a filename formatted for display.
+     * 
+     * @param cosmoID
+     *            : The cosmoID that needs to be removed from the end of the
+     *            filename
+     * @return
+     */
+    public StringProperty displayPhoneNumber( String cosmoID, String phoneNumber )
+    {
+       FormatHelper fh = new FormatHelper();
+   
+       String formatedPhone = fh.formatPhoneNum(phoneNumber);
+
+        StringProperty displayName = new SimpleStringProperty(formatedPhone);
+        return displayName;
+    }
 
 }

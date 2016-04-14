@@ -257,7 +257,9 @@ public class MedicalStaffMainPageGUI extends Application
         stats.setText("Stats");
         incidentForm.setText("Incident Reporting Form");
         physicianManagement.setText("Physician Management");
-        
+        StatisticsTabGUI stg = new StatisticsTabGUI(stats, medMainStage);
+        stats.setContent(stg.showStatistics().getContent());
+
         // set tabs to not be closable
         forms.closableProperty().set(false);
         participants.closableProperty().set(false);

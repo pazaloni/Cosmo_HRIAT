@@ -11,10 +11,10 @@ import controllers.ProgressNotesTableViewController;
 import controllers.MedicationsTableViewController;
 import core.Allergies;
 import core.MedicalAdministrator;
-import core.MedicalCondition;
 import core.Medication;
 import core.PopUpCheck;
 import core.PopUpMessage;
+import core.QueryResult;
 import core.StaffAccount;
 import javafx.collections.ModifiableObservableListBase;
 import javafx.geometry.Insets;
@@ -290,7 +290,7 @@ public class HealthStatusFormGUI
 
         MedicalConditionsTableViewController controller = new MedicalConditionsTableViewController(
                 cosmoId);
-        TableView<MedicalCondition> table = controller.conditionTable;
+        TableView<QueryResult> table = controller.conditionTable;
 
         //Add the medical condition 
         btnAddMedicalCondition
@@ -302,7 +302,7 @@ public class HealthStatusFormGUI
                 });
         //Editing a medical condition
         btnEditMedicalCondition.setOnMouseClicked(event -> {
-            MedicalCondition condition = controller.getSelectedMedicalCondition();
+            QueryResult condition = controller.getSelectedMedicalCondition();
             if(condition==null)
             {
                 Stage stage = new Stage();
@@ -323,7 +323,7 @@ public class HealthStatusFormGUI
             }
         });
         btnDeleteMedicalCondition.setOnMouseClicked(event -> {
-            MedicalCondition condition = controller.getSelectedMedicalCondition();
+            QueryResult condition = controller.getSelectedMedicalCondition();
             if(condition==null)
             {
                 Stage stage = new Stage();
@@ -348,7 +348,7 @@ public class HealthStatusFormGUI
                 stage.showAndWait();
                 if(popup.runCheck())
                 {
-                MedicalCondition.deleteCondition(table.getSelectionModel()
+                QueryResult.deleteCondition(table.getSelectionModel()
                         .getSelectedItem(), cosmoID);
                 }
                 controller.refreshTable(cosmoID);
