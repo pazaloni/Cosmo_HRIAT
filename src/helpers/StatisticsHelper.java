@@ -4,9 +4,26 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
+/**
+ * Helper for the statisticsTabGUI
+ * 
+ * @author cst207
+ *
+ */
 public class StatisticsHelper
 {
 
+    /**
+     * Takes the three parameters and generates the appropriate SQL code
+     * 
+     * @param searchFor
+     *            the table you are looking in
+     * @param comparison
+     *            the operator you are using
+     * @param condition
+     *            the limiter on your query results
+     * @return
+     */
     public String generateSQL( String searchFor, String comparison,
             String condition )
     {
@@ -125,26 +142,35 @@ public class StatisticsHelper
 
     }
 
-    private String[] getTableHeadings( String queryName )
+    /**
+     * Method for getting headings of a table from the database
+     * 
+     * @param tableName
+     *            the table whose headings we are requesting
+     * @return
+     */
+    private String[] getTableHeadings( String tableName )
     {
-        DatabaseHelper db = new DatabaseHelper();
-        db.connect();
-        ResultSet rs = db.directSelect("Select * from " + queryName);
-        String[] result = new String[0];
-        try
-        {
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int columnCount = rsmd.getColumnCount();
-            result = new String[columnCount];
-            for ( int i = 1; i <= result.length; i++ )
+        
+            DatabaseHelper db = new DatabaseHelper();
+            db.connect();
+            ResultSet rs = db.directSelect("Select * from " + tableName);
+            String[] result = new String[0];
+            try
             {
-                result[i - 1] = rsmd.getColumnLabel(i);
+                ResultSetMetaData rsmd = rs.getMetaData();
+                int columnCount = rsmd.getColumnCount();
+                result = new String[columnCount];
+                for ( int i = 1; i <= result.length; i++ )
+                {
+                    result[i - 1] = rsmd.getColumnLabel(i);
+                }
             }
-        }
-        catch ( SQLException e )
-        {
-            e.printStackTrace();
-        }
+            catch ( SQLException e )
+            {
+                e.printStackTrace();
+            }
+            
         return result;
     }
 }

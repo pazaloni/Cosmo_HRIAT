@@ -6,7 +6,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import core.SavedQuery;
-
+/**
+ * Method to test the SavedQuery object
+ * @author cst207
+ *
+ */
 public class SavedQueryTest
 {
     String queryName1;
@@ -29,14 +33,17 @@ public class SavedQueryTest
         query2 = "SELECT * FROM Seizures;";
     }
 
-    @Test
+    /**
+     * Test for saving queries to the database
+     */
+    @Test    
     public void testCreateSavedQuery()
     {
         SavedQuery.removeQuery(queryName1);
         SavedQuery.removeQuery(queryName2);
         assertTrue(SavedQuery.createSavedQuery(queryName1, query1).equals(""));
         assertTrue(SavedQuery.createSavedQuery(queryNameSame, query2).equals(
-                "A query with that name has already been entered."));
+                "That name already exists."));
         assertTrue(SavedQuery.createSavedQuery(queryNameEmpty, query2).equals(
                 "You must give your query a name"));
         assertTrue(SavedQuery.createSavedQuery(queryName2, query2).equals(""));
@@ -44,6 +51,9 @@ public class SavedQueryTest
         SavedQuery.removeQuery(queryName2);
     }
 
+    /**
+     * Test for removing queries from the database
+     */
     @Test
     public void testRemoveQuery()
     {
@@ -55,6 +65,9 @@ public class SavedQueryTest
         
     }
 
+    /**
+     * Test for searching for queries with their name
+     */
     @Test
     public void testPopulateQuery()
     {

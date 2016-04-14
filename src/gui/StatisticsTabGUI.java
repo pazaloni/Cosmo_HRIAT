@@ -80,15 +80,15 @@ public class StatisticsTabGUI
     VBox savedQueryBox;
 
     ListView<String> savedQueryList;
+    
+    ListView<String> fieldList;
 
     HealthStatusInformationHelper helper = new HealthStatusInformationHelper();
 
     /**
-     * 
-     * Constructor for the HealthStatus class.
-     * 
-     * @param ctrl
-     *            the pane, or box that this will be placed on
+     * Constructor for the statistics class
+     * @param statsTab the tab that this is inserted into
+     * @param parentStage the stage that tab is in
      */
     public StatisticsTabGUI(Tab statsTab, Stage parentStage)
     {
@@ -100,8 +100,6 @@ public class StatisticsTabGUI
      * 
      * Purpose: This method will make everything and display it.
      * 
-     * @param cosmoId
-     *            : The cosmoId for the participant
      */
     public Tab showStatistics()
     {
@@ -111,7 +109,7 @@ public class StatisticsTabGUI
 
         Label categoriesLbl = new Label("Categories: ");
         categoriesLbl.setFont(new Font(16));
-        ListView<String> fieldList = new ListView<String>();
+        fieldList = new ListView<String>();
         ObservableList<String> objects = FXCollections.observableArrayList(
                 "Allergies", "Seizures", "Medications", "Vaccinations",
                 "Conditions");
@@ -147,9 +145,17 @@ public class StatisticsTabGUI
         queryBtnBox.getChildren().addAll(qryBtn, saveQryBtn);
         StatisticsHelper sh = new StatisticsHelper();
         generateQryBtn.setOnAction(event -> {
-            String query = sh.generateSQL(fieldList.getSelectionModel()
+            String query ="";
+            if(!(fieldList.getSelectionModel()
+                    .getSelectedItem() == null)){
+            query = sh.generateSQL(fieldList.getSelectionModel()
                     .getSelectedItem(), comparisonCmbo.getSelectionModel()
                     .getSelectedItem(), conditionTxt.getText());
+            }
+            else
+            {
+                query = "Choose a field from the categories list.";
+            }
             sqlTxtArea.setText(query);
         });
 
@@ -201,6 +207,10 @@ public class StatisticsTabGUI
         return parentTab;
     }
 
+    /**
+     * method for deleting a saved query
+     * @param queryName the name of the query to be deleted
+     */
     private void deleteQuery( String queryName )
     {
         Stage stage = new Stage();
@@ -219,17 +229,14 @@ public class StatisticsTabGUI
             stage.initOwner(this.parentStage);
             stage.showAndWait();
 
-            // when the user is removed from the database
             if ( checkBox.result )
             {
                 SavedQuery.removeQuery(queryName);
             }
 
         }
-        // pop up a message saying that no user has been selected to delete
         else
         {
-            // tell the user to select a user to delete
             PopUpMessage messageBox = new PopUpMessage("Please select a query"
                     + " to remove.", stage);
 
@@ -238,6 +245,10 @@ public class StatisticsTabGUI
 
     }
 
+    /**
+     * Method for saving a query to the database
+     * @param text the sql of the query to save
+     */
     private void saveQuery( String text )
     {
         Stage saveQueryStage = new Stage();
@@ -255,7 +266,6 @@ public class StatisticsTabGUI
         TextField queryNameTxt = new TextField();
 
         grid.add(queryNameLbl, 0, 0, 2, 1);
-        // grid.add(lblWarning, 1, 0);
         grid.add(queryNameTxt, 0, 1, 2, 1);
 
         grid.setPadding(new Insets(10, 10, 10, 10));
@@ -268,8 +278,6 @@ public class StatisticsTabGUI
             @Override
             public void handle( ActionEvent e )
             {
-                // call create participant on medical administrator with the
-                // text passed in
                 String result = SavedQuery.createSavedQuery(
                         queryNameTxt.getText(), text);
 
@@ -290,6 +298,7 @@ public class StatisticsTabGUI
 
         HBox addHbox = new HBox();
         addHbox.getChildren().add(addQueryBtn);
+        grid.add(lblWarning,1,2);
         grid.add(addQueryBtn, 1, 3);
         GridPane.setHalignment(addQueryBtn, HPos.CENTER);
         grid.setPadding(new Insets(20, 0, 0, 20));
@@ -300,6 +309,10 @@ public class StatisticsTabGUI
         saveQueryStage.showAndWait();
     }
 
+    /**
+     * A list that contains every query name in the database
+     * @return
+     */
     private ListView<String> createSavedQueryList()
     {
         savedQueryList = new ListView<>();
@@ -316,7 +329,6 @@ public class StatisticsTabGUI
         }
         catch ( SQLException e )
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         savedQueryList.setItems(objects);
@@ -324,9 +336,14 @@ public class StatisticsTabGUI
         return savedQueryList;
     }
 
+    /**
+     * Method for generating statistics from the sql field.
+     * @param queryString The sql string that needs to be queryed with.
+     */
     private void getStatistics( String queryString )
     {
         String result = "";
+        //Check to ensure that the sql is valid
         if ( queryString.toUpperCase().indexOf("SELECT") == 0
                 && (queryString.indexOf(";") == -1 || queryString.indexOf(";") == queryString
                         .length() - 1) )

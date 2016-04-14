@@ -10,9 +10,19 @@ import com.healthmarketscience.jackcess.DatabaseBuilder;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * Object for saving queries
+ * @author cst207
+ *
+ */
 public class SavedQuery
 {
-
+    /**
+     * method for adding a new query to the database
+     * @param queryName the name of the query to be added
+     * @param query the contents of the query to be added
+     * @return
+     */
     public static String createSavedQuery( String queryName, String query )
     {
         String result = "";
@@ -46,13 +56,17 @@ public class SavedQuery
             }
             else
             {
-                result = "A query with that name has already been entered.";
+                result = "That name already exists.";
             }
            
         }
         return result;
     }
 
+    /**
+     * Method to remove queries from the database
+     * @param queryName the name of the query to remove
+     */
     public static void removeQuery( String queryName )
     {
         DatabaseHelper db = new DatabaseHelper();
@@ -62,7 +76,11 @@ public class SavedQuery
 
         
     }
-    
+    /**
+     * method for getting the contents of queries form the database  
+     * @param queryName the name of the query to get the contents of 
+     * @return
+     */
     public static String populateQuery( String queryName )
     {
         String result = "";

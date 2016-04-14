@@ -6,6 +6,11 @@ import helpers.StatisticsHelper;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Test for the statistics helper class
+ * @author cst207
+ *
+ */
 public class StatisticsHelperTest
 {
 
@@ -44,6 +49,9 @@ public class StatisticsHelperTest
         sh = new StatisticsHelper();
     }
 
+    /**
+     * Test for automatically generating SQL code 
+     */
     @Test
     public void testGenerateSQL()
     {
