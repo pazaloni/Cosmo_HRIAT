@@ -30,7 +30,7 @@ public class PersonalCareTest
 		supports = "Daily insulin injections";
 		totalAsOf = "1";
 		totalForLastYear = "2";
-		pc = new PersonalCare(supports, totalAsOf, totalForLastYear);
+		pc = new PersonalCare("",supports, totalAsOf, totalForLastYear);
 	}
 	
 	/**

@@ -36,15 +36,15 @@ public class OlderAdultsNeeds
 	 * 
 	 *  @author Breanna Wilson, Jon Froese
 	 */
-	public OlderAdultsNeeds(String age, int longTermCare, int elmwood, int lutherCare, int other,
-			int totalAsOf, int totalForLastYear)
+	public OlderAdultsNeeds(String age, int longTermCare, int elmwood, int lutherCare, int other, int totalAsOf,
+			int totalForLastYear)
 	{
 		this.age = age;
 		this.longTermCare = longTermCare;
 		this.elmwood = elmwood;
 		this.lutherCare = lutherCare;
 		this.other = other;
-		this.totalAsOf = totalAsOf;
+		this.totalAsOf = longTermCare + elmwood + lutherCare + other;
 		this.totalForLastYear = totalForLastYear;
 	}
 	
