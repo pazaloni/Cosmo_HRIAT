@@ -87,6 +87,7 @@ public class ManageScanFormsGUI
         description.setMaxWidth(250);
         description.setWrapText(true);
         imageBtn.setMaxWidth(250);
+        imageBtn.setMinWidth(100);
 
         imageBtn
         .setOnAction(event -> {

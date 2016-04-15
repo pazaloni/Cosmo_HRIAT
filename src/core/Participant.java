@@ -1,4 +1,6 @@
 package core;
+import helpers.FormatHelper;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -194,6 +196,23 @@ public class Participant
         return emergencyContactPhone;
     }
 
+    public StringProperty displayEmergencyContactPhoneProperty()
+    {
+        
+        FormatHelper fh = new FormatHelper();
+        
+        String formatedPhone = fh.formatPhoneNum(emergencyContactPhone.get());
+        
+        if (formatedPhone.equals("A phone number must have 10 digits."))
+        {
+            formatedPhone = " ";
+        }
+
+         StringProperty displayPhone = new SimpleStringProperty(formatedPhone);
+        return displayPhone;
+    }
+
+    
     public String getStatus()
     {
         return participantStatus.get();

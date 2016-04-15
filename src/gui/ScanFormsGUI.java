@@ -197,7 +197,6 @@ private VBox createScannedForm( String cosmoId )
     if(!(this.loggedInUser instanceof MedicalAdministrator))
     {
         btnAddImage.setVisible(false);
-        btnViewImage.setVisible(false);
         btnDeleteImage.setVisible(false);
     }
     

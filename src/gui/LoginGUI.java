@@ -1,5 +1,6 @@
 package gui;
 import helpers.EncryptionHelper;
+import helpers.EncryptionHelper;
 import core.StaffAccount;
 import core.TechnicalAdministrator;
 import javafx.application.Application;
@@ -14,7 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+   
 /**
  * Purpose: Create the first page the user sees when they launch the program
  * 
@@ -24,7 +25,6 @@ import javafx.stage.Stage;
 public class LoginGUI extends Application
 {
 	StaffAccount staffloginHelper = new StaffAccount();
-
     /* Login Elements */
     private VBox vbMainPane;
     private TextField txtUserName;
@@ -76,6 +76,8 @@ public class LoginGUI extends Application
         btnLogin = new Button(BUTTON_LABEL);
         // making the image for the logo to be displayed
         imgLogo = new Image(IMAGE_PATH);
+    
+    
     }
 
     /**

@@ -3,7 +3,14 @@ import helpers.DatabaseHelper;
 import helpers.NotePaneHelper;
 import helpers.PreviewPaneHelper;
 
+import java.awt.Paint;
+import java.awt.PaintContext;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -230,25 +237,17 @@ public class MedicalStaffMainPageGUI extends Application
      */
     private TabPane createTabs()
     {
-        Label lblIncidnetReportForm = new Label("Incident Report Form");
-        lblIncidnetReportForm.setFont(new Font(22));
-        Button btnAddIncidentReport = new Button("Add");
-        Button btnDeleteIncidebtReport = new Button("Delete");
-        Button btnEditIncidentReport = new Button("Edit");
         TabPane tabPane = new TabPane();
 
         // Create tabs names
         Tab participants = new Tab();
         Tab forms = new Tab();
         Tab stats = new Tab();
+        Tab incidentForm = new Tab();
+        Tab physicianManagement = new Tab();
+        HBox box = new HBox();
+        HBox pmgBox = new HBox();
 
-        HBox box = new HBox();        
-        HBox btnBox = new HBox();
-        
-        btnBox.getChildren().addAll(btnAddIncidentReport,btnEditIncidentReport,btnDeleteIncidebtReport);
-        btnBox.setSpacing(10);
-        box.getChildren().addAll(lblIncidnetReportForm,btnBox);
-        box.setSpacing(200);
         // set text for tabs
         participants.setText("Participants");
         VBox vbox = new VBox();
@@ -256,38 +255,39 @@ public class MedicalStaffMainPageGUI extends Application
         participants.setContent(vbox);
         forms.setText("Forms");
         stats.setText("Stats");
-        btnAddIncidentReport.setOnAction(event->{
-            IncidentReportFormGUI irf = new IncidentReportFormGUI(medMainStage, loggedInUser);
-            irf.showIncidentReportForm();
-        });
+        incidentForm.setText("Incident Reporting Form");
+        physicianManagement.setText("Physician Management");
+        StatisticsTabGUI stg = new StatisticsTabGUI(stats, medMainStage);
+        stats.setContent(stg.showStatistics().getContent());
+
         // set tabs to not be closable
         forms.closableProperty().set(false);
         participants.closableProperty().set(false);
         stats.closableProperty().set(false);
-
-
-        forms.setContent(box);
+        incidentForm.closableProperty().set(false);
+        physicianManagement.closableProperty().set(false);
+        IncidentReportFormGUI irf = new IncidentReportFormGUI(medMainStage, loggedInUser);
+        PhysicianManagementGUI pmg = new PhysicianManagementGUI();
+        
+        //box.getChildren().add(irf.showIncidentReportForm());
+        pmgBox.getChildren().add(pmg.showPhysicianManagementForm());
+        
+  
+        box.setAlignment(Pos.CENTER);
+        incidentForm.setContent(box);
+        
+        pmgBox.setAlignment(Pos.CENTER_LEFT);
+        physicianManagement.setContent(pmgBox);
+        
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(175);
        
-
-        Button genQuartRpt = new Button("Generate Quarterly Reports");
-        genQuartRpt.setOnAction(event -> {
-        	Stage stage = new Stage();
-        	QuarterlyReportsGUI reportGUI = new QuarterlyReportsGUI(stage);
-        	stage.setScene(new Scene(reportGUI.mainVbox));
-        	stage.showAndWait();
-        });
-        stats.setContent(genQuartRpt);
-        
-        
-        tabPane.getTabs().addAll(participants);
-
+        tabPane.getTabs().addAll(participants, forms);
 
         // if they are an administrator, add the stats tab
         if ( loggedInUser instanceof MedicalAdministrator )
         {
-            tabPane.getTabs().addAll(stats,forms);
+            tabPane.getTabs().addAll(stats,incidentForm,physicianManagement);
         }
 
         // set initial selected tab to participants
@@ -310,7 +310,7 @@ public class MedicalStaffMainPageGUI extends Application
                         }
                         else if ( mostRecentlySelectedTab.equals(stats) )
                         {
-                            StatisticsGUI reportGUI = new StatisticsGUI();
+                            QuarterlyReportGUI reportGUI = new QuarterlyReportGUI();
                             reportGUI.reportsMainStageConstruct(medMainStage,
                                     loggedInUser);
                         }
@@ -644,7 +644,7 @@ public class MedicalStaffMainPageGUI extends Application
                     createParticipantStage.setTitle("Create Participant");
 
                     createParticipantStage.setScene(new Scene(
-                            createParticipantPopUp(), 325, 425));
+                            createParticipantPopUp(), 325, 485));
                     createParticipantStage
                             .initModality(Modality.APPLICATION_MODAL);
                     createParticipantStage.initOwner(medMainStage);
@@ -734,6 +734,7 @@ public class MedicalStaffMainPageGUI extends Application
         Label phoneLbl = new Label("Phone Number");
         Label cosmoIdLbl = new Label("Cosmo ID");
         Label addressLbl = new Label("Participant Address");
+        Label careTypeLbl = new Label("Care Type");
         Label imageLbl = new Label("Participant Picture");
 
         // the text fields
@@ -755,6 +756,7 @@ public class MedicalStaffMainPageGUI extends Application
         phoneTxt.setPromptText("Ex: 3062879111");
         TextField cosmoIdTxt = new TextField();
         TextField addressTxt = new TextField();
+        TextField careTypeTxt = new TextField();
         Button imageBrowseBtn = new Button("Browse...");
         TextField chosenPathTxt = new TextField("");
 
@@ -789,7 +791,8 @@ public class MedicalStaffMainPageGUI extends Application
         grid.add(healthNumLbl, 0, 7);
         grid.add(phoneLbl, 0, 8);
         grid.add(addressLbl, 0, 9);
-        grid.add(imageLbl, 0, 10);
+        grid.add(careTypeLbl,0,10);
+        grid.add(imageLbl, 0, 11);
 
         grid.add(lblWarning, 1, 0);
         grid.add(cosmoIdTxt, 1, 1);
@@ -801,7 +804,8 @@ public class MedicalStaffMainPageGUI extends Application
         grid.add(healthNumTxt, 1, 7);
         grid.add(phoneTxt, 1, 8);
         grid.add(addressTxt, 1, 9);
-        grid.add(imageBrowseBtn, 1, 10);
+        grid.add(careTypeTxt,1,10);
+        grid.add(imageBrowseBtn, 1, 11);
 
         // setPadding of the grid
         grid.setPadding(new Insets(10, 10, 0, 10));
@@ -824,7 +828,7 @@ public class MedicalStaffMainPageGUI extends Application
                         lastNameTxt.getText(), birthDatePicker.getValue(),
                         physicianFNameTxt.getText(),
                         physicianLNameTxt.getText(), healthNumTxt.getText(),
-                        phoneTxt.getText(), addressTxt.getText(),
+                        phoneTxt.getText(), addressTxt.getText(), careTypeTxt.getText(),
                         chosenPathTxt.getText());
 
                 // if no error message is recieved then close this window and
@@ -885,8 +889,8 @@ public class MedicalStaffMainPageGUI extends Application
         buttonsHbox.setAlignment(Pos.CENTER);
         resetHbox.getChildren().addAll(resetBtn);
         resetHbox.setAlignment(Pos.CENTER_RIGHT);
-        grid.add(buttonsHbox, 1, 11);
-        grid.add(resetHbox, 0, 11);
+        grid.add(buttonsHbox, 1, 12);
+        grid.add(resetHbox, 0, 12);
 
         return grid;
     }

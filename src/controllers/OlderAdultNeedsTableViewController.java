@@ -123,7 +123,7 @@ public class OlderAdultNeedsTableViewController
 		
 		ResultSet rs = db.select("careType, address, dateOfBirth", "Participant", "","");
 		
-		Date current = new Date(Calendar.YEAR, Calendar.MONTH + 1, Calendar.DAY_OF_MONTH);
+		Date current = new Date();
 		System.out.println(current.toString());
 		Date birthday;
 		
@@ -359,22 +359,22 @@ public class OlderAdultNeedsTableViewController
 		
 		elmwoodColumn.setCellValueFactory(cellData -> cellData.getValue()
 				.getElmwoodProperty());
-        elmwoodColumn.setMinWidth(140);
+        elmwoodColumn.setMinWidth(130);
         elmwoodColumn.setResizable(false);
 		
 		lutherCareColumn.setCellValueFactory(cellData -> cellData.getValue()
 				.getLutherCareProperty());
-        lutherCareColumn.setMinWidth(140);
+        lutherCareColumn.setMinWidth(130);
         lutherCareColumn.setResizable(false);
 		
 		otherColumn.setCellValueFactory(cellData -> cellData.getValue()
 				.getOtherProperty());
-        otherColumn.setMinWidth(100);
+        otherColumn.setMinWidth(90);
         otherColumn.setResizable(false);
 		
 		totalAsOfColumn.setCellValueFactory(cellData -> cellData.getValue()
 				.getTotalAsOfProperty());
-        totalAsOfColumn.setMinWidth(120);
+        totalAsOfColumn.setMinWidth(150);
         totalAsOfColumn.setResizable(false);
 		
 		totalForLastYearColumn.setCellValueFactory(cellData -> cellData

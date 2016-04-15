@@ -27,6 +27,7 @@ public class TestBasicStaff
     private String participantPhone;
     private String participantAddress;
     private String participantAllergy;
+    private String participantCareType;
     
     private String username;
     private String firstName;
@@ -63,6 +64,7 @@ public class TestBasicStaff
         participantPhone = "1231231231";
         participantAddress = "123 Fake Street";
         participantAllergy = "Peanuts";
+        participantCareType = "Luther";
 
     }
     /**
@@ -83,7 +85,7 @@ public class TestBasicStaff
     {
         MedicalAdministrator.createParticipant(cosmoID, participantFirstName, participantLastName, 
                  birthDate, physicianFName, physicianLName, participantHealthNumber, 
-                 participantPhone, participantAddress, "");
+                 participantPhone, participantAddress, participantCareType, "");
          
     //    ObservableList<Participant> participantData = basicstaff.search
          //       (BasicStaff.SearchType.NAME, participantFirstName);
@@ -102,7 +104,7 @@ public class TestBasicStaff
     {
          MedicalAdministrator.createParticipant(cosmoID, participantFirstName, participantLastName, 
                  birthDate, physicianFName, physicianLName, participantHealthNumber, 
-                 participantPhone, participantAddress, "");
+                 participantPhone, participantAddress, participantCareType, "");
          
        // ObservableList<Participant> participantData = basicstaff.search
         //        (BasicStaff.SearchType.ADDRESS, participantAddress);
@@ -121,7 +123,7 @@ public class TestBasicStaff
     {
          MedicalAdministrator.createParticipant(cosmoID, participantFirstName, participantLastName, 
                  birthDate, physicianFName, physicianLName, participantHealthNumber, 
-                 participantPhone, participantAddress, "");
+                 participantPhone, participantAddress ,participantCareType, "");
          
       //  ObservableList<Participant> participantData = 
         //        basicstaff.search(BasicStaff.SearchType.ALLERGY, participantAllergy);
@@ -142,7 +144,7 @@ public class TestBasicStaff
     {
          MedicalAdministrator.createParticipant(cosmoID, participantFirstName, participantLastName, 
                  birthDate, physicianFName, physicianLName, participantHealthNumber, 
-                 participantPhone, participantAddress, "");
+                 participantPhone, participantAddress, participantCareType, "");
          
       //  ObservableList<Participant> participantData = basicstaff.search(BasicStaff.SearchType.NAME, cosmoID);
       //  

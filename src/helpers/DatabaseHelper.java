@@ -137,6 +137,7 @@ public class DatabaseHelper
 
             //System.out.println(query);
             // execute the query
+            System.out.println(query);
             rs = s.executeQuery(query);
         }
         catch ( SQLException e )
@@ -434,6 +435,41 @@ public class DatabaseHelper
         }
 
         return rows;
+    }
+    
+    /**
+     * 
+     * Purpose: Perform a SELECT query on the database
+     * 
+     * @param columnList list of columns to be selected
+     * @param tableList list of tables to select from
+     * @param condition optional sql condition to select with
+     * @param sort optional sql sort statement to supply
+     * @return ResultSet rs The result of the SELECT query
+     */
+    public ResultSet directSelect( String queryStatement)
+    {
+
+        Statement s = null;
+        ResultSet rs = null;
+        String query = queryStatement;
+
+        try
+        {
+            s = conn.createStatement();
+
+            //System.out.println(query);
+            // execute the query
+            System.out.println(query);
+            rs = s.executeQuery(query);
+        }
+        catch ( SQLException e )
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }        
+        // return the resultset
+        return rs;
     }
 
     /**
