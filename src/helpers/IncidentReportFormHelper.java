@@ -163,10 +163,9 @@ public class IncidentReportFormHelper
      * 
      * Purpose: save the individual injured body areas in the database
      * 
-     * @param injuredAreas
-     *            the areas that were injured
-     * @param incidentID
-     *            the incident report for that has these injured body areas
+     * @param injuredAreas the areas that were injured
+     * @param incidentID the incident report for that has these injured body
+     *            areas
      * @return true if successful, false otherwise
      */
     private boolean saveInjuredBodyAreas( String[] injuredAreas, int incidentID )
@@ -192,10 +191,8 @@ public class IncidentReportFormHelper
      * 
      * Purpose: Save the injury types for the current incident
      * 
-     * @param injuries
-     *            array of injures to save
-     * @param incidentId
-     *            the incident that we will save this information to
+     * @param injuries array of injures to save
+     * @param incidentId the incident that we will save this information to
      * @return true if the injures were saved successfully, false otherwise
      */
     private boolean saveInjuryTypes( String[] injuries, int incidentId )
@@ -240,10 +237,8 @@ public class IncidentReportFormHelper
      * 
      * Purpose: Save the incident witnesses in the database for a incident
      * 
-     * @param witnesses
-     *            the witnesses of the incident
-     * @param incidentId
-     *            the incident that we will save the witnesses for
+     * @param witnesses the witnesses of the incident
+     * @param incidentId the incident that we will save the witnesses for
      * @return true if the witnesses were saved successfully, false otherwise
      */
     private boolean saveIncidentWitnesses( ArrayList<Witness> witnesses,
@@ -270,7 +265,8 @@ public class IncidentReportFormHelper
                     if ( saveNewWitness(wit) )
                     {
                         int currentWittnessId = getWitnessId(wit);
-                        result = addWitnessToIncident(incidentId, currentWittnessId);
+                        result = addWitnessToIncident(incidentId,
+                                currentWittnessId);
                     }
                 }
             }
@@ -284,8 +280,7 @@ public class IncidentReportFormHelper
      * Purpose: Save the new injury type when the checkbox for the other injury
      * type is selected
      * 
-     * @param injuryType
-     *            the new injury
+     * @param injuryType the new injury
      * @return true if the injury was saved false otherwise
      */
     private boolean saveNewInjuryType( String injuryType )
@@ -310,10 +305,8 @@ public class IncidentReportFormHelper
      * 
      * Purpose: Add an injury to the incident
      * 
-     * @param incidentId
-     *            the incident id to add
-     * @param injuryId
-     *            the injury id to add
+     * @param incidentId the incident id to add
+     * @param injuryId the injury id to add
      * @return true if the injury was added, false otherwise
      */
     private boolean addInjuryToIncident( int incidentId, int injuryId )
@@ -337,8 +330,7 @@ public class IncidentReportFormHelper
      * 
      * Purpose: Check the database to see if the selected injury type exits
      * 
-     * @param injuryName
-     *            the injury type we're checking
+     * @param injuryName the injury type we're checking
      * @return true if it exists, false otherwise
      */
     private boolean injuryTypeExists( String injuryName )
@@ -370,8 +362,7 @@ public class IncidentReportFormHelper
      * 
      * Purpose: Add a new witness to the database
      * 
-     * @param witness
-     *            the witness to add
+     * @param witness the witness to add
      * @return true if new addition was successful, false otherwise
      */
     private boolean saveNewWitness( Witness witness )
@@ -400,8 +391,7 @@ public class IncidentReportFormHelper
      * 
      * Purpose: check the database to see if the witness exists
      * 
-     * @param witness
-     *            the witness to check
+     * @param witness the witness to check
      * @return true if the witness exits, false otherwise
      */
     private boolean witnessAlreadyExists( Witness witness )
@@ -434,10 +424,8 @@ public class IncidentReportFormHelper
      * 
      * Purpose: add a witness to an incident
      * 
-     * @param incidentId
-     *            the incident to add the witness to
-     * @param witnessId
-     *            the witness id in the database
+     * @param incidentId the incident to add the witness to
+     * @param witnessId the witness id in the database
      * @return true if addition was successful, false otherwise
      */
     private boolean addWitnessToIncident( int incidentId, int witnessId )
@@ -461,8 +449,7 @@ public class IncidentReportFormHelper
      * 
      * Purpose: get the witness id from the database
      * 
-     * @param witness
-     *            the witness to look for
+     * @param witness the witness to look for
      * @return and integer representing that witness' id
      */
     private int getWitnessId( Witness witness )
@@ -493,8 +480,7 @@ public class IncidentReportFormHelper
      * 
      * Purpose: get the injury id form the database
      * 
-     * @param injuryName
-     *            the injury to search for
+     * @param injuryName the injury to search for
      * @return the injury id
      */
     private int getInjuryId( String injuryName )
@@ -708,8 +694,7 @@ public class IncidentReportFormHelper
      * 
      * Purpose: Format date using the DATE_FORMAT (dd-MMM-yyyy) format provided
      * 
-     * @param date
-     *            the date to be formatted
+     * @param date the date to be formatted
      * @return the date in a String object
      */
     private String formatDate( LocalDate date )

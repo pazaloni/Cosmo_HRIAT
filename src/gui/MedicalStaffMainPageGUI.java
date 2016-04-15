@@ -1,4 +1,5 @@
 package gui;
+
 import helpers.DatabaseHelper;
 import helpers.NotePaneHelper;
 import helpers.PreviewPaneHelper;
@@ -76,7 +77,7 @@ public class MedicalStaffMainPageGUI extends Application
 {
 
     private ParticipantTableViewController pTVCont;
-    
+
     private IncidentReportTableViewController iTVCont;
 
     private DatabaseHelper dbObject = new DatabaseHelper();
@@ -149,7 +150,7 @@ public class MedicalStaffMainPageGUI extends Application
         dbObject.activtyLogEntry(loggedInStaff.GetUsername(), "Logged In", "");
         pTVCont = new ParticipantTableViewController();
         pTVCont.initialize();
-        
+
         iTVCont = new IncidentReportTableViewController();
         iTVCont.initialize();
 
@@ -172,7 +173,8 @@ public class MedicalStaffMainPageGUI extends Application
         {
             public void handle( WindowEvent we )
             {
-                dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout","");
+                dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout",
+                        "");
             }
         });
     }
@@ -203,7 +205,8 @@ public class MedicalStaffMainPageGUI extends Application
                 medMainStage.setOnCloseRequest(null);
 
                 medMainStage.close();
-                dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout","");
+                dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Logout",
+                        "");
                 LoginGUI test5 = new LoginGUI();
                 try
                 {
@@ -240,7 +243,9 @@ public class MedicalStaffMainPageGUI extends Application
         lblIncidnetReportForm.setFont(new Font(22));
         Button btnAddIncidentReport = new Button("Add");
         Button btnDeleteIncidebtReport = new Button("Delete");
+        btnDeleteIncidebtReport.setDisable(true);
         Button btnEditIncidentReport = new Button("Edit");
+        btnEditIncidentReport.setDisable(true);
         TabPane tabPane = new TabPane();
 
         // Create tabs names
@@ -248,84 +253,81 @@ public class MedicalStaffMainPageGUI extends Application
         Tab forms = new Tab();
         Tab stats = new Tab();
         VBox formsBox = new VBox();
-        HBox box = new HBox();        
+        HBox box = new HBox();
         HBox btnBox = new HBox();
-        
-        btnBox.getChildren().addAll(btnAddIncidentReport,btnEditIncidentReport,btnDeleteIncidebtReport);
+
+        btnBox.getChildren().addAll(btnAddIncidentReport,
+                btnEditIncidentReport, btnDeleteIncidebtReport);
         btnBox.setSpacing(10);
-        box.getChildren().addAll(lblIncidnetReportForm,btnBox);
+        box.getChildren().addAll(lblIncidnetReportForm, btnBox);
         box.setSpacing(200);
         // set text for tabs
         participants.setText("Participants");
         VBox vbox = new VBox();
-        vbox.getChildren().addAll(createHBoxPreviewNotes(),pTVCont.participantTable);
+        vbox.getChildren().addAll(createHBoxPreviewNotes(),
+                pTVCont.participantTable);
         participants.setContent(vbox);
-        forms.setText("Forms");
+        forms.setText("Reports");
         stats.setText("Stats");
-        btnAddIncidentReport.setOnAction(event->{
-            IncidentReportFormGUI irf = new IncidentReportFormGUI(medMainStage, loggedInUser);
+        btnAddIncidentReport.setOnAction(event -> {
+            IncidentReportFormGUI irf = new IncidentReportFormGUI(medMainStage,
+                    loggedInUser);
             irf.showIncidentReportForm();
+            if(irf.getSubmitResult())
+            {
+                iTVCont.refreshTable("", "Incidents");
+            }
+
         });
         // set tabs to not be closable
         forms.closableProperty().set(false);
         participants.closableProperty().set(false);
         stats.closableProperty().set(false);
 
-        ////add incident table
+        // //add incident table
         formsBox.getChildren().addAll(box, iTVCont.incidentTable);
         forms.setContent(formsBox);
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(175);
-       
 
         Button genQuartRpt = new Button("Generate Quarterly Reports");
         genQuartRpt.setOnAction(event -> {
-        	Stage stage = new Stage();
-        	QuarterlyReportsGUI reportGUI = new QuarterlyReportsGUI(stage);
-        	stage.setScene(new Scene(reportGUI.mainVbox));
-        	stage.showAndWait();
+            Stage stage = new Stage();
+            QuarterlyReportsGUI reportGUI = new QuarterlyReportsGUI(stage);
+            stage.setScene(new Scene(reportGUI.mainVbox));
+            stage.showAndWait();
         });
         stats.setContent(genQuartRpt);
-        
-        
-        tabPane.getTabs().addAll(participants);
 
+        tabPane.getTabs().addAll(participants);
 
         // if they are an administrator, add the stats tab
         if ( loggedInUser instanceof MedicalAdministrator )
         {
-            tabPane.getTabs().addAll(stats,forms);
+            tabPane.getTabs().addAll(stats, forms);
         }
 
         // set initial selected tab to participants
         tabPane.getSelectionModel().select(participants);
 
         // set the changed property
-        /*tabPane.getSelectionModel().selectedItemProperty()
-                .addListener(new ChangeListener<Tab>()
-                {
-
-                    @Override
-                    public void changed( ObservableValue<? extends Tab> arg0,
-                            Tab arg1, Tab mostRecentlySelectedTab )
-                    {
-                        if ( mostRecentlySelectedTab.equals(forms) )
-                        {
-                            IncidentReportFormGUI irf = new IncidentReportFormGUI(
-                                    medMainStage, loggedInUser);
-                            irf.showIncidentReportForm();
-                        }
-                        else if ( mostRecentlySelectedTab.equals(stats) )
-                        {
-                            StatisticsGUI reportGUI = new StatisticsGUI();
-                            reportGUI.reportsMainStageConstruct(medMainStage,
-                                    loggedInUser);
-                        }
-
-                    }
-
-                });
-*/
+        /*
+         * tabPane.getSelectionModel().selectedItemProperty() .addListener(new
+         * ChangeListener<Tab>() {
+         * 
+         * @Override public void changed( ObservableValue<? extends Tab> arg0,
+         * Tab arg1, Tab mostRecentlySelectedTab ) { if (
+         * mostRecentlySelectedTab.equals(forms) ) { IncidentReportFormGUI irf =
+         * new IncidentReportFormGUI( medMainStage, loggedInUser);
+         * irf.showIncidentReportForm(); } else if (
+         * mostRecentlySelectedTab.equals(stats) ) { StatisticsGUI reportGUI =
+         * new StatisticsGUI();
+         * reportGUI.reportsMainStageConstruct(medMainStage, loggedInUser); }
+         * 
+         * }
+         * 
+         * });
+         */
         tabPane.setMinHeight(29);
         tabPane.setFocusTraversable(false);
         return tabPane;
@@ -848,10 +850,12 @@ public class MedicalStaffMainPageGUI extends Application
                 {
                     createParticipantStage.close();
                     pTVCont.refreshTable("", "Participant");
-                    
-                    //create activity log entry for creating this user
-                    dbObject.activtyLogEntry(loggedInUser.GetUsername(), "Created Participant (" + cosmoIdTxt.getText() + ")",
-                    "Name: \"" + firstNameTxt.getText() + " " + lastNameTxt.getText() + "\"" );
+
+                    // create activity log entry for creating this user
+                    dbObject.activtyLogEntry(loggedInUser.GetUsername(),
+                            "Created Participant (" + cosmoIdTxt.getText()
+                                    + ")", "Name: \"" + firstNameTxt.getText()
+                                    + " " + lastNameTxt.getText() + "\"");
 
                 }
                 // if there is an error message, display it
@@ -979,7 +983,7 @@ public class MedicalStaffMainPageGUI extends Application
         noteDisplayPane.add(participantLabel, 0, 1);
         noteDisplayPane.add(subjectLabel, 0, 3);
         noteDisplayPane.add(resolvedCb, 0, 4);
-        
+
         // Initially the labes for notes will be empty because they haven't
         // selected a note yet
         dateInfoLabel = new Label();
@@ -1086,16 +1090,15 @@ public class MedicalStaffMainPageGUI extends Application
         BorderPane header = createHBoxHeader();
         // tab pane
         TabPane tabs = createTabs();
-        
+
         // Search bar
         HBox searchBar = createSearchBar();
         VBox.setMargin(searchBar, new Insets(5, 0, 5, 0));
         // preview notes
-        //HBox previewNotes = createHBoxPreviewNotes();
+        // HBox previewNotes = createHBoxPreviewNotes();
 
         // add everything to vbox
-        vbox.getChildren().addAll(header, searchBar, tabs 
-                );
+        vbox.getChildren().addAll(header, searchBar, tabs);
 
         return vbox;
 

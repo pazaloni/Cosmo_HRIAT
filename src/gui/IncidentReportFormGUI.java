@@ -105,6 +105,8 @@ public class IncidentReportFormGUI
 
     private StaffAccount loggedInStaff;
 
+    public boolean submitResult;
+
     /**
      * 
      * Constructor for the IncidentReportFormGUI class.
@@ -190,8 +192,7 @@ public class IncidentReportFormGUI
         localStage.initOwner(parentStage);
         localStage.setScene(new Scene(mainPane));
         localStage.setTitle("New Incident Report");
-        localStage.show();
-
+        localStage.showAndWait();
     }
 
     /**
@@ -904,11 +905,11 @@ public class IncidentReportFormGUI
 
             String reported = noVerbalReport.isSelected() + "";
 
-            irfh.saveIncidentInfo(personInjured.getSelectionModel()
-                    .getSelectedItem().getCosmoID(), dateOfIncident.getValue(),
-                    time.getText(), location.getText(),
-                    txtAProtEquip.getText(), incidentDescription.getText(),
-                    incidentFactors.getText(),
+            boolean result = irfh.saveIncidentInfo(personInjured
+                    .getSelectionModel().getSelectedItem().getCosmoID(),
+                    dateOfIncident.getValue(), time.getText(),
+                    location.getText(), txtAProtEquip.getText(),
+                    incidentDescription.getText(), incidentFactors.getText(),
                     txtPersonReportedToName.getText(),
                     dateReportToPerson.getValue(),
                     txtTimeReportedToPerson.getText(), reported,
@@ -919,7 +920,20 @@ public class IncidentReportFormGUI
                     txtReportWrittenBy.getText(), injuredAreas,
                     selectedInjuries, witnesses);
 
-            localStage.close();
+            if ( result )
+            {
+                submitResult = true;
+                localStage.close();
+            }
+            else
+            {
+                Stage stage = new Stage();
+                stage.initOwner(parentStage);
+                stage.initModality(Modality.APPLICATION_MODAL);
+                PopUpMessage popup = new PopUpMessage(
+                        "There was an error adding the incident", stage);
+                popup.stage.showAndWait();
+            }
 
         }
         else
@@ -940,6 +954,16 @@ public class IncidentReportFormGUI
             });
 
         }
+    }
+    
+    /**
+     * 
+     * Purpose: return the result of the submission for the form
+     * @return true or false
+     */
+    public boolean getSubmitResult()
+    {
+        return submitResult;
     }
 
     /**
