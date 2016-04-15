@@ -1,4 +1,5 @@
 package core;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 
@@ -11,8 +12,9 @@ import javafx.collections.ObservableList;
 public class BasicStaff extends StaffAccount
 {
 
-	/**
+    /**
      * Constructor for the BasicStaff class.
+     * 
      * @param username
      * @param lastName
      * @param firstName
@@ -32,6 +34,4 @@ public class BasicStaff extends StaffAccount
         this.accessLevel = new SimpleStringProperty(accessLevel);
     }
 
-    
 }
-

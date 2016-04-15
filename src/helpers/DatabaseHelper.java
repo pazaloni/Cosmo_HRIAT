@@ -1,4 +1,5 @@
 package helpers;
+
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -27,8 +28,8 @@ public class DatabaseHelper
         connect();
     }
 
-    /**k
-     * Purpose: To establish a connection to the database
+    /**
+     * k Purpose: To establish a connection to the database
      * 
      * @throws SQLException
      */
@@ -135,8 +136,9 @@ public class DatabaseHelper
                 query += " ORDER BY " + sort;
             }
 
-            //System.out.println(query);
+            // System.out.println(query);
             // execute the query
+            System.out.println(query);
             rs = s.executeQuery(query);
         }
         catch ( SQLException e )
@@ -225,7 +227,7 @@ public class DatabaseHelper
             {
                 valueList += "'" + newRecord[r][1] + "', ";
             }
-           
+
             else
             {
                 valueList += "" + newRecord[r][1] + ", ";
@@ -388,6 +390,7 @@ public class DatabaseHelper
 
         try
         {
+            System.out.println(deleteStatement);
             s = conn.createStatement();
             rows = s.executeUpdate(deleteStatement);
         }
@@ -436,6 +439,41 @@ public class DatabaseHelper
     }
 
     /**
+     * 
+     * Purpose: Perform a SELECT query on the database
+     * 
+     * @param columnList list of columns to be selected
+     * @param tableList list of tables to select from
+     * @param condition optional sql condition to select with
+     * @param sort optional sql sort statement to supply
+     * @return ResultSet rs The result of the SELECT query
+     */
+    public ResultSet directSelect( String queryStatement )
+    {
+
+        Statement s = null;
+        ResultSet rs = null;
+        String query = queryStatement;
+
+        try
+        {
+            s = conn.createStatement();
+
+            // System.out.println(query);
+            // execute the query
+            System.out.println(query);
+            rs = s.executeQuery(query);
+        }
+        catch ( SQLException e )
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // return the resultset
+        return rs;
+    }
+
+    /**
      * A method for entering an event into the activity log.
      * 
      * @param who The user who triggered the event
@@ -443,12 +481,11 @@ public class DatabaseHelper
      * @param event What the event was
      * @param db The database to insert into
      */
-    public void activtyLogEntry(String who, String event, String details)
+    public void activtyLogEntry( String who, String event, String details )
     {
 
-             
-        String activityValues[][] = new String [3][3];
-        
+        String activityValues[][] = new String[3][3];
+
         activityValues[0][0] = "Who";
         activityValues[1][0] = "Event";
         activityValues[2][0] = "Details";
@@ -456,7 +493,7 @@ public class DatabaseHelper
         activityValues[0][1] = who;
         activityValues[1][1] = event;
         activityValues[2][1] = details;
-        
+
         this.insert(activityValues, "ActivityLog");
 
     }

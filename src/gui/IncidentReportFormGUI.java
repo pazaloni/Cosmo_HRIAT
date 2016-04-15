@@ -516,7 +516,7 @@ public class IncidentReportFormGUI
 
         txtAProtEquip = new TextArea();
         txtAProtEquip.setWrapText(true);
-        txtAProtEquip.setMaxWidth(200);
+        txtAProtEquip.setMaxWidth(240);
         VBox vbox = new VBox();
         vbox.getChildren().addAll(lblProtEquipment, txtAProtEquip);
 
@@ -927,6 +927,7 @@ public class IncidentReportFormGUI
             }
             else
             {
+                submitResult = false;
                 Stage stage = new Stage();
                 stage.initOwner(parentStage);
                 stage.initModality(Modality.APPLICATION_MODAL);
@@ -955,10 +956,11 @@ public class IncidentReportFormGUI
 
         }
     }
-    
+
     /**
      * 
      * Purpose: return the result of the submission for the form
+     * 
      * @return true or false
      */
     public boolean getSubmitResult()

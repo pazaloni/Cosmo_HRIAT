@@ -1,4 +1,5 @@
 package tests;
+
 import static org.junit.Assert.*;
 
 import org.junit.After;
@@ -36,7 +37,7 @@ public class TestActivityLog
     private String timeStamp2;
     private String timeStamp3;
     private String timeStamp4;
-    
+
     private String details;
     private String details2;
 
@@ -57,11 +58,10 @@ public class TestActivityLog
         timeStamp2 = "2/3/2016 1:20:19";
         timeStamp3 = "2/5/2016 3:20:11";
         timeStamp4 = "2/22/2016 2:23:25";
-        
+
         details = "First Name: \"Jimmy\" -> \"Bobby\"";
         details2 = "Name: Steven Hawking";
 
-        
         test1 = new ActivityLog(who1, timeStamp1, event1, "");
         test2 = new ActivityLog(who2, timeStamp2, event2, "");
         test3 = new ActivityLog(who3, timeStamp3, event3, details);
@@ -77,7 +77,7 @@ public class TestActivityLog
 
     /**
      * 
-     * Purpose:checks if the person that triggered the event was set 
+     * Purpose:checks if the person that triggered the event was set
      */
     @Test
     public void testGetWho()
@@ -91,7 +91,7 @@ public class TestActivityLog
 
     /**
      * 
-     * Purpose: checks if the timestamps of the triggered event was set 
+     * Purpose: checks if the timestamps of the triggered event was set
      */
     @Test
     public void testGetTimestamp()
@@ -105,19 +105,19 @@ public class TestActivityLog
 
     /**
      * 
-     * Purpose: checks if the event of the triggered event was set 
+     * Purpose: checks if the event of the triggered event was set
      */
     @Test
     public void testGetEvent()
     {
-        
+
         assertTrue(test1.getEvent().get().equals(event1));
         assertTrue(test2.getEvent().get().equals(event2));
         assertTrue(test3.getEvent().get().equals(event3));
         assertTrue(test4.getEvent().get().equals(event4));
         assertTrue(test5.getEvent().get().equals(""));
     }
-    
+
     /**
      * 
      * Purpose: checks if the details of the triggered event were set

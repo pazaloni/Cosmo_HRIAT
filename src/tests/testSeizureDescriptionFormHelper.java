@@ -1,11 +1,11 @@
 package tests;
+
 import static org.junit.Assert.*;
 import helpers.SeizureDescriptionFormHelper;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 
 public class testSeizureDescriptionFormHelper
 {
@@ -15,12 +15,11 @@ public class testSeizureDescriptionFormHelper
     String[] personRetrieve = new String[8];
     String cosmoID = "454593";
 
-    
     @Before
     public void setUp() throws Exception
     {
-    	personSave[0] = "Slightly Violent";
-    	personSave[1] = "Shakes violently for the first few minutes"
+        personSave[0] = "Slightly Violent";
+        personSave[1] = "Shakes violently for the first few minutes"
                 + ", calms down fairly quickly, and shakes become less "
                 + "violent after first few minutes.";
         personSave[2] = "weekly";
@@ -33,23 +32,25 @@ public class testSeizureDescriptionFormHelper
         personSave[5] = "keep head elevated";
         personSave[6] = "two doses of medication";
         personSave[7] = "17-May-1991";
-        
+
     }
 
     @After
     public void tearDown() throws Exception
     {
-        
+
     }
-    @Test 
+
+    @Test
     public void testSaveSeizureInformation()
     {
-    	assertTrue(shOne.saveSeizureInformation(personSave, cosmoID).length() == 0);
+        assertTrue(shOne.saveSeizureInformation(personSave, cosmoID).length() == 0);
     }
+
     @Test
     public void testretrieveSeizureInformation()
     {
-    	personRetrieve = shOne.retieveSeizureInformation(cosmoID);
+        personRetrieve = shOne.retieveSeizureInformation(cosmoID);
         assertTrue(personRetrieve[0].equals(personSave[0]));
         assertTrue(personRetrieve[1].equals(personSave[1]));
         assertTrue(personRetrieve[2].equals(personSave[2]));

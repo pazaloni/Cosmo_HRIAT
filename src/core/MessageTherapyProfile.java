@@ -1,8 +1,9 @@
 package core;
+
 public class MessageTherapyProfile
 {
 
-    public void messageTherapyProfile(Participant particpant)
+    public void messageTherapyProfile( Participant particpant )
     {
 
     }

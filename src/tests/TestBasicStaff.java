@@ -1,4 +1,5 @@
 package tests;
+
 import static org.junit.Assert.*;
 
 import java.time.LocalDate;
@@ -12,11 +13,10 @@ import org.junit.Test;
 import core.BasicStaff;
 import core.MedicalAdministrator;
 
-
 public class TestBasicStaff
 {
-    private  BasicStaff basicstaff;
-    
+    private BasicStaff basicstaff;
+
     private String cosmoID;
     private String participantFirstName;
     private String participantLastName;
@@ -27,16 +27,15 @@ public class TestBasicStaff
     private String participantPhone;
     private String participantAddress;
     private String participantAllergy;
-    
+    private String participantCareType;
+
     private String username;
     private String firstName;
     private String lastName;
     private String email;
     private String firstPassword;
     private String accessLevel;
-    
-    
-    
+
     private BasicStaff test;
 
     @Before
@@ -49,9 +48,9 @@ public class TestBasicStaff
         firstPassword = "password";
 
         accessLevel = "1";
-        
-        basicstaff = new BasicStaff(username, firstName, lastName, 
-                email, firstPassword, accessLevel);
+
+        basicstaff = new BasicStaff(username, firstName, lastName, email,
+                firstPassword, accessLevel);
 
         cosmoID = "1111";
         participantFirstName = "John";
@@ -63,8 +62,10 @@ public class TestBasicStaff
         participantPhone = "1231231231";
         participantAddress = "123 Fake Street";
         participantAllergy = "Peanuts";
+        participantCareType = "Luther";
 
     }
+
     /**
      * st041
      * 
@@ -81,81 +82,83 @@ public class TestBasicStaff
     @Test
     public void testSearchName()
     {
-        MedicalAdministrator.createParticipant(cosmoID, participantFirstName, participantLastName, 
-                 birthDate, physicianFName, physicianLName, participantHealthNumber, 
-                 participantPhone, participantAddress, "");
-         
-    //    ObservableList<Participant> participantData = basicstaff.search
-         //       (BasicStaff.SearchType.NAME, participantFirstName);
-        
-    //    assertTrue(participantData.get(0).getParticipantName().contains(participantFirstName));
-  
+        MedicalAdministrator.createParticipant(cosmoID, participantFirstName,
+                participantLastName, birthDate, physicianFName, physicianLName,
+                participantHealthNumber, participantPhone, participantAddress,
+                participantCareType, "");
+
+        // ObservableList<Participant> participantData = basicstaff.search
+        // (BasicStaff.SearchType.NAME, participantFirstName);
+
+        // assertTrue(participantData.get(0).getParticipantName().contains(participantFirstName));
+
     }
+
     /**
      * Purpose: Test searching the participant database by address
      * 
      * @author - Jonathan Froese CST203 - Niklaas Neijmeijer CST207
      */
-    
+
     @Test
     public void testSearchAddress()
     {
-         MedicalAdministrator.createParticipant(cosmoID, participantFirstName, participantLastName, 
-                 birthDate, physicianFName, physicianLName, participantHealthNumber, 
-                 participantPhone, participantAddress, "");
-         
-       // ObservableList<Participant> participantData = basicstaff.search
-        //        (BasicStaff.SearchType.ADDRESS, participantAddress);
-      
-      //  assertTrue(participantData.get(0).getParticipantAddress().contains(participantAddress));
-  
+        MedicalAdministrator.createParticipant(cosmoID, participantFirstName,
+                participantLastName, birthDate, physicianFName, physicianLName,
+                participantHealthNumber, participantPhone, participantAddress,
+                participantCareType, "");
+
+        // ObservableList<Participant> participantData = basicstaff.search
+        // (BasicStaff.SearchType.ADDRESS, participantAddress);
+
+        // assertTrue(participantData.get(0).getParticipantAddress().contains(participantAddress));
+
     }
+
     /**
      * Purpose: Test searching the participant database by Allergy
      * 
      * @author - Jonathan Froese CST203 - Niklaas Neijmeijer CST207
      */
-    
+
     @Test
     public void testSearchAllergy()
     {
-         MedicalAdministrator.createParticipant(cosmoID, participantFirstName, participantLastName, 
-                 birthDate, physicianFName, physicianLName, participantHealthNumber, 
-                 participantPhone, participantAddress, "");
-         
-      //  ObservableList<Participant> participantData = 
-        //        basicstaff.search(BasicStaff.SearchType.ALLERGY, participantAllergy);
-        
-      //  assertTrue(participantData.get(0).getParticipantName().contains(participantAllergy));
-  
+        MedicalAdministrator.createParticipant(cosmoID, participantFirstName,
+                participantLastName, birthDate, physicianFName, physicianLName,
+                participantHealthNumber, participantPhone, participantAddress,
+                participantCareType, "");
+
+        // ObservableList<Participant> participantData =
+        // basicstaff.search(BasicStaff.SearchType.ALLERGY, participantAllergy);
+
+        // assertTrue(participantData.get(0).getParticipantName().contains(participantAllergy));
+
     }
-    
+
     /**
      * Purpose: Test searching the participant database by cosmoID
      * 
      * @author - Jonathan Froese CST203 - Niklaas Neijmeijer CST207
      */
-    
-    
+
     @Test
     public void testSearchCosmoID()
     {
-         MedicalAdministrator.createParticipant(cosmoID, participantFirstName, participantLastName, 
-                 birthDate, physicianFName, physicianLName, participantHealthNumber, 
-                 participantPhone, participantAddress, "");
-         
-      //  ObservableList<Participant> participantData = basicstaff.search(BasicStaff.SearchType.NAME, cosmoID);
-      //  
-  
+        MedicalAdministrator.createParticipant(cosmoID, participantFirstName,
+                participantLastName, birthDate, physicianFName, physicianLName,
+                participantHealthNumber, participantPhone, participantAddress,
+                participantCareType, "");
+
+        // ObservableList<Participant> participantData =
+        // basicstaff.search(BasicStaff.SearchType.NAME, cosmoID);
+        //
+
     }
-    
-    
+
     @After
     public void tearDown() throws Exception
     {
     }
-
-
-
 
 }

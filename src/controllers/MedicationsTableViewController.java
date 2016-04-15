@@ -1,4 +1,5 @@
 package controllers;
+
 import helpers.DatabaseHelper;
 
 import java.sql.ResultSet;
@@ -65,7 +66,7 @@ public class MedicationsTableViewController
         this.medicationNameData.clear();
         this.medicationsTable.getColumns().clear();
         this.retrieveMedicationData(cosmoID);
-        this.initialize();     
+        this.initialize();
     }
 
     /**

@@ -4,34 +4,15 @@ import helpers.DatabaseHelper;
 import helpers.NotePaneHelper;
 import helpers.PreviewPaneHelper;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 
-import javax.imageio.ImageIO;
-import javax.swing.plaf.synth.SynthSeparatorUI;
-
-import controllers.IncidentReportTableViewController;
-import controllers.NoteTableViewController;
-import controllers.ParticipantTableViewController;
-import core.MedicalAdministrator;
-import core.Note;
-import core.StaffAccount;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -44,20 +25,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -65,6 +39,14 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import controllers.IncidentReportTableViewController;
+import gui.PhysicianManagementGUI;
+import gui.StatisticsTabGUI;
+import controllers.NoteTableViewController;
+import controllers.ParticipantTableViewController;
+import core.MedicalAdministrator;
+import core.Note;
+import core.StaffAccount;
 
 /**
  * 
@@ -252,15 +234,18 @@ public class MedicalStaffMainPageGUI extends Application
         Tab participants = new Tab();
         Tab forms = new Tab();
         Tab stats = new Tab();
+        Tab physicianManagement = new Tab();
+        HBox btnBox = new HBox();
         VBox formsBox = new VBox();
         HBox box = new HBox();
-        HBox btnBox = new HBox();
+        HBox pmgBox = new HBox();
 
         btnBox.getChildren().addAll(btnAddIncidentReport,
                 btnEditIncidentReport, btnDeleteIncidebtReport);
         btnBox.setSpacing(10);
         box.getChildren().addAll(lblIncidnetReportForm, btnBox);
-        box.setSpacing(200);
+        box.setSpacing(250);
+
         // set text for tabs
         participants.setText("Participants");
         VBox vbox = new VBox();
@@ -269,65 +254,52 @@ public class MedicalStaffMainPageGUI extends Application
         participants.setContent(vbox);
         forms.setText("Reports");
         stats.setText("Stats");
-        btnAddIncidentReport.setOnAction(event -> {
-            IncidentReportFormGUI irf = new IncidentReportFormGUI(medMainStage,
-                    loggedInUser);
-            irf.showIncidentReportForm();
-            if(irf.getSubmitResult())
-            {
-                iTVCont.refreshTable("", "Incidents");
-            }
+        physicianManagement.setText("Physician Management");
+        StatisticsTabGUI stg = new StatisticsTabGUI(stats, medMainStage);
+        stats.setContent(stg.showStatistics().getContent());
 
-        });
         // set tabs to not be closable
         forms.closableProperty().set(false);
         participants.closableProperty().set(false);
         stats.closableProperty().set(false);
 
+        physicianManagement.closableProperty().set(false);
+        btnAddIncidentReport.setOnAction(evnet -> {
+            IncidentReportFormGUI irf = new IncidentReportFormGUI(medMainStage,
+                    loggedInUser);
+            irf.showIncidentReportForm();
+            if ( irf.getSubmitResult() )
+            {
+                iTVCont.refreshTable("", "Incidents");
+            }
+        });
+
+        PhysicianManagementGUI pmg = new PhysicianManagementGUI();
+
+        pmgBox.getChildren().add(pmg.showPhysicianManagementForm());
+
+        box.setAlignment(Pos.BASELINE_LEFT);
         // //add incident table
         formsBox.getChildren().addAll(box, iTVCont.incidentTable);
         forms.setContent(formsBox);
+
+        pmgBox.setAlignment(Pos.CENTER_LEFT);
+        physicianManagement.setContent(pmgBox);
+
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(175);
-
-        Button genQuartRpt = new Button("Generate Quarterly Reports");
-        genQuartRpt.setOnAction(event -> {
-            Stage stage = new Stage();
-            QuarterlyReportsGUI reportGUI = new QuarterlyReportsGUI(stage);
-            stage.setScene(new Scene(reportGUI.mainVbox));
-            stage.showAndWait();
-        });
-        stats.setContent(genQuartRpt);
 
         tabPane.getTabs().addAll(participants);
 
         // if they are an administrator, add the stats tab
         if ( loggedInUser instanceof MedicalAdministrator )
         {
-            tabPane.getTabs().addAll(stats, forms);
+            tabPane.getTabs().addAll(stats, forms, physicianManagement);
         }
 
         // set initial selected tab to participants
         tabPane.getSelectionModel().select(participants);
 
-        // set the changed property
-        /*
-         * tabPane.getSelectionModel().selectedItemProperty() .addListener(new
-         * ChangeListener<Tab>() {
-         * 
-         * @Override public void changed( ObservableValue<? extends Tab> arg0,
-         * Tab arg1, Tab mostRecentlySelectedTab ) { if (
-         * mostRecentlySelectedTab.equals(forms) ) { IncidentReportFormGUI irf =
-         * new IncidentReportFormGUI( medMainStage, loggedInUser);
-         * irf.showIncidentReportForm(); } else if (
-         * mostRecentlySelectedTab.equals(stats) ) { StatisticsGUI reportGUI =
-         * new StatisticsGUI();
-         * reportGUI.reportsMainStageConstruct(medMainStage, loggedInUser); }
-         * 
-         * }
-         * 
-         * });
-         */
         tabPane.setMinHeight(29);
         tabPane.setFocusTraversable(false);
         return tabPane;
@@ -383,16 +355,8 @@ public class MedicalStaffMainPageGUI extends Application
         // create picture box for left side of preview pane
         VBox pictureBox = new VBox();
         // default preview picture
-        URL url = getClass().getResource("../images/defaultPicture.png");
-        try
-        {
-            previewPicture = new ImageView(new Image(url.openStream()));
-        }
-        catch ( IOException e )
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        // URL url = getClass().getResource("images/defaultPicture.png");
+        previewPicture = new ImageView(new Image("images/defaultPicture.png"));
 
         // details button
         Button detailsButton = new Button("View Details");
@@ -661,7 +625,7 @@ public class MedicalStaffMainPageGUI extends Application
                     createParticipantStage.setTitle("Create Participant");
 
                     createParticipantStage.setScene(new Scene(
-                            createParticipantPopUp(), 325, 425));
+                            createParticipantPopUp(), 325, 485));
                     createParticipantStage
                             .initModality(Modality.APPLICATION_MODAL);
                     createParticipantStage.initOwner(medMainStage);
@@ -751,6 +715,7 @@ public class MedicalStaffMainPageGUI extends Application
         Label phoneLbl = new Label("Phone Number");
         Label cosmoIdLbl = new Label("Cosmo ID");
         Label addressLbl = new Label("Participant Address");
+        Label careTypeLbl = new Label("Care Type");
         Label imageLbl = new Label("Participant Picture");
 
         // the text fields
@@ -772,6 +737,7 @@ public class MedicalStaffMainPageGUI extends Application
         phoneTxt.setPromptText("Ex: 3062879111");
         TextField cosmoIdTxt = new TextField();
         TextField addressTxt = new TextField();
+        TextField careTypeTxt = new TextField();
         Button imageBrowseBtn = new Button("Browse...");
         TextField chosenPathTxt = new TextField("");
 
@@ -806,7 +772,8 @@ public class MedicalStaffMainPageGUI extends Application
         grid.add(healthNumLbl, 0, 7);
         grid.add(phoneLbl, 0, 8);
         grid.add(addressLbl, 0, 9);
-        grid.add(imageLbl, 0, 10);
+        grid.add(careTypeLbl, 0, 10);
+        grid.add(imageLbl, 0, 11);
 
         grid.add(lblWarning, 1, 0);
         grid.add(cosmoIdTxt, 1, 1);
@@ -818,7 +785,8 @@ public class MedicalStaffMainPageGUI extends Application
         grid.add(healthNumTxt, 1, 7);
         grid.add(phoneTxt, 1, 8);
         grid.add(addressTxt, 1, 9);
-        grid.add(imageBrowseBtn, 1, 10);
+        grid.add(careTypeTxt, 1, 10);
+        grid.add(imageBrowseBtn, 1, 11);
 
         // setPadding of the grid
         grid.setPadding(new Insets(10, 10, 0, 10));
@@ -842,7 +810,7 @@ public class MedicalStaffMainPageGUI extends Application
                         physicianFNameTxt.getText(),
                         physicianLNameTxt.getText(), healthNumTxt.getText(),
                         phoneTxt.getText(), addressTxt.getText(),
-                        chosenPathTxt.getText());
+                        careTypeTxt.getText(), chosenPathTxt.getText());
 
                 // if no error message is recieved then close this window and
                 // refresh the table
@@ -904,8 +872,8 @@ public class MedicalStaffMainPageGUI extends Application
         buttonsHbox.setAlignment(Pos.CENTER);
         resetHbox.getChildren().addAll(resetBtn);
         resetHbox.setAlignment(Pos.CENTER_RIGHT);
-        grid.add(buttonsHbox, 1, 11);
-        grid.add(resetHbox, 0, 11);
+        grid.add(buttonsHbox, 1, 12);
+        grid.add(resetHbox, 0, 12);
 
         return grid;
     }

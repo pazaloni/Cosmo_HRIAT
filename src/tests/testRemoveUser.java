@@ -1,4 +1,5 @@
 package tests;
+
 import static org.junit.Assert.*;
 import helpers.DatabaseHelper;
 import helpers.ManageStaffAccountHelper;
@@ -61,7 +62,7 @@ public class testRemoveUser
 
         StaffAccount RemovedUser = acctHelper.queryStaff(usernameToRemove);
 
-        //check if the removed user exists
+        // check if the removed user exists
         assertTrue(RemovedUser == null);
     }
 
@@ -143,7 +144,7 @@ public class testRemoveUser
         userToRemove.setEmail("hyrule@warriors.com");
         assertTrue(userToRemove.GetFirstName().equals("hyrule@warriors.com"));
     }
-    
+
     public void testSetAccessLevel()
     {
         userToRemove.setAccessLevel("1");

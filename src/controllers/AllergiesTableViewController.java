@@ -1,4 +1,5 @@
 package controllers;
+
 import helpers.DatabaseHelper;
 
 import java.sql.ResultSet;
@@ -53,11 +54,12 @@ public class AllergiesTableViewController
         allergiesTable.setItems(allergyData);
         allergiesTable.setFocusTraversable(false);
     }
+
     /**
      * 
      * Purpose: Refresh the table on the GUI
      */
-    public void refreshTable(String cosmoID)
+    public void refreshTable( String cosmoID )
     {
         this.allergyData.clear();
         this.allergiesTable.getColumns().clear();
@@ -158,10 +160,10 @@ public class AllergiesTableViewController
 
     }
 
-    
     /**
      * 
      * Purpose:Return the selected item from the database
+     * 
      * @return
      */
     public Allergies getSelectedAllergy()

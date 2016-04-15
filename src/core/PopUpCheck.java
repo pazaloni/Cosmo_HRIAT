@@ -1,4 +1,5 @@
 package core;
+
 import javafx.application.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -33,10 +34,8 @@ public class PopUpCheck
     /**
      * Purpose: The main constructor for the pop up check
      * 
-     * @param message
-     *            The passed in message that will be displayed on the GUI
-     * @param stage
-     *            The passed in stage
+     * @param message The passed in message that will be displayed on the GUI
+     * @param stage The passed in stage
      * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
     public PopUpCheck(String message, Stage stage)
@@ -59,8 +58,8 @@ public class PopUpCheck
         // the yes and no buttons are set
         yesBtn = new Button("Yes");
         noBtn = new Button("No");
-        this.stage.setOnCloseRequest(event->{
-        	result = false;
+        this.stage.setOnCloseRequest(event -> {
+            result = false;
         });
         this.stage.setResizable(false);
         // set the action for the yes button
@@ -68,7 +67,7 @@ public class PopUpCheck
         {
 
             @Override
-            public void handle(ActionEvent event)
+            public void handle( ActionEvent event )
             {
                 // set the result to true
                 result = true;
@@ -85,7 +84,7 @@ public class PopUpCheck
         noBtn.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
-            public void handle(ActionEvent event)
+            public void handle( ActionEvent event )
             {
                 // set the result to false
                 result = false;

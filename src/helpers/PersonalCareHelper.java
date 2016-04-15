@@ -5,8 +5,10 @@ import java.sql.SQLException;
 import java.util.Date;
 
 import javafx.scene.control.CheckBox;
+
 /**
  * A helper class for the PersonalCareGUI
+ * 
  * @author cst207
  *
  */
@@ -19,10 +21,12 @@ public class PersonalCareHelper
     {
         db = new DatabaseHelper();
     }
-    
+
     /**
      * Method for retrieved personal care information from the database
-     * @param cosmoID The cosmoID of the participant we are query the database for
+     * 
+     * @param cosmoID The cosmoID of the participant we are query the database
+     *            for
      * @return
      */
     public String[] retrievePersonalCareInformation( String cosmoID )
@@ -115,6 +119,7 @@ public class PersonalCareHelper
 
     /**
      * A method to save the personal care information of the participant
+     * 
      * @param valArray The array of boolean values to insert into the database
      * @param value The value of the assistance box combo box
      * @param when The time that the method is called.

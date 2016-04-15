@@ -1,7 +1,7 @@
 package gui;
 
-import core.MedicalCondition;
 import core.ProgressNotes;
+import core.QueryResult;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -61,8 +61,7 @@ public class ManageProgressNoteGUI
     /**
      * Purpose: show the window for the addition of a new progressNote
      * 
-     * @param cosmoID
-     *            the participant that will be getting the new progresNote
+     * @param cosmoID the participant that will be getting the new progresNote
      */
     public void showAddProgressNote( String cosmoID )
 
@@ -134,10 +133,8 @@ public class ManageProgressNoteGUI
     /**
      * Purpose: Edit a progressNote for a specified participant
      * 
-     * @param progressNote
-     *            The progress note to be edited
-     * @param cosmoID
-     *            the participant that will have the progress note edited
+     * @param progressNote The progress note to be edited
+     * @param cosmoID the participant that will have the progress note edited
      */
     public void showUpdateProgressNote( ProgressNotes progressNote,
             String cosmoID )

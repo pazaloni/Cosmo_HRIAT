@@ -1,5 +1,7 @@
 package core;
 
+import helpers.FormatHelper;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -62,7 +64,7 @@ public class Participant
     @Override
     public String toString()
     {
-        return participantName.get() ;
+        return participantName.get();
     }
 
     public Participant(String cosmoId, String participantName)
@@ -205,6 +207,22 @@ public class Participant
     public StringProperty getEmergencyContactPhoneProperty()
     {
         return emergencyContactPhone;
+    }
+
+    public StringProperty displayEmergencyContactPhoneProperty()
+    {
+
+        FormatHelper fh = new FormatHelper();
+
+        String formatedPhone = fh.formatPhoneNum(emergencyContactPhone.get());
+
+        if ( formatedPhone.equals("Phone Number must be 10 digits") )
+        {
+            formatedPhone = " ";
+        }
+
+        StringProperty displayPhone = new SimpleStringProperty(formatedPhone);
+        return displayPhone;
     }
 
     public String getStatus()

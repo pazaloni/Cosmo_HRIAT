@@ -1,5 +1,6 @@
 package gui;
-import core.MedicalCondition;
+
+import core.QueryResult;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -52,9 +53,10 @@ public class ManageMedicalConditionGUI
     }
 
     /**
-     * Purpose: show the window for the addition of new medical condition 
-     *  
-     * @param cosmoID the participant that will be getting the new medical condition 
+     * Purpose: show the window for the addition of new medical condition
+     * 
+     * @param cosmoID the participant that will be getting the new medical
+     *            condition
      */
     public void showAddMedicalCondition( String cosmoID )
 
@@ -73,7 +75,7 @@ public class ManageMedicalConditionGUI
 
         conditionName.setMaxWidth(250);
         conditionDescription.setMaxWidth(250);
-        
+
         HBox controls = new HBox();
 
         controls.getChildren().addAll(btnCancel, btnAdd);
@@ -88,9 +90,9 @@ public class ManageMedicalConditionGUI
         mainPane.setPadding(new Insets(10, 10, 10, 10));
 
         btnAdd.setOnAction(event -> {
-            String result = MedicalCondition.createMedicalCondition(
-                    new MedicalCondition(conditionName.getText(),
-                            conditionDescription.getText()), cosmoID);
+            String result = QueryResult.createMedicalCondition(new QueryResult(
+                    conditionName.getText(), conditionDescription.getText()),
+                    cosmoID);
             if ( result.equals("") )
             {
                 localStage.close();
@@ -110,16 +112,17 @@ public class ManageMedicalConditionGUI
         localStage.initOwner(parentStage);
         localStage.setTitle("Add a medical condition entry");
         localStage.showAndWait();
-        
+
     }
 
     /**
-     * Purpose: Edit a medical condition for a specified participant 
+     * Purpose: Edit a medical condition for a specified participant
      * 
-     * @param condition The condition to be edited 
-     * @param cosmoID the participant that will have the condition edited 
+     * @param condition The condition to be edited
+     * @param cosmoID the participant that will have the condition edited
      */
-    public void showUpdateMedicalCondition(MedicalCondition condition ,String cosmoID)
+    public void showUpdateMedicalCondition( QueryResult condition,
+            String cosmoID )
     {
         Stage localStage = new Stage();
         lblMessage = new Label("");
@@ -132,13 +135,13 @@ public class ManageMedicalConditionGUI
 
         mainPane.add(conditionName, 1, 1);
         mainPane.add(conditionDescription, 1, 2);
-        
+
         conditionName.setMaxWidth(250);
         conditionDescription.setMaxWidth(250);
-        
+
         conditionName.setText(condition.getCondition().get());
         conditionDescription.setText(condition.getDescripion().get());
-        
+
         HBox controls = new HBox();
 
         controls.getChildren().addAll(btnCancel, btnAdd);
@@ -153,10 +156,11 @@ public class ManageMedicalConditionGUI
         mainPane.setPadding(new Insets(10, 10, 10, 10));
         btnAdd.setText("Update");
         btnAdd.setOnAction(event -> {
-        	MedicalCondition newCondition = new MedicalCondition
-        			(conditionName.getText(), conditionDescription.getText());
-        	
-            String result = MedicalCondition.updateMedicalCondition(newCondition,condition ,cosmoID);
+            QueryResult newCondition = new QueryResult(conditionName.getText(),
+                    conditionDescription.getText());
+
+            String result = QueryResult.updateMedicalCondition(newCondition,
+                    condition, cosmoID);
             if ( result.equals("") )
             {
                 localStage.close();
@@ -166,9 +170,8 @@ public class ManageMedicalConditionGUI
                 lblMessage.setText(result);
             }
         });
-        btnCancel.setOnAction(event ->
-        {
-        	localStage.close();
+        btnCancel.setOnAction(event -> {
+            localStage.close();
         });
 
         Scene scene = new Scene(mainPane, 400, 300);

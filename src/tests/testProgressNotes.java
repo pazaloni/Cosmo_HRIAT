@@ -204,8 +204,9 @@ public class testProgressNotes
     {
         test1 = new ProgressNotes(dateTime, participantName1, num);
         ProgressNotes.createProgressNote(test1, "123").equals("");
-        
-        assertTrue(ProgressNotes.deleteProgressNote(test1, "123").equals( "Deleted successfully"));
-        
+
+        assertTrue(ProgressNotes.deleteProgressNote(test1, "123").equals(
+                "Deleted successfully"));
+
     }
 }

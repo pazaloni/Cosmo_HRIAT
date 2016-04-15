@@ -1,4 +1,5 @@
 package gui;
+
 import helpers.HealthStatusInformationHelper;
 
 import java.awt.Dialog.ModalExclusionType;
@@ -11,10 +12,10 @@ import controllers.ProgressNotesTableViewController;
 import controllers.MedicationsTableViewController;
 import core.Allergies;
 import core.MedicalAdministrator;
-import core.MedicalCondition;
 import core.Medication;
 import core.PopUpCheck;
 import core.PopUpMessage;
+import core.QueryResult;
 import core.StaffAccount;
 import javafx.collections.ModifiableObservableListBase;
 import javafx.geometry.Insets;
@@ -65,10 +66,10 @@ public class HealthStatusFormGUI
     private Label familyPhysicianTxt;
     private TextField participantDiagnosisTxt;
     private Label physicianPhoneTxt;
-    private Label dateCompletedTxt;    
-    
-    private Label lblMessage; 
-    
+    private Label dateCompletedTxt;
+
+    private Label lblMessage;
+
     private Stage parentStage;
 
     private CheckBox tylenolGiven;
@@ -115,8 +116,8 @@ public class HealthStatusFormGUI
             this.btnSave.setVisible(false);
         }
 
-       lblMessage = new Label("");
-		titleBox.getChildren().addAll(title, lblMessage ,btnSave);
+        lblMessage = new Label("");
+        titleBox.getChildren().addAll(title, lblMessage, btnSave);
         titleBox.setSpacing(100);
         VBox contentBox = new VBox();
 
@@ -187,31 +188,30 @@ public class HealthStatusFormGUI
         editableItems.add(physicianPhoneTxt);
         editableItems.add(participantDiagnosisTxt);
         editableItems.add(familyPhysicianTxt);
-        btnSave.setOnAction(event ->{
-        	lblMessage.setText("");
-        	String[] info = new String[4];
-        	info[0] = participantDiagnosisTxt.getText();
-        	info[1] = tylenolGiven.isSelected()+"";
-        	info[2] = careGiverPermission.isSelected()+"";
-        	info[3] = otherInfoTxt.getText();
-        	
-        	boolean success = helper.saveHealthStatusInfo(info,cosmoID);
-        	
-        	if(success)
-        	{
-        	            	    
-        	    assignDiagnosisInfo(cosmoId);
-        	    lblMessage.setTextFill(Color.BLUE);
-        	    lblMessage.setText("Save successful");
-        	    
-        	}
-        	else
-        	{
-        	    lblMessage.setTextFill(Color.RED);
+        btnSave.setOnAction(event -> {
+            lblMessage.setText("");
+            String[] info = new String[4];
+            info[0] = participantDiagnosisTxt.getText();
+            info[1] = tylenolGiven.isSelected() + "";
+            info[2] = careGiverPermission.isSelected() + "";
+            info[3] = otherInfoTxt.getText();
+
+            boolean success = helper.saveHealthStatusInfo(info, cosmoID);
+
+            if ( success )
+            {
+
+                assignDiagnosisInfo(cosmoId);
+                lblMessage.setTextFill(Color.BLUE);
+                lblMessage.setText("Save successful");
+
+            }
+            else
+            {
+                lblMessage.setTextFill(Color.RED);
                 lblMessage.setText("The save was unsuccesful.");
-        	}
-       
-        	
+            }
+
         });
         // Following is just adding stuff to their boxes and setting some
         // spacing and alignment
@@ -219,7 +219,7 @@ public class HealthStatusFormGUI
                 familyPhysicianTxt);
         familyPhysicianHBox.setSpacing(125);
         familyPhysicianHBox.setAlignment(Pos.CENTER_RIGHT);
-        
+
         participantDiagnosisHBox.getChildren().addAll(participantDiagnosisLbl,
                 participantDiagnosisTxt);
         participantDiagnosisHBox.setSpacing(SPACING);
@@ -290,9 +290,9 @@ public class HealthStatusFormGUI
 
         MedicalConditionsTableViewController controller = new MedicalConditionsTableViewController(
                 cosmoId);
-        TableView<MedicalCondition> table = controller.conditionTable;
+        TableView<QueryResult> table = controller.conditionTable;
 
-        //Add the medical condition 
+        // Add the medical condition
         btnAddMedicalCondition
                 .setOnMouseClicked(event -> {
                     ManageMedicalConditionGUI manageMedicalCondition = new ManageMedicalConditionGUI(
@@ -300,68 +300,76 @@ public class HealthStatusFormGUI
                     manageMedicalCondition.showAddMedicalCondition(cosmoId);
                     controller.refreshTable(cosmoId);
                 });
-        //Editing a medical condition
-        btnEditMedicalCondition.setOnMouseClicked(event -> {
-            MedicalCondition condition = controller.getSelectedMedicalCondition();
-            if(condition==null)
-            {
-                Stage stage = new Stage();
-                PopUpMessage popup = new PopUpMessage(
-                        "Must select a medical condition to edit", stage);
-                Scene scene = new Scene(popup.root, 300, 75);
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.initOwner(parentStage);
-                stage.setScene(scene);
-                stage.showAndWait();
-            }
-            else
-            {
-                ManageMedicalConditionGUI manageMedicalCondition = new ManageMedicalConditionGUI(
-                        parentStage);            	
-            	manageMedicalCondition.showUpdateMedicalCondition(condition, cosmoId);
-            	controller.refreshTable(cosmoId);
-            }
-        });
-        btnDeleteMedicalCondition.setOnMouseClicked(event -> {
-            MedicalCondition condition = controller.getSelectedMedicalCondition();
-            if(condition==null)
-            {
-                Stage stage = new Stage();
-                PopUpMessage popup = new PopUpMessage(
-                        "Must select a medical condition to delete", stage);
-                Scene scene = new Scene(popup.root, 300, 75);
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.initOwner(parentStage);
-                stage.setScene(scene);
-                stage.showAndWait();
-            }
-            else
-            {
-                Stage stage = new Stage();
-                PopUpCheck popup = new PopUpCheck(
-                        "Are you sure you want to delete the selected medical condition ?",
-                        stage);
-                Scene scene = new Scene(popup.root, 450, 75);
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.initOwner(parentStage);
-                stage.setScene(scene);
-                stage.showAndWait();
-                if(popup.runCheck())
-                {
-                MedicalCondition.deleteCondition(table.getSelectionModel()
-                        .getSelectedItem(), cosmoID);
-                }
-                controller.refreshTable(cosmoID);
-            }
-        });
+        // Editing a medical condition
+        btnEditMedicalCondition
+                .setOnMouseClicked(event -> {
+                    QueryResult condition = controller
+                            .getSelectedMedicalCondition();
+                    if ( condition == null )
+                    {
+                        Stage stage = new Stage();
+                        PopUpMessage popup = new PopUpMessage(
+                                "Must select a medical condition to edit",
+                                stage);
+                        Scene scene = new Scene(popup.root, 300, 75);
+                        stage.initModality(Modality.APPLICATION_MODAL);
+                        stage.initOwner(parentStage);
+                        stage.setScene(scene);
+                        stage.showAndWait();
+                    }
+                    else
+                    {
+                        ManageMedicalConditionGUI manageMedicalCondition = new ManageMedicalConditionGUI(
+                                parentStage);
+                        manageMedicalCondition.showUpdateMedicalCondition(
+                                condition, cosmoId);
+                        controller.refreshTable(cosmoId);
+                    }
+                });
+        btnDeleteMedicalCondition
+                .setOnMouseClicked(event -> {
+                    QueryResult condition = controller
+                            .getSelectedMedicalCondition();
+                    if ( condition == null )
+                    {
+                        Stage stage = new Stage();
+                        PopUpMessage popup = new PopUpMessage(
+                                "Must select a medical condition to delete",
+                                stage);
+                        Scene scene = new Scene(popup.root, 300, 75);
+                        stage.initModality(Modality.APPLICATION_MODAL);
+                        stage.initOwner(parentStage);
+                        stage.setScene(scene);
+                        stage.showAndWait();
+                    }
+                    else
+                    {
+                        Stage stage = new Stage();
+                        PopUpCheck popup = new PopUpCheck(
+                                "Are you sure you want to delete the selected medical condition ?",
+                                stage);
+                        Scene scene = new Scene(popup.root, 450, 75);
+                        stage.initModality(Modality.APPLICATION_MODAL);
+                        stage.initOwner(parentStage);
+                        stage.setScene(scene);
+                        stage.showAndWait();
+                        if ( popup.runCheck() )
+                        {
+                            QueryResult.deleteCondition(table
+                                    .getSelectionModel().getSelectedItem(),
+                                    cosmoID);
+                        }
+                        controller.refreshTable(cosmoID);
+                    }
+                });
 
-        if(!(this.loggedInUser instanceof MedicalAdministrator))
+        if ( !(this.loggedInUser instanceof MedicalAdministrator) )
         {
             btnAddMedicalCondition.setVisible(false);
             btnEditMedicalCondition.setVisible(false);
             btnDeleteMedicalCondition.setVisible(false);
         }
-        
+
         buttons.getChildren().addAll(btnAddMedicalCondition,
                 btnEditMedicalCondition, btnDeleteMedicalCondition);
 
@@ -465,10 +473,10 @@ public class HealthStatusFormGUI
                         stage.initOwner(parentStage);
                         stage.setScene(scene);
                         stage.showAndWait();
-                        if(popup.runCheck())
+                        if ( popup.runCheck() )
                         {
-                        Allergies.deleteAllergy(table.getSelectionModel()
-                                .getSelectedItem(), cosmoID);
+                            Allergies.deleteAllergy(table.getSelectionModel()
+                                    .getSelectedItem(), cosmoID);
                         }
                         controller.refreshTable(cosmoID);
                     }
@@ -479,7 +487,7 @@ public class HealthStatusFormGUI
         buttons.setSpacing(5);
         controls.setSpacing(485);
 
-        if(!(this.loggedInUser instanceof MedicalAdministrator))
+        if ( !(this.loggedInUser instanceof MedicalAdministrator) )
         {
             btnAddAllergy.setVisible(false);
             btnEditAllergy.setVisible(false);
@@ -522,11 +530,11 @@ public class HealthStatusFormGUI
             controller.refreshTable(cosmoId);
         });
 
-        //Handle the editing of a medication 
+        // Handle the editing of a medication
         btnEditMedication
                 .setOnAction(event -> {
-                    //Get the selected medication 
-                	Medication med = controller.getSelectedMedication();
+                    // Get the selected medication
+                    Medication med = controller.getSelectedMedication();
                     if ( med == null )
                     {
                         Stage stage = new Stage();
@@ -547,38 +555,41 @@ public class HealthStatusFormGUI
                     }
 
                 });
-        btnDeleteMedication.setOnAction(event->{
-        	Medication med = controller.getSelectedMedication();
-        	if(med == null)
-        	{
-                Stage stage = new Stage();
-                PopUpMessage popup = new PopUpMessage(
-                        "Must select a medication entry to delete", stage);
-                Scene scene = new Scene(popup.root, 300, 75);
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.initOwner(parentStage);
-                stage.setScene(scene);
-                stage.showAndWait();
-        	}
-        	else
-        	{
-                Stage stage = new Stage();
-                PopUpCheck popup = new PopUpCheck(
-                        "Are you sure you want to delete the selected medication entry ?",
-                        stage);
-                Scene scene = new Scene(popup.root, 450, 75);
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.initOwner(parentStage);
-                stage.setScene(scene);
-                stage.showAndWait();
-                if(popup.runCheck())
-                {
-                Medication.removeMedication(med.getMedicationName().get(),cosmoID);
-                controller.refreshTable(cosmoID);
-                }
-        		
-        	}
-        });
+        btnDeleteMedication
+                .setOnAction(event -> {
+                    Medication med = controller.getSelectedMedication();
+                    if ( med == null )
+                    {
+                        Stage stage = new Stage();
+                        PopUpMessage popup = new PopUpMessage(
+                                "Must select a medication entry to delete",
+                                stage);
+                        Scene scene = new Scene(popup.root, 300, 75);
+                        stage.initModality(Modality.APPLICATION_MODAL);
+                        stage.initOwner(parentStage);
+                        stage.setScene(scene);
+                        stage.showAndWait();
+                    }
+                    else
+                    {
+                        Stage stage = new Stage();
+                        PopUpCheck popup = new PopUpCheck(
+                                "Are you sure you want to delete the selected medication entry ?",
+                                stage);
+                        Scene scene = new Scene(popup.root, 450, 75);
+                        stage.initModality(Modality.APPLICATION_MODAL);
+                        stage.initOwner(parentStage);
+                        stage.setScene(scene);
+                        stage.showAndWait();
+                        if ( popup.runCheck() )
+                        {
+                            Medication.removeMedication(med.getMedicationName()
+                                    .get(), cosmoID);
+                            controller.refreshTable(cosmoID);
+                        }
+
+                    }
+                });
         buttons.getChildren().addAll(btnAddMedication, btnEditMedication,
                 btnDeleteMedication);
 
@@ -588,14 +599,14 @@ public class HealthStatusFormGUI
 
         buttons.setSpacing(5);
         controls.setSpacing(450);
-        if(!(this.loggedInUser instanceof MedicalAdministrator))
+        if ( !(this.loggedInUser instanceof MedicalAdministrator) )
         {
             btnAddMedication.setVisible(false);
             btnDeleteMedication.setVisible(false);
             btnEditMedication.setVisible(false);
         }
 
-        box.getChildren().addAll(medicationsLbl,table ,controls);
+        box.getChildren().addAll(medicationsLbl, table, controls);
 
         return box;
     }

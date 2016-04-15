@@ -83,7 +83,8 @@ public class participantDetailsGUI extends Application
     private Label cityText = new Label();
     private Label postalText = new Label();
     private Label sinText = new Label();
-    ///new label to represent the participant's status within the system
+    private Label careText = new Label();
+    // /new label to represent the participant's status within the system
     private Label statusText = new Label();
 
     private Stage createNoteStage;
@@ -104,8 +105,7 @@ public class participantDetailsGUI extends Application
      * Purpose: Construct the main stage for the medical staff once they have
      * selected a participant to view
      * 
-     * @param stage
-     *            : the stage the medical staff will see
+     * @param stage : the stage the medical staff will see
      */
     public void participantDetailsConstruct( Stage stage, int cosmoID,
             StaffAccount loggedInUser )
@@ -119,7 +119,7 @@ public class participantDetailsGUI extends Application
         participantMainStage.setTitle("Cosmo Industries");
 
         VBox root = createMainVBox();
-        participantMainStage.setScene(new Scene(root, 875, 580));
+        participantMainStage.setScene(new Scene(root, 1420, 800));
         participantMainStage.initModality(Modality.APPLICATION_MODAL);
         participantMainStage.initOwner(stage);
         participantMainStage.resizableProperty().set(true);
@@ -166,12 +166,7 @@ public class participantDetailsGUI extends Application
         Tab seizureDescription = new Tab();
         Tab progressNotes = new Tab();
         Tab personalCare = new Tab();
-        Tab workDetails = new Tab();
-        Tab physicianInfo = new Tab();
-        Tab caregiver = new Tab();
-        Tab other = new Tab();
-
-
+        Tab scannedForms = new Tab();
 
         // set body for tabs
         HealthStatusFormGUI hsf = new HealthStatusFormGUI(healthStatus,
@@ -184,27 +179,27 @@ public class participantDetailsGUI extends Application
                 seizureDescription, loggedInUser, cosmoID + "");
         seizureDescription.setContent(sDescForm.ShowSeizureForm().getContent());
 
-        //create the Participant Update Tab
+        // create the Participant Update Tab
         PartcipantUpdateForm puf = new PartcipantUpdateForm(cosmoID,
                 loggedInUser);
         participantUpdate.setContent(puf.getForm());
 
-        //Create the Progress Notes Tab
-        ProgressNotesFormGUI pnf = new ProgressNotesFormGUI(progressNotes, loggedInUser,
-                participantMainStage);
+        // Create the Progress Notes Tab
+        ProgressNotesFormGUI pnf = new ProgressNotesFormGUI(progressNotes,
+                loggedInUser, participantMainStage);
         progressNotes.setContent(pnf.showProgressNotes(cosmoID + "")
                 .getContent());
-                
-        //Create the Personal Care Tab
+
+        // Create the Personal Care Tab
         PersonalCareGUI pc = new PersonalCareGUI(personalCare, loggedInUser,
                 participantMainStage);
-        personalCare.setContent(pc.showPersonalCare(cosmoID + "")
-                .getContent());
-        
-        workDetails.setContent(createWorkDetailsTab());
-        physicianInfo.setContent(createPhysicianInfoTab());
-        caregiver.setContent(createCaregiverTab());
-        other.setContent(createOtherTab());
+        personalCare.setContent(pc.showPersonalCare(cosmoID + "").getContent());
+        //
+        // //Create the Scanned Forms Tab
+        ScanFormsGUI sfg = new ScanFormsGUI(scannedForms, loggedInUser,
+                participantMainStage);
+        scannedForms
+                .setContent(sfg.showScannedForms(cosmoID + "").getContent());
 
         // set text for tabs
         healthStatus.setText("Health Status");
@@ -212,10 +207,7 @@ public class participantDetailsGUI extends Application
         seizureDescription.setText("Seizure Description");
         progressNotes.setText("Progress Notes");
         personalCare.setText("Personal Care");
-        workDetails.setText("Work");
-        physicianInfo.setText("Physician");
-        caregiver.setText("Caregiver");
-        other.setText("Other");
+        scannedForms.setText("Scanned Documents");
 
         // set tabs to not be closable
         healthStatus.closableProperty().set(false);
@@ -223,16 +215,12 @@ public class participantDetailsGUI extends Application
         seizureDescription.closableProperty().set(false);
         progressNotes.closableProperty().set(false);
         personalCare.closableProperty().set(false);
-        workDetails.closableProperty().set(false);
-        physicianInfo.closableProperty().set(false);
-        caregiver.closableProperty().set(false);
-        other.closableProperty().set(false);
+        scannedForms.closableProperty().set(false);
 
         // set the size of the tabs and add to the pane
         tabPane.setTabMinWidth(100);
         tabPane.getTabs().addAll(healthStatus, participantUpdate,
-                seizureDescription, progressNotes, personalCare, physicianInfo, workDetails,
-                caregiver, other);
+                seizureDescription, progressNotes, personalCare, scannedForms);
         tabPane.setMinHeight(29);
 
         return tabPane;
@@ -279,17 +267,10 @@ public class participantDetailsGUI extends Application
         BorderPane previewPane = new BorderPane();
 
         // create picture box for left side of preview pane
-        VBox pictureBox = new VBox();
+        VBox pictureBox = new VBox(3);
         // default preview picture
-        URL url = getClass().getResource("../images/defaultPicture.png");
-        try
-        {
-            previewPicture = new ImageView(new Image(url.openStream()));
-        }
-        catch ( IOException e )
-        {
-            e.printStackTrace();
-        }
+        // URL url = getClass().getResource("../images/defaultPicture.png");
+        previewPicture = new ImageView(new Image("images/defaultPicture.png"));
 
         // set margins
         VBox.setMargin(previewPicture, new Insets(10, 10, 10, 10));
@@ -300,15 +281,15 @@ public class participantDetailsGUI extends Application
         pictureBox.setStyle("-fx-background-color: #FFFFFF;");
         pictureBox.setAlignment(Pos.TOP_CENTER);
 
-        ///Add the status to the picture box
-        ///create the hbox to store status information
+        // /Add the status to the picture box
+        // /create the hbox to store status information
         HBox statusBox = new HBox();
-        ///get the current status for the current participant
+        // /get the current status for the current participant
         ResultSet statusResults = DBObject.select("participantStatus",
                 "Participant", "cosmoID =" + this.cosmoID, "");
-        ///Label for the new status field
+        // /Label for the new status field
         Label statusLabel = new Label("Status:");
-        ///set the text to the current status
+        // /set the text to the current status
         String statusString = "";
         try
         {
@@ -322,19 +303,19 @@ public class participantDetailsGUI extends Application
             e1.printStackTrace();
         }
         statusText.setText(statusString);
-        
-        ///set the padding for the status label and text
+
+        // /set the padding for the status label and text
         statusText.setPadding(new Insets(5, 5, 5, 5));
         statusLabel.setPadding(new Insets(5, 5, 5, 5));
-        
-        ///add the label and text to the status box
+
+        // /add the label and text to the status box
         statusBox.getChildren().addAll(statusLabel, statusText);
         statusBox.setPadding(new Insets(0, 0, 0, 15));
 
-        //create buttons
+        // create buttons
         Button editBtn = new Button();
-        Button viewDocumentsBtn = new Button("View \nAttached \nDocuments");
-        Button generateFormsBtn = new Button("Generate Forms");
+        // Button viewDocumentsBtn = new Button("View \nAttached \nDocuments");
+        // Button generateFormsBtn = new Button("Generate Forms");
         Button createNoteBtn = new Button("Create Note");
 
         createNoteBtn.setOnAction(new EventHandler<ActionEvent>()
@@ -362,15 +343,14 @@ public class participantDetailsGUI extends Application
         editBtn.setMinWidth(30);
         editBtn.setMaxHeight(25);
         editBtn.setMaxHeight(25);
-        editBtn.setGraphic(new ImageView("images/edit.png"));
+        editBtn.setGraphic(new ImageView(new Image("images/edit.png")));
 
-        viewDocumentsBtn.setMaxWidth(100);
-        viewDocumentsBtn.setMinWidth(100);
-        viewDocumentsBtn.setMinHeight(60);
-        viewDocumentsBtn.setMaxHeight(60);
-
-        generateFormsBtn.setMaxWidth(100);
-        generateFormsBtn.setMinWidth(100);
+        /*
+         * viewDocumentsBtn.setMaxWidth(100); viewDocumentsBtn.setMinWidth(100);
+         * viewDocumentsBtn.setMinHeight(60); viewDocumentsBtn.setMaxHeight(60);
+         * 
+         * generateFormsBtn.setMaxWidth(100); generateFormsBtn.setMinWidth(100);
+         */
 
         createNoteBtn.setMaxWidth(100);
         createNoteBtn.setMinWidth(100);
@@ -391,6 +371,7 @@ public class participantDetailsGUI extends Application
         Label postalLabel = new Label("Postal Code: ");
         Label phoneLabel = new Label("Phone Number: ");
         Label sinLabel = new Label("SIN: ");
+        Label careLabel = new Label("Care Type: ");
 
         // use width to made container large enough
         cosmoIDLabel.setMinWidth(100);
@@ -408,10 +389,11 @@ public class participantDetailsGUI extends Application
         postalLabel.setPadding(new Insets(5, 5, 5, 5));
         phoneLabel.setPadding(new Insets(5, 5, 5, 5));
         sinLabel.setPadding(new Insets(5, 5, 5, 5));
-        /// get participant name, phn, diagnosis, and address from database
+        careLabel.setPadding(new Insets(5, 5, 5, 5));
+        // / get participant name, phn, diagnosis, and address from database
         ResultSet results = DBObject
                 .select("firstName, lastName, dateOfBirth, personalHealthNumber, conditionName,"
-                        + "description, address, imagePath, phoneNumber, city, postalCode, socialInsuranceNumber",
+                        + "description, address, imagePath, phoneNumber, city, postalCode, socialInsuranceNumber, careType",
                         "Participant p LEFT OUTER JOIN Conditions c ON p.cosmoID = c.cosmoID",
                         "cosmoID =" + this.cosmoID, "");
 
@@ -430,12 +412,13 @@ public class participantDetailsGUI extends Application
                 DateFormat format = new SimpleDateFormat("dd-MMM-YYYY");
 
                 dayOfBirthText.setText(format.format(results.getTimestamp(3)));
-                healthNumText.setText(results.getString(4)+"");
-                addressText.setText(results.getString(7)+"");
-                phoneNumberText.setText(results.getString(9)+"");
-                cityText.setText(results.getString(10)+"");
-                postalText.setText(results.getString(11)+"");
-                sinText.setText(results.getString(12)+"");
+                healthNumText.setText(results.getString(4) + "");
+                addressText.setText(results.getString(7) + "");
+                phoneNumberText.setText(results.getString(9) + "");
+                cityText.setText(results.getString(10) + "");
+                postalText.setText(results.getString(11) + "");
+                sinText.setText(results.getString(12) + "");
+                careText.setText(results.getString(13) + "");
                 URL u = null;
                 try
                 {
@@ -473,8 +456,7 @@ public class participantDetailsGUI extends Application
             e.printStackTrace();
         }
 
-        pictureBox.getChildren().addAll(statusBox, viewDocumentsBtn, generateFormsBtn,
-                createNoteBtn);
+        pictureBox.getChildren().addAll(statusBox, createNoteBtn);
 
         cosmoIDText.setMaxWidth(PREVIEW_TEXT_WIDTH);
         cosmoIDText.setMinWidth(PREVIEW_TEXT_WIDTH);
@@ -505,6 +487,7 @@ public class participantDetailsGUI extends Application
         basicInfoPane.add(cityLabel, 0, 8);
         basicInfoPane.add(postalLabel, 0, 9);
         basicInfoPane.add(sinLabel, 0, 10);
+        basicInfoPane.add(careLabel, 0, 11);
 
         basicInfoPane.add(cosmoIDText, 1, 0);
         basicInfoPane.add(firstNameText, 1, 2);
@@ -516,6 +499,7 @@ public class participantDetailsGUI extends Application
         basicInfoPane.add(cityText, 1, 8);
         basicInfoPane.add(postalText, 1, 9);
         basicInfoPane.add(sinText, 1, 10);
+        basicInfoPane.add(careText, 1, 11);
 
         // add buttons to the previewPane
         if ( loggedInUser instanceof MedicalAdministrator )
@@ -540,7 +524,7 @@ public class participantDetailsGUI extends Application
                 mainEditWindow.setTitle("Edit Participant");
 
                 mainEditWindow.setScene(new Scene(editParticipantPopUp(), 290,
-                        420));
+                        440));
                 mainEditWindow.initModality(Modality.APPLICATION_MODAL);
                 mainEditWindow.initOwner(participantMainStage);
                 mainEditWindow.setResizable(false);
@@ -1153,7 +1137,8 @@ public class participantDetailsGUI extends Application
         Label cityLbl = new Label("City");
         Label postalCodeLbl = new Label("Postal Code");
         Label sinLbl = new Label("SIN");
-        ///Label to display the participant status
+        Label careLbl = new Label("Care Type");
+        // /Label to display the participant status
         Label statusLabel = new Label("Status:");
 
         // the text fields
@@ -1227,33 +1212,35 @@ public class participantDetailsGUI extends Application
 
         // set the value of the birth date picker
         birthDatePicker.setValue(ld);
-        
-        ///The combo box to select the participant status.(Active, Inactive, Deceased)
-        ObservableList<String> status = FXCollections.observableArrayList
-        (
-                "Active", "Inactive", "Deceased"
-        );
+
+        // /The combo box to select the participant status.(Active, Inactive,
+        // Deceased)
+        ObservableList<String> status = FXCollections.observableArrayList(
+                "Active", "Inactive", "Deceased");
         final ComboBox<String> statusCombo = new ComboBox<String>(status);
-        
+
         // set the health num
         TextField healthNumTxt = new TextField(healthNumText.getText());
 
         // address text
         TextField addressTxt = new TextField(addressText.getText());
-        
-        //Phone Number text
+
+        // Phone Number text
         TextField phoneNumTxt = new TextField(phoneNumberText.getText());
-        
-        //City text
+
+        // City text
         TextField cityTxt = new TextField(cityText.getText());
-        
-        //Postal Text
+
+        // Postal Text
         TextField postalTxt = new TextField(postalText.getText());
-        
-        //SIN Text
+
+        // SIN Text
         TextField sinTxt = new TextField(sinText.getText());
-        
-        ///set the combobox value to the current status
+
+        // care type
+        TextField careTxt = new TextField(careText.getText());
+
+        // /set the combobox value to the current status
         statusCombo.setValue(statusText.getText());
 
         // add the form to the grid
@@ -1266,27 +1253,28 @@ public class participantDetailsGUI extends Application
         grid.add(cityLbl, 0, 7);
         grid.add(postalCodeLbl, 0, 8);
         grid.add(sinLbl, 0, 9);
-        ///Add the status label to the gui
-        grid.add(statusLabel, 0, 10);
-        
+        grid.add(careLbl, 0, 10);
+        // /Add the status label to the gui
+        grid.add(statusLabel, 0, 11);
+
         grid.add(lblWarning, 1, 0);
-        
+
         grid.add(firstNameTxt, 1, 1);
         grid.add(lastNameTxt, 1, 2);
         grid.add(birthDatePicker, 1, 3);
         grid.add(healthNumTxt, 1, 4);
         grid.add(addressTxt, 1, 5);
         grid.add(phoneNumTxt, 1, 6);
-        grid.add(cityTxt, 1,7);
+        grid.add(cityTxt, 1, 7);
         grid.add(postalTxt, 1, 8);
         grid.add(sinTxt, 1, 9);
-        ///add the combobox to the GUI
-        grid.add(statusCombo, 1, 10);
-
+        grid.add(careTxt, 1, 10);
+        // /add the combobox to the GUI
+        grid.add(statusCombo, 1, 11);
 
         // setPadding of the grid
         grid.setPadding(new Insets(10, 10, 0, 10));
-        grid.setHgap(10);
+        grid.setHgap(5);
         grid.setVgap(10);
 
         // Adding participant event handler
@@ -1301,8 +1289,10 @@ public class participantDetailsGUI extends Application
                 String result = MedicalAdministrator.editParticipant(
                         cosmoIDText.getText(), firstNameTxt.getText(),
                         lastNameTxt.getText(), birthDatePicker.getValue(),
-                        healthNumTxt.getText(), addressTxt.getText(), phoneNumTxt.getText(),
-                        cityTxt.getText(), postalTxt.getText(), sinTxt.getText(), statusCombo.getValue().toString());
+                        healthNumTxt.getText(), addressTxt.getText(),
+                        phoneNumTxt.getText(), cityTxt.getText(),
+                        postalTxt.getText(), sinTxt.getText(),
+                        careTxt.getText(), statusCombo.getValue().toString());
 
                 // if no error message is recieved then close this window and
                 // refresh the table
@@ -1316,39 +1306,43 @@ public class participantDetailsGUI extends Application
                             .ofPattern("dd-MM-yyyy"));
 
                     // check for changed data
-                   checkForChanges(firstNameText, firstNameTxt.getText(),
+                    checkForChanges(firstNameText, firstNameTxt.getText(),
                             "First Name", cosmoIDText.getText());
-                   
-                   checkForChanges(lastNameText, lastNameTxt.getText(),
-                           "Last Name", cosmoIDText.getText());
-                   
-                   checkForChanges(dayOfBirthText, birthDateString,
-                           "Birth Date", cosmoIDText.getText());
-                   
-                   checkForChanges(healthNumText, healthNumTxt.getText(),
-                           "Health Number", cosmoIDText.getText());
-                   
-                   checkForChanges(addressText, addressTxt.getText(),
-                           "Address", cosmoIDText.getText());                                      
-                   
-                   checkForChanges(phoneNumberText, phoneNumTxt.getText(),
-                           "Phone Number", cosmoIDText.getText());
-                   
-                   FormatHelper fh = new FormatHelper();
-                   phoneNumTxt.setText(fh.formatPhoneNum(phoneNumberText.getText()));
-                   
-                   checkForChanges(cityText, cityTxt.getText(),
-                           "City", cosmoIDText.getText());
-                   
-                   checkForChanges(postalText, postalTxt.getText(),
-                           "Postal Code", cosmoIDText.getText());
-                   
-                   checkForChanges(sinText, sinTxt.getText(),
-                           "SIN", cosmoIDText.getText());
-                   
-                   checkForChanges(statusText, statusCombo.getValue().toString(),
-                           "Status", cosmoIDText.getText());    
-                   
+
+                    checkForChanges(lastNameText, lastNameTxt.getText(),
+                            "Last Name", cosmoIDText.getText());
+
+                    checkForChanges(dayOfBirthText, birthDateString,
+                            "Birth Date", cosmoIDText.getText());
+
+                    checkForChanges(healthNumText, healthNumTxt.getText(),
+                            "Health Number", cosmoIDText.getText());
+
+                    checkForChanges(addressText, addressTxt.getText(),
+                            "Address", cosmoIDText.getText());
+
+                    checkForChanges(phoneNumberText, phoneNumTxt.getText(),
+                            "Phone Number", cosmoIDText.getText());
+
+                    FormatHelper fh = new FormatHelper();
+                    phoneNumTxt.setText(fh.formatPhoneNum(phoneNumberText
+                            .getText()));
+
+                    checkForChanges(cityText, cityTxt.getText(), "City",
+                            cosmoIDText.getText());
+
+                    checkForChanges(postalText, postalTxt.getText(),
+                            "Postal Code", cosmoIDText.getText());
+
+                    checkForChanges(sinText, sinTxt.getText(), "SIN",
+                            cosmoIDText.getText());
+
+                    checkForChanges(careText, careTxt.getText(), "Care Type",
+                            cosmoIDText.getText());
+
+                    checkForChanges(statusText, statusCombo.getValue()
+                            .toString(), "Status", cosmoIDText.getText());
+
                 }
                 // if there is an error message, display it
                 else
@@ -1379,6 +1373,7 @@ public class participantDetailsGUI extends Application
                 cityTxt.setText("");
                 postalTxt.setText("");
                 sinTxt.setText("");
+                careTxt.setText("");
                 lblWarning.setText("");
             }
 
@@ -1391,30 +1386,34 @@ public class participantDetailsGUI extends Application
         buttonsHbox.setAlignment(Pos.CENTER);
         resetHbox.getChildren().addAll(resetBtn);
         resetHbox.setAlignment(Pos.CENTER_RIGHT);
-        grid.add(buttonsHbox, 1, 11);
-        grid.add(resetHbox, 0, 11);
+        grid.add(buttonsHbox, 1, 12);
+        grid.add(resetHbox, 0, 12);
 
         return grid;
     }
-    
+
     /**
      * 
-     * Purpose: To check if two values have changed and if so, update relevant label on GUI and insert activity
-     * log entry into database
+     * Purpose: To check if two values have changed and if so, update relevant
+     * label on GUI and insert activity log entry into database
+     * 
      * @param original - the original label that is to be checked against
      * @param changed - the submitted information
      * @param label - the label for the activity log entry if required
      * @param cosmoID - the cosmo ID of the participant being edited
      * 
      */
-    private void checkForChanges(Label original, String changed, String label, String cosmoID)
+    private void checkForChanges( Label original, String changed, String label,
+            String cosmoID )
     {
         String originalString = original.getText();
-        if ( !changed.equals(originalString))
+        if ( !changed.equals(originalString) )
         {
-            DBObject.activtyLogEntry(loggedInUser.GetUsername(), "Edited Participant (" + cosmoID + ")",  label + ": \"" + originalString + "\" → \"" + changed + "\"");
+            DBObject.activtyLogEntry(loggedInUser.GetUsername(),
+                    "Edited Participant (" + cosmoID + ")", label + ": \""
+                            + originalString + "\" → \"" + changed + "\"");
             original.setText(changed);
         }
     }
-    
+
 }

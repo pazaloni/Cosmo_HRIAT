@@ -10,11 +10,12 @@ package core;
 public class InjuryType
 {
     private String injuryType;
- 
+
     /**
      * 
      * Constructor for the InjuryType class.
-     * @param injuryType the injury name 
+     * 
+     * @param injuryType the injury name
      */
     public InjuryType(String injuryType)
     {
@@ -23,19 +24,21 @@ public class InjuryType
 
     /**
      * 
-     * Purpose: edit the injury name 
+     * Purpose: edit the injury name
+     * 
      * @param injuryType
      */
     private void setInjuryType( String injuryType )
     {
         this.injuryType = injuryType;
-        
+
     }
 
     /**
      * 
-     * Purpose: get the injury name 
-     * @return the injury name 
+     * Purpose: get the injury name
+     * 
+     * @return the injury name
      */
     public String getInjuryType()
     {

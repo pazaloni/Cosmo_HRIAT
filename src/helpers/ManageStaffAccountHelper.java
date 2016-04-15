@@ -1,4 +1,5 @@
 package helpers;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -25,7 +26,7 @@ public class ManageStaffAccountHelper
     private static final String USERNAME_NOT_UNIQUE = "Username is already taken";
 
     private DatabaseHelper db;
-    ///the EncryptionHelper declaration
+    // /the EncryptionHelper declaration
     private EncryptionHelper eh;
 
     /**
@@ -36,7 +37,7 @@ public class ManageStaffAccountHelper
     public ManageStaffAccountHelper()
     {
         db = new DatabaseHelper();
-        ///Instantiating the EncryptionHelper
+        // /Instantiating the EncryptionHelper
         eh = new EncryptionHelper();
     }
 
@@ -45,32 +46,25 @@ public class ManageStaffAccountHelper
      * Purpose: Return true or false if the user was added to the database
      * successfully
      * 
-     * @param username
-     *            : the username the user passed in
-     * @param lastName
-     *            : the lastname the user passed in
-     * @param firstName
-     *            : the firstName the user passed in
-     * @param email
-     *            : the email the user passed in
-     * @param password
-     *            : the password the user passed in
-     * @param repeatPW
-     *            : the second password the user passed in
-     * @param securityLv
-     *            : the the user passed in
+     * @param username : the username the user passed in
+     * @param lastName : the lastname the user passed in
+     * @param firstName : the firstName the user passed in
+     * @param email : the email the user passed in
+     * @param password : the password the user passed in
+     * @param repeatPW : the second password the user passed in
+     * @param securityLv : the the user passed in
      * 
      * @return boolean: true if the user addition was successful, false
      *         otherwise
      */
-    public String addUser(String username, String lastName, String firstName,
-            String email, String password, String repeatPW, String securityLv)
+    public String addUser( String username, String lastName, String firstName,
+            String email, String password, String repeatPW, String securityLv )
     {
         String result = "";
 
-        if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty()
+        if ( firstName.isEmpty() || lastName.isEmpty() || username.isEmpty()
                 || password.isEmpty() || repeatPW.isEmpty()
-                || securityLv.isEmpty())
+                || securityLv.isEmpty() )
 
         {
             result = EMPTY_FIELD;
@@ -78,22 +72,21 @@ public class ManageStaffAccountHelper
         else
         {
             // if the paswords are the same, proceed
-            if (password.equals(repeatPW))
+            if ( password.equals(repeatPW) )
             {
                 // if the email cotains an @ and .
-                if (email.contains("@") && email.contains("."))
+                if ( email.contains("@") && email.contains(".") )
                 {
 
                     db.connect();
                     // if the username does not exist in the database
-                    if (!usernameExists(username))
+                    if ( !usernameExists(username) )
                     {
                         String[] newUserInfo = new String[6];
                         newUserInfo[0] = username;
                         newUserInfo[1] = lastName;
                         newUserInfo[2] = firstName;
                         newUserInfo[3] = email;
-                        ///encrypt the password using the encryption helper
                         newUserInfo[4] = eh.encrypt(password);
                         newUserInfo[5] = securityLv;
                         db.insert(newUserInfo, "Staff");
@@ -128,11 +121,10 @@ public class ManageStaffAccountHelper
      * 
      * Purpose: Query the database and check if the username has been taken
      *
-     * @param username
-     *            : the username for the new account
+     * @param username : the username for the new account
      * @return boolean: true if the username exists, false otherwise
      */
-    private boolean usernameExists(String username)
+    private boolean usernameExists( String username )
     {
         boolean result = false;
 
@@ -140,17 +132,17 @@ public class ManageStaffAccountHelper
         ResultSet set = db.select("UserName", "Staff", "", "");
         try
         {
-            while (set.next() && !result)
+            while ( set.next() && !result )
             {
                 // if the username for the new user is already in the database
                 // then the result is false
-                if (username.equals(set.getString(1)))
+                if ( username.equals(set.getString(1)) )
                 {
                     result = true;
                 }
             }
         }
-        catch (SQLException e)
+        catch ( SQLException e )
         {
 
             e.printStackTrace();
@@ -164,14 +156,14 @@ public class ManageStaffAccountHelper
      * 
      * @param username
      */
-    public String editUser(String username, String lastName, String firstName,
-            String email, String password, String repeatPW, String securityLv)
+    public String editUser( String username, String lastName, String firstName,
+            String email, String password, String repeatPW, String securityLv )
     {
         String result = "";
 
-        if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty()
+        if ( firstName.isEmpty() || lastName.isEmpty() || username.isEmpty()
                 || password.isEmpty() || repeatPW.isEmpty()
-                || securityLv.isEmpty())
+                || securityLv.isEmpty() )
 
         {
             result = EMPTY_FIELD;
@@ -179,10 +171,10 @@ public class ManageStaffAccountHelper
         else
         {
             // if the paswords are the same, proceed
-            if (password.equals(repeatPW))
+            if ( password.equals(repeatPW) )
             {
                 // if the email cotains an @ and .
-                if (email.contains("@") && email.contains("."))
+                if ( email.contains("@") && email.contains(".") )
                 {
 
                     db.connect();
@@ -220,11 +212,10 @@ public class ManageStaffAccountHelper
      * you wish to delete them, if so, will delete the selected user, then
      * refresh the table of accounts
      * 
-     * @param username
-     *            : The user that you will remove
+     * @param username : The user that you will remove
      * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public boolean removeUser(String username)
+    public boolean removeUser( String username )
     {
         return this.db.delete("Staff", "UserName = \"" + username + "\"");
     }
@@ -234,28 +225,27 @@ public class ManageStaffAccountHelper
      * Purpose: To take in a username, query the database for that username and
      * if the user exists, return an object of the user
      * 
-     * @param username
-     *            String of user name to be queried on
-     * @return StaffAccount a staff account object 
+     * @param username String of user name to be queried on
+     * @return StaffAccount a staff account object
      */
-    public StaffAccount queryStaff(String username)
+    public StaffAccount queryStaff( String username )
     {
         StaffAccount staffToReturn = null;
-        
+
         ResultSet staff = db.select(
                 "UserName, lastName, firstName, email, password, accessLevel",
                 "Staff", "username='" + username + "'", "");
-        
+
         String usernameOut = "";
         String lastName = "";
         String firstName = "";
         String email = "";
         String password = "";
         String accessLevel = "";
-        
+
         try
         {
-            while (staff.next())
+            while ( staff.next() )
             {
                 usernameOut = staff.getString(1);
                 lastName = staff.getString(2);
@@ -265,26 +255,27 @@ public class ManageStaffAccountHelper
                 accessLevel = staff.getString(6);
             }
         }
-        catch (SQLException e)
+        catch ( SQLException e )
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
-        
-        if (accessLevel.equals("0"))
+
+        if ( accessLevel.equals("0") )
         {
-            staffToReturn = new BasicStaff(usernameOut, lastName, firstName, email, password, accessLevel);
+            staffToReturn = new BasicStaff(usernameOut, lastName, firstName,
+                    email, password, accessLevel);
         }
-        else if (accessLevel.equals("1"))
+        else if ( accessLevel.equals("1") )
         {
-            staffToReturn = new MedicalAdministrator(usernameOut, lastName, firstName, email, password, accessLevel);
+            staffToReturn = new MedicalAdministrator(usernameOut, lastName,
+                    firstName, email, password, accessLevel);
         }
-        else if (accessLevel.equals("2"))
+        else if ( accessLevel.equals("2") )
         {
-            staffToReturn = new TechnicalAdministrator(usernameOut, lastName, firstName, email, password, accessLevel);
+            staffToReturn = new TechnicalAdministrator(usernameOut, lastName,
+                    firstName, email, password, accessLevel);
         }
-        
 
         return staffToReturn;
     }

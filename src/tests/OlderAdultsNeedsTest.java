@@ -9,210 +9,198 @@ import org.junit.Test;
 import core.OlderAdultsNeeds;
 
 /**
- * Tests the OlderAdultsNeeds data holder class
- * and it's getter methods.
+ * Tests the OlderAdultsNeeds data holder class and it's getter methods.
  * 
  * @author Breanna Wilson, Jon Froese
  *
  */
 
-public class OlderAdultsNeedsTest 
+public class OlderAdultsNeedsTest
 {
 
-	private String age;
-	private int longTermCare;
-	private int elmwood;
-	private int lutherCare;
-	private int other;
-	private int totalAsOf;
-	private int totalForLastYear;
-	private OlderAdultsNeeds oan;
-	@Before
-	public void setUp() throws Exception 
-	{
-		age = ">65";
-		longTermCare = 3;
-		elmwood = 21;
-		lutherCare = 1;
-		other = 21;
-		totalAsOf = 49;
-		totalForLastYear = 46;
-		oan = new OlderAdultsNeeds(age, longTermCare, 
-				elmwood, lutherCare, other, totalAsOf, 
-				totalForLastYear);
-	}
+    private String age;
+    private int longTermCare;
+    private int elmwood;
+    private int lutherCare;
+    private int other;
+    private int totalAsOf;
+    private int totalForLastYear;
+    private OlderAdultsNeeds oan;
 
-	/**
-	 * Test the getAge() method returns the expected
-	 * String value.
-	 * 
-	 * @author Breanna Wilson, Jon Froese
-	 */
-	@Test
-	public void testGetAge() 
-	{
-		assertTrue(age.equals(oan.getAge()));
-	}
+    @Before
+    public void setUp() throws Exception
+    {
+        age = ">65";
+        longTermCare = 3;
+        elmwood = 21;
+        lutherCare = 1;
+        other = 21;
+        totalAsOf = 49;
+        totalForLastYear = 46;
+        oan = new OlderAdultsNeeds(age, longTermCare, elmwood, lutherCare,
+                other, totalAsOf, totalForLastYear);
+    }
 
-	/**
-	 * Test the getAgeProperty() returns
-	 * a StringProperty with the expected
-	 * String value.
-	 * 
-	 * @author Breanna Wilson, Jon Froese
-	 */
-	@Test
-	public void testGetAgeProperty()
-	{
-		assertTrue(oan.getAgeProperty().getValue().equals("" + age));
-	}
+    /**
+     * Test the getAge() method returns the expected String value.
+     * 
+     * @author Breanna Wilson, Jon Froese
+     */
+    @Test
+    public void testGetAge()
+    {
+        assertTrue(age.equals(oan.getAge()));
+    }
 
-	/**
-	 * Tests the getLongTermCare() method returns
-	 * the same value as expected.
-	 * 
-	 * @author Breanna Wilson, Jon Froese
-	 */
-	@Test
-	public void testGetLongTermCare() 
-	{
-		assertTrue(longTermCare == oan.getLongTermCare());
-	}
+    /**
+     * Test the getAgeProperty() returns a StringProperty with the expected
+     * String value.
+     * 
+     * @author Breanna Wilson, Jon Froese
+     */
+    @Test
+    public void testGetAgeProperty()
+    {
+        assertTrue(oan.getAgeProperty().getValue().equals("" + age));
+    }
 
-	/**
-	 * Tests the getLongTermCareProperty() method
-	 * returns the expected value.
-	 * 
-	 * @author Breanna Wilson, Jon Froese
-	 */
-	@Test
-	public void testGetLongTermCareProperty()
-	{
-		assertTrue(oan.getLongTermCareProperty().getValue().equals("" + longTermCare));
-	}
+    /**
+     * Tests the getLongTermCare() method returns the same value as expected.
+     * 
+     * @author Breanna Wilson, Jon Froese
+     */
+    @Test
+    public void testGetLongTermCare()
+    {
+        assertTrue(longTermCare == oan.getLongTermCare());
+    }
 
-	/**
-	 * Test the getElmwood() method returns the expected
-	 * value.
-	 * 
-	 * @author Breanna Wilson, Jon Froese
-	 */
-	@Test
-	public void testGetElmwood()
-	{
-		assertTrue(elmwood == oan.getElmwood());
-	}
+    /**
+     * Tests the getLongTermCareProperty() method returns the expected value.
+     * 
+     * @author Breanna Wilson, Jon Froese
+     */
+    @Test
+    public void testGetLongTermCareProperty()
+    {
+        assertTrue(oan.getLongTermCareProperty().getValue()
+                .equals("" + longTermCare));
+    }
 
-	/**
-	 * Tests the getElmwoodProperty() method
-	 * returns the expected value.
-	 * 
-	 * @author Breanna Wilson, Jon Froese
-	 */
-	@Test
-	public void testGetElmwoodProperty() 
-	{
-		 assertTrue(oan.getElmwoodProperty().getValue().equals("" + elmwood));
-	}
+    /**
+     * Test the getElmwood() method returns the expected value.
+     * 
+     * @author Breanna Wilson, Jon Froese
+     */
+    @Test
+    public void testGetElmwood()
+    {
+        assertTrue(elmwood == oan.getElmwood());
+    }
 
-	/**
-	 * Tests the getLutherCare() method 
-	 * returns the expected value.
-	 * 
-	 * @author Breanna Wilson, Jon Froese
-	 */
-	@Test
-	public void testGetLutherCare() 
-	{
-		assertTrue(lutherCare == oan.getLutherCare());
-	}
+    /**
+     * Tests the getElmwoodProperty() method returns the expected value.
+     * 
+     * @author Breanna Wilson, Jon Froese
+     */
+    @Test
+    public void testGetElmwoodProperty()
+    {
+        assertTrue(oan.getElmwoodProperty().getValue().equals("" + elmwood));
+    }
 
-	/**
-	 * Tests the getLutherCareProperty() method
-	 * returns a StringProperty with the expected
-	 * String value.
-	 * 
-	 * @author Breanna Wilson, Jon Froese
-	 */
-	@Test
-	public void testGetLutherCareProperty()
-	{
-		assertTrue(oan.getLutherCareProperty().getValue().equals("" + lutherCare));
-	}
+    /**
+     * Tests the getLutherCare() method returns the expected value.
+     * 
+     * @author Breanna Wilson, Jon Froese
+     */
+    @Test
+    public void testGetLutherCare()
+    {
+        assertTrue(lutherCare == oan.getLutherCare());
+    }
 
-	/**
-	 * Tests the getOther() method returns
-	 * the expected value.
-	 * 
-	 * @author Breanna Wilson, Jon Froese
-	 */
-	@Test
-	public void testGetOther() 
-	{
-		assertTrue(oan.getOther() == other);
-	}
+    /**
+     * Tests the getLutherCareProperty() method returns a StringProperty with
+     * the expected String value.
+     * 
+     * @author Breanna Wilson, Jon Froese
+     */
+    @Test
+    public void testGetLutherCareProperty()
+    {
+        assertTrue(oan.getLutherCareProperty().getValue()
+                .equals("" + lutherCare));
+    }
 
-	/**
-	 * Tests the getOtherProperty() returns a
-	 * StringProperty containing the expected
-	 * String value.
-	 * 
-	 * @author Breanna Wilson, Jon Froese
-	 */
-	@Test
-	public void testGetOtherProperty() 
-	{
-		assertTrue(oan.getOtherProperty().getValue().equals("" + other));
-	}
+    /**
+     * Tests the getOther() method returns the expected value.
+     * 
+     * @author Breanna Wilson, Jon Froese
+     */
+    @Test
+    public void testGetOther()
+    {
+        assertTrue(oan.getOther() == other);
+    }
 
-	/**
-	 * Tests the getTotalAsOf() method returns
-	 * the expected value.
-	 * 
-	 * @author Breanna Wilson, Jon Froese
-	 */
-	@Test
-	public void testGetTotalAsOf() 
-	{
-		assertTrue(oan.getTotalAsOf() == totalAsOf);
-	}
+    /**
+     * Tests the getOtherProperty() returns a StringProperty containing the
+     * expected String value.
+     * 
+     * @author Breanna Wilson, Jon Froese
+     */
+    @Test
+    public void testGetOtherProperty()
+    {
+        assertTrue(oan.getOtherProperty().getValue().equals("" + other));
+    }
 
-	/**
-	 * Tests the getTotalAsOfProperty() method
-	 * returns a StringProperty with the expected
-	 * String value.
-	 * 
-	 * @author Breanna Wilson, Jon Froese
-	 */
-	@Test
-	public void testGetTotalAsOfProperty() 
-	{
-		assertTrue(oan.getTotalAsOfProperty().getValue().equals("" + totalAsOf));
-	}
+    /**
+     * Tests the getTotalAsOf() method returns the expected value.
+     * 
+     * @author Breanna Wilson, Jon Froese
+     */
+    @Test
+    public void testGetTotalAsOf()
+    {
+        assertTrue(oan.getTotalAsOf() == totalAsOf);
+    }
 
-	/**
-	 * Tests the getTotalForLastYear() method
-	 * returns the expected value
-	 * 
-	 * @author Breanna Wilson, Jon Froese
-	 */
-	@Test
-	public void testGetTotalForLastYear() 
-	{
-		assertTrue(oan.getTotalForLastYear() == totalForLastYear);
-	}
+    /**
+     * Tests the getTotalAsOfProperty() method returns a StringProperty with the
+     * expected String value.
+     * 
+     * @author Breanna Wilson, Jon Froese
+     */
+    @Test
+    public void testGetTotalAsOfProperty()
+    {
+        assertTrue(oan.getTotalAsOfProperty().getValue().equals("" + totalAsOf));
+    }
 
-	/**
-	 * Tests the getTotalForLastYearProperty()
-	 * method returns a StringProperty with the expected
-	 * string value.
-	 * 
-	 * @author Breanna Wilson, Jon Froese
-	 */
-	@Test
-	public void testGetTotalForLastYearProperty() 
-	{
-		assertTrue(oan.getTotalForLastYearProperty().getValue().equals("" + totalForLastYear));
-	}
+    /**
+     * Tests the getTotalForLastYear() method returns the expected value
+     * 
+     * @author Breanna Wilson, Jon Froese
+     */
+    @Test
+    public void testGetTotalForLastYear()
+    {
+        assertTrue(oan.getTotalForLastYear() == totalForLastYear);
+    }
+
+    /**
+     * Tests the getTotalForLastYearProperty() method returns a StringProperty
+     * with the expected string value.
+     * 
+     * @author Breanna Wilson, Jon Froese
+     */
+    @Test
+    public void testGetTotalForLastYearProperty()
+    {
+        assertTrue(oan.getTotalForLastYearProperty().getValue()
+                .equals("" + totalForLastYear));
+    }
 
 }

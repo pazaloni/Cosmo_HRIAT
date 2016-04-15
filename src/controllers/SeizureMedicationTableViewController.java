@@ -1,4 +1,5 @@
 package controllers;
+
 import helpers.DatabaseHelper;
 
 import java.sql.ResultSet;
@@ -11,9 +12,10 @@ import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+
 /**
  * 
- *  Purpose: Method to implement the seizureMedication table.
+ * Purpose: Method to implement the seizureMedication table.
  *
  * @author CST205, CST207
  * @version 1.0
@@ -21,22 +23,18 @@ import javafx.scene.control.TableView;
 public class SeizureMedicationTableViewController
 {
 
-    public TableView<SeizureMedication> seizureMedicationTable = 
-            new TableView<SeizureMedication>();
+    public TableView<SeizureMedication> seizureMedicationTable = new TableView<SeizureMedication>();
 
-    private TableColumn<SeizureMedication, String> medicationNameColumn =
-            new TableColumn<SeizureMedication, String>(
+    private TableColumn<SeizureMedication, String> medicationNameColumn = new TableColumn<SeizureMedication, String>(
             "Medication Name");
-    private TableColumn<SeizureMedication, String> dosageColumn = 
-            new TableColumn<SeizureMedication, String>(
+    private TableColumn<SeizureMedication, String> dosageColumn = new TableColumn<SeizureMedication, String>(
             "Dosage");
 
-    private TableColumn<SeizureMedication, String> timesGivenColumn = 
-            new TableColumn<SeizureMedication, String>(
+    private TableColumn<SeizureMedication, String> timesGivenColumn = new TableColumn<SeizureMedication, String>(
             "Times Given");
-    
-    private ObservableList<SeizureMedication> seizureMedicationData = 
-            FXCollections.observableArrayList();
+
+    private ObservableList<SeizureMedication> seizureMedicationData = FXCollections
+            .observableArrayList();
 
     public SeizureMedicationTableViewController(String cosmoId)
     {
@@ -56,10 +54,10 @@ public class SeizureMedicationTableViewController
         DatabaseHelper db = new DatabaseHelper();
 
         db.connect();
-        
+
         // Select statement to get the seizure id
-        ResultSet rs = db.select("seizureID", "Seizures",
-                "cosmoID=" + cosmoId, "");
+        ResultSet rs = db.select("seizureID", "Seizures", "cosmoID=" + cosmoId,
+                "");
         String seizureID = "";
         try
         {
@@ -70,28 +68,28 @@ public class SeizureMedicationTableViewController
             }
         }
         catch ( SQLException e )
-        {           
+        {
             e.printStackTrace();
             System.out.println("Failed to populate conditions table");
         }
 
-        if (!seizureID.equals(""))
+        if ( !seizureID.equals("") )
         {
-        	//Select statement to get the medication id.
+            // Select statement to get the medication id.
             ResultSet sm = db.select("medicationID", "SeizureMedication",
-                "seizureID=" + seizureID, "");
+                    "seizureID=" + seizureID, "");
             String medicationID;
-            
+
             try
             {
                 while ( sm.next() )
                 {
-    
+
                     medicationID = sm.getString(1);
-                    //Select statement to get the medication for the seizure
-                    rs = db.select("medicationName, dosage, timesGiven", 
+                    // Select statement to get the medication for the seizure
+                    rs = db.select("medicationName, dosage, timesGiven",
                             "Medication", "MedicationID=" + medicationID, "");
-                    
+
                     String medicationName;
                     String dosage;
                     String timesGiven;
@@ -99,43 +97,41 @@ public class SeizureMedicationTableViewController
                     {
                         while ( rs.next() )
                         {
-    
+
                             medicationName = rs.getString(1);
                             dosage = rs.getString(2);
                             timesGiven = rs.getString(3);
-                                                        
-                            SeizureMedication SeizureMedication = new 
-                                    SeizureMedication(medicationName, dosage, 
-                                            timesGiven);
-    
+
+                            SeizureMedication SeizureMedication = new SeizureMedication(
+                                    medicationName, dosage, timesGiven);
+
                             seizureMedicationData.add(SeizureMedication);
                         }
                     }
                     catch ( SQLException e )
-                    {           
+                    {
                         e.printStackTrace();
                         System.out.println("Failed to populate table");
                     }
                 }
             }
             catch ( SQLException e )
-            {           
+            {
                 e.printStackTrace();
                 System.out.println("Failed to populate conditions table");
             }
-        
+
         }
         else
         {
-            
+
             SeizureMedication sm = new SeizureMedication("", "", "");
             seizureMedicationData.add(sm);
         }
-        
-        
-        
+
         db.disconnect();
     }
+
     /**
      * 
      * Purpose: initialize the columns in the table and configure them
@@ -143,62 +139,61 @@ public class SeizureMedicationTableViewController
     @SuppressWarnings("unchecked")
     private void initialize()
     {
-        medicationNameColumn.setCellValueFactory(
-                cellData->cellData.getValue().getMedicationName());
+        medicationNameColumn.setCellValueFactory(cellData -> cellData
+                .getValue().getMedicationName());
         medicationNameColumn.setMinWidth(400);
         medicationNameColumn.setResizable(false);
-        
-        dosageColumn.setCellValueFactory(
-                cellData->cellData.getValue().getDosage());
+
+        dosageColumn.setCellValueFactory(cellData -> cellData.getValue()
+                .getDosage());
         dosageColumn.setMinWidth(150);
         dosageColumn.setResizable(false);
-        
-        timesGivenColumn.setCellValueFactory(
-                cellData->cellData.getValue().getTimesGiven());
+
+        timesGivenColumn.setCellValueFactory(cellData -> cellData.getValue()
+                .getTimesGiven());
         timesGivenColumn.setMinWidth(150);
         timesGivenColumn.setResizable(false);
-        
-        
-        
+
         seizureMedicationTable.getColumns().addListener(
-            new ListChangeListener<Object>()
-            {
-                @Override
-                public void onChanged( Change change )
+                new ListChangeListener<Object>()
                 {
-                    change.next();
-                    // if the column was changed
-                    if ( change.wasReplaced() )
+                    @Override
+                    public void onChanged( Change change )
                     {
-                        // clear all columns
-                        seizureMedicationTable.getColumns().clear();
-                        // re-add the columns in order
-                        seizureMedicationTable.getColumns().addAll(
-                                medicationNameColumn, dosageColumn, 
-                                timesGivenColumn);
+                        change.next();
+                        // if the column was changed
+                        if ( change.wasReplaced() )
+                        {
+                            // clear all columns
+                            seizureMedicationTable.getColumns().clear();
+                            // re-add the columns in order
+                            seizureMedicationTable.getColumns().addAll(
+                                    medicationNameColumn, dosageColumn,
+                                    timesGivenColumn);
+                        }
                     }
-                }
-        });
-        seizureMedicationTable.getColumns().addAll(medicationNameColumn, 
+                });
+        seizureMedicationTable.getColumns().addAll(medicationNameColumn,
                 dosageColumn, timesGivenColumn);
     }
 
-    public void refreshTable( String cosmoID)
+    public void refreshTable( String cosmoID )
     {
-        this.seizureMedicationData.clear();        
+        this.seizureMedicationData.clear();
         this.seizureMedicationTable.getColumns().clear();
         this.retrieveSeizureMedicationData(cosmoID);
         this.initialize();
-        
+
     }
-    
+
     public String getSelectedPK()
     {
         String result;
 
-        SeizureMedication seizureMedication = seizureMedicationTable.getSelectionModel().getSelectedItem();
+        SeizureMedication seizureMedication = seizureMedicationTable
+                .getSelectionModel().getSelectedItem();
 
-        if (seizureMedication == null)
+        if ( seizureMedication == null )
         {
             result = "null";
         }
@@ -208,6 +203,5 @@ public class SeizureMedicationTableViewController
         }
         return result;
     }
-    
-    
+
 }

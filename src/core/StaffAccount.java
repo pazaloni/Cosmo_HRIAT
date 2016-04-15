@@ -1,4 +1,5 @@
 package core;
+
 import helpers.DatabaseHelper;
 import helpers.EncryptionHelper;
 import helpers.ManageStaffAccountHelper;
@@ -22,7 +23,7 @@ import java.sql.SQLException;
 public class StaffAccount
 {
     private DatabaseHelper db;
-    ///Instantiating the EncryptionHelper
+    // /Instantiating the EncryptionHelper
     private EncryptionHelper eh = new EncryptionHelper();
     private ManageStaffAccountHelper manageStaff;
 
@@ -38,21 +39,18 @@ public class StaffAccount
      * Purpose: perform a login attempt based on the credentials provided by the
      * user
      * 
-     * @param username
-     *            : the username the user provided
-     * @param password
-     *            : the password the user provided
+     * @param username : the username the user provided
+     * @param password : the password the user provided
      * @return either an instantiated account(basic staff, medical admin, or
      *         techincal admin) or a null account indicating an unsucessful
      *         login
      * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public StaffAccount login(String username, String password)
+    public StaffAccount login( String username, String password )
     {
         // the account that will be returned upon successful login
         StaffAccount staff = null;
         manageStaff = new ManageStaffAccountHelper();
-
 
         // These are set as not found because when there is nothing returned
         // form the database they are assigned nothing so they remain
@@ -69,14 +67,14 @@ public class StaffAccount
         db.connect();
         // query used to find the provided username that returns the username,
         // password and accesslevel
-       
-       StaffAccount currentUser = manageStaff.queryStaff(username);
+
+        StaffAccount currentUser = manageStaff.queryStaff(username);
 
         // flag used to check if the returned user exists
-        if (currentUser != null)
+        if ( currentUser != null )
         {
-            if (!(currentUser.GetUsername().equals(username)
-                    && currentUser.GetPassword().equals(password)))
+            if ( !(currentUser.GetUsername().equals(username) && currentUser
+                    .GetPassword().equals(password)) )
             {
                 // if the returned username is null, make the staff to return
                 // null aswell
@@ -97,35 +95,33 @@ public class StaffAccount
     {
         return false;
     }
-    
-    
+
     /**
      * 
      * Purpose: To take in a username, query the database for that username and
      * if the user exists, return an object of the user
      * 
-     * @param username
-     *            String of user name to be queried on
-     * @return StaffAccount a staffa ccount object 
+     * @param username String of user name to be queried on
+     * @return StaffAccount a staffa ccount object
      */
-    public StaffAccount queryStaff(String username)
+    public StaffAccount queryStaff( String username )
     {
         StaffAccount staffToReturn = null;
-        
+
         ResultSet staff = db.select(
                 "UserName, lastName, firstName, email, password, accessLevel",
                 "Staff", "username='" + username + "'", "");
-        
+
         String usernameOut = "";
         String lastName = "";
         String firstName = "";
         String email = "";
         String password = "";
         String accessLevel = "";
-        
+
         try
         {
-            while (staff.next())
+            while ( staff.next() )
             {
                 usernameOut = staff.getString(1);
                 lastName = staff.getString(2);
@@ -135,29 +131,29 @@ public class StaffAccount
                 accessLevel = staff.getString(6);
             }
         }
-        catch (SQLException e)
+        catch ( SQLException e )
         {
             e.printStackTrace();
         }
-        
-        
-        if (accessLevel.equals("0"))
+
+        if ( accessLevel.equals("0") )
         {
-            staffToReturn = new BasicStaff(usernameOut, lastName, firstName, email, password, accessLevel);
+            staffToReturn = new BasicStaff(usernameOut, lastName, firstName,
+                    email, password, accessLevel);
         }
-        else if (accessLevel.equals("1"))
+        else if ( accessLevel.equals("1") )
         {
-            staffToReturn = new MedicalAdministrator(usernameOut, lastName, firstName, email, password, accessLevel);
+            staffToReturn = new MedicalAdministrator(usernameOut, lastName,
+                    firstName, email, password, accessLevel);
         }
-        else if (accessLevel.equals("2"))
+        else if ( accessLevel.equals("2") )
         {
-            staffToReturn = new TechnicalAdministrator(usernameOut, lastName, firstName, email, password, accessLevel);
+            staffToReturn = new TechnicalAdministrator(usernameOut, lastName,
+                    firstName, email, password, accessLevel);
         }
-        
 
         return staffToReturn;
     }
-    
 
     /**
      * 
@@ -266,11 +262,11 @@ public class StaffAccount
     {
         return accessLevel.get();
     }
-    
+
     public String GetPassword()
     {
         String pass = password.get();
-        ///decrypt the encrypted password from the database
+        // /decrypt the encrypted password from the database
         String decryptedPass = eh.decrypt(pass);
         return decryptedPass;
 
@@ -287,11 +283,11 @@ public class StaffAccount
     public StringProperty accessLevelProperty()
     {
         String accessStr = " ";
-        if (accessLevel.getValue().equals("0"))
+        if ( accessLevel.getValue().equals("0") )
         {
             accessStr = "Basic Staff";
         }
-        else if (accessLevel.getValue().equals("1"))
+        else if ( accessLevel.getValue().equals("1") )
         {
             accessStr = "Medical Administrator";
         }
@@ -309,7 +305,7 @@ public class StaffAccount
      * 
      * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public void setUsername(String username)
+    public void setUsername( String username )
     {
         this.username.set(username);
     }
@@ -320,7 +316,7 @@ public class StaffAccount
      * 
      * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public void setLastName(String lastName)
+    public void setLastName( String lastName )
     {
         this.lastName.set(lastName);
     }
@@ -331,7 +327,7 @@ public class StaffAccount
      * 
      * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public void setFirstName(String firstName)
+    public void setFirstName( String firstName )
     {
         this.firstName.set(firstName);
     }
@@ -342,7 +338,7 @@ public class StaffAccount
      * 
      * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public void setEmail(String email)
+    public void setEmail( String email )
     {
         this.email.set(email);
     }
@@ -353,7 +349,7 @@ public class StaffAccount
      * 
      * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public void setAccessLevel(String accessLevel)
+    public void setAccessLevel( String accessLevel )
     {
         this.accessLevel.set(accessLevel);
     }

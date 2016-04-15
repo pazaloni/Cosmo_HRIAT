@@ -1,4 +1,5 @@
 package gui;
+
 import core.Allergies;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -59,7 +60,7 @@ public class ManageAllergyGUI
     /**
      * Purpose: show the window for new allergy
      * 
-     * @param cosmoID: the participant that will be receiving the allergy    
+     * @param cosmoID: the participant that will be receiving the allergy
      */
     public void showAddAllergy( String cosmoID )
     {
@@ -153,9 +154,10 @@ public class ManageAllergyGUI
         btnAdd.setText("Update");
         // Handles the editing of the allergy
         btnAdd.setOnAction(event -> {
-        	Allergies newAllergy = new Allergies(allergicTo.getText(), allergyType.getText(),
-                            allergyDescription.getText());
-            String result = Allergies.updateAllergy(newAllergy, allergy,cosmoID);
+            Allergies newAllergy = new Allergies(allergicTo.getText(),
+                    allergyType.getText(), allergyDescription.getText());
+            String result = Allergies.updateAllergy(newAllergy, allergy,
+                    cosmoID);
             if ( result.equals("Update successfull") )
             {
                 localStage.close();

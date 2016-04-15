@@ -1,4 +1,5 @@
 package core;
+
 import gui.MedicalStaffMainPageGUI;
 import helpers.DatabaseHelper;
 import helpers.FormatHelper;
@@ -46,6 +47,7 @@ public class MedicalAdministrator extends BasicStaff
      * @param healthNumber the healthnumber of the participant
      * @param phone the phone number of the participant
      * @param address the address of the participant
+     * @param careType the type of care for the participant
      * @param imagePath the path to the image representing the participant
      * 
      * @return A string indicating the result of the creation, could include
@@ -54,7 +56,7 @@ public class MedicalAdministrator extends BasicStaff
     public static String createParticipant( String cosmoID, String firstName,
             String lastName, LocalDate birthDate, String physicianFName,
             String physicianLName, String healthNumber, String phone,
-            String address, String imagePath )
+            String address, String careType, String imagePath )
     {
         // initialize birth date string to an empty string
         String birthDateString = "";
@@ -63,7 +65,8 @@ public class MedicalAdministrator extends BasicStaff
         // get a null pointer exception
         if ( birthDate != null )
         {
-            birthDateString = birthDate.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy"));
+            birthDateString = birthDate.format(DateTimeFormatter
+                    .ofPattern("dd-MMM-yyyy"));
         }
 
         // set the result error message to en empty string
@@ -73,11 +76,11 @@ public class MedicalAdministrator extends BasicStaff
         if ( cosmoID.isEmpty() || firstName.isEmpty() || lastName.isEmpty()
                 || birthDateString.equals("") || physicianFName.isEmpty()
                 || physicianLName.isEmpty() || healthNumber.isEmpty()
-                || phone.isEmpty() || address.isEmpty() )
+                || phone.isEmpty() || address.isEmpty() || careType.isEmpty() )
         {
             result = "One of your fields is empty";
         }
-        else if(cosmoID.length() > 9)
+        else if ( cosmoID.length() > 9 )
         {
             result = "CosmoID must be less than 10 digits.";
         }
@@ -173,7 +176,7 @@ public class MedicalAdministrator extends BasicStaff
                     }
 
                     // array of field names
-                    String values[][] = new String[16][2];
+                    String values[][] = new String[17][2];
                     values[0][0] = "cosmoID";
                     values[1][0] = "firstName";
                     values[2][0] = "lastName";
@@ -181,15 +184,16 @@ public class MedicalAdministrator extends BasicStaff
                     values[4][0] = "personalHealthNumber";
                     values[5][0] = "phoneNumber";
                     values[6][0] = "address";
-                    values[7][0] = "dateUpdated";
-                    values[8][0] = "agencyID";
-                    values[9][0] = "chwNurseID";
-                    values[10][0] = "caregiverID";
-                    values[11][0] = "kinID";
-                    values[12][0] = "landlordID";
-                    values[13][0] = "physicianID";
-                    values[14][0] = "workID";
-                    values[15][0] = "imagePath";
+                    values[7][0] = "careType";
+                    values[8][0] = "dateUpdated";
+                    values[9][0] = "agencyID";
+                    values[10][0] = "chwNurseID";
+                    values[11][0] = "caregiverID";
+                    values[12][0] = "kinID";
+                    values[13][0] = "landlordID";
+                    values[14][0] = "physicianID";
+                    values[15][0] = "workID";
+                    values[16][0] = "imagePath";
 
                     // get the current date to insert into "lastUpdated"
                     Calendar c = Calendar.getInstance();
@@ -197,24 +201,24 @@ public class MedicalAdministrator extends BasicStaff
                     String formattedDate = df.format(c.getTime());
 
                     String dbPath = saveImage(imagePath, cosmoID);
-                    FormatHelper fh = new FormatHelper();
                     // array of values to insert
                     values[0][1] = cosmoID;
                     values[1][1] = firstName;
                     values[2][1] = lastName;
                     values[3][1] = birthDateString;
                     values[4][1] = healthNumber;
-                    values[5][1] = fh.formatPhoneNum(phone);
+                    values[5][1] = phone;
                     values[6][1] = address;
-                    values[7][1] = formattedDate;
-                    values[8][1] = "1";
+                    values[7][1] = careType;
+                    values[8][1] = formattedDate;
                     values[9][1] = "1";
                     values[10][1] = "1";
                     values[11][1] = "1";
                     values[12][1] = "1";
-                    values[13][1] = physicianID;
-                    values[14][1] = "1";
-                    values[15][1] = dbPath;
+                    values[13][1] = "1";
+                    values[14][1] = physicianID;
+                    values[15][1] = "1";
+                    values[16][1] = dbPath;
 
                     // inserting into the database
                     successful = db.insert(values, "Participant");
@@ -246,7 +250,7 @@ public class MedicalAdministrator extends BasicStaff
         byte[] imageData;
         // This returns the path to where the jar file is stored
         String pathToSaveTo = "./images/" + cosmoID + ".jpg";
-       
+
         try (FileOutputStream fos = new FileOutputStream(pathToSaveTo))
         {
             File imageToWrite = new File(path);
@@ -259,10 +263,10 @@ public class MedicalAdministrator extends BasicStaff
         {
             System.out.println("File can't be found!");
         }
-        
-        //Remove the dot to store them in properly in the database
+
+        // Remove the dot to store them in properly in the database
         pathToSaveTo = pathToSaveTo.replace("./images/", "/images/");
-        System.out.println("Path to save to "+ pathToSaveTo);
+        System.out.println("Path to save to " + pathToSaveTo);
         return pathToSaveTo;
 
     }
@@ -315,20 +319,21 @@ public class MedicalAdministrator extends BasicStaff
      * @param city - the participant city
      * @param postal code - the participant postal code
      * @param sin - the participant social insurance number
+     * @param careType - the care type of the participant
      * @param status - the participant status
      * @return
      */
-	public static String editParticipant(String cosmoId, String firstName,
-            String lastName, LocalDate birthDate,
-            String phn, String address, String phoneNum, String city, String postalCode,
-            String sin, String status)
-	{
+    public static String editParticipant( String cosmoId, String firstName,
+            String lastName, LocalDate birthDate, String phn, String address,
+            String phoneNum, String city, String postalCode, String sin,
+            String careType, String status )
+    {
         // initialize birth date string to an empty string
         String birthDateString = "";
 
         // check if birthdate is set before trying to format it so we don't
         // get a null pointer exception
-        if (birthDate != null)
+        if ( birthDate != null )
         {
             birthDateString = birthDate.format(DateTimeFormatter
                     .ofPattern("dd-MMM-yyyy"));
@@ -336,10 +341,9 @@ public class MedicalAdministrator extends BasicStaff
         String result = "";
 
         // check to see if any of the fields are empty
-        if (firstName.isEmpty() || lastName.isEmpty()
+        if ( firstName.isEmpty() || lastName.isEmpty()
                 || birthDateString.equals("") || phn.isEmpty()
-                     || address.isEmpty() || phoneNum.isEmpty() || 
-                     city.isEmpty())
+                || address.isEmpty() || phoneNum.isEmpty() || city.isEmpty() )
         {
             result = "One of your fields is empty";
         }
@@ -351,66 +355,68 @@ public class MedicalAdministrator extends BasicStaff
             FormatHelper fh = new FormatHelper();
             boolean successful = false;
             // check to see if the Health Number is a 9 digit number
-            if (!phn.matches("^[0-9]{9}$"))
+            if ( !phn.matches("^[0-9]{9}$") )
             {
                 result = "Health Number must be 9 digits";
             }
-            //check if postal code is valid
-            else if(!postalCode.matches("^[A-Za-z]\\d[A-Za-z][ ]?\\d[A-Za-z]\\d$"))
+            // check if postal code is valid
+            else if ( !postalCode
+                    .matches("^[A-Za-z]\\d[A-Za-z][ ]?\\d[A-Za-z]\\d$") )
             {
                 result = "Invalid Postal Code";
             }
-            //ensure SIN is a 9 digit number
-            else if(!sin.matches("^[0-9]{9}$"))
+            // ensure SIN is a 9 digit number
+            else if ( !sin.matches("^[0-9]{9}$") )
             {
                 result = "SIN must be 9 digits";
             }
-            else if((phoneNum = fh.formatPhoneNum(phoneNum)) == "A phone number must have 10 digits.")
+            else if ( (phoneNum = fh.formatPhoneNum(phoneNum)) == "A phone number must have 10 digits." )
             {
                 result = phoneNum;
             }
             else
             {
                 successful = false;
-                    // array of field names
-                    String values[][] = new String[12][2];
-                    values[0][0] = "cosmoID";
-                    values[1][0] = "firstName";
-                    values[2][0] = "lastName";
-                    values[3][0] = "dateOfBirth";
-                    values[4][0] = "personalHealthNumber";
-                    values[5][0] = "address";
-                    values[6][0] = "phoneNumber";
-                    values[7][0] = "city";
-                    values[8][0] = "postalCode";
-                    values[9][0] = "socialInsuranceNumber";
-                    values[10][0] = "participantStatus";
-                    values[11][0] = "dateUpdated";
+                // array of field names
+                String values[][] = new String[13][2];
+                values[0][0] = "cosmoID";
+                values[1][0] = "firstName";
+                values[2][0] = "lastName";
+                values[3][0] = "dateOfBirth";
+                values[4][0] = "personalHealthNumber";
+                values[5][0] = "address";
+                values[6][0] = "phoneNumber";
+                values[7][0] = "city";
+                values[8][0] = "postalCode";
+                values[9][0] = "socialInsuranceNumber";
+                values[10][0] = "careType";
+                values[11][0] = "participantStatus";
+                values[12][0] = "dateUpdated";
 
-                 
-                    // get the current date to insert into "lastUpdated"
-                    Calendar c = Calendar.getInstance();
-                    SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-                    String formattedDate = df.format(c.getTime());                   
-                    // array of values to insert
-                    values[0][1] = cosmoId;
-                    values[1][1] = firstName;
-                    values[2][1] = lastName;
-                    values[3][1] = birthDateString;
-                    values[4][1] = phn;
-                    values[5][1] = address;
-                    values[6][1] = phoneNum;
-                    values[7][1] = city;
-                    values[8][1] = postalCode;
-                    values[9][1] = sin;
-                    values[10][1] = status;
-                    values[11][1] = formattedDate;         
-    
-                    Calendar ca = Calendar.getInstance();
-                    // inserting into the database
-                    successful = db.update(values, "Participant", cosmoId);
-                    
-                if (!successful)
+                // get the current date to insert into "lastUpdated"
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                String formattedDate = df.format(c.getTime());
+                // array of values to insert
+                values[0][1] = cosmoId;
+                values[1][1] = firstName;
+                values[2][1] = lastName;
+                values[3][1] = birthDateString;
+                values[4][1] = phn;
+                values[5][1] = address;
+                values[6][1] = phoneNum;
+                values[7][1] = city;
+                values[8][1] = postalCode;
+                values[9][1] = sin;
+                values[10][1] = careType;
+                values[11][1] = status;
+                values[12][1] = formattedDate;
+
+                Calendar ca = Calendar.getInstance();
+                // inserting into the database
+                successful = db.update(values, "Participant", cosmoId);
+
+                if ( !successful )
                 {
                     result = "The insertion was not successful";
                 }
@@ -418,7 +424,7 @@ public class MedicalAdministrator extends BasicStaff
             db.disconnect();
         }
         return result;
-    
-	}
+
+    }
 
 }

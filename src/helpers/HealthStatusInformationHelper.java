@@ -1,4 +1,5 @@
 package helpers;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -111,11 +112,12 @@ public class HealthStatusInformationHelper
             }
             SimpleDateFormat outputFormatter = new SimpleDateFormat();
             outputFormatter.applyPattern("dd-MMM-yyyy");
-            
+
             healthStatusInfo[5] = outputFormatter.format(date);
         }
 
-        //healthStatusInfo[5] = lastUpdated.substring(0, lastUpdated.length()-9);
+        // healthStatusInfo[5] = lastUpdated.substring(0,
+        // lastUpdated.length()-9);
         if ( otherInfo == null )
         {
             otherInfo = " ";
@@ -129,37 +131,36 @@ public class HealthStatusInformationHelper
      * Purpose: Save the health status info
      * 
      * @param info the info to save
-     * @param cosmoID the participant to save the health status info to 
+     * @param cosmoID the participant to save the health status info to
      * @return String containing the saved information
      */
-    public boolean saveHealthStatusInfo(String[] info,String cosmoID)
+    public boolean saveHealthStatusInfo( String[] info, String cosmoID )
     {
-    	db.connect();
-    	
-    	String updateValues[][] = new String[6][2];
-    	
-    	updateValues[0][0] = "cosmoID";
+        db.connect();
+
+        String updateValues[][] = new String[6][2];
+
+        updateValues[0][0] = "cosmoID";
         updateValues[1][0] = "diagnosis";
         updateValues[2][0] = "tylenolPermission";
         updateValues[3][0] = "careGiverPermissionGive";
         updateValues[4][0] = "healthStatusUpdated";
         updateValues[5][0] = "otherInfo";
-        
+
         updateValues[0][1] = cosmoID;
         updateValues[1][1] = info[0];
         updateValues[2][1] = info[1];
-        updateValues[3][1] = info[2];        
+        updateValues[3][1] = info[2];
         Date now = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat();
         formatter.applyPattern("dd-MMM-yyyy");
-        updateValues[4][1] = formatter.format(now);         
+        updateValues[4][1] = formatter.format(now);
         updateValues[5][1] = info[3];
-        
+
         boolean success = db.update(updateValues, "Participant", cosmoID);
 
-    	db.disconnect();    	
-    	return success;
+        db.disconnect();
+        return success;
     }
-    
-    
+
 }

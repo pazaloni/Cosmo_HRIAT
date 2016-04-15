@@ -1,4 +1,5 @@
 package tests;
+
 import static org.junit.Assert.*;
 import helpers.ManageStaffAccountHelper;
 
@@ -46,14 +47,12 @@ public class TestStaffAccount
     private String failPassword;
     private String failEmptyField;
 
-
-
     @Before
     public void setUp() throws Exception
     {
         test = new StaffAccount();
         testHelper = new ManageStaffAccountHelper();
-        
+
         usernameOne = "lebowskyD";
         firstNameOne = "dude";
         lastNameOne = "lebowsky";
@@ -106,7 +105,8 @@ public class TestStaffAccount
     {
 
         StaffAccount user = test.login(usernameOne, firstPasswordOne);
-        assertTrue(user.getClass().getSimpleName().equals("MedicalAdministrator"));
+        assertTrue(user.getClass().getSimpleName()
+                .equals("MedicalAdministrator"));
     }
 
     @Test
@@ -114,7 +114,8 @@ public class TestStaffAccount
     {
 
         StaffAccount user = test.login(usernameTwo, firstPasswordTwo);
-        assertTrue(user.getClass().getSimpleName().equals("TechnicalAdministrator"));
+        assertTrue(user.getClass().getSimpleName()
+                .equals("TechnicalAdministrator"));
     }
 
     @Test
@@ -156,7 +157,6 @@ public class TestStaffAccount
         StaffAccount user = test.login(failEmptyField, failEmptyField);
         assertTrue(user == null);
     }
-
 
     @After
     public void tearDown() throws Exception

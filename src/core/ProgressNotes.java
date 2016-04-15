@@ -42,7 +42,7 @@ public class ProgressNotes
      * @return
      */
     public StringProperty getDateTime()
-    {       
+    {
         return dateTime;
     }
 
@@ -70,16 +70,17 @@ public class ProgressNotes
 
     /**
      * Method for display properly formatted date value.
+     * 
      * @return a properly formatted date string
      */
     public StringProperty displayDateTime()
     {
-        
+
         DateFormat dToSFormat = new SimpleDateFormat("dd-MMM-yyyy");
         DateFormat sToDFormat = new SimpleDateFormat("yyyy-MM-dd");
         String unformatedString = dateTime.get();
         Date unformatedDate;
-        String formattedString; 
+        String formattedString;
         try
         {
             unformatedDate = sToDFormat.parse(unformatedString);
@@ -89,10 +90,12 @@ public class ProgressNotes
         {
             formattedString = dateTime.toString();
         }
-        
-        StringProperty formattedDateTime = new SimpleStringProperty(formattedString);
+
+        StringProperty formattedDateTime = new SimpleStringProperty(
+                formattedString);
         return formattedDateTime;
     }
+
     /**
      * Purpose to return the date as a localDate
      * 
@@ -117,10 +120,8 @@ public class ProgressNotes
      * 
      * Purpose: Add a progress note for a participant in the database
      * 
-     * @param note
-     *            note to add
-     * @param cosmoID
-     *            the participant that will be receiving the note
+     * @param note note to add
+     * @param cosmoID the participant that will be receiving the note
      * @return The result of the insertion in the database
      */
     public static String createProgressNote( ProgressNotes note, String cosmoID )
@@ -147,9 +148,8 @@ public class ProgressNotes
 
             progressNotesValues[0] = note.getNum().get();
             progressNotesValues[1] = cosmoID;
-            progressNotesValues[2] = note.getDateTime().get();            
+            progressNotesValues[2] = note.getDateTime().get();
             progressNotesValues[3] = note.getName().get();
-            
 
             success = db.insert(progressNotesValues, "ProgressNotes");
 
@@ -171,12 +171,9 @@ public class ProgressNotes
      * 
      * Purpose: Update a progress note for a participant
      * 
-     * @param newNote
-     *            the note that will be new in the database
-     * @param oldNote
-     *            the note that will be changed
-     * @param cosmoID
-     *            the participant that will have the note changed
+     * @param newNote the note that will be new in the database
+     * @param oldNote the note that will be changed
+     * @param cosmoID the participant that will have the note changed
      * @return a string containing the status of the update
      */
     public static String updateProgressNote( ProgressNotes newNote,
@@ -203,11 +200,9 @@ public class ProgressNotes
             updateValues[0][0] = "num";
             updateValues[1][0] = "participantName";
             updateValues[2][0] = "dateTime";
-            
-            
 
             updateValues[0][1] = newNote.getNum().get();
-            updateValues[1][1] = newNote.getName().get();            
+            updateValues[1][1] = newNote.getName().get();
             updateValues[2][1] = newNote.getDateTime().get();
 
             success = db.update(updateValues, "ProgressNotes", oldNote.getNum()
@@ -231,10 +226,8 @@ public class ProgressNotes
      * 
      * Purpose: Remove a progress note for a participant from the database
      * 
-     * @param note
-     *            the note to remove
-     * @param cosmoID
-     *            the participant that will have the note removed
+     * @param note the note to remove
+     * @param cosmoID the participant that will have the note removed
      * @return a string containing the status of the deletion
      */
     public static String deleteProgressNote( ProgressNotes note, String cosmoID )

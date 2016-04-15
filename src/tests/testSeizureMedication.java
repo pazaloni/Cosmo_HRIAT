@@ -1,4 +1,5 @@
 package tests;
+
 import static org.junit.Assert.*;
 
 import org.junit.After;
@@ -6,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import core.SeizureMedication;
-
 
 public class testSeizureMedication
 {
@@ -34,8 +34,6 @@ public class testSeizureMedication
 
         timesGiven1 = "2016-02-08 05:12:18";
         timesGiven2 = "2016-04-15 05:12:18";
-
-
 
         test1 = new SeizureMedication(medicationName1, dosage1, timesGiven1);
         test2 = new SeizureMedication(medicationName2, dosage2, timesGiven2);
@@ -80,8 +78,4 @@ public class testSeizureMedication
         assertTrue(test2.getTimesGiven().get().equals(timesGiven2));
     }
 
-
 }
-
-
-

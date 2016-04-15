@@ -5,8 +5,10 @@ import helpers.FormatHelper;
 
 import org.junit.Before;
 import org.junit.Test;
+
 /**
  * Test the FormatHelper Object
+ * 
  * @author cst209
  *
  */
@@ -18,6 +20,7 @@ public class FormatHelperTest
     String test3;
     String test4;
     String test5;
+
     @Before
     public void setUp() throws Exception
     {

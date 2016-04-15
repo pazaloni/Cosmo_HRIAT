@@ -1,9 +1,5 @@
 package gui;
 
-
-
-
-
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
@@ -118,8 +114,8 @@ public class PrintPreviewUpdateFormGUI extends ScrollPane
      * Purpose: Creates the form, populated with information related to the
      * participant.
      * 
-     * @param cosmoID
-     *            The primary key for the participant to get information for.
+     * @param cosmoID The primary key for the participant to get information
+     *            for.
      * @author Andrew Hundeby cst205
      */
     public void PrintPreviewUpdateFormGUIConstruct( Stage stage, int cosmoID,
@@ -182,15 +178,18 @@ public class PrintPreviewUpdateFormGUI extends ScrollPane
                 PrinterJob printJob = PrinterJob.getPrinterJob();
                 printJob.setPrintable(new ImagePrintable(printJob, buffImage));
 
-                if (printJob.printDialog()) {
-                    try {
+                if ( printJob.printDialog() )
+                {
+                    try
+                    {
                         printJob.print();
-                    } catch (PrinterException prt) {
+                    }
+                    catch ( PrinterException prt )
+                    {
                         prt.printStackTrace();
                     }
                 }
 
-                
             });
         }
 
@@ -687,27 +686,30 @@ public class PrintPreviewUpdateFormGUI extends ScrollPane
         emergencyContactName.setText(eInfo[0] + " " + eInfo[1]);
         emergencyContactPhone.setText(eInfo[2]);
     }
-    
+
     /**
      * Purpose: inner class
+     * 
      * @author cst205
      *
      */
-    public class ImagePrintable implements Printable 
+    public class ImagePrintable implements Printable
     {
 
-        private double          x, y, width;
+        private double x, y, width;
 
-        private int             orientation;
+        private int orientation;
 
-        private BufferedImage   image;
+        private BufferedImage image;
 
         /**
-         * Purpose:  for setting the multiple variables
-         * @param printJob is used to fetch info such as x, y and width dimensions
+         * Purpose: for setting the multiple variables
+         * 
+         * @param printJob is used to fetch info such as x, y and width
+         *            dimensions
          * @param image is scene coming in
          */
-        public ImagePrintable(PrinterJob printJob, BufferedImage image) 
+        public ImagePrintable(PrinterJob printJob, BufferedImage image)
         {
             PageFormat pageFormat = printJob.defaultPage();
             this.x = 0;
@@ -718,30 +720,26 @@ public class PrintPreviewUpdateFormGUI extends ScrollPane
         }
 
         /**
-         * Purpose: checks to see if orientation is portrait or landscape
-         * and prints accordingly
+         * Purpose: checks to see if orientation is portrait or landscape and
+         * prints accordingly
          */
         @Override
-        public int print(Graphics g, PageFormat pageFormat, int pageIndex)
-                throws PrinterException 
+        public int print( Graphics g, PageFormat pageFormat, int pageIndex )
+                throws PrinterException
         {
-            if (pageIndex == 0) 
+            if ( pageIndex == 0 )
             {
- 
-                
+
                 g.drawImage(image, (int) x, (int) y, 650, 800, null);
-                
-                //width = 468 height = 495
+
+                // width = 468 height = 495
                 return PAGE_EXISTS;
             }
-            else 
+            else
             {
                 return NO_SUCH_PAGE;
             }
         }
     }
-
-
-    
 
 }

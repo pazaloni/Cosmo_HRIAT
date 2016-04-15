@@ -2,7 +2,7 @@ package core;
 
 /**
  * 
- * Purpose: represent the incident injury types in the database for one incident  
+ * Purpose: represent the incident injury types in the database for one incident
  * 
  * @author CIMP
  * @version 1.0
@@ -23,7 +23,7 @@ public class IncidentInjuryType
     {
         return incidnetID;
     }
-    
+
     public void setIncidnetID( int incidnetID )
     {
         this.incidnetID = incidnetID;

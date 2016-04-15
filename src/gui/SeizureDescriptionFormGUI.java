@@ -1,4 +1,5 @@
 package gui;
+
 import helpers.DatabaseHelper;
 import helpers.SeizureDescriptionFormHelper;
 

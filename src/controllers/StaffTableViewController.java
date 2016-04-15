@@ -1,4 +1,5 @@
 package controllers;
+
 import helpers.DatabaseHelper;
 
 import java.sql.*;
@@ -57,6 +58,7 @@ public class StaffTableViewController
         // The result set that will query the database to get all the users
         ResultSet rs = db.select("UserName, lastName, firstName, email, "
                 + "accessLevel", "Staff", "", "");
+
         String username;
         String lastName;
         String firstName;
@@ -65,14 +67,14 @@ public class StaffTableViewController
         String accessLevel;
         try
         {
-            while (rs.next())
+            while ( rs.next() )
             {
                 username = rs.getString(1);
 
                 lastName = rs.getString(2);
                 firstName = rs.getString(3);
                 // if there is no email set, "none" will be displayed
-                if (rs.getString(4) == null)
+                if ( rs.getString(4) == null )
                 {
                     email = "none";
                 }
@@ -85,14 +87,14 @@ public class StaffTableViewController
 
                 StaffAccount account;
                 // if accessLevel is 0, then the user is a basicStaff
-                if (accessLevel.equals("0"))
+                if ( accessLevel.equals("0") )
                 {
                     account = new BasicStaff(username, lastName, firstName,
                             email, password, accessLevel);
                 }
                 // If the accessLevel is 1, then the user is a
                 // medicalAdministrator
-                else if (accessLevel.equals("1"))
+                else if ( accessLevel.equals("1") )
                 {
                     account = new MedicalAdministrator(username, lastName,
                             firstName, email, password, accessLevel);
@@ -109,7 +111,7 @@ public class StaffTableViewController
             }
         }
         // if this fail, print the stack trace
-        catch (SQLException e)
+        catch ( SQLException e )
         {
 
             e.printStackTrace();
@@ -160,7 +162,7 @@ public class StaffTableViewController
 
         StaffAccount account = staffTable.getSelectionModel().getSelectedItem();
 
-        if (account == null)
+        if ( account == null )
         {
             result = "null";
         }
@@ -175,12 +177,11 @@ public class StaffTableViewController
      * Purpose: This will remove the user from the table and then refresh the
      * table.
      * 
-     * @param username
-     *            The username that identifies which entry to remove from the
-     *            table.
+     * @param username The username that identifies which entry to remove from
+     *            the table.
      * @author Breanna Wilson cst215 Steven Palchinski cst209
      */
-    public void removeViewableUser(String username)
+    public void removeViewableUser( String username )
     {
         this.staffData.clear();
         this.intitializeStaffData();

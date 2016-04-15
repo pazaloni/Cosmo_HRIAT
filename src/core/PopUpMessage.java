@@ -1,4 +1,5 @@
 package core;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -25,10 +26,8 @@ public class PopUpMessage
      * displays a message, and contains a confirmation button to close the
      * window.
      * 
-     * @param message
-     *            : The message to be displayed
-     * @param stage
-     *            : the stage to display in.
+     * @param message : The message to be displayed
+     * @param stage : the stage to display in.
      */
     public PopUpMessage(String message, Stage stage)
     {
@@ -46,16 +45,15 @@ public class PopUpMessage
 
         bottom.getChildren().add(confirmBtn);
         bottom.setAlignment(Pos.CENTER);
-        root.setPadding(new Insets(10,10,10,10));
-        
-       
+        root.setPadding(new Insets(10, 10, 10, 10));
+
         this.root.setBottom(bottom);
 
         this.confirmBtn.setOnAction(new EventHandler<ActionEvent>()
         {
 
             @Override
-            public void handle(ActionEvent event)
+            public void handle( ActionEvent event )
             {
                 stage.close();
 

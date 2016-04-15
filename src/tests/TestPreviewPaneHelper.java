@@ -1,4 +1,5 @@
 package tests;
+
 import static org.junit.Assert.*;
 import helpers.DatabaseHelper;
 import helpers.PreviewPaneHelper;
@@ -36,6 +37,7 @@ public class TestPreviewPaneHelper
     private String healthNumber;
     private String phoneOne;
     private String addressOne;
+    private String careTypeOne;
 
     private String path;
 
@@ -53,11 +55,12 @@ public class TestPreviewPaneHelper
         healthNumber = "111111111";
         phoneOne = "1111111111";
         addressOne = "123 Fake Street";
+        careTypeOne = "Luther";
         path = "asfdsad";
         String result = MedicalAdministrator.createParticipant(cosmoID,
                 participantFirstName, participantLastName,
                 participantBirthdate, physicianFName, physicianLName,
-                healthNumber, phoneOne, addressOne, path);
+                healthNumber, phoneOne, addressOne, careTypeOne, path);
 
         System.out.println(result);
     }

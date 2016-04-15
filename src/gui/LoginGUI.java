@@ -1,4 +1,6 @@
 package gui;
+
+import helpers.EncryptionHelper;
 import helpers.EncryptionHelper;
 import core.StaffAccount;
 import core.TechnicalAdministrator;
@@ -23,16 +25,15 @@ import javafx.stage.Stage;
  */
 public class LoginGUI extends Application
 {
-	StaffAccount staffloginHelper = new StaffAccount();
-
+    StaffAccount staffloginHelper = new StaffAccount();
     /* Login Elements */
     private VBox vbMainPane;
     private TextField txtUserName;
     private PasswordField pfUserPassword;
     private Button btnLogin;
-    private Image imgLogo; 
-    
-    //The encryption helper instance
+    private Image imgLogo;
+
+    // The encryption helper instance
     private EncryptionHelper eh;
 
     public static Stage stageLogin;
@@ -47,9 +48,9 @@ public class LoginGUI extends Application
     public static final String USERNAME_PROMPT_TEXT = "Username";
     public static final String PASSWORD_PROMPT_TEXT = "Password";
     public static final String STAGE_TITLE = "Cosmopolitan Industries";
-    public static final String IMAGE_PATH = "file:images/CosmoIconLong.png";
+    public static final String IMAGE_PATH = "images/CosmoIconLong.png";
     public static final String BUTTON_LABEL = "Login";
-    
+
     public static void main( String[] args )
     {
         launch();
@@ -76,6 +77,7 @@ public class LoginGUI extends Application
         btnLogin = new Button(BUTTON_LABEL);
         // making the image for the logo to be displayed
         imgLogo = new Image(IMAGE_PATH);
+
     }
 
     /**
@@ -99,7 +101,7 @@ public class LoginGUI extends Application
         txtUserName.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
-            public void handle(ActionEvent e)
+            public void handle( ActionEvent e )
             {
                 login();
             }
@@ -107,7 +109,7 @@ public class LoginGUI extends Application
         pfUserPassword.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
-            public void handle(ActionEvent e)
+            public void handle( ActionEvent e )
             {
                 login();
             }
@@ -115,7 +117,7 @@ public class LoginGUI extends Application
         btnLogin.setOnAction(new EventHandler<ActionEvent>()
         {
             @Override
-            public void handle(ActionEvent e)
+            public void handle( ActionEvent e )
             {
                 login();
             }
@@ -124,7 +126,7 @@ public class LoginGUI extends Application
     }
 
     @Override
-    public void start(Stage stage)
+    public void start( Stage stage )
     {
 
         stageLogin = stage;
@@ -160,7 +162,7 @@ public class LoginGUI extends Application
         // the username and password form the textfields
         String username = txtUserName.getText();
         String password = pfUserPassword.getText();
-        
+
         // flag used to keep track if they logged in or not
         boolean success = false;
         // Checks the length of the textfields
@@ -169,17 +171,18 @@ public class LoginGUI extends Application
 
             // attempt login
             loggedInStaff = staffloginHelper.login(username, password);
-            
+
             // of the returned staff isn't null
-            if (loggedInStaff != null)
+            if ( loggedInStaff != null )
             {
                 // if they are a technicalAdministrator
-                if (loggedInStaff instanceof TechnicalAdministrator)
+                if ( loggedInStaff instanceof TechnicalAdministrator )
                 {
                     success = true;
                     stageLogin.close();
                     TechMainPageGUI techMainGui = new TechMainPageGUI();
-                    techMainGui.techMainPageConstruct(stageLogin, loggedInStaff);
+                    techMainGui
+                            .techMainPageConstruct(stageLogin, loggedInStaff);
                 }
                 else
                 {
@@ -187,12 +190,12 @@ public class LoginGUI extends Application
                     stageLogin.close();
                     MedicalStaffMainPageGUI medStaffGUI = new MedicalStaffMainPageGUI();
                     medStaffGUI.medMainPageConstruct(stageLogin, loggedInStaff);
-                }     
+                }
             }
         }
         // If they didn't successfully login a incorrect username or
         // password will be displayed
-        if (success == false)
+        if ( success == false )
         {
             txtUserName.setText("");
             pfUserPassword.setText("");

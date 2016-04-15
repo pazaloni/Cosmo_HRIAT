@@ -1,4 +1,5 @@
 package gui;
+
 import controllers.ActivityLogTableViewController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -53,7 +54,7 @@ public class ActivityLogPopUp
     {
         this.parentStage = parentStage;
     }
-   
+
     /**
      * 
      * Purpose: Create the acivity log with all the details needed including the
@@ -65,7 +66,7 @@ public class ActivityLogPopUp
     {
         HBox controls = createControls();
         TableView table = logController.activityLogTable;
-     //   HBox tableBox = createTableBox();
+        // HBox tableBox = createTableBox();
         root.setTop(controls);
         root.setCenter(table);
         root.setPadding(new Insets(10, 10, 10, 10));
@@ -92,7 +93,6 @@ public class ActivityLogPopUp
         // Setting the default value to be the first one
         searchCriteriaBox.setValue(searchOptions.get(0));
 
-        
         box.setPadding(new Insets(10, 10, 10, 10));
         box.setSpacing(SPACING);
         box.getChildren().addAll(searchCriteriaBox, searchCriteria,
@@ -108,26 +108,24 @@ public class ActivityLogPopUp
      * @return
      */
 
-
-
     /**
      * 
      * Purpose: Assign handlers on all items on this specific gui
      */
     private void assignHandlers()
     {
-        //Handler for the search button 
+        // Handler for the search button
         searchButton.setOnAction(new EventHandler<ActionEvent>()
         {
             // TODO add the event to be handled here
             @Override
             public void handle( ActionEvent arg0 )
             {
-                
+
             }
         });
 
-        //Handler for the searchbox
+        // Handler for the searchbox
         searchCriteria.setOnAction(new EventHandler<ActionEvent>()
         {
             // TODO add the event to be handled here
@@ -138,8 +136,7 @@ public class ActivityLogPopUp
             }
         });
     }
- 
-    
+
     /**
      * 
      * Purpose: show the activity log when this method is being called.
@@ -150,7 +147,7 @@ public class ActivityLogPopUp
         logController = new ActivityLogTableViewController();
 
         root = createActivityLog();
-        //Assign handlers on the various controls
+        // Assign handlers on the various controls
         assignHandlers();
 
         Stage localStage = new Stage();

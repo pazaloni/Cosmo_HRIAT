@@ -1,4 +1,5 @@
 package gui;
+
 import core.Medication;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -147,12 +148,12 @@ public class ManageMedicationGUI
         mainPane.add(timesGiven, 1, 3);
         mainPane.add(reason, 1, 4);
 
-        //Set the values to 
+        // Set the values to
         medicationName.setText(med.getMedicationName().get());
         medicationDosage.setText(med.getDosage().get());
         timesGiven.setText(med.getTimesGiven().get());
         reason.setText(med.getReason().get());
-        
+
         HBox controls = new HBox();
 
         controls.getChildren().addAll(btnCancel, btnAdd);
@@ -167,10 +168,10 @@ public class ManageMedicationGUI
         mainPane.setPadding(new Insets(10, 10, 10, 10));
         btnAdd.setText("Update");
         btnAdd.setOnAction(event -> {
-            String result = Medication.updateMedication(
-                    medicationName.getText(), medicationDosage.getText(),
-                    timesGiven.getText(), reason.getText(), cosmoID,
-                    med.getMedicationName().get());
+            String result = Medication.updateMedication(medicationName
+                    .getText(), medicationDosage.getText(), timesGiven
+                    .getText(), reason.getText(), cosmoID, med
+                    .getMedicationName().get());
             if ( result.equals("") )
             {
                 localStage.close();
@@ -180,8 +181,8 @@ public class ManageMedicationGUI
                 lblMessage.setText(result);
             }
         });
-        //If they want to click cancel for some reason, close the window
-        btnCancel.setOnAction(event->{
+        // If they want to click cancel for some reason, close the window
+        btnCancel.setOnAction(event -> {
             localStage.close();
         });
 

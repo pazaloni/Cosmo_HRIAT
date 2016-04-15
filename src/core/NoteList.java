@@ -1,4 +1,5 @@
 package core;
+
 import java.util.ArrayList;
 
 public class NoteList
@@ -11,7 +12,7 @@ public class NoteList
 
     }
 
-    public void addNote(Note noteToAdd)
+    public void addNote( Note noteToAdd )
     {
 
     }

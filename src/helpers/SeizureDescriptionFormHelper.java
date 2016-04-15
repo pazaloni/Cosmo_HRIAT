@@ -1,4 +1,5 @@
 package helpers;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
@@ -30,8 +31,7 @@ public class SeizureDescriptionFormHelper
      * array with the relevant information or empty if the participant does not
      * have any seizures
      * 
-     * @param cosmoId
-     *            of the participant being passes in
+     * @param cosmoId of the participant being passes in
      * @return
      */
     public String[] retieveSeizureInformation( String cosmoId )
@@ -110,6 +110,7 @@ public class SeizureDescriptionFormHelper
 
     /**
      * Method for saving seizure information
+     * 
      * @param seizureInformation: The values to be saved
      * @param cosmoID: The person you are saving this for.
      * @return Whether or not the insertion was successful
@@ -120,7 +121,7 @@ public class SeizureDescriptionFormHelper
         String result = "";
         DatabaseHelper db = new DatabaseHelper();
         db.connect();
-        //Get the seizureID for the current participant
+        // Get the seizureID for the current participant
         ResultSet idResult = db.select("seizureID", "Seizures", "cosmoId = '"
                 + cosmoID + "'", "");
         String seizureID = "";
@@ -132,7 +133,7 @@ public class SeizureDescriptionFormHelper
         }
         catch ( SQLException e )
         {
-            //If the participant does not have a seizureID, make one. 
+            // If the participant does not have a seizureID, make one.
             String[][] initializerValues = new String[1][2];
             initializerValues[0][0] = "cosmoID";
             initializerValues[0][1] = cosmoID;
@@ -160,7 +161,7 @@ public class SeizureDescriptionFormHelper
         }
         if ( successful )
         {
-            //Prepare to add all the information for the seizure
+            // Prepare to add all the information for the seizure
             String[][] values = new String[9][2];
             values[0][0] = "seizureID";
             values[1][0] = "seizureType";
@@ -174,7 +175,7 @@ public class SeizureDescriptionFormHelper
             values[0][1] = seizureID;
             for ( int i = 1; i < values.length; i++ )
             {
-                values[i][1] = seizureInformation[i-1];
+                values[i][1] = seizureInformation[i - 1];
             }
             successful = db.update(values, "Seizures", seizureID);
 

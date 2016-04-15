@@ -1,4 +1,5 @@
 package helpers;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -25,7 +26,6 @@ public class PreviewPaneHelper
     private String allergies;
     private String imagePath;
 
-
     private DatabaseHelper db;
 
     public PreviewPaneHelper()
@@ -49,8 +49,8 @@ public class PreviewPaneHelper
 
         // Query for the participant information
         participantInfo = db.select(
-                "firstName, lastName, physicianID, imagePath", 
-                "Participant", "cosmoID=" + participantID, "");
+                "firstName, lastName, physicianID, imagePath", "Participant",
+                "cosmoID=" + participantID, "");
         String physicianID = "";
 
         // Get the seizure info for the participant
@@ -64,14 +64,14 @@ public class PreviewPaneHelper
             // retreive the first and last name
             firstName = participantInfo.getString(1);
             lastName = participantInfo.getString(2);
-            
 
             // get the phyisican id for the particiapnt
             physicianID = participantInfo.getString(3);
 
             String imagePath = participantInfo.getString(4);
             this.imagePath = imagePath;
-//            System.out.println("Preview pane helper image path: " + this.imagePath);
+            // System.out.println("Preview pane helper image path: " +
+            // this.imagePath);
             // close the result set, free up resources.
             participantInfo.close();
 
@@ -195,6 +195,5 @@ public class PreviewPaneHelper
             e.printStackTrace();
         }
     }
-
 
 }

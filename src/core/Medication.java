@@ -1,4 +1,5 @@
 package core;
+
 import helpers.DatabaseHelper;
 
 import java.sql.ResultSet;
@@ -79,16 +80,11 @@ public class Medication
     /**
      * create a new medication and add it to database
      * 
-     * @param medicationName
-     *            : The name of the medication to be added
-     * @param dosage
-     *            : How much of the medication needs to be taken
-     * @param timesGiven
-     *            : What times the medication is taken
-     * @param reason
-     *            : Why the medication is taken.
-     * @param cosmoID
-     *            : Who the medication is being taken by.
+     * @param medicationName : The name of the medication to be added
+     * @param dosage : How much of the medication needs to be taken
+     * @param timesGiven : What times the medication is taken
+     * @param reason : Why the medication is taken.
+     * @param cosmoID : Who the medication is being taken by.
      * @return: The result of the insertion to the database.
      */
     public static String createMedication( String medicationName,
@@ -251,10 +247,8 @@ public class Medication
     /**
      * Method for removing medication from the database
      * 
-     * @param medicationName
-     *            : The name of the medication to be removed.
-     * @param cosmoID
-     *            : The person the medication is being removed for.
+     * @param medicationName : The name of the medication to be removed.
+     * @param cosmoID : The person the medication is being removed for.
      * @return: Whether or not the removal was successful
      */
     public static boolean removeMedication( String medicationName,
@@ -329,18 +323,14 @@ public class Medication
     /**
      * Method for modifying an already existing medication.
      * 
-     * @param medicationName
-     *            : The new medication name
-     * @param dosage
-     *            : The new dosage
-     * @param timesGiven
-     *            : The new time of day that the medication is to administrated
-     * @param reason
-     *            : The new reason for taking the medication
-     * @param cosmoID
-     *            : The individual whose medication is being updated.
-     * @param oldMedicationName
-     *            : The old name of the medication that is being updated.
+     * @param medicationName : The new medication name
+     * @param dosage : The new dosage
+     * @param timesGiven : The new time of day that the medication is to
+     *            administrated
+     * @param reason : The new reason for taking the medication
+     * @param cosmoID : The individual whose medication is being updated.
+     * @param oldMedicationName : The old name of the medication that is being
+     *            updated.
      * @return
      */
     public static String updateMedication( String medicationName,

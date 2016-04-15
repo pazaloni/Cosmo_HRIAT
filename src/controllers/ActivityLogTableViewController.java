@@ -1,4 +1,5 @@
 package controllers;
+
 import helpers.DatabaseHelper;
 
 import java.sql.ResultSet;
@@ -91,12 +92,13 @@ public class ActivityLogTableViewController
                 details = activityLogResults.getString(5);
                 System.out.println(whenDate.toString());
                 DateFormat format = new SimpleDateFormat("dd-MMM-YYYY");
-                // Remove extra 0's at the end of the timestamp                
+                // Remove extra 0's at the end of the timestamp
                 when = format.format(whenDate);
                 format = new SimpleDateFormat("kk:mm:ss");
-                when += " " +format.format(whenTime);
+                when += " " + format.format(whenTime);
 
-                ActivityLog currentLog = new ActivityLog(who, when, event, details);
+                ActivityLog currentLog = new ActivityLog(who, when, event,
+                        details);
 
                 // Add the log to the list
                 activityLogData.add(currentLog);
@@ -124,16 +126,15 @@ public class ActivityLogTableViewController
 
         whenColumn.setCellValueFactory(cellData -> cellData.getValue()
                 .getWhen());
-        whenColumn.setMinWidth(125);   
+        whenColumn.setMinWidth(125);
 
         eventColumn.setCellValueFactory(cellData -> cellData.getValue()
                 .getEvent());
         eventColumn.setMinWidth(160);
-        
+
         detailsColumn.setCellValueFactory(cellData -> cellData.getValue()
                 .getDetails());
         detailsColumn.setMinWidth(400);
-
 
         activityLogTable.getColumns().addListener(
                 new ListChangeListener<Object>()
@@ -153,9 +154,9 @@ public class ActivityLogTableViewController
                         }
                     }
                 });
-       // activityLogTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        activityLogTable.getColumns()
-                .addAll(whoColumn, whenColumn, eventColumn, detailsColumn);
+        // activityLogTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        activityLogTable.getColumns().addAll(whoColumn, whenColumn,
+                eventColumn, detailsColumn);
 
     }
 
