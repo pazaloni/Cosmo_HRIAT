@@ -203,7 +203,7 @@ public class Participant
         
         String formatedPhone = fh.formatPhoneNum(emergencyContactPhone.get());
         
-        if (formatedPhone.equals("A phone number must have 10 digits."))
+        if (formatedPhone.equals("Phone Number must be 10 digits"))
         {
             formatedPhone = " ";
         }

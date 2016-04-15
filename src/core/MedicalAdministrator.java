@@ -199,14 +199,13 @@ public class MedicalAdministrator extends BasicStaff
                     String formattedDate = df.format(c.getTime());
 
                     String dbPath = saveImage(imagePath, cosmoID);
-                    FormatHelper fh = new FormatHelper();
                     // array of values to insert
                     values[0][1] = cosmoID;
                     values[1][1] = firstName;
                     values[2][1] = lastName;
                     values[3][1] = birthDateString;
                     values[4][1] = healthNumber;
-                    values[5][1] = fh.formatPhoneNum(phone);
+                    values[5][1] = phone;
                     values[6][1] = address;
                     values[7][1] = careType;
                     values[8][1] = formattedDate;
