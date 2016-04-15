@@ -3,10 +3,16 @@ package helpers;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import core.Participant;
@@ -28,6 +34,13 @@ public class IncidentReportFormHelper
 
     }
 
+    /**
+     * 
+     * Purpose: Query the database for all the active participants and put them
+     * into and observable list
+     * 
+     * @return a list containing participants
+     */
     public static ObservableList<Participant> getParticipants()
     {
         ObservableList<Participant> participants = FXCollections
@@ -57,6 +70,34 @@ public class IncidentReportFormHelper
 
     }
 
+    /**
+     * 
+     * Purpose: Save all the information required for an Incident
+     * 
+     * @param cosmoID the id of the participant that was involved in the
+     *            incident
+     * @param dateOfIncident the date the incident happened
+     * @param timeOfIncident the time the incident happened
+     * @param locationOfIncident the location of the incident
+     * @param protectiveEquipment protective equipment used when the incident
+     *            happened
+     * @param incidentDescription the description of the incident
+     * @param contributingFactors the contributing factors of the incident
+     * @param reportedTo the person this incident was reported
+     * @param dateReported the date this incident was reported to a person
+     * @param timeReported the time this incident was reported to a person
+     * @param verballyReported the person this incident was reported verbally
+     * @param verbalReportDate the date this incident was reported verbally
+     * @param verbalReportTime the time this incident was reported verbally
+     * @param dateReportWritten the date this incident report was written
+     * @param timeReportWritten the time this incident report was written
+     * @param reportedWrittenBy who wrote this report
+     * @param injuredBodyAreas all the injured areas of the person in the report
+     * @param typesOfInjuries the types of injures this person has
+     * @param witnesses the witnesses that witnessed this incident
+     * @return true if all the information was saved successfully, false
+     *         otherwise
+     */
     public boolean saveIncidentInfo( String cosmoID, LocalDate dateOfIncident,
             String timeOfIncident, String locationOfIncident,
             String protectiveEquipment, String incidentDescription,
@@ -134,6 +175,8 @@ public class IncidentReportFormHelper
         {
             dateReportWrittenString = formatDate(dateReportWritten);
         }
+        
+        
         newRecord[13][1] = dateReportWrittenString;
         newRecord[14][1] = timeReported;
         newRecord[15][1] = reportedWrittenBy;
@@ -699,6 +742,24 @@ public class IncidentReportFormHelper
      */
     private String formatDate( LocalDate date )
     {
-        return date.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
+        String unformattedDate = date.toString();
+
+        DateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date formattedDate = new Date();
+
+        try
+        {
+            formattedDate = inputFormatter.parse(unformattedDate);
+        }
+        
+        catch ( ParseException e )
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        SimpleDateFormat outputFormatter = new SimpleDateFormat();
+        outputFormatter.applyPattern("dd-MMM-yyyy");
+        return outputFormatter.format(formattedDate);
     }
 }

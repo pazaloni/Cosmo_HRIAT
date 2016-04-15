@@ -1,5 +1,11 @@
 package core;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import helpers.FormatHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -77,6 +83,31 @@ public class Incident
     public StringProperty getDateOfIncident()
     {
         return dateOfIncident;
+    }
+
+    public StringProperty displayDateOfIncident()
+    {
+        String unformattedDate = dateOfIncident.get();
+
+        DateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+
+        try
+        {
+            date = inputFormatter.parse(unformattedDate);
+        }
+        
+        catch ( ParseException e )
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        SimpleDateFormat outputFormatter = new SimpleDateFormat();
+        outputFormatter.applyPattern("dd-MMM-yyyy");
+        StringProperty formattedDateOfIncidient = new SimpleStringProperty(outputFormatter.format(date));
+        return formattedDateOfIncidient;
+
     }
 
     /**
