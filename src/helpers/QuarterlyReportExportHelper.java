@@ -86,7 +86,7 @@ public class QuarterlyReportExportHelper
 	 * 
 	 * @author Breanna Wilson
 	 */
-	private String createPersonalCareCSVString()
+	public String createPersonalCareCSVString()
 	{
 		String csvStr = ", Supports, Total Persons as of: " + date + ", Total For: " + prevYear + "\n";
 		Iterator<PersonalCare> iter = personalCareList.iterator();
@@ -116,7 +116,7 @@ public class QuarterlyReportExportHelper
 	 * 
 	 * @author Breanna Wilson
 	 */
-	private String createReactiveCareCSVString()
+	public String createReactiveCareCSVString()
 	{
 		String csvStr = "Year, Participants Involved, Staff Members Involved, Total\n";
 		Iterator<ReactiveCare> iter = reactiveCareList.iterator();
@@ -147,7 +147,7 @@ public class QuarterlyReportExportHelper
 	 * 
 	 * @author Breanna Wilson
 	 */
-	private String createOlderAdultNeedsCSVString()
+	public String createOlderAdultNeedsCSVString()
 	{
 		String csvStr = "Age, Long Term Care Facility, Elmwood Res, "
 				+ "Luther Care, Other, Total As Of: " + date + ", Total For: " + 
