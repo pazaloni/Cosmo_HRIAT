@@ -2,6 +2,8 @@ package controllers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import helpers.DatabaseHelper;
 import core.Incident;
@@ -120,7 +122,7 @@ public class IncidentReportTableViewController
         cosmoIDColumn.setResizable(false);
 
         dateOfIncidentColumn.setCellValueFactory(cellData -> cellData
-                .getValue().getDateOfIncident());
+                .getValue().displayDateOfIncident());
         dateOfIncidentColumn.setMinWidth(100);
         dateOfIncidentColumn.setResizable(false);
 
@@ -191,4 +193,5 @@ public class IncidentReportTableViewController
         this.incidentTable.getColumns().clear();
         this.initialize();
     }
+
 }
